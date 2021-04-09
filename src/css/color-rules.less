@@ -1,0 +1,75 @@
+//color variables
+@page-font-color: #333;
+@page-bg-color: #fff;
+@page-bg-color-v2: #f9f9f9;
+
+
+
+@col2_light: #de243d;
+@col3_light: #225169;
+
+@tabs-highlight-color: rgba(125, 0, 24, 0.74);
+@subtabs-highlight-color: rgba(32, 59, 125, 0.74);
+
+@docker-width: 20em;
+@topnav-height: 0.25 * @docker-width;
+
+@tab-active-color: #555;
+@tab-inactive-color: #999;
+
+
+@text-hover-color: rgba(124, 0, 26, 0.2);
+
+@docker-hover-color: rgba(124, 0, 26, 0.2);
+@docker-hover-color2: rgba(160, 0, 36, 0.1);
+@docker-hover-color-light: rgba(160, 0, 36, 0.2);
+@docker-font-color: @page-font-color;
+@menu-border-color: #999;
+@docker-bg-color: #f5f5f5;
+@docker-background-color2: #eaeaea;
+//rgba values
+
+//path variables
+
+@image-path: '../../images';
+@icon-path: '../../icons';
+
+//mixins
+.transition(@time){
+  -webkit-transition: @time ease;
+  -moz-transition:    @time ease;
+  -o-transition:      @time ease;
+  transition:         @time ease;
+}
+
+.transition (@property,@time) {
+  -webkit-transition: @property @time ease;
+  -moz-transition:    @property @time ease;
+  -o-transition:      @property @time ease;
+  transition:         @property @time ease;
+}
+
+.transition (@property,@time, @animation) {
+  -webkit-transition: @property @time @animation;
+  -moz-transition:    @property @time @animation;
+  -o-transition:      @property @time @animation;
+  transition:         @property @time @animation;
+}
+
+
+.transition (@property,@time, @animation, @delay) {
+  -webkit-transition: @property @time @animation @delay;
+  -moz-transition:    @property @time @animation @delay;
+  -o-transition:      @property @time @animation @delay;
+  transition:         @property @time @animation @delay;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}

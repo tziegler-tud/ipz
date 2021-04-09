@@ -1,0 +1,80 @@
+@import 'color-rules.less';
+@import 'variables.less';
+
+@keyframes show-dash {
+  from {
+    bottom: -400px;
+  }
+
+  20% {
+    bottom: 0;
+  }
+
+  80% {
+    bottom: 0;
+  }
+
+  to {
+    bottom: -400px;
+  }
+}
+
+
+.no-js {
+
+}
+
+#no-js-dash {
+  z-index: 10;
+  display: none;
+  width: calc(~"100% - 10em");
+  overflow: hidden;
+  padding: 2em 5em;
+  background-color: #00293c;
+  bottom: 0;
+
+  position: fixed;
+  height: auto;
+
+}
+
+#no-js-dash #no-js-text {
+
+  color: #fff;
+  font-size: 100%;
+
+  text-align: center;
+}
+
+.no-js #no-js-dash {
+  display: block;
+
+
+
+}
+
+
+
+
+.no-js .infobar {
+  display: none;
+}
+
+.no-js .floating-button {
+  display: none;
+}
+
+
+/* alignment from common.less */
+
+.no-js .sec-label {
+
+  top: 0 !important;
+  height: 100vh;
+
+}
+
+.no-js .sec-label .active {
+  background-color: inherit;
+  color: inherit;
+}

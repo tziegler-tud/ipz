@@ -1,0 +1,52 @@
+extends ../../layout
+
+block page_includes
+    link(rel='stylesheet', href='/static/unisams/stylesheets/lssc_loader_index.css')
+    script(src="static/unisams/js/index.js")
+
+    link(rel='stylesheet', href='/static/unisams/stylesheets/protocol.css')
+
+    link(rel='stylesheet', href='/dist/protocol.css')
+    script(src="/dist/protocol.js")
+
+    link(rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons")
+
+block content
+    #wrapper
+        #page-container.page-container.protocol-container
+            #page-container-inner.page-container-inner
+                section
+                    #sec-content.subpage-container
+                        #content1-heading.subpage-heading
+                            h3 Meine Protokolle
+                        .subpage-topbar
+                            #usersearch.subpage-searchbar.topbar-element
+                        #content1-text.sec-content
+                            .subpage-content
+                                .itemlist-content-container
+                                    #documentlist-container.gallery-container
+                                        ul#documentlist-top.common-list.documentlist.gallery-view.protocol-gallery
+                                            if protocolList
+                                                each document in protocolList
+                                                    li.gallery-item.protocol-item(data-viewkey=document.id)
+                                                        .inner
+                                                            .image
+                                                                img(src="/static/images/protocol/divi.jpg")
+                                                            .image-overlay
+                                                            .item-property.title.gallery-heading.protocol-heading= document.title
+                                                                .gallery-heading-inner.date= document.dateTimeString
+                                                            .gallery-item-actions
+                                                                .dropdown-menu.menu-below
+                                                                    button.mdc-icon-button.dropdown-button.material-icons(title='More options', data-mdc-ripple-is-unbounded='true') more_vert
+                                                                    .userprofile-dropdown
+                                                                        .dropdown-container
+                                                                            .dropdown-entry.last
+                                                                                a.before-icon.icon-delete.documentDeleteBtn(id="deleteProtocol" + document.id, data-id=document.id) löschen
+                                                            //.item-property.gallery-text.completion= document.completion
+                                                            //    | % abgeschlossen
+                                        .add-smt-button.gallery-add-item.protocol-add
+                                            a.add-smt-button-inner()
+                                                svg(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus") <line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+
+
+

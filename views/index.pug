@@ -1,5 +1,19 @@
 extends layout
 
+block page_includes
+  link(rel='stylesheet', href='/static/unisams/stylesheets/lssc_loader_index.css')
+  script(src="dist/index.js")
+
+  link(rel='stylesheet', href='/css/preloader.css')
+
+
+
 block content
-  h1= title
-  p Welcome to #{title}
+  #wrapper.unisams-app.app-page-wrapper.protocol-app
+    #page-container.app-content-container.mdc-drawer-app-content
+      #protocol-container
+
+
+
+
+

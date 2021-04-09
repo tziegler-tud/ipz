@@ -1,7 +1,11 @@
 doctype html
 html
   head
-    title= title
+    title=title
     link(rel='stylesheet', href='/stylesheets/style.css')
+
+    block page_includes
+
   body
+    include preloader
     block content
