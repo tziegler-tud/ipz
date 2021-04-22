@@ -12,6 +12,7 @@ router.post('/add', addData);
 router.get('/get', get);
 router.get('/getCheckoutData', getCheckoutData);
 router.post('/getCheckoutData', getCheckoutEntry);
+router.post('/redraw', redraw);
 router.get('/getCheckoutDataVersion', getCheckoutDataVersion);
 router.post('/checkout', checkout);
 
@@ -84,6 +85,13 @@ function getCheckoutData (req, res, next){
 function getCheckoutEntry (req, res, next){
     //validate data
     checkinDataService.getCheckoutEntry(req.body.id)
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
+function redraw (req, res, next){
+    //validate data
+    checkinDataService.redraw(req.body.id)
         .then(result => res.json(result))
         .catch(err => next(err));
 }

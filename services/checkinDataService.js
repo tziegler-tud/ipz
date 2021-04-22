@@ -8,6 +8,7 @@ module.exports = {
     getCheckoutData,
     getCheckoutEntry,
     getCheckoutDataVersion,
+    redraw,
     add,
     checkout,
 };
@@ -29,6 +30,49 @@ async function getCheckoutEntry(id) {
 
 async function getCheckoutDataVersion() {
     return Version.findOne({label: "checkout"});
+}
+
+async function redraw(id, minutes) {
+    if (!id) {
+        throw new Error("invalid id");
+    }
+    if (!minutes) {
+        throw new Error("invalid redraw time");
+    }
+    //find entry
+    let dbEntry = await CheckinData.findById(id)
+    if(!dbEntry) {
+        throw new Error("Could not find entry with id: " + id);
+    }
+    //check if status is 0
+    if (!dbEntry.currentStatus){
+        throw new Error("Failed to read entry status");
+    }
+
+    //change current status to 1
+    let newTimestamp = addMinutes(dbEntry.currentStatus.timestamp, minutes);
+    dbEntry.currentStatus = {
+        status: 0,
+        text: "WB1 - Zurückgestellt",
+        timestamp: newTimestamp,
+    }
+    dbEntry.statusHistory.push(dbEntry.currentStatus)
+
+    let version = await Version.findOne({label: "checkout"});
+    if(!version){
+        console.log("no version file found. Generating new version history...")
+        version = new Version({
+            label: "checkout",
+            version: 1,
+            timestamp: Date.now(),
+        });
+    }
+    else {
+        version.version++;
+    }
+    version.save();
+    await dbEntry.save();
+    return dbEntry;
 }
 
 
@@ -107,5 +151,9 @@ async function checkout(entry) {
     version.save();
     await dbEntry.save();
     return dbEntry;
+}
+
+function addMinutes(date, minutes) {
+    return new Date(date.getTime() + minutes*60000);
 }
 

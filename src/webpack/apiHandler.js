@@ -74,6 +74,23 @@ var ApiHandler = function() {
         });
     }
 
+    self.redraw = function (id) {
+        let jsonData = {
+            id: id,
+            time: 5, //reschedule for 5 minutes from now
+        }
+        return $.post({
+            url: "/api/v1/checkin/redraw",
+            // make put for safety reasons :-)
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
+            success: function (result) {
+            }
+        });
+    }
+
     self.checkout = function (entry, callback) {
         if (callback === undefined) {
             callback = {

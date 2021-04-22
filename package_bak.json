@@ -24,7 +24,7 @@
     "jquery": "^3.6.0",
     "less-middleware": "~2.2.1",
     "material-icons-font": "^2.1.0",
-    "mongoose": "^4.13.21",
+    "mongoose": "^5.12.4",
     "mongoose-plugin-autoinc-fix": "^1.2.1",
     "morgan": "~1.9.1",
     "open-sans-fonts": "^1.6.2",
@@ -46,3 +46,5 @@
     "webpack-dev-server": "^3.11.0"
   }
 }
+
+
