@@ -17,7 +17,7 @@
                     <tr data-entryid="{{../this.id}}" class="mdc-data-table__row checkout-table-row {{#if @first}}primary{{else}}secondary{{/if}}">
                         <td>{{#if @first}}{{else}}<span class="secondary-icon material-icons">add</span>{{/if}}</td>
                         <th class="mdc-data-table__cell" scope="row">{{this}}</th>
-                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">WB1</td>
+                        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{../this.currentStatus.text}}</td>
                         <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{transformTimeString ../this.currentStatus.timestamp}}</td>
 <!--                        <td class="mdc-data-table__cell">Super tasty</td>-->
                     </tr>
