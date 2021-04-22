@@ -1,0 +1,20 @@
+@import "~@fontsource/open-sans/index.css";
+@import "~@fontsource/open-sans/300-italic.css";
+
+body {
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+
+  font-family: "Open Sans", Sans;
+}
+
+.app-wrapper {
+  width: 100%;
+  height: 100vh;
+
+  .page-container {
+    height: 100%;
+    overflow: scroll;
+  }
+}

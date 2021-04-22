@@ -1,23 +1,28 @@
-@use "@material/drawer";
-@use "@material/list";
-@use "@material/button";
-@use "@material/icon-button";
-@use "@material/top-app-bar";
-@use "@material/top-app-bar/mdc-top-app-bar";
+@use "../../node_modules/@material/drawer";
+@use "../../node_modules/@material/list";
+@use "../../node_modules/@material/button/styles";
+@use "../../node_modules/@material/icon-button";
+@use "../../node_modules/@material/top-app-bar";
+@use "../../node_modules/@material/top-app-bar/mdc-top-app-bar";
+
 
 @import "~material-icons-font/material-icons-font.css";
 //
 @include drawer.core-styles;
 @include drawer.dismissible-core-styles;
 @include drawer.modal-core-styles;
-@include list.core-styles;
-@include button.core-styles;
+@include list.deprecated-core-styles;
 @include icon-button.core-styles;
 
 .mdc-top-app-bar {
-  @include top-app-bar.fill-color(#00293c)
+  @include top-app-bar.fill-color(#00293c);
+
+  // Only apply this style if below top app bar.
+  z-index: 7;
 }
 
 .mdc-drawer {
   @include drawer.width(300px);
 }
+
+

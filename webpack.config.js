@@ -10,6 +10,7 @@ new webpack.ProvidePlugin({
 module.exports = {
     entry: {
         index: "./src/webpack/index.js",
+        index_style: "./src/webpack/index.scss",
 
     },
     output: {
