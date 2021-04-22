@@ -66,9 +66,9 @@ var Navigation = function(context, options){
         const navEntry3 = document.getElementById("app-link-page3");
 
         //hook nav events
-        navEntry1.addEventListener("click", function(e){
-            options.nav1.onclick(e);
-        });
+        // navEntry1.addEventListener("click", function(e){
+        //     options.nav1.onclick(e);
+        // });
         navEntry2.addEventListener("click", function(e){
             options.nav2.onclick(e);
         });
