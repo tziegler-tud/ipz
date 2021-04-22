@@ -10,12 +10,13 @@
                             {{this}}{{#unless @last}},{{/unless}}
                         {{/each}}
                     </span>
+                    <span class="checkout-banner-text">{{transformTimeString this.currentStatus.timestamp}}</span>
                 </div>
             </div>
             <div class="mdc-banner__actions">
                 <button type="button" class="mdc-button mdc-banner__secondary-action">
                     <div class="mdc-button__ripple"></div>
-                    <div class="mdc-button__label">Löschen</div>
+                    <div class="mdc-button__label">Zurückstellen</div>
                 </button>
                 <button type="button" class="mdc-button mdc-button--raised mdc-banner__primary-action banner-button-next">
                     <div class="mdc-button__ripple"></div>

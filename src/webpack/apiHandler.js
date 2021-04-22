@@ -58,6 +58,22 @@ var ApiHandler = function() {
         });
     }
 
+    self.getCheckoutEntry = function (id) {
+        let jsonData = {
+            id: id,
+        }
+        return $.get({
+            url: "/api/v1/checkin/getCheckoutData",
+            // make put for safety reasons :-)
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
+            success: function (result) {
+            }
+        });
+    }
+
     self.checkout = function (entry, callback) {
         if (callback === undefined) {
             callback = {

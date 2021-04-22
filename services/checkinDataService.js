@@ -6,6 +6,7 @@ const Version = db.version;
 module.exports = {
     getAll,
     getCheckoutData,
+    getCheckoutEntry,
     getCheckoutDataVersion,
     add,
     checkout,
@@ -20,6 +21,10 @@ async function getAll() {
 
 async function getCheckoutData() {
     return CheckinData.find({"currentStatus.status": 0});
+}
+
+async function getCheckoutEntry(id) {
+    return CheckinData.findById(id);
 }
 
 async function getCheckoutDataVersion() {

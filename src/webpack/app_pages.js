@@ -243,6 +243,19 @@ CheckoutPage.prototype.buildDataTable = function(entries){
         }
         self.dataTableContainer.innerHTML=template(context);
         const dataTable = new MDCDataTable(document.querySelector('.mdc-data-table'));
+        $(".checkout-table-row").click(function(){
+            //read id from dataset
+            let id = this.dataset.entryid;
+            if(!id) {
+                console.error("Could not find corresponding row id.")
+                return false;
+            }
+            //find corresponding entry
+            apiHandler.getCheckoutEntry(id)
+                .done(function(result){
+                    self.showBanner(result)
+            });
+        })
 
     });
 
@@ -265,6 +278,16 @@ CheckoutPage.prototype.showBanner = function(entry){
         banner.foundation.handlePrimaryActionClick = function(){
             //handle current entry
             apiHandler.checkout(entry, {
+                onSuccess: function(result){
+                    console.log(result);
+                    self.show();
+                },
+            });
+
+        }
+        banner.foundation.handleSecondaryActionClick = function(){
+            //handle current entry
+            apiHandler.redraw(entry, {
                 onSuccess: function(result){
                     console.log(result);
                     self.show();

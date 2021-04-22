@@ -14,7 +14,7 @@
 
             {{#each entries}}
                 {{#each data}}
-                    <tr class="mdc-data-table__row checkout-table-row {{#if @first}}primary{{else}}secondary{{/if}}">
+                    <tr data-entryid="{{../this.id}}" class="mdc-data-table__row checkout-table-row {{#if @first}}primary{{else}}secondary{{/if}}">
                         <td>{{#if @first}}{{else}}<span class="secondary-icon material-icons">add</span>{{/if}}</td>
                         <th class="mdc-data-table__cell" scope="row">{{this}}</th>
                         <td class="mdc-data-table__cell mdc-data-table__cell--numeric">WB1</td>

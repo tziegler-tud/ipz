@@ -11,6 +11,7 @@ const checkinDataService = require('../../services/checkinDataService');
 router.post('/add', addData);
 router.get('/get', get);
 router.get('/getCheckoutData', getCheckoutData);
+router.post('/getCheckoutData', getCheckoutEntry);
 router.get('/getCheckoutDataVersion', getCheckoutDataVersion);
 router.post('/checkout', checkout);
 
@@ -76,6 +77,13 @@ function get (req, res, next){
 function getCheckoutData (req, res, next){
     //validate data
     checkinDataService.getCheckoutData()
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
+function getCheckoutEntry (req, res, next){
+    //validate data
+    checkinDataService.getCheckoutEntry(req.body.id)
         .then(result => res.json(result))
         .catch(err => next(err));
 }
