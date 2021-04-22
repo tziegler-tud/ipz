@@ -74,10 +74,20 @@ var ApiHandler = function() {
         });
     }
 
-    self.redraw = function (id) {
+    self.redraw = function (id, callback) {
+        if (callback === undefined) {
+            callback = {
+                onSuccess: function () {
+                    console.log("data send successfully")
+                },
+                onFail: function () {
+                    console.error("failed to send data")
+                }
+            }
+        }
         let jsonData = {
             id: id,
-            time: 5, //reschedule for 5 minutes from now
+            minutes: 5, //reschedule for 5 minutes from now
         }
         return $.post({
             url: "/api/v1/checkin/redraw",
@@ -87,6 +97,7 @@ var ApiHandler = function() {
             dataType: 'json',
             data: JSON.stringify(jsonData),
             success: function (result) {
+                callback.onSuccess()
             }
         });
     }

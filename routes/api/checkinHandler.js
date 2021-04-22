@@ -91,7 +91,7 @@ function getCheckoutEntry (req, res, next){
 
 function redraw (req, res, next){
     //validate data
-    checkinDataService.redraw(req.body.id)
+    checkinDataService.redraw(req.body.id, req.body.minutes)
         .then(result => res.json(result))
         .catch(err => next(err));
 }

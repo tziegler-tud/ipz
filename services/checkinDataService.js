@@ -21,7 +21,7 @@ async function getAll() {
 }
 
 async function getCheckoutData() {
-    return CheckinData.find({"currentStatus.status": 0});
+    return CheckinData.find({"currentStatus.status": 0}).sort({'currentStatus.timestamp': 1});
 }
 
 async function getCheckoutEntry(id) {
@@ -154,6 +154,6 @@ async function checkout(entry) {
 }
 
 function addMinutes(date, minutes) {
-    return new Date(date.getTime() + minutes*60000);
+    return new Date(date + minutes*60000).getTime();
 }
 

@@ -285,9 +285,10 @@ CheckoutPage.prototype.showBanner = function(entry){
             });
 
         }
-        banner.foundation.handleSecondaryActionClick = function(){
-            //handle current entry
-            apiHandler.redraw(entry, {
+        banner.foundation.handleSecondaryActionClick = function(e){
+            //find current id
+            let id = entry.id;
+            apiHandler.redraw(id, {
                 onSuccess: function(result){
                     console.log(result);
                     self.show();
