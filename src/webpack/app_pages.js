@@ -3,6 +3,7 @@ import "./handlebarsHelpers";
 import {apiHandler} from "./apiHandler";
 var $ = require( "jquery" );
 import {MDCRipple} from '@material/ripple';
+import {MDCSnackbar} from '@material/snackbar';
 import {MDCList} from '@material/list';
 import {MDCDataTable} from '@material/data-table';
 import {MDCBanner} from '@material/banner';
@@ -52,6 +53,7 @@ var CheckinPage = function(args){
     self.url = "/webpack/templates/checkin_page.hbs";
     self.inputAmount = 1;
     self.primaryInputElement = null;
+    self.snackbar = undefined;
     console.log(self.test);
 
     self.submitPage = function(){
@@ -65,27 +67,71 @@ var CheckinPage = function(args){
             console.error("Failed to read input data: invalid number of input elements found. Assumed: " + self.inputAmount + " , but found: " + numberArray.length);
             return;
         }
+        /**
+         *
+         * @type {Checkin-ApiHandlerCallback}
+         */
         let callback = {
-            onSuccess: function(){
+            onSuccess: function (result) {
+                let numberString = "";
+                if (result) {
+                    if (result.data) {
+                        numberString = result.data.toString();
+                    }
+                }
+                let message = "Wartenummer " + numberString + " hinzugefügt"
                 //reset page
-                self.show()
+                self.show({
+                    snackbar: {
+                        show: true,
+                        message: message,
+                    }
+                })
+            },
+            onFail: function (error) {
+                self.showSnackbar(error)
             }
         }
+
         apiHandler.checkin(self.inputAmount, numberArray, callback);
     }
     return self;
 }
 
-CheckinPage.prototype.show = function(){
+CheckinPage.prototype.showSnackbar = function(message) {
+    let self = this;
+    let snackbar = self.snackbar;
+    if (!snackbar) {
+        //try to find snackbar
+        let bar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
+        if(bar) {
+            self.snackbar = bar;
+        }
+        else {
+            return false;
+        }
+    }
+    snackbar.labelText = message;
+    snackbar.open()
+}
+CheckinPage.prototype.show = function(options){
     let self = this;
     let context = {};
 
     //render html
-    return this.buildHtml(self.url, context);
+    return this.buildHtml(self.url, context, options);
 }
 
-CheckinPage.prototype.buildHtml = function(url, context){
+CheckinPage.prototype.buildHtml = function(url, context, options){
     let self = this;
+    let defaultOptions = {
+        snackbar: {
+            show: false,
+            message: "",
+        }
+    }
+    options = (options === undefined) ? {}: options;
+    options = Object.assign(defaultOptions, options);
     return $.get(url, function (data) {
         console.log("template found");
         var template = Handlebars.compile(data);
@@ -99,6 +145,10 @@ CheckinPage.prototype.buildHtml = function(url, context){
         const buttonRipple = new MDCRipple(document.querySelector('.mdc-button'));
         const addBtn = document.getElementById("add-button");
         const submitBtn = document.getElementById("submit-button");
+        self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
+        if(options.snackbar.show) {
+            self.showSnackbar(options.snackbar.message);
+        }
         submitBtn.addEventListener("click", function(){
             self.submitPage();
         })
@@ -143,12 +193,57 @@ CheckinPage.prototype.buildHtml = function(url, context){
 var CheckoutPage = function(args){
     let self = Page.apply(this, args);
     self.url = "/webpack/templates/checkout_page2.hbs";
-    self.entries = null;
+    self.entries = undefined;
     self.page = undefined;
     self.dataVersion = 0;
     //get current entries
     let context = {};
     //render html
+
+    /**
+     * @typedef {Object} ContextObject
+     *
+     * @property {boolean} isEmpty true if no entries were found
+     * @property {boolean} updateBanner true if first entry differs from previous set
+     * @property {CheckinDataSchemeObject[]} entries checkout data array
+     */
+
+    /**
+     *
+     * creates a context object from the api response
+     *
+     * @param result {CheckinDataSchemeObject[]}
+     * @returns {ContextObject}
+     */
+   self.buildContext = function(result){
+
+       /**
+         * @type {ContextObject} context
+         */
+        let context = {
+            isEmpty: true,
+            updateBanner: false,
+            entries: result,
+        }
+
+        if(result !== undefined && result.length !== 0) {
+            context.isEmpty = false;
+            //check if at least on entry was present
+            if (self.entries !== undefined && self.entries.length !== 0) {
+                //check if first entry changed
+                if (self.entries[0].id !== result[0].id) {
+                    context.updateBanner = true;
+                }
+            }
+            else {
+                context.updateBanner = true;
+            }
+        }
+        else {
+            context.isEmpty = true;
+        }
+        return context;
+    }
 
 }
 
@@ -160,10 +255,8 @@ CheckoutPage.prototype.hide = function(){
 CheckoutPage.prototype.show = function(){
     let self = this;
     apiHandler.getCheckoutData()
-        .done(function(result){
-            let context = {
-                entries: result,
-            }
+        .done(function(result, textStatus, jqXHR){
+            let context = self.buildContext(result);
             self.entries = context.entries;
             self.initialize = self.buildHtml(self.url, context);
             self.active = true;
@@ -195,23 +288,26 @@ CheckoutPage.prototype.refresh = function(self){
                     self.dataVersion = result.version;
                     apiHandler.getCheckoutData()
                         .done(function(result){
-                            let context = {
-                                entries: result,
-                            }
-                            //check if first entry changed
-                            if(self.entries[0].id !== context.entries[0].id){
+                            let context = self.buildContext(result);
+                            if(context.updateBanner) {
                                 //refreshing banner
                                 console.log("refreshing banner");
                                 self.showBanner(context.entries[0])
                             }
-                            self.buildDataTable(context.entries);
+                            self.buildDataTable(context)
                             self.entries = context.entries;
                         })
-
                 }
             }
         })
 }
+
+/**
+ *
+ * @param url {String}
+ * @param context {ContextObject}
+ * @returns {*}
+ */
 CheckoutPage.prototype.buildHtml = function(url, context){
     let self = this;
     return $.get(url, function (data) {
@@ -228,19 +324,23 @@ CheckoutPage.prototype.buildHtml = function(url, context){
         // const list = new MDCList(document.querySelector('.mdc-list'));
         // const listItemRipples = list.listElements.map((listItemEl) => new MDCRipple(listItemEl));
         //create banner
-        let firstEntry = context.entries[0];
-        self.showBanner(firstEntry);
-        self.buildDataTable(context.entries)
+        if(context.updateBanner) {
+            //refreshing banner
+            console.log("refreshing banner");
+            self.showBanner(context.entries[0])
+        }
+        self.buildDataTable(context);
     });
 }
 
-CheckoutPage.prototype.buildDataTable = function(entries){
+/**
+ *
+ * @param context {ContextObject}
+ */
+CheckoutPage.prototype.buildDataTable = function(context){
     let self = this;
     $.get("/webpack/templates/dataTable.hbs", function (data) {
         var template = Handlebars.compile(data);
-        let context = {
-            entries: entries,
-        }
         self.dataTableContainer.innerHTML=template(context);
         const dataTable = new MDCDataTable(document.querySelector('.mdc-data-table'));
         $(".checkout-table-row").click(function(){
@@ -260,6 +360,11 @@ CheckoutPage.prototype.buildDataTable = function(entries){
     });
 
 }
+
+/**
+ *
+ * @param entry {CheckinDataSchemeObject}
+ */
 CheckoutPage.prototype.showBanner = function(entry){
     let self = this;
     if(entry === undefined) {

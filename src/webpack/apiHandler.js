@@ -1,12 +1,64 @@
+/**
+ * @typedef {Object} jquery-jqXHR
+ * @property {function(function)} done
+ */
+
+/**
+ * @typedef {Object} CheckinDataSchemeObjectStatus
+ * @property {Integer} status
+ * @property {String} text
+ * @property {Date} timestamp
+ */
+/**
+ * @typedef {Object} CheckinDataSchemeObject
+ * @property {Integer} amount
+ * @property {Integer[]} data
+ * @property {CheckinDataSchemeObjectStatus} currentStatus
+ * @property {CheckinDataSchemeObjectStatus[]} statusHistory
+ */
+
 var $ = require( "jquery" );
 
 var ApiHandler = function() {
     let self = this;
     self.checkoutDataVersion = 0;
+
+
+
+    /**
+     * @callback onSuccess
+     * @param {CheckinDataSchemeObject} result server response object, most likely a json containing the processed data
+     */
+
+    /**
+     * @callback onFail
+     * @param {Object} result server response object, most likely an error object
+     */
+
+    /**
+     * Callback object for apiHandler functions
+     * @typedef {Object} ApiHandlerCallback
+     * @property {onSuccess} onSuccess function to be called if api call is successfull
+     * @property {onFail} onFail function to be called if api call fails
+     */
+
+    /**
+     * Callback object for apiHandler functions
+     * @typedef {Object} Checkin-ApiHandlerCallback
+     * @property {onSuccess} onSuccess function to be called if the number was added successfully
+     * @property {onFail} onFail function to be called if api call fails
+     */
+
+    /**
+     *
+     * @param amount {Integer} amount of numbers to be added.
+     * @param numberArray {[Integer]} Array containing the numbers to be added
+     * @param callback {Checkin-ApiHandlerCallback} Callback object
+     */
     self.checkin = function (amount, numberArray, callback) {
         if (callback === undefined) {
             callback = {
-                onSuccess: function () {
+                onSuccess: function (result) {
                     console.log("data send successfully")
                 },
                 onFail: function () {
@@ -30,9 +82,7 @@ var ApiHandler = function() {
             contentType: "application/json; charset=UTF-8",
             dataType: 'json',
             data: JSON.stringify(jsonData),
-            success: function (result) {
-                callback.onSuccess();
-            }
+            success: callback.onSuccess,
         });
     };
 
@@ -47,7 +97,23 @@ var ApiHandler = function() {
         });
     }
 
-    self.getCheckoutData = function (version) {
+    /**
+     *
+     * @typedef {Object} jquery-jqXHR-checkoutdata
+     * @property {function(function(CheckinDataSchemeObject[], String, jquery-jqXHR-checkoutdata))} done
+     * @property {function(function(Error))} fail
+     * @property {function(function())} always
+     * @property {function(function())} then
+     */
+
+
+    /**
+     * Gets the current set of entries with status=0 ("WB1"). These are the elements that are due to be checked out of WB1.
+     *
+     * @returns {jquery-jqXHR-checkoutdata} jqXHR object return by jquery ajax call. Serves as a promise-like object, providing done, fail, always, then resolvers.
+     *
+     */
+    self.getCheckoutData = function () {
         return $.get({
             url: "/api/v1/checkin/getCheckoutData",
             // make put for safety reasons :-)

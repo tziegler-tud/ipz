@@ -6,7 +6,7 @@
     </div>
     <div class="app-page-content">
         <div class="checkin-container">
-            <form>
+            <div>
                 <div id="numberinput-container--primary" class="numberinput-container hide-label">
                     <label class="numberinput-label" for="numberinput-element--primary">1</label>
                     <input id="numberinput-element--primary" class="numberinput-element" type="text" maxlength="4"/>
@@ -21,7 +21,15 @@
                     <i class="material-icons mdc-button__icon" aria-hidden="true">send</i>
                     <span class="mdc-button__label">Bestätigen</span>
                 </button>
-            </form>
+            </div>
+        </div>
+    </div>
+    <div class="mdc-snackbar">
+        <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+            <div class="mdc-snackbar__label" aria-atomic="false">
+                Can't send photo. Retry in 5 seconds.
+            </div>
+
         </div>
     </div>
 </div>
