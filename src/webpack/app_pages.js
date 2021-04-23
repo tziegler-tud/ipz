@@ -162,6 +162,7 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
             input.id = "numberinput-element--" + self.inputAmount;
             input.classList.add("numberinput-element");
             input.type = "text";
+            input.autocomplete="off";
             input.maxLength = 4;
             let label = document.createElement("label");
             label.for = "numberinput-element--" + self.inputAmount;
@@ -254,6 +255,7 @@ CheckoutPage.prototype.hide = function(){
 
 CheckoutPage.prototype.show = function(){
     let self = this;
+    if(self.active) return;
     apiHandler.getCheckoutData()
         .done(function(result, textStatus, jqXHR){
             let context = self.buildContext(result);
@@ -324,11 +326,7 @@ CheckoutPage.prototype.buildHtml = function(url, context){
         // const list = new MDCList(document.querySelector('.mdc-list'));
         // const listItemRipples = list.listElements.map((listItemEl) => new MDCRipple(listItemEl));
         //create banner
-        if(context.updateBanner) {
-            //refreshing banner
-            console.log("refreshing banner");
-            self.showBanner(context.entries[0])
-        }
+        self.showBanner(context.entries[0])
         self.buildDataTable(context);
     });
 }
@@ -371,12 +369,9 @@ CheckoutPage.prototype.showBanner = function(entry){
         self.bannerWrapper.innerHTML = "";
         return
     }
-    console.log("i am here");
     $.get("/webpack/templates/banner.hbs", function (data) {
         //we need current entry as context
         let context = entry;
-        console.log(entry);
-        console.log("i am there");
         var template = Handlebars.compile(data);
         self.bannerWrapper.innerHTML = template(context);
         const banner = new MDCBanner(document.querySelector('.mdc-banner'));

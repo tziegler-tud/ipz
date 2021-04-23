@@ -124,6 +124,23 @@ var ApiHandler = function() {
         });
     }
 
+    /**
+     *
+     * @typedef {Object} jquery-jqXHR-checkoutentry
+     * @property {function(function(CheckinDataSchemeObject, String, jquery-jqXHR-checkoutdata))} done
+     * @property {function(function(Error))} fail
+     * @property {function(function())} always
+     * @property {function(function())} then
+     */
+
+
+    /**
+     * Gets the current set of entries with status=0 ("WB1"). These are the elements that are due to be checked out of WB1.
+     *
+     * @param {String} id
+     * @returns {jquery-jqXHR-checkoutentry} jqXHR object return by jquery ajax call. Serves as a promise-like object, providing done, fail, always, then resolvers.
+     *
+     */
     self.getCheckoutEntry = function (id) {
         let jsonData = {
             id: id,
