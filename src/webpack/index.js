@@ -6,17 +6,15 @@ import "./handlebarsHelpers";
 const Handlebars = require("handlebars");
 var $ = require( "jquery" );
 
+var phone = window.matchMedia("only screen and (max-device-width: 400px)");
+var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
+
 $(window).on('load',function() {
     console.log("finished loading, hiding preloader");
-    let plr = new preloader();
-    setTimeout(plr.hide,0);
+    // let plr = new preloader();
+    // setTimeout(plr.hide,0);
 
 });
-
-
-
-
-
 
 let nav = new Navigation(
     {
@@ -48,4 +46,18 @@ let nav = new Navigation(
 
 let checkinPage = new CheckinPage();
 let checkoutPage = new CheckoutPage();
-checkinPage.show();
+checkinPage.show().done(function(){
+    if (phone.matches || tablet.matches) {
+        checkinPage.focus({click: true});
+    }
+});
+nav.initialize
+    .done(function(){
+    });
+
+if (!(phone.matches || tablet.matches)) {
+    $(window).one("MDCDrawer:opened", function(){
+        checkinPage.focus()
+    });
+}
+

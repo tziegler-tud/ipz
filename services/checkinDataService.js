@@ -77,6 +77,21 @@ async function redraw(id, minutes) {
 
 
 async function add(amount, data) {
+    //validate
+    if (data.length === 0){
+        throw new Error("data cannot be empty.");
+    }
+    //check with regex to contain only numbers
+    var reg = new RegExp('^\\d+$');
+    //remove whitespace
+    let trimmed = data.map(function(el){
+        el.trim();
+        if(!reg.test(el)) {
+            throw new Error("Failed to parse data: Invalid characters")
+        }
+        return el;
+    })
+
     //get checkout version
     let version = await Version.findOne({label: "checkout"});
     if(!version){
@@ -94,7 +109,7 @@ async function add(amount, data) {
     //create new object
     let checkinDataObject = {
         amount: amount,
-        data: data,
+        data: trimmed,
         currentStatus: {
             status: 0,
             text: "WB1",

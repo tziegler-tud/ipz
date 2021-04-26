@@ -1,0 +1,128 @@
+@import "color-rules.less";
+@import "variables.less";
+
+#sec1 {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  font-size: 90%;
+  font-family: "Open Sans", Sans;
+  //position: relative;
+  //width: 100%;
+  //margin-top: 2em;
+
+  @media @desktop, @tablet-landscape {
+    font-size: 100%;
+    //margin-top: 2em;
+    //position: relative;
+    //height: 100%;
+
+  }
+
+  #content1 {
+
+    margin: 0 5%;
+    width: 90%;
+    font-size: 90%;
+    text-align: center;
+
+
+    @media @desktop, @tablet-landscape {
+      margin: 0 25% 0 25%;
+      width: 50%;
+      font-size: 100%;
+
+      .sec-heading {
+
+
+        .img-container {
+          img {
+          }
+        }
+
+        .unisams-label {
+          display: block !important;
+          float: left;
+          span {
+            }
+        }
+      }
+    }
+    .sec-heading {
+      display: inline-block;
+      .img-container {
+        max-width: 10em;
+        float: left;
+        img {
+          max-width: 10em;
+        }
+      }
+      .unisams-label {
+        display: none;
+        float: left;
+        font-size: 400%;
+        span {
+        }
+      }
+    }
+  }
+}
+.center-in-container{
+  transform: translate(50%,50%,0);
+
+}
+
+#error-container {
+  text-align: center;
+  max-width: 40em;
+
+  margin: 1em auto;
+  position: relative;
+
+  #error-container-inner {
+    width: 100%;
+
+
+    .errorbox-heading {
+      color: @col2_light;
+      font-size: 400%;
+    }
+
+    .errorbox-status {
+
+      padding: 0 0 20px 0;
+
+      color: #00293c;
+      font-size: 500%;
+
+    }
+    .errorbox-body {
+      padding: 0 0 10px 0;
+      font-size: 110%;
+      @media @desktop, @tablet-landscape {
+        font-size: 100%;
+      }
+
+      &.large {
+        font-size: 120%;
+        @media @desktop, @tablet-landscape {
+          font-size: 110%;
+        }
+      }
+
+      &.hudge {
+        font-size: 150%;
+        @media @desktop, @tablet-landscape {
+          font-size: 130%;
+        }
+      }
+      span {
+        display: block;
+        width: 100%;
+        padding: 0 0 5px 0;
+      }
+    }
+  }
+}

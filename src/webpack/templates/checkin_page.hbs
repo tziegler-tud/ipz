@@ -8,9 +8,25 @@
         <div class="checkin-container">
             <div>
                 <div id="numberinput-container--primary" class="numberinput-container hide-label">
-                    <label class="numberinput-label" for="numberinput-element--primary">1</label>
-                    <input autocomplete="off" id="numberinput-element--primary" class="numberinput-element" type="text" maxlength="4"/>
+<!--                    <label class="numberinput-label" for="numberinput-element--primary">1</label>-->
+                    <label id="mdc-text-field--1" class="mdc-text-field mdc-text-field--outlined">
+                    <span class="mdc-notched-outline">
+                        <span class="mdc-notched-outline__leading"></span>
+                        <span class="mdc-notched-outline__notch">
+                            <span class="mdc-floating-label" id="numberinput-label--1">Wartenummer</span>
+                        </span>
+                        <span class="mdc-notched-outline__trailing"></span>
+                    </span>
+                    <input id="numberinput-element--primary" autocomplete="off" class="numberinput-element mdc-text-field__input" type="number" maxlength="4" aria-labelledby="numberinput-label--1">
+                    <span class="numberinput-counter-label mdc-text-field__affix mdc-text-field__affix--prefix">1</span>
+                    </label>
                 </div>
+
+
+<!--                <div id="numberinput-container--primary" class="numberinput-container hide-label">-->
+<!--                    <label class="numberinput-label" for="numberinput-element--primary">1</label>-->
+<!--                    <input autocomplete="off" id="numberinput-element--primary" class="numberinput-element" type="number" maxlength="4"/>-->
+<!--                </div>-->
                 <button id="add-button" class="add-button mdc-button mdc-button--outlined">
                     <span class="mdc-button__ripple"></span>
                     <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
@@ -27,7 +43,13 @@
     <div class="mdc-snackbar">
         <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
             <div class="mdc-snackbar__label" aria-atomic="false">
-                Can't send photo. Retry in 5 seconds.
+                Hier könnte Ihre Meldung stehen.
+            </div>
+            <div class="mdc-snackbar__actions" aria-atomic="true">
+                <button type="button" class="mdc-button mdc-snackbar__action">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label"></span>
+                </button>
             </div>
 
         </div>

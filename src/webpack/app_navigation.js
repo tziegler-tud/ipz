@@ -6,7 +6,8 @@ const Handlebars = require("handlebars");
 import {transformDateTimeString} from "./helpers";
 var $ = require( "jquery" );
 
-var phone = window.matchMedia("only screen and (max-width: 50em)");
+var phone = window.matchMedia("only screen and (max-device-width: 400px)");
+var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 /**
  *
@@ -19,8 +20,8 @@ var Navigation = function(context, options){
     let self = this;
     let url;
 
-    if (phone.matches) url = '/webpack/templates/navigation-mobile.hbs'
-    else url = '/webpack/templates/navigation.hbs'
+    if (phone.matches || tablet.matches) url = '/webpack/templates/navigation-mobile.hbs';
+    else url = '/webpack/templates/navigation.hbs';
 
     var applyArgs = function(options){
         let defaults = {
@@ -58,7 +59,7 @@ var Navigation = function(context, options){
 
         const topAppBarElement = document.querySelector('.mdc-top-app-bar');
         const topAppBar = new MDCTopAppBar(topAppBarElement);
-        const drawer = MDCDrawer.attachTo(document.querySelector('.mdc-drawer'))
+        const drawer = MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
         const listEl = document.querySelector('.mdc-drawer .mdc-deprecated-list');
         const mainContentEl = document.querySelector('.app-content-container');
         const navEntry1 = document.getElementById("app-link-page1");
@@ -71,10 +72,13 @@ var Navigation = function(context, options){
         // });
         navEntry2.addEventListener("click", function(e){
             options.nav2.onclick(e);
+            if (phone.matches || tablet.matches) drawer.open = false;
         });
         navEntry3.addEventListener("click", function(e){
             options.nav3.onclick(e);
+            if (phone.matches || tablet.matches) drawer.open = false;
         });
+
 
 
         if (options.clock !== undefined){
@@ -96,9 +100,10 @@ var Navigation = function(context, options){
             drawer.open = !drawer.open;
         });
 
-        if (!phone.matches) {
+        if (!(phone.matches || tablet.matches)) {
             //open drawer intially on desktop screen sizes
             drawer.open = true;
+
         }
 
         self.drawer = drawer;
@@ -108,7 +113,9 @@ var Navigation = function(context, options){
         $(window).on('resize', function () {
             self.adjustWrapper(topAppBar);
         });
+
     });
+
     return self;
 }
 

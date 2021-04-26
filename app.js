@@ -38,13 +38,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/api/v1/checkin', checkinDataRouter);
-app.use('/', indexRouter);
-
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use("/api", function(req, res, next) {
   next(createError(404));
 });
+
+app.use("/api", errorHandler.apiErrorHandler);
+app.use('/', indexRouter);
+// catch 404 and forward to error handler
+app.use("/*", function(req, res, next) {
+  next(createError(404));
+});
+app.use("/", errorHandler.webErrorHandler);
+
+
+
 
 // error handler
 app.use(function(err, req, res, next) {

@@ -6,6 +6,12 @@
 @use "../../node_modules/@material/banner/styles";
 @use "../../node_modules/@material/banner";
 @use "../../node_modules/@material/snackbar/mdc-snackbar";
+@use "../../node_modules/@material/floating-label/mdc-floating-label";
+@use "../../node_modules/@material/line-ripple/mdc-line-ripple";
+@use "../../node_modules/@material/notched-outline/mdc-notched-outline";
+@use "../../node_modules/@material/textfield";
+@use "../../node_modules/@material/textfield/icon";
+
 
 @import "./variables";
 
@@ -16,7 +22,31 @@
 @include icon-button.core-styles;
 @include data-table.core-styles;
 @include data-table.theme-baseline;
+@include textfield.core-styles;
+@include icon.icon-core-styles;
 
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.mdc-snackbar {
+  .mdc-snackbar__action {
+    display: none;
+  }
+  &.show-action {
+    .mdc-snackbar__action {
+      display: block;
+    }
+  }
+}
 
 .app-page-wrapper {
   width: 100%;
@@ -59,10 +89,10 @@
       //grid-template-rows: auto;
       //grid-template-columns: repeat(4, 25%);
 
-      &.hide-label label {
+      &.hide-label .numberinput-counter-label {
         display: none;
       }
-      label {
+      .numberinput-label {
         flex: 0 0 1em;
         font-family: "Open Sans Light";
         font-size: 80%;
@@ -76,8 +106,14 @@
         position: relative;
       }
       .clear-btn {
+        flex: 0 0 1em;
+        height: auto;
         width: 1em;
         font-family: "Material Icons";
+
+        .mdc-button__icon {
+          margin-right: 0;
+        }
       }
     }
     .submit-button {

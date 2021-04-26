@@ -51,21 +51,21 @@ var ApiHandler = function() {
 
     /**
      *
+     * @typedef {Object} jquery-jqXHR-checkin
+     * @property {function(function(CheckinDataSchemeObject, String, jquery-jqXHR-checkoutdata))} done
+     * @property {function(function(Error))} fail
+     * @property {function(function())} always
+     * @property {function(function())} then
+     */
+
+    /**
+     *
      * @param amount {Integer} amount of numbers to be added.
      * @param numberArray {[Integer]} Array containing the numbers to be added
-     * @param callback {Checkin-ApiHandlerCallback} Callback object
+     *
+     * @return {jquery-jqXHR-checkin}
      */
-    self.checkin = function (amount, numberArray, callback) {
-        if (callback === undefined) {
-            callback = {
-                onSuccess: function (result) {
-                    console.log("data send successfully")
-                },
-                onFail: function () {
-                    console.error("failed to send data")
-                }
-            }
-        }
+    self.checkin = function (amount, numberArray) {
         let jsonData = {
             amount: amount,
             data: numberArray,
@@ -75,14 +75,13 @@ var ApiHandler = function() {
                 timestamp: Date.now(),
             },
         }
-        $.ajax({
+        return $.ajax({
             url: "/api/v1/checkin/add",
             // make put for safety reasons :-)
             type: 'POST',
             contentType: "application/json; charset=UTF-8",
             dataType: 'json',
             data: JSON.stringify(jsonData),
-            success: callback.onSuccess,
         });
     };
 
@@ -185,30 +184,33 @@ var ApiHandler = function() {
         });
     }
 
-    self.checkout = function (entry, callback) {
-        if (callback === undefined) {
-            callback = {
-                onSuccess: function () {
-                    console.log("data send successfully")
-                },
-                onFail: function () {
-                    console.error("failed to send data")
-                }
-            }
-        }
+    /**
+     *
+     * @typedef {Object} jquery-jqXHR-co
+     * @property {function(function(CheckinDataSchemeObject, String, jquery-jqXHR-checkoutdata))} done
+     * @property {function(function(Error))} fail
+     * @property {function(function())} always
+     * @property {function(function())} then
+     */
+
+
+    /**
+     * Gets the current set of entries with status=0 ("WB1"). These are the elements that are due to be checked out of WB1.
+     *
+     * @returns {jquery-jqXHR-co} jqXHR object return by jquery ajax call. Serves as a promise-like object, providing done, fail, always, then resolvers.
+     *
+     */
+    self.checkout = function (entry) {
         let jsonData = {
             entry: entry,
         }
-        $.ajax({
+        return $.ajax({
             url: "/api/v1/checkin/checkout",
             // make put for safety reasons :-)
             type: 'POST',
             contentType: "application/json; charset=UTF-8",
             dataType: 'json',
             data: JSON.stringify(jsonData),
-            success: function (result) {
-                callback.onSuccess(result);
-            }
         });
     };
 }
