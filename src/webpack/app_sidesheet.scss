@@ -1,0 +1,255 @@
+@use "../../node_modules/@material/button";
+@use "../../node_modules/@material/list";
+@use "../../node_modules/@material/checkbox"; // Required only for data table with row selection.
+@use "../../node_modules/@material/icon-button"; // Required only for data table with column sorting.
+@use "../../node_modules/@material/data-table/data-table";
+@use "../../node_modules/@material/banner/styles";
+@use "../../node_modules/@material/banner";
+@use "../../node_modules/@material/snackbar/mdc-snackbar";
+@use "../../node_modules/@material/floating-label/mdc-floating-label";
+@use "../../node_modules/@material/line-ripple/mdc-line-ripple";
+@use "../../node_modules/@material/notched-outline/mdc-notched-outline";
+@use "../../node_modules/@material/textfield";
+@use "../../node_modules/@material/textfield/icon";
+@use "../../node_modules/@material/fab";
+
+
+@import "./variables";
+
+@import "~material-icons-font/material-icons-font.css";
+
+
+@include list.deprecated-core-styles;
+@include checkbox.core-styles;
+@include icon-button.core-styles;
+@include data-table.core-styles;
+@include data-table.theme-baseline;
+@include textfield.core-styles;
+@include icon.icon-core-styles;
+@include fab.core-styles;
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+
+.mdc-snackbar {
+  .mdc-snackbar__action {
+    display: none;
+  }
+  &.show-action {
+    .mdc-snackbar__action {
+      display: block;
+    }
+  }
+}
+
+.app-page-wrapper {
+  width: 100%;
+
+  .app-page-header {
+    width: 80%;
+    margin: 2em auto;
+
+    .page-title {
+      font-size: 150%;
+      font-family: "Open Sans", Sans, sans-serif
+
+    }
+  }
+
+  .app-page-content {
+
+    font-size: 120%;
+
+    @media #{$desktop} {
+      width: calc(100% - 4em);
+      padding: 2em 2em;
+      margin: 0;
+
+    }
+    padding: 0;
+    margin: 2em auto;
+    width: 100%;
+  }
+}
+.checkin-page{
+  @media #{$desktop} {
+    width: 100%;
+    margin: 0;
+  }
+  width: auto;
+  max-width: 100%;
+  margin: 0 20px;
+  .checkin-container {
+    .numberinput-container {
+      display: flex;
+      flex-flow: row nowrap;
+      font-size: 150%;
+      width: 100%;
+      margin: .5em 0;
+      //display: grid;
+      //grid-template-rows: auto;
+      //grid-template-columns: repeat(4, 25%);
+
+      &.hide-label .numberinput-counter-label {
+        display: none;
+      }
+      .numberinput-label {
+        flex: 0 0 1em;
+        font-family: "Open Sans Light";
+        font-size: 80%;
+        margin-right: 1em;
+      }
+      .numberinput-element {
+        flex: 1 1 auto;
+        max-width: 15ex;
+        display: block;
+        font-size: 100%;
+        position: relative;
+      }
+      .clear-btn {
+        flex: 0 0 1em;
+        height: auto;
+        width: 1em;
+        font-family: "Material Icons";
+
+        .mdc-button__icon {
+          margin-right: 0;
+        }
+      }
+    }
+    .submit-button {
+      display: block;
+      margin: 2em 0;
+      @include button.container-fill-color(#c31d34);
+    }
+  }
+}
+.banner-wrapper {
+  position: relative;
+  font-size: 150%;
+  .checkout-banner {
+    transition: height 0ms ease;
+    @include banner.mobile-stacked;
+
+    .mdc-banner__fixed {
+
+    }
+    .checkout-banner-text {
+      font-size: 150%;
+      display: block;
+      width: 100%;
+      margin-bottom:.5em;
+    }
+    .checkout-banner-number {
+      display: block;
+      line-height: 1em;
+      font-size: 400%;
+      color: #c31d34;
+      @media #{$tablet} {
+        font-size: 700%;
+      }
+    }
+    .banner-button {
+      @media #{$tablet} {
+        font-size: 18px;
+        @include button.height(50px);
+      }
+
+    }
+    .banner-button-next {
+      @include button.container-fill-color(#c31d34);
+      @include button.ink-color(#fff);
+    }
+    .banner-content {
+      .banner-text {
+
+      }
+      .banner-actions {
+
+      }
+    }
+  }
+
+}
+
+.checkout-page {
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  overflow: hidden;
+  .app-page-content {
+    overflow: scroll;
+  }
+  .checkout-container {
+
+    .checkout-table {
+      width: 95%;
+      margin: auto;
+
+
+      .checkout-table-container {
+        @media #{$tablet} {
+          .mdc-data-table__cell {
+            font-size: 130%;
+          }
+
+          .checkout-cell-number {
+            font-size: 180%;
+          }
+        }
+        .checkout-table-row {
+          .checkout-table-noEntryLabel {
+            font-style: italic;
+          }
+
+          &.primary {
+
+          }
+
+          &.secondary {
+            border-top: none;
+
+            .secondary-icon {
+              margin-right: 0;
+              font-size:100%;
+              color: #555;
+            }
+          }
+        }
+      }
+
+    }
+  }
+}
+
+#side-sheet {
+  //right: 0;
+  //left: initial;
+  //
+  //border-left-width: 1px;
+  //border-left-style: solid;
+  //border-right-width: 0;
+  //border-right-style: none;
+  //
+  //&.mdc-drawer--animate {
+  //    transform: translateX(100%);
+  //}
+  //
+  //&.mdc-drawer--opening {
+  //
+  //    transform: translateX(0);
+  //  }
+  //&.mdc-drawer--closing {
+  //    transform: translateX(100%);
+  //  }
+}
