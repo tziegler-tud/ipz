@@ -181,7 +181,12 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
         self.pageContainer.append(template(context));
         self.primaryInputContainer = document.getElementById("numberinput-container--primary");
         const input = new MDCTextField(document.querySelector('.mdc-text-field'));
-        const actionlist = new MDCList(document.querySelector('.interactions-list'));
+        const interactionLists = document.querySelectorAll('.interactions-list');
+        let mdcInteractionLists = [];
+        interactionLists.forEach(function(el){
+            mdcInteractionLists.push(new MDCList(el));
+        })
+        // const actionlist = new MDCList(document.querySelector('.interactions-list'));
         self.primaryInputElement = input;
         input.focus();
         self.lastInputContainer = self.primaryInputContainer;

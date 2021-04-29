@@ -40,7 +40,7 @@
                         </button>
                     </div>
                     <div class="mdc-deprecated-list-group">
-                        <h3 class="mdc-deprecated-list-group__subheader">List 1</h3>
+<!--                        <h3 class="mdc-deprecated-list-group__subheader"></h3>-->
                         <ul class="mdc-deprecated-list interactions-list" role="radiogroup">
                             <li class="mdc-deprecated-list-item" role="radio" aria-checked="false">
                                 <span class="mdc-deprecated-list-item__ripple"></span>
@@ -94,8 +94,9 @@
                             </span>
                                 <label class="mdc-deprecated-list-item__text" for="demo-list-radio-item-2">Checkin-Priorität</label>
                             </li>
+                            <li role="separator" class="mdc-deprecated-list-divider"></li>
                         </ul>
-                        <h3 class="mdc-deprecated-list-group__subheader">List 2</h3>
+                        <h3 class="mdc-deprecated-list-group__subheader">Zusätzliche Angaben</h3>
                         <ul class="mdc-deprecated-list interactions-list">
                             <li class="mdc-deprecated-list-item" role="checkbox" aria-checked="false">
                                 <span class="mdc-deprecated-list-item__ripple"></span>
@@ -113,10 +114,9 @@
                                     </div>
                                 </div>
                             </span>
-                                <label class="mdc-deprecated-list-item__text" for="demo-list-checkbox-item-1">Rollstuhl</label>
+                                <label class="mdc-deprecated-list-item__text" for="demo-list-checkbox-item-1">Dokumente ausfüllen</label>
                             </li>
-                            <li role="separator" class="mdc-deprecated-list-divider"></li>
-                            <li class="mdc-deprecated-list-item color--important" role="checkbox" aria-checked="false">
+                            <li class="mdc-deprecated-list-item" role="checkbox" aria-checked="false">
                                 <span class="mdc-deprecated-list-item__ripple"></span>
                                 <span class="mdc-deprecated-list-item__graphic">
                                 <div class="mdc-checkbox">
@@ -132,9 +132,31 @@
                                     </div>
                                 </div>
                             </span>
-                                <label class="mdc-deprecated-list-item__text" for="demo-list-checkbox-item-1">Checkin - Priorität</label>
+                                <label class="mdc-deprecated-list-item__text" for="demo-list-checkbox-item-1">Termin:</label>
                             </li>
+                            <input type="time" id="checkin-timepicker" name="checkin-timepicker">
                         </ul>
+<!--                        <h3 class="mdc-deprecated-list-group__subheader">List 2</h3>-->
+<!--                        <ul class="mdc-deprecated-list interactions-list">-->
+<!--                            <li class="mdc-deprecated-list-item" role="checkbox" aria-checked="false">-->
+<!--                                <span class="mdc-deprecated-list-item__ripple"></span>-->
+<!--                                <span class="mdc-deprecated-list-item__graphic">-->
+<!--                                <div class="mdc-checkbox">-->
+<!--                                    <input type="checkbox" class="mdc-checkbox__native-control" id="demo-list-checkbox-item-1"/>-->
+<!--                                    <div class="mdc-checkbox__background">-->
+<!--                                        <svg class="mdc-checkbox__checkmark"-->
+<!--                                             viewBox="0 0 24 24">-->
+<!--                                        <path class="mdc-checkbox__checkmark-path"-->
+<!--                                              fill="none"-->
+<!--                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>-->
+<!--                                        </svg>-->
+<!--                                        <div class="mdc-checkbox__mixedmark"></div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </span>-->
+<!--                                <label class="mdc-deprecated-list-item__text" for="demo-list-checkbox-item-1">Rollstuhl</label>-->
+<!--                            </li>-->
+<!--                        </ul>-->
                     </div>
                 </div>
             </div>
