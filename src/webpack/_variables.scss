@@ -1,32 +1,8 @@
+$phone: "only screen and (max-width: 600px)";
+$tablet-landscape: "only screen and (min-width: 600px) and (max-width: 1280px) and (orientation: landscape)";
+$tablet-portrait: "only screen and (min-width: 600px) and (max-width: 1280px) and (orientation: portrait)";
+$tablet: "only screen and  (min-width: 600px) and (max-width: 1280px)";
+$desktop: "only screen and (min-width: 1280px)";
 
-$phone-width: "(max-width: 50em)";
-$tablet-width: "(min-width: 50em) and (max-width: 75em)";
-$desktop-width: "(min-width: 75em)";
-
-
-
-$phone-narrow: #{"only screen and (max-width: 25em)"};
-$phone-medium: #{"only screen and (min-width: 25em) and (max-width: 35em)"};
-$phone-large: #{"only screen and (min-width: 35em) and (max-width: 50em)"};
-$phone: #{"only screen and #{$phone-width}"};
-
-$tablet-portrait: #{"only screen and #{$tablet-width} and (orientation: portrait)"};
-$tablet-landscape: #{"only screen and #{$tablet-width} and (orientation: landscape)"};
-
-$tablet-landscape-narrow: #{"only screen and (min-width: 50em) and (max-width: 60em)"};
-$tablet-landscape-medium: #{"only screen and (min-width: 60em) and (max-width: 70em)"};
-$tablet-landscape-wide: #{"only screen and (min-width: 70em) and (max-width: 75em)"};
-
-
-
-$desktop: "only screen and #{$desktop-width}";
-$desktop-full: #{"only screen and (min-width: 95em)"};
-$desktop-wide:  #{"only screen and (min-width: 85em) and (max-width: 95em)"};
-$desktop-regular: #{"only screen and (min-width: 75em) and (max-width: 85em)"};
-$desktop-narrow: #{"only screen and (min-width: 65em) and (max-width: 75em)"};
-
-$desktop-short: #{"only screen and (max-height: 35em) and (min-width: 75em)"};
-$desktop-medium: #{"only screen and (min-height: 35em) and (max-height: 45em) and (min-width: 75em)"};
-$desktop-tall: #{"only screen and (min-height: 45em) and (max-height: 70em) and (min-width: 75em)"};
 
 

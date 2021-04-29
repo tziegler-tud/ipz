@@ -11,11 +11,14 @@
 @use "../../node_modules/@material/notched-outline/mdc-notched-outline";
 @use "../../node_modules/@material/textfield";
 @use "../../node_modules/@material/textfield/icon";
+@use "../../node_modules/@material/fab";
 
 
 @import "./variables";
+@import "./color-variables";
 
 @import "~material-icons-font/material-icons-font.css";
+
 
 @include list.deprecated-core-styles;
 @include checkbox.core-styles;
@@ -24,7 +27,7 @@
 @include data-table.theme-baseline;
 @include textfield.core-styles;
 @include icon.icon-core-styles;
-
+@include fab.core-styles;
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -36,6 +39,8 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+
 
 .mdc-snackbar {
   .mdc-snackbar__action {
@@ -50,6 +55,7 @@ input[type=number] {
 
 .app-page-wrapper {
   width: 100%;
+  height: 100%;
 
   .app-page-header {
     width: 80%;
@@ -64,10 +70,15 @@ input[type=number] {
 
   .app-page-content {
 
+    font-size: 120%;
+
     @media #{$desktop} {
-      width: 80%;
+      width: calc(100% - 4em);
+      padding: 2em 2em;
+      margin: 0;
 
     }
+    padding: 0;
     margin: 2em auto;
     width: 100%;
   }
@@ -75,90 +86,223 @@ input[type=number] {
 .checkin-page{
   @media #{$desktop} {
     width: 100%;
+    margin: 0;
   }
-  width: 90%;
-  margin: auto;
-  .checkin-container {
-    .numberinput-container {
+  width: auto;
+  max-width: 100%;
+  margin: 0 20px;
+  .app-page-content {
+
+    .checkin-container {
       display: flex;
-      flex-flow: row nowrap;
-      font-size: 150%;
-      width: 100%;
-      margin: .5em 0;
-      //display: grid;
-      //grid-template-rows: auto;
-      //grid-template-columns: repeat(4, 25%);
+      flex-flow: row wrap;
+      $flex-wrap-detection: "(min-width: 1000px)";
 
-      &.hide-label .numberinput-counter-label {
-        display: none;
-      }
-      .numberinput-label {
-        flex: 0 0 1em;
-        font-family: "Open Sans Light";
-        font-size: 80%;
-        margin-right: 1em;
-      }
-      .numberinput-element {
-        flex: 1 1 auto;
-        max-width: 15ex;
-        display: block;
-        font-size: 100%;
-        position: relative;
-      }
-      .clear-btn {
-        flex: 0 0 1em;
-        height: auto;
-        width: 1em;
-        font-family: "Material Icons";
+      .form-container {
+        .form-container-inner {
+          padding: 10px;
+          background-color: $page-element-color;
+          box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
+        }
+        min-width: 400px;
+        flex: 1 1 min-content;
+        margin: 10px;
 
-        .mdc-button__icon {
-          margin-right: 0;
+
+      }
+      .interaction-container {
+        @media #{$flex-wrap-detection}{
+          flex: 0 1 50%;
+
+        }
+        min-width: 300px;
+        margin: 10px;
+
+        flex: 1 1 50%;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        .interaction-container-inner {
+          padding: 10px;
+          background-color: $page-element-color;
+          box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
+
+          .fab-container {
+            @media #{$flex-wrap-detection}{
+              transform: translateY(-30px);
+            }
+          }
+          .interactions-list {
+            $color--important: #de243d;
+            li.color--important {
+              @include list.deprecated-item-primary-text-ink-color($color--important);
+            }
+          }
+        }
+
+
+
+      }
+
+
+      .numberinput-container {
+        display: flex;
+        flex-flow: row nowrap;
+        width: 100%;
+        margin: .5em 0;
+
+        .numberinput-element {
+          font-size: 150%;
+        }
+        .clear-btn {
+          flex: 0 0 1em;
+          height: auto;
+          width: 1em;
+          font-family: "Material Icons";
+
+          .mdc-button__icon {
+            margin-right: 0;
+          }
         }
       }
-    }
-    .submit-button {
-      display: block;
-      margin: 2em 0;
-      @include button.container-fill-color(#c31d34);
+      .submit-button {
+        @include button.container-fill-color(#c31d34);
+      }
     }
   }
+
+}
+.banner-wrapper {
+  position: relative;
+  font-size: 150%;
+  .checkout-banner {
+    transition: height 0ms ease;
+    @include banner.mobile-stacked;
+
+    &.multi2, &.multi4 {
+      .mdc-banner__content {
+          max-width: unset;
+      }
+      .mdc-banner__graphic-text-wrapper {
+        flex-flow: row wrap;
+      }
+      .checkout-number-container {
+        flex-flow: row wrap;
+      }
+    }
+
+    .mdc-banner__fixed {
+
+    }
+    .checkout-banner-text {
+      font-size: 150%;
+      display: block;
+      width: 100%;
+      margin-bottom:.5em;
+    }
+    .checkout-number-container {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-items: flex-end;
+      .checkout-banner-number {
+        flex: 1 1 auto;
+        //display: block;
+        line-height: 1em;
+        font-size: 400%;
+        color: #c31d34;
+        @media #{$tablet} {
+          font-size: 550%;
+          &.multi2 {
+            font-size: 450%;
+          }
+          &.multi4 {
+            font-size: 400%;
+          }
+        }
+      }
+      .time-container {
+        margin-left: 20px;
+        flex: 1 1 auto;
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-end;
+        .checkout-time-label {
+          position: relative;
+          font-size: 120%;
+        }
+        .checkout-time {
+          position: relative;
+          font-size: 160%;
+        }
+      }
+
+    }
+
+    .banner-button {
+      @media #{$tablet} {
+        font-size: 18px;
+        @include button.height(50px);
+      }
+
+    }
+    .banner-button-next {
+      @include button.container-fill-color(#c31d34);
+      @include button.ink-color(#fff);
+    }
+    .mdc-banner__content {
+      @media #{$tablet} {
+        //flex-flow: row wrap;
+        max-width: unset;
+
+        .mdc-banner__graphic-text-wrapper {
+          flex-flow: row wrap;
+        }
+        .checkout-number-container {
+          flex-flow: row wrap;
+        }
+      }
+
+      .mdc-banner__actions {
+        @media #{$phone} {
+          flex-flow: column nowrap;
+          margin: 10px;
+          button {
+            margin-top: 10px;
+          }
+        }
+
+
+      }
+    }
+  }
+
 }
 
 .checkout-page {
-  .banner-wrapper {
-    font-size: 150%;
-    .checkout-banner {
-        transition: height 0ms ease;
-        @include banner.mobile-stacked;
-      .checkout-banner-text {
-        font-size: 120%;
-        display: block;
-        width: 100%;
-        margin-bottom:.5em;
-      }
-      .checkout-banner-number {
-        display: block;
-        line-height: 1em;
-        font-size: 300%;
-        color: #c31d34;
-      }
-      .banner-button-next {
-        @include button.container-fill-color(#c31d34);
-        @include button.ink-color(#fff);
-      }
-    }
-
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  overflow: hidden;
+  .app-page-content {
+    overflow: scroll;
   }
   .checkout-container {
+
     .checkout-table {
       width: 95%;
       margin: auto;
 
-      @media #{$desktop} {
-        width: 80%;
-      }
 
       .checkout-table-container {
+        @media #{$tablet} {
+          .mdc-data-table__cell {
+            font-size: 130%;
+          }
+
+          .checkout-cell-number {
+            font-size: 180%;
+          }
+        }
         .checkout-table-row {
           .checkout-table-noEntryLabel {
             font-style: italic;
@@ -173,7 +317,7 @@ input[type=number] {
 
             .secondary-icon {
               margin-right: 0;
-              font-size:80%;
+              font-size:100%;
               color: #555;
             }
           }
@@ -184,3 +328,24 @@ input[type=number] {
   }
 }
 
+#side-sheet {
+  //right: 0;
+  //left: initial;
+  //
+  //border-left-width: 1px;
+  //border-left-style: solid;
+  //border-right-width: 0;
+  //border-right-style: none;
+  //
+  //&.mdc-drawer--animate {
+  //    transform: translateX(100%);
+  //}
+  //
+  //&.mdc-drawer--opening {
+  //
+  //    transform: translateX(0);
+  //  }
+  //&.mdc-drawer--closing {
+  //    transform: translateX(100%);
+  //  }
+}

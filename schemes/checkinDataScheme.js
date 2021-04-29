@@ -13,6 +13,10 @@ var checkinDataSchema = new Schema({
             type: Number
         },
     ],
+    queueNumber: {
+        type: Number,
+        required: true,
+    },
     currentStatus: {
         status: {
             type: Number,

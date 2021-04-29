@@ -4,10 +4,11 @@ import {MDCDrawer} from "@material/drawer";
 import {MDCRipple} from "@material/ripple";
 const Handlebars = require("handlebars");
 import {transformDateTimeString} from "./helpers";
+import {CheckinPage} from "./app_pages";
 var $ = require( "jquery" );
 
-var phone = window.matchMedia("only screen and (max-device-width: 400px)");
-var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
+var phone = window.matchMedia("only screen and (max-width: 600px)");
+var tablet = window.matchMedia("only screen and (min-width: 600px) and (max-width: 1280px)");
 
 /**
  *
@@ -26,6 +27,7 @@ var Navigation = function(context, options){
     var applyArgs = function(options){
         let defaults = {
             clock: undefined,
+            sidesheet: false,
             nav1: {
                 onclick: function(e){
                     return e;
@@ -80,7 +82,6 @@ var Navigation = function(context, options){
         });
 
 
-
         if (options.clock !== undefined){
             setInterval(function() {
                 $(options.clock).text(transformDateTimeString(Date.now()).time("hh:mm:ss"));
@@ -113,10 +114,33 @@ var Navigation = function(context, options){
         $(window).on('resize', function () {
             self.adjustWrapper(topAppBar);
         });
-
     });
 
     return self;
+}
+
+Navigation.prototype.setAction = function(id, action, args){
+    if(!id || typeof(action) !== "function"){
+        console.error("Can't set action: invalid parameters.");
+    }
+    //find action element
+    let el = document.getElementById(id);
+    if (el === undefined) {
+        console.error("Failed to add action: Element with ID: " + id + "not found");
+        return false;
+    }
+    el.addEventListener("click", function(e){
+        action(e, args);
+    })
+}
+/**
+ * Sets the title text of the top app bar
+ * @param text {String} new title text
+ *
+ */
+Navigation.prototype.setTitle = function(text){
+    let title = document.getElementById("nav-title");
+    title.innerHTML = text;
 }
 
 Navigation.prototype.adjustWrapper = function(topAppBar){

@@ -1,5 +1,6 @@
 import {preloader} from "./preloader";
 import {Navigation} from "./app_navigation";
+import {Sidesheet} from "./app_sidesheet";
 import {CheckinPage, CheckoutPage} from "./app_pages";
 import {transformDateTimeString} from "./helpers";
 import "./handlebarsHelpers";
@@ -13,19 +14,22 @@ $(window).on('load',function() {
     console.log("finished loading, hiding preloader");
     // let plr = new preloader();
     // setTimeout(plr.hide,0);
-
 });
+
+let sidesheet;
+
 
 let nav = new Navigation(
     {
         pageData: {
-            navTitle: "Impfzentrum Dresden - Digitale Wartenummern",
+            navTitle: "Check In - Vorkontrolle",
             date: transformDateTimeString(Date.now()).date,
             time: transformDateTimeString(Date.now()).time("hh:mm:ss"),
         },
     },
     {
         clock: ".navigation-clock",
+        sidesheet: true,
         nav1: {
             onclick: function(){
             }
@@ -34,11 +38,16 @@ let nav = new Navigation(
             onclick: function(){
                 checkoutPage.hide();
                 checkinPage.show();
+                nav.setTitle("Check In - Vorkontrolle");
+                sidesheet.setContent("checkin", checkinPage, {show: false});
+
             }
         },
         nav3: {
             onclick: function(){
                 checkoutPage.show();
+                nav.setTitle("Wartebereich 1 - Aufruf");
+                sidesheet.setContent("wb1", checkoutPage, {show: false});
             }
         }
     },
@@ -47,12 +56,16 @@ let nav = new Navigation(
 let checkinPage = new CheckinPage();
 let checkoutPage = new CheckoutPage();
 checkinPage.show().done(function(){
+    sidesheet = new Sidesheet("checkin", checkinPage, {});
     if (phone.matches || tablet.matches) {
         checkinPage.focus({click: true});
     }
 });
 nav.initialize
     .done(function(){
+        nav.setAction("mdc-top-app-bar-action1", function(e, args){
+            sidesheet.toggle();
+        })
     });
 
 if (!(phone.matches || tablet.matches)) {

@@ -2,9 +2,12 @@ import {MDCList} from "@material/list";
 import {MDCTopAppBar} from "@material/top-app-bar";
 import {MDCDrawer} from "@material/drawer";
 import {MDCRipple} from "@material/ripple";
+import {MDCSwitch} from '@material/switch';
+
+import {apiHandler} from "./apiHandler";
+
 const Handlebars = require("handlebars");
 import {transformDateTimeString} from "./helpers";
-import {CheckinPage} from "./app_pages";
 var $ = require( "jquery" );
 
 var phone = window.matchMedia("only screen and (max-device-width: 400px)");
@@ -12,169 +15,137 @@ var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 /**
  *
- * @param context
- * @param options
- * @returns function {Navigation}
+ * @param type {String}
+ * @param options {Object}
+ * @param activePage {Page}
+ * @returns {Sidesheet}
  * @constructor
  */
-var Navigation = function(context, options){
+var Sidesheet = function(type, activePage, options){
     let self = this;
     let url;
-
-    if (phone.matches || tablet.matches) url = '/webpack/templates/navigation-mobile.hbs';
-    else url = '/webpack/templates/navigation.hbs';
-
+    self.active = false;
     var applyArgs = function(options){
         let defaults = {
-            clock: undefined,
-            sidesheet: false,
-            nav1: {
-                onclick: function(e){
-                    return e;
-                }
-            },
-            nav2: {
-                onclick: function(e){
-                    return e;
-                }
-            },
-            nav3: {
-                onclick: function(e){
-                    return e;
-                }
-            }
+            containerId: "sidesheet-container",
         }
         options = (options === undefined) ? {}: options;
         return Object.assign(defaults, options);
     };
     //options
     self.options = applyArgs(options);
-
-
-
-    //load drawer template and attach to body
-    self.initialize = $.get(url, function (data) {
-        console.log("template found");
-        var template = Handlebars.compile(data);
-        // $(".app-drawer-container").prepend(template(context));
-        $(".app-wrapper").prepend(template(context));
-
-        const topAppBarElement = document.querySelector('.mdc-top-app-bar');
-        const topAppBar = new MDCTopAppBar(topAppBarElement);
-        const drawer = MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
-        const listEl = document.querySelector('.mdc-drawer .mdc-deprecated-list');
-        const mainContentEl = document.querySelector('.app-content-container');
-        const navEntry1 = document.getElementById("app-link-page1");
-        const navEntry2 = document.getElementById("app-link-page2");
-        const navEntry3 = document.getElementById("app-link-page3");
-
-        if(self.options.sidesheet) {
-            self.addSidesheet().done(function(){
-                $(topAppBarElement).find("#mdc-top-app-bar-action1").click(function(){
-                    self.sidesheet.open = !self.sidesheet.open;
-                })
-                console.log("sidesheet added");
-                }
-            );
-        }
-
-        //hook nav events
-        // navEntry1.addEventListener("click", function(e){
-        //     options.nav1.onclick(e);
-        // });
-        navEntry2.addEventListener("click", function(e){
-            options.nav2.onclick(e);
-            if (phone.matches || tablet.matches) drawer.open = false;
-        });
-        navEntry3.addEventListener("click", function(e){
-            options.nav3.onclick(e);
-            if (phone.matches || tablet.matches) drawer.open = false;
-        });
-
-
-
-        if (options.clock !== undefined){
-            setInterval(function() {
-                $(options.clock).text(transformDateTimeString(Date.now()).time("hh:mm:ss"));
-            }, 1000);
-        }
-        listEl.addEventListener('click', (event) => {
-            // mainContentEl.querySelector('input, button').focus();
-        });
-
-        document.body.addEventListener('MDCDrawer:closed', () => {
-            // mainContentEl.querySelector('input, button').focus();
-        });
-        // const buttonRipple = new MDCRipple(document.querySelector('.mdc-button'));
-
-        topAppBar.setScrollTarget(mainContentEl);
-        topAppBar.listen('MDCTopAppBar:nav', () => {
-            drawer.open = !drawer.open;
-        });
-
-        if (!(phone.matches || tablet.matches)) {
-            //open drawer intially on desktop screen sizes
-            drawer.open = true;
-
-        }
-
-        self.drawer = drawer;
-        self.topAppBar = topAppBar;
-
-        self.adjustWrapper(topAppBar);
-        $(window).on('resize', function () {
-            self.adjustWrapper(topAppBar);
-        });
-    });
-
+    self.container = document.getElementById(self.options.containerId);
+    if(!self.container) {
+        //try again later
+        $(window).on("load", function(){
+            self.container = document.getElementById(self.options.containerId);
+            self.setContent(type, activePage, options);
+        })
+    }
+    else {
+        self.setContent(type, activePage, options);
+    }
     return self;
 }
 
-/**
- * Sets the title text of the top app bar
- * @param text {String} new title text
- *
- */
-Navigation.prototype.setTitle = function(text){
-    let title = document.getElementById("nav-title");
-    title.innerHTML = text;
-}
 
-Navigation.prototype.addSidesheet = function(type){
+Sidesheet.prototype.setContent = function(type, activePage, options){
     let self = this;
-    if(type===undefined) type = "checkin";
-    let context = {};
-    if(self.sidesheet){
-        self.sidesheet.remove();
+    let defaultOptions = {
+        show: false,
     }
+    options = (options === undefined) ? {}: options;
+    options = Object.assign(defaultOptions, options);
     let url;
     switch(type){
         case "checkin":
-            url = "/webpack/templates/sidesheet-checkin.hbs";
+            url = "/webpack/templates/sidesheet/sidesheet-checkin.hbs";
+            self.createCheckinPage(activePage, options);
             break;
         case "wb1":
-            url = "/webpack/templates/sidesheet-wb1.hbs";
+            url = "/webpack/templates/sidesheet/sidesheet-wb1.hbs";
+            self.createWb1Page(activePage, options);
             break;
         default:
-            url = "/webpack/templates/sidesheet-checkin.hbs";
+            url = "/webpack/templates/sidesheet/sidesheet-checkin.hbs";
             break;
     }
-    return $.get(url, function (data) {
-        var template = Handlebars.compile(data);
-        $(".app-wrapper").prepend(template(context));
-        let list = new MDCList(document.querySelector('.sidesheet .mdc-deprecated-list'));
-        const mainContentEl = document.querySelector('.app-content-container');
-    });
-}
-Navigation.prototype.adjustWrapper = function(topAppBar){
-    //get viewport height
-    const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-    //get height of top navigation and topbar element
-    let navHeight = topAppBar.foundation.adapter.getTopAppBarHeight();
-    $(".app-content-container").css({
-        height: (vh - navHeight) + "px",
-        "padding-top": navHeight + "px"
-    })
+    let context = {};
 }
 
-export {Navigation}
+/**
+ *
+ * @param activePage
+ * @param options
+ */
+Sidesheet.prototype.createCheckinPage = function(activePage, options){
+    let self = this;
+    let url = "/webpack/templates/sidesheet/sidesheet-checkin.hbs";
+    let context = {};
+    $.get(url, function (data) {
+        var template = Handlebars.compile(data);
+        self.container.innerHTML = template(context);
+        let list = new MDCList(document.querySelector('.sidesheet .mdc-deprecated-list'));
+        let cancelBtn = document.getElementById("sidesheet-cancel-button-element")
+        cancelBtn.addEventListener("click", function(){
+            self.hide();
+        })
+        if(!options.show) self.hide();
+    });
+}
+
+/**
+ *
+ * @param activePage
+ * @param options
+ */
+Sidesheet.prototype.createWb1Page = function(activePage, options){
+    let self = this;
+    let url = "/webpack/templates/sidesheet/sidesheet-wb1.hbs";
+    let context = {};
+    $.get(url, function (data) {
+        var template = Handlebars.compile(data);
+        self.container.innerHTML = template(context);
+        const switchControl = new MDCSwitch(document.querySelector('.mdc-switch'));
+        //setup sorting select element
+        let sort = document.getElementById("wb1-select-sort");
+        apiHandler.getCheckoutSorting()
+            .done(function(result){
+                //find corresponding option
+                sort.value=result.property;
+
+            })
+        let cancelBtn = document.getElementById("sidesheet-cancel-button-element")
+        cancelBtn.addEventListener("click", function(){
+            self.hide();
+        })
+        $(sort).on("change", function(){
+            let val = sort.value;
+            //request new data
+            apiHandler.setCheckoutSorting({sort: val, direction: 1})
+                .done(function(){
+                    //update page
+                })
+        })
+        if(!options.show) self.hide();
+    });
+}
+
+Sidesheet.prototype.show = function(){
+    this.active = true;
+    this.container.classList.add("sidesheet-active");
+      return true;
+}
+
+Sidesheet.prototype.hide = function(){
+    this.active = false;
+    this.container.classList.remove("sidesheet-active");
+    return false;
+}
+
+Sidesheet.prototype.toggle = function(){
+    if(this.active) return this.hide();
+    else {return this.show()}
+}
+
+export {Sidesheet}

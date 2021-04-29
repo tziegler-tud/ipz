@@ -5,6 +5,7 @@
 @use "../../node_modules/@material/top-app-bar";
 @use "../../node_modules/@material/top-app-bar/mdc-top-app-bar";
 
+@import "./variables";
 
 @import "~material-icons-font/material-icons-font.css";
 //
@@ -23,6 +24,18 @@
 
 .mdc-drawer {
   @include drawer.width(300px);
+  @media #{$tablet} {
+    @include drawer.width(350px);
+    .mdc-drawer__title {
+      font-size: 140%;
+    }
+    .mdc-drawer__subtitle {
+      font-size: 110%;
+    }
+    .mdc-deprecated-list-item {
+      font-size: 110%;
+    }
+  }
 }
 
 

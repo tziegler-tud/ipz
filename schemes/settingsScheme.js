@@ -3,21 +3,28 @@ const Schema = mongoose.Schema;
 
 
 // create instance of Schema
-var versionSchema = new Schema({
-    label: {
-        type: String,
-        required: true,
-    },
-    version: {
-        type: Number,
-        required: true,
-    },
+var settingsSchema = new Schema({
     timestamp: {
         type: Date,
         default: Date.now(),
+    },
+    checkinSettings: {
+
+    },
+    checkoutSettings: {
+        sorting: {
+            property: {
+                type: String,
+                default: "queueNumber",
+            },
+            direction: {
+                type: Number,
+                default: 1,
+            }
+        }
     }
 })
 
-versionSchema.set('toJSON', { virtuals: true, getters: true });
+settingsSchema.set('toJSON', { virtuals: true, getters: true });
 
-module.exports = mongoose.model('version', versionSchema);
+module.exports = mongoose.model('settings', settingsSchema);

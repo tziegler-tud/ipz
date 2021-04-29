@@ -3,6 +3,8 @@ const db = require('../schemes/mongo');
 const CheckinData = db.checkinData;
 const Version = db.version;
 
+const settingsService = require('./settingsService');
+
 module.exports = {
     getAll,
     getCheckoutData,
@@ -11,6 +13,7 @@ module.exports = {
     redraw,
     add,
     checkout,
+    updateVersion,
 };
 
 /**
@@ -20,8 +23,30 @@ async function getAll() {
     return CheckinData.find();
 }
 
-async function getCheckoutData() {
-    return CheckinData.find({"currentStatus.status": 0}).sort({'currentStatus.timestamp': 1});
+async function getCheckoutData(sort) {
+    let settings = await settingsService.getCheckoutSettings();
+    let currentSort = settings.sorting.property;
+    if (sort === undefined || sort === "default") {
+        sort = currentSort;
+    } else {
+        if (typeof (sort) !== "string") {
+            throw new Error("Failed to get sorted data: Unknown sorting argument given.");
+        }
+        if (sort === "queueNumber") {
+            sort = "queueNumber";
+        }
+        if (sort === "data") {
+            // return CheckinData.find({"currentStatus.status": 0}).sort({"data.0": 1});
+            sort = "data.0";
+        }
+        if (sort === "timestamp") {
+            sort = "currentStatus.timestamp";
+        }
+    }
+    let sortObject = {};
+    sortObject[sort] = 1;
+    return CheckinData.find({"currentStatus.status": 0}).sort(sortObject);
+
 }
 
 async function getCheckoutEntry(id) {
@@ -76,7 +101,7 @@ async function redraw(id, minutes) {
 }
 
 
-async function add(amount, data) {
+async function add(amount, data, queueNumber) {
     //validate
     if (data.length === 0){
         throw new Error("data cannot be empty.");
@@ -89,8 +114,14 @@ async function add(amount, data) {
         if(!reg.test(el)) {
             throw new Error("Failed to parse data: Invalid characters")
         }
+        el = parseInt(el);
         return el;
     })
+    //sort by numbers
+    trimmed.sort((a, b) => a - b);
+    if(queueNumber === undefined) {
+        queueNumber = trimmed[0];
+    }
 
     //get checkout version
     let version = await Version.findOne({label: "checkout"});
@@ -110,6 +141,7 @@ async function add(amount, data) {
     let checkinDataObject = {
         amount: amount,
         data: trimmed,
+        queueNumber: queueNumber,
         currentStatus: {
             status: 0,
             text: "WB1",
@@ -166,6 +198,28 @@ async function checkout(entry) {
     version.save();
     await dbEntry.save();
     return dbEntry;
+}
+
+
+async function updateVersion(number) {
+    let version = await Version.findOne({label: "checkout"});
+    if(!version){
+        console.log("no version file found. Generating new version history...")
+        version = new Version({
+            label: "checkout",
+            version: 1,
+            timestamp: Date.now(),
+        });
+    }
+    else {
+        if (number === undefined){
+            version.version++;
+        }
+        else {
+            version.version = number;
+        }
+    }
+    return version.save();
 }
 
 function addMinutes(date, minutes) {

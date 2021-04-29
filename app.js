@@ -8,6 +8,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var checkinDataRouter = require('./routes/api/checkinHandler');
+var checkoutDataRouter = require('./routes/api/checkoutHandler');
 
 
 
@@ -37,7 +38,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+//load settings
+var settingsService = require('./services/settingsService');
+settingsService.initialize();
+
 app.use('/api/v1/checkin', checkinDataRouter);
+app.use('/api/v1/checkout', checkoutDataRouter);
 app.use("/api", function(req, res, next) {
   next(createError(404));
 });

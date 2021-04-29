@@ -1,3 +1,5 @@
+import {MDCDrawer} from "@material/drawer";
+
 const Handlebars = require("handlebars");
 import "./handlebarsHelpers";
 import {apiHandler} from "./apiHandler";
@@ -174,11 +176,12 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
         //reset page content
         self.inputAmount = 1;
         self.inputUniqueId = 1;
-        let pageContainer = $("#page-container");
-        pageContainer.empty();
-        pageContainer.append(template(context));
+        self.pageContainer = $("#page-container");
+        self.pageContainer.empty();
+        self.pageContainer.append(template(context));
         self.primaryInputContainer = document.getElementById("numberinput-container--primary");
         const input = new MDCTextField(document.querySelector('.mdc-text-field'));
+        const actionlist = new MDCList(document.querySelector('.interactions-list'));
         self.primaryInputElement = input;
         input.focus();
         self.lastInputContainer = self.primaryInputContainer;
@@ -186,7 +189,7 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
         const addBtn = document.getElementById("add-button");
         const submitBtn = document.getElementById("submit-button");
         self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
-        pageContainer.on('keyup', (e) => {
+        self.pageContainer.on('keyup', (e) => {
             if (e.isDefaultPrevented()) {
                 return; // Do nothing if the event was already processed
             }
@@ -209,13 +212,6 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
             console.log("Input added. Total amount is now: " + self.inputAmount);
             let inputContainer = document.createElement("div");
             inputContainer.classList.add("numberinput-container", "additional");
-            // let input = document.createElement("input");
-            // input.id = "numberinput-element--" + self.inputAmount;
-            // input.classList.add("numberinput-element");
-            // input.type = "text";
-            // input.autocomplete="off";
-            // input.maxLength = 4;
-            // inputContainer.innerHTML = '<label id="mdc-text-field--' + self.inputAmount +'" class="mdc-text-field mdc-text-field--filled"><span class="mdc-text-field__ripple"></span> <span class="mdc-floating-label" id="numberinput-label--'+self.inputAmount + '">Hint text</span><input id="numberinput-element--"' + self.inputAmount + ' class="mdc-text-field__input" type="number" aria-labelledby="numberinput-label--'+self.inputAmount + '"><span class="mdc-line-ripple"></span> </label>'
             inputContainer.innerHTML = '<label id="mdc-text-field--' + self.inputUniqueId +'" class="mdc-text-field mdc-text-field--outlined">' +
                 '                           <span class="mdc-notched-outline">\n' +
                 '                               <span class="mdc-notched-outline__leading"></span>\n' +
@@ -227,10 +223,6 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
                 '                           <input id="numberinput-element--' + self.inputUniqueId + '" autocomplete="off" class="numberinput-element mdc-text-field__input" type="number" maxlength="4" aria-labelledby="numberinput-label--'+self.inputUniqueId + '">' +
                 '                           <span class="numberinput-counter-label mdc-text-field__affix mdc-text-field__affix--prefix">'+self.inputAmount+'</span>' +
                 '                       </label>'
-            // let label = document.createElement("label");
-            // label.classList.add("numberinput-label");
-            // label.for = "numberinput-element--" + self.inputUniqueId;
-            // label.innerHTML = self.inputAmount;
             let removeBtn = document.createElement("button");
             removeBtn.classList.add("clear-btn", "mdc-button", "mdc-button--outlined");
             removeBtn.innerHTML = '<span class="mdc-button__ripple"></span><i class="material-icons mdc-button__icon" aria-hidden="true">clear</i>'
@@ -475,6 +467,7 @@ CheckoutPage.prototype.showBanner = function(entry){
         let options = {
             forceUpdateBanner: true,
         }
+
         banner.foundation.handlePrimaryActionClick = function(){
             //handle current entry
             apiHandler.checkout(entry)

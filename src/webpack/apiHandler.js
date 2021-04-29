@@ -87,7 +87,7 @@ var ApiHandler = function() {
 
     self.getCheckoutDataVersion = function(){
         return $.get({
-            url: "/api/v1/checkin/getCheckoutDataVersion",
+            url: "/api/v1/checkout/getDataVersion",
             // get version to first to see if anything has changed
             type: 'GET',
             contentType: "application/json; charset=UTF-8",
@@ -112,16 +112,61 @@ var ApiHandler = function() {
      * @returns {jquery-jqXHR-checkoutdata} jqXHR object return by jquery ajax call. Serves as a promise-like object, providing done, fail, always, then resolvers.
      *
      */
-    self.getCheckoutData = function () {
+    self.getCheckoutData = function (options) {
+        let self = this;
+        let defaultOptions = {
+            sort: "default",
+            direction: 1,
+        }
+        options = (options === undefined) ? {}: options;
+        options = Object.assign(defaultOptions, options);
+
+        let jsonData = {
+            sort: options.sort,
+            direction: options.direction,
+        }
+
         return $.get({
-            url: "/api/v1/checkin/getCheckoutData",
+            url: "/api/v1/checkout/get",
             // make put for safety reasons :-)
-            type: 'GET',
+            type: 'POST',
             contentType: "application/json; charset=UTF-8",
-            success: function (result) {
-            }
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
         });
     }
+
+    self.setCheckoutSorting = function(params, options) {
+        let self = this;
+        let defaultParams = {
+            sort: "default",
+            direction: 1,
+        }
+        params = (params === undefined) ? {} : params;
+        params = Object.assign(defaultParams, params);
+
+        let jsonData = {
+            property: params.sort,
+            direction: params.direction,
+        }
+
+        return $.post({
+            url: "/api/v1/checkout/setSorting",
+            // make put for safety reasons :-)
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
+        });
+    }
+    self.getCheckoutSorting = function() {
+        let self = this;
+        return $.get({
+            url: "/api/v1/checkout/getSorting",
+            contentType: "application/json; charset=UTF-8",
+        });
+    };
+
 
     /**
      *
@@ -145,7 +190,7 @@ var ApiHandler = function() {
             id: id,
         }
         return $.get({
-            url: "/api/v1/checkin/getCheckoutData",
+            url: "/api/v1/checkout/getEntry",
             // make put for safety reasons :-)
             type: 'POST',
             contentType: "application/json; charset=UTF-8",
@@ -172,7 +217,7 @@ var ApiHandler = function() {
             minutes: 5, //reschedule for 5 minutes from now
         }
         return $.post({
-            url: "/api/v1/checkin/redraw",
+            url: "/api/v1/checkout/redraw",
             // make put for safety reasons :-)
             type: 'POST',
             contentType: "application/json; charset=UTF-8",
@@ -205,7 +250,7 @@ var ApiHandler = function() {
             entry: entry,
         }
         return $.ajax({
-            url: "/api/v1/checkin/checkout",
+            url: "/api/v1/checkout/checkout",
             // make put for safety reasons :-)
             type: 'POST',
             contentType: "application/json; charset=UTF-8",

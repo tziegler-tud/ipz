@@ -30,4 +30,5 @@ mongoose.Promise = global.Promise;
 module.exports = {
     checkinData: require('./checkinDataScheme'),
     version: require('./versionScheme'),
+    settings: require('./settingsScheme'),
 };

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const checkinDataService = require('../../services/checkinDataService');
+const settingsService = require('../../services/settingsService');
 
 
 
@@ -10,11 +11,6 @@ const checkinDataService = require('../../services/checkinDataService');
 // routes
 router.post('/add', addData);
 router.get('/get', get);
-router.get('/getCheckoutData', getCheckoutData);
-router.post('/getCheckoutData', getCheckoutEntry);
-router.post('/redraw', redraw);
-router.get('/getCheckoutDataVersion', getCheckoutDataVersion);
-router.post('/checkout', checkout);
 
 /**
  * add Numbers to Checkin waiting list
@@ -52,53 +48,9 @@ function addData (req, res, next){
         .catch(err => next(err));
 }
 
-function checkout (req, res, next){
-    //validate data
-    let err = new Error("invalid arguments received")
-    if (req.body === undefined) {
-        next(err);
-    }
-    if(req.body.entry === undefined){
-        next(err)
-    }
-    let entry = req.body.entry;
-
-    checkinDataService.checkout(entry)
-        .then(result => res.json(result))
-        .catch(err => next(err));
-}
-
 function get (req, res, next){
     //validate data
     checkinDataService.getAll()
-        .then(result => res.json(result))
-        .catch(err => next(err));
-}
-
-function getCheckoutData (req, res, next){
-    //validate data
-    checkinDataService.getCheckoutData()
-        .then(result => res.json(result))
-        .catch(err => next(err));
-}
-
-function getCheckoutEntry (req, res, next){
-    //validate data
-    checkinDataService.getCheckoutEntry(req.body.id)
-        .then(result => res.json(result))
-        .catch(err => next(err));
-}
-
-function redraw (req, res, next){
-    //validate data
-    checkinDataService.redraw(req.body.id, req.body.minutes)
-        .then(result => res.json(result))
-        .catch(err => next(err));
-}
-
-function getCheckoutDataVersion (req, res, next){
-    //validate data
-    checkinDataService.getCheckoutDataVersion()
         .then(result => res.json(result))
         .catch(err => next(err));
 }
