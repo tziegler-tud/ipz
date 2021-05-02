@@ -60,18 +60,16 @@ var ApiHandler = function() {
 
     /**
      *
-     * @param amount {Integer} amount of numbers to be added.
-     * @param numberArray {[Integer]} Array containing the numbers to be added
+     * @param type {Integer} type 0=null, 1=B, 2=M, 3=A
      *
      * @return {jquery-jqXHR-checkin}
      */
-    self.checkin = function (amount, numberArray) {
+    self.checkin = function (type) {
         let jsonData = {
-            amount: amount,
-            data: numberArray,
+            type: type,
             currentStatus: {
                 stauts: 0,
-                text: "WB1",
+                text: "WB2",
                 timestamp: Date.now(),
             },
         }
@@ -133,6 +131,38 @@ var ApiHandler = function() {
             contentType: "application/json; charset=UTF-8",
             dataType: 'json',
             data: JSON.stringify(jsonData),
+        });
+    }
+
+    /**
+     *
+     * @typedef {Object} jquery-jqXHR-counter
+     * @property {function(function({}, String, jquery-jqXHR-counter))} done
+     * @property {function(function(Error))} fail
+     * @property {function(function())} always
+     * @property {function(function())} then
+     */
+
+
+    /**
+     * Gets the current set of entries with status=0 ("WB1"). These are the elements that are due to be checked out of WB1.
+     *
+     * @returns {jquery-jqXHR-counter} jqXHR object return by jquery ajax call. Serves as a promise-like object, providing done, fail, always, then resolvers.
+     *
+     */
+    self.getCheckinCounts = function (options) {
+        let self = this;
+        let defaultOptions = {
+
+        }
+        options = (options === undefined) ? {}: options;
+        options = Object.assign(defaultOptions, options);
+
+        return $.get({
+            url: "/api/v1/checkin/counts",
+            // make put for safety reasons :-)
+            type: 'GET',
+            contentType: "application/json; charset=UTF-8",
         });
     }
 
@@ -201,33 +231,6 @@ var ApiHandler = function() {
         });
     }
 
-    self.redraw = function (id, callback) {
-        if (callback === undefined) {
-            callback = {
-                onSuccess: function () {
-                    console.log("data send successfully")
-                },
-                onFail: function () {
-                    console.error("failed to send data")
-                }
-            }
-        }
-        let jsonData = {
-            id: id,
-            minutes: 5, //reschedule for 5 minutes from now
-        }
-        return $.post({
-            url: "/api/v1/checkout/redraw",
-            // make put for safety reasons :-)
-            type: 'POST',
-            contentType: "application/json; charset=UTF-8",
-            dataType: 'json',
-            data: JSON.stringify(jsonData),
-            success: function (result) {
-                callback.onSuccess()
-            }
-        });
-    }
 
     /**
      *

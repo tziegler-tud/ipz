@@ -4,17 +4,12 @@ const Schema = mongoose.Schema;
 
 // create instance of Schema
 var checkinDataSchema = new Schema({
-    amount: {
+    type: {
         type: Number,
-        default: 1,
+        required: true,
     },
-    data: [
-        {
-            type: Number
-        },
-    ],
-    queueNumber: {
-        type: Number,
+    name: {
+        type: String,
         required: true,
     },
     currentStatus: {

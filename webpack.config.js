@@ -12,6 +12,12 @@ module.exports = {
     entry: {
         index: "./src/webpack/index.js",
         index_style: "./src/webpack/index.scss",
+        checkin: "./src/webpack/checkin.js",
+        checkin_style: "./src/webpack/checkin.scss",
+        management: "./src/webpack/management.js",
+        management_style: "./src/webpack/management.scss",
+        list: "./src/webpack/list.js",
+        list_style: "./src/webpack/list.scss",
 
     },
     output: {

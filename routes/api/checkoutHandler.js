@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const checkinDataService = require('../../services/checkinDataService');
+const checkinDataService = require('../../services/dataService');
 const settingsService = require('../../services/settingsService');
 
 
@@ -14,7 +14,6 @@ router.post('/get', getCheckoutData);
 router.post('/getEntry', getCheckoutEntry);
 router.post('/setSorting', setCheckoutSorting);
 router.get('/getSorting', getCheckoutSorting);
-router.post('/redraw', redraw);
 router.get('/getDataVersion', getCheckoutDataVersion);
 router.post('/checkout', checkout);
 
@@ -49,13 +48,6 @@ function getCheckoutData (req, res, next){
 function getCheckoutEntry (req, res, next){
     //validate data
     checkinDataService.getCheckoutEntry(req.body.id)
-        .then(result => res.json(result))
-        .catch(err => next(err));
-}
-
-function redraw (req, res, next){
-    //validate data
-    checkinDataService.redraw(req.body.id, req.body.minutes)
         .then(result => res.json(result))
         .catch(err => next(err));
 }

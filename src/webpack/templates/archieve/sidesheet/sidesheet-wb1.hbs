@@ -1,0 +1,37 @@
+<div id="sidesheet" class="sidesheet">
+    <div class="sidesheet-wrapper">
+        <div class="sidesheet-cancel-button">
+            <i id="sidesheet-cancel-button-element" class="sidesheet-cancel-button-element material-icons mdc-button__icon" aria-hidden="true">clear</i>
+        </div>
+        <div class="sidesheet__header">
+            <h3 class="sidesheet__title">Einstellungen - Wartebereich 1</h3>
+        </div>
+        <div class="sidesheet__body">
+            <ul class="settings-list">
+                <li class="settings-list-item">
+                    <div class="settings-list-item__label">Test</div>
+                    <div class="settings-list-item__action">
+                        <div class="mdc-switch">
+                            <div class="mdc-switch__track"></div>
+                            <div class="mdc-switch__thumb-underlay">
+                                <div class="mdc-switch__thumb"></div>
+                                <input type="checkbox" id="basic-switch" class="mdc-switch__native-control" role="switch" aria-checked="false">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="settings-list-item">
+                    <div class="settings-list-item__label">Reihenfolge: </div>
+                    <div class="settings-list-item__action">
+                        <select  name="wb1-select-sort" id="wb1-select-sort">
+                            <option value="data">Wartenummer</option>
+                            <option value="timestamp">Eingangszeit</option>
+                            <option value="queueNumber">QueueNumber</option>
+                        </select>
+                    </div>
+                </li>
+                <li role="separator" class="settings-list-separator"></li>
+            </ul>
+        </div>
+    </div>
+</div>

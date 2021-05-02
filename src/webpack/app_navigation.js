@@ -4,7 +4,6 @@ import {MDCDrawer} from "@material/drawer";
 import {MDCRipple} from "@material/ripple";
 const Handlebars = require("handlebars");
 import {transformDateTimeString} from "./helpers";
-import {CheckinPage} from "./app_pages";
 var $ = require( "jquery" );
 
 var phone = window.matchMedia("only screen and (max-width: 600px)");

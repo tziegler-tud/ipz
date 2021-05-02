@@ -3,9 +3,10 @@
         <table class="mdc-data-table__table" aria-label="Dessert calories">
             <thead>
             <tr class="mdc-data-table__header-row">
-                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">id</th>
-                <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Impfstoff</th>
+                <th></th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Nummer</th>
                 <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Status</th>
+                <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">QueueNumber</th>
                 <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Zeit</th>
 <!--                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Comments</th>-->
             </tr>
@@ -17,13 +18,16 @@
                 </tr>
             {{else}}
                 {{#each entries}}
-                        <tr data-entryid="{{../this.id}}" class="mdc-data-table__row checkout-table-row">
-                            <th class="mdc-data-table__cell checkout-cell-number" scope="row">{{this.id}}</th>
-                            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{this.name}}</td>
-                            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{this.currentStatus.text}}</td>
-                            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{transformTimeString this.currentStatus.timestamp}}</td>
+                    {{#each data}}
+                        <tr data-entryid="{{../this.id}}" class="mdc-data-table__row checkout-table-row {{#if @first}}primary{{else}}secondary{{/if}}">
+                            <td>{{#unless @first}}<span class="secondary-icon material-icons">add</span>{{/unless}}</td>
+                            <th class="mdc-data-table__cell checkout-cell-number" scope="row">{{this}}</th>
+                            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{../this.currentStatus.text}}</td>
+                            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{../this.queueNumber}}</td>
+                            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{transformTimeString ../this.currentStatus.timestamp}}</td>
                             <!--                        <td class="mdc-data-table__cell">Super tasty</td>-->
                         </tr>
+                    {{/each}}
                 {{/each}}
             {{/if}}
             </tbody>

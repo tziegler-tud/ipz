@@ -1,0 +1,104 @@
+@use "../../node_modules/@material/button";
+@use "../../node_modules/@material/list";
+@use "../../node_modules/@material/checkbox"; // Required only for data table with row selection.
+@use "../../node_modules/@material/icon-button"; // Required only for data table with column sorting.
+@use "../../node_modules/@material/data-table/data-table";
+@use "../../node_modules/@material/banner/styles";
+@use "../../node_modules/@material/banner";
+@use "../../node_modules/@material/snackbar/mdc-snackbar";
+@use "../../node_modules/@material/floating-label/mdc-floating-label";
+@use "../../node_modules/@material/line-ripple/mdc-line-ripple";
+@use "../../node_modules/@material/notched-outline/mdc-notched-outline";
+@use "../../node_modules/@material/textfield";
+@use "../../node_modules/@material/textfield/icon";
+@use "../../node_modules/@material/fab";
+
+@import "./app_pages";
+
+
+@import "./variables";
+@import "./color-variables";
+
+@import "~material-icons-font/material-icons-font.css";
+
+
+@include list.deprecated-core-styles;
+@include checkbox.core-styles;
+@include icon-button.core-styles;
+@include data-table.core-styles;
+@include data-table.theme-baseline;
+@include textfield.core-styles;
+@include icon.icon-core-styles;
+@include fab.core-styles;
+
+.mdc-snackbar {
+  .mdc-snackbar__action {
+    display: none;
+  }
+  &.show-action {
+    .mdc-snackbar__action {
+      display: block;
+    }
+  }
+}
+
+.checkin-page {
+  @media #{$desktop} {
+    width: 100%;
+    margin: 0;
+  }
+  width: auto;
+  max-width: 100%;
+  margin: 0 20px;
+
+  .app-page-content {
+
+    .checkin-container {
+      display: flex;
+      flex-flow: row wrap;
+      $flex-wrap-detection: "(min-width: 1000px)";
+
+      .choosing-container {
+        min-width: 300px;
+        margin: 10px;
+
+        flex: 1 1 100%;
+
+        .choosing-container-inner {
+          display: flex;
+          flex-flow: row nowrap;
+          .choosing-item {
+            flex: 1 1 33%;
+            padding: 10px;
+
+            &.biontech {
+              .choosing-item-inner {
+                background-color: $biontech-background-color;
+              }
+
+            }
+            &.moderna {
+              .choosing-item-inner {
+                background-color: $moderna-background-color;
+              }
+
+            }
+            &.astra {
+              .choosing-item-inner {
+                background-color: $astra-background-color;
+              }
+
+            }
+
+            .choosing-item-inner {
+              height: 300px;
+              padding: 10px;
+              box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+
+            }
+          }
+        }
+      }
+    }
+  }
+}

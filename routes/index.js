@@ -5,8 +5,45 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index',
       {
-        title: "ImpFLow Dresden",
+        title: "ImpFLow Dresden - Startseite",
       });
 });
+
+
+/* GET checkin page. */
+router.get('/checkin', function(req, res, next) {
+    res.render('pages/checkin',
+        {
+            title: "CheckIn - ImpFLow Dresden",
+        });
+});
+
+
+/* GET management page. */
+router.get('/management', function(req, res, next) {
+    res.render('pages/management',
+        {
+            title: "Teamleiter - ImpFLow Dresden",
+        });
+});
+
+/* GET list page. */
+router.get('/list', function(req, res, next) {
+    res.render('pages/list',
+        {
+            title: "Teamleiter - ImpFLow Dresden",
+        });
+});
+
+
+/* GET apotheke page. */
+router.get('/apotheke', function(req, res, next) {
+    res.render('pages/apotheke',
+        {
+            title: "Apotheke - ImpFlow Dresden",
+        });
+});
+
+
 
 module.exports = router;

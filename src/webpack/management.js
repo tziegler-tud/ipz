@@ -1,6 +1,7 @@
 import {preloader} from "./preloader";
 import {Navigation} from "./app_navigation";
 import {Sidesheet} from "./app_sidesheet";
+import {ManagementPage} from "./app_managementPage";
 import {transformDateTimeString} from "./helpers";
 import "./handlebarsHelpers";
 const Handlebars = require("handlebars");
@@ -14,6 +15,8 @@ $(window).on('load',function() {
     // let plr = new preloader();
     // setTimeout(plr.hide,0);
 });
+
+let sidesheet;
 
 
 let nav = new Navigation(
@@ -43,3 +46,17 @@ let nav = new Navigation(
         }
     },
 );
+
+let managementPage = new ManagementPage();
+managementPage.show()
+//     .done(function(){
+//     sidesheet = new Sidesheet("checkin", managementPage, {});
+// });
+
+nav.initialize
+    .done(function(){
+        nav.setAction("mdc-top-app-bar-action1", function(e, args){
+            sidesheet.toggle();
+        })
+    });
+

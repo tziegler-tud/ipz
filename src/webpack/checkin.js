@@ -1,6 +1,7 @@
 import {preloader} from "./preloader";
 import {Navigation} from "./app_navigation";
 import {Sidesheet} from "./app_sidesheet";
+import {CheckinPage} from "./app_checkinPage";
 import {transformDateTimeString} from "./helpers";
 import "./handlebarsHelpers";
 const Handlebars = require("handlebars");
@@ -15,11 +16,13 @@ $(window).on('load',function() {
     // setTimeout(plr.hide,0);
 });
 
+let sidesheet;
+
 
 let nav = new Navigation(
     {
         pageData: {
-            navTitle: "Check In - Vorkontrolle",
+            navTitle: "CheckIn - ImpFlow Dresden",
             date: transformDateTimeString(Date.now()).date,
             time: transformDateTimeString(Date.now()).time("hh:mm:ss"),
         },
@@ -43,3 +46,15 @@ let nav = new Navigation(
         }
     },
 );
+
+let checkinPage = new CheckinPage();
+checkinPage.show().done(function(){
+    sidesheet = new Sidesheet("checkin", checkinPage, {});
+});
+
+nav.initialize
+    .done(function(){
+        nav.setAction("mdc-top-app-bar-action1", function(e, args){
+            sidesheet.toggle();
+        })
+    });

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const checkinDataService = require('../../services/checkinDataService');
+const checkinDataService = require('../../services/dataService');
 const settingsService = require('../../services/settingsService');
 
 
@@ -11,6 +11,7 @@ const settingsService = require('../../services/settingsService');
 // routes
 router.post('/add', addData);
 router.get('/get', get);
+router.get('/counts', getCounts);
 
 /**
  * add Numbers to Checkin waiting list
@@ -27,23 +28,11 @@ function addData (req, res, next){
     if (req.body === undefined) {
         next(err);
     }
-    if(req.body.amount === undefined || req.body.data === undefined){
+    if(req.body.type === undefined){
         next(err)
     }
-    let date;
-    if(req.body.date === undefined) {
-        req.body.date = Date.now();
-    }
-    else {
-        date = req.body.date;
-    }
-    //read data amount
-    let amount = req.body.amount;
-    //get data array
-    let dataArray = req.body.data;
-    //add document containing all data entries
 
-    checkinDataService.add(amount, dataArray, date)
+    checkinDataService.add(req.body)
         .then(result => res.json(result))
         .catch(err => next(err));
 }
@@ -51,6 +40,15 @@ function addData (req, res, next){
 function get (req, res, next){
     //validate data
     checkinDataService.getAll()
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
+function getCounts (req, res, next){
+    //validate data
+    checkinDataService.getCounts({
+        status: 0
+    })
         .then(result => res.json(result))
         .catch(err => next(err));
 }
