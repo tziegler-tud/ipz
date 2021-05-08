@@ -1,9 +1,8 @@
-
 const Handlebars = require("handlebars");
-import "./handlebarsHelpers";
-import {Counter} from "./helpers";
-import {apiHandler} from "./apiHandler";
-import {Page} from "./app_page";
+import "../handlebarsHelpers";
+import {Counter} from "../helpers";
+import {apiHandler} from "../apiHandler";
+import {Page} from "../app_page";
 var $ = require( "jquery" );
 import {MDCRipple} from '@material/ripple';
 import {MDCSnackbar} from '@material/snackbar';
@@ -12,20 +11,23 @@ import {MDCDataTable} from '@material/data-table';
 import {MDCBanner} from '@material/banner';
 import {MDCTextField} from '@material/textfield';
 import {MDCTextFieldIcon} from '@material/textfield/icon';
+import {MDCDialog} from '@material/dialog';
+
 
 var phone = window.matchMedia("only screen and (max-width: 50em)");
 
 /**
  *
- * @returns {CheckinPage}
+ * @returns {StreckePage}
  * @constructor
  */
-var CheckinPage = function(args){
+var StreckePage = function(track, args){
     let self = Page.apply(this, args);
-    self.url = "/webpack/templates/checkin_page.hbs";
-    self.inputAmount = 1;
-    self.primaryInputElement = null;
-    self.primaryInputContainer = null;
+    self.track = track;
+    if(track === undefined || track.id === undefined) {
+        throw new Error("Failed to initalize track: invalid arguments received");
+    }
+    self.url = "/webpack/templates/strecke_page.hbs";
     self.snackbar = undefined;
     self.counters = {};
     //get counters
@@ -33,7 +35,7 @@ var CheckinPage = function(args){
     return self;
 }
 
-CheckinPage.prototype.showSnackbar = function(message, options) {
+StreckePage.prototype.showSnackbar = function(message, options) {
     let self = this;
     let snackbar = self.snackbar;
     let defaultOptions = {
@@ -71,7 +73,7 @@ CheckinPage.prototype.showSnackbar = function(message, options) {
     snackbar.open()
 }
 
-CheckinPage.prototype.show = function(options){
+StreckePage.prototype.show = function(options){
     let self = this;
     let context = {};
 
@@ -79,7 +81,7 @@ CheckinPage.prototype.show = function(options){
     return this.buildHtml(self.url, context, options);
 }
 
-CheckinPage.prototype.buildHtml = function(url, context, options){
+StreckePage.prototype.buildHtml = function(url, context, options){
     let self = this;
     let defaultOptions = {
         snackbar: {
@@ -97,13 +99,28 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
         self.pageContainer = $("#page-container");
         self.pageContainer.empty();
         self.pageContainer.append(template(context));
-        self.primaryInputContainer = document.getElementById("numberinput-container--primary");
         const selector = '.mdc-card__primary-action';
         const ripples = [].map.call(document.querySelectorAll(selector), function(el) {
             return new MDCRipple(el);
         });
+        const dialog1 = new MDCDialog(document.querySelector('#dialog1'));
+        const dialog2 = new MDCDialog(document.querySelector('#dialog2'));
+        const list1 = new MDCList(document.querySelector('#dialog1 #dialog-select-list1'));
+        const list2 = new MDCList(document.querySelector('#dialog2 #dialog-select-list2'));
+        const listItemRipples1 = list1.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+        const listItemRipples2 = list2.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+
+        list1.singleSelection = true;
+        list2.singleSelection = true;
+        dialog1.listen('MDCDialog:opened', () => {
+            list1.layout();
+        });
+        dialog2.listen('MDCDialog:opened', () => {
+            list2.layout();
+        });
+
         //get counters
-        apiHandler.getCheckinCounts()
+        apiHandler.getTrackCounts(self.track)
             .done(function(result){
                 self.counters = {
                     b: {
@@ -128,9 +145,9 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
             })
         //choosing-item event handlers
         $(".choosing-card__action-section").on("click", function(){
-            let type = parseInt(this.dataset.type)
-            let counter = getCounter(type, self)
-            apiHandler.checkin(type)
+            let type = parseInt(this.dataset.type);
+            let counter = getCounter(type, self);
+            apiHandler.addTrackEntry(type, self.track)
                 .done(function(result){
                     let message = "Eintrag hinzugefügt: " + result.name;
                     if(type !== 0) counter.el.innerHTML = counter.counter.increase();
@@ -161,7 +178,7 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
              */
             let c = getCounter(type, self);
             c.el.innerHTML = '<span class="choosing-card-counter-loader lds-dual-ring"></span>';
-            apiHandler.getCheckinCounts(type)
+            apiHandler.getTrackCounts(self.track)
                 .done(function(result){
                     c.el.innerHTML = c.counter.set(getCounter(type, result));
                 })
@@ -187,7 +204,7 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
              * @property {String} name
              */
             let c = getCounter(type, self);
-            apiHandler.removeCheckinEntry(type)
+            apiHandler.removeTrackEntry(type, self.track)
                 .done(function (result) {
                     let message = "Eintrag entfernt: " + result.name;
                     if (type !== 0) c.el.innerHTML = c.counter.decrease();
@@ -206,12 +223,56 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
                     self.showSnackbar(message, options)
                 });
         });
+        $(".switch-button").on("click", function() {
+            self.dialogChoice = {};
+            dialog1.open();
+        });
+        dialog1.listen("MDCDialog:closed", function(event){
+            let detail = event.detail;
+            self.dialogChoice = {
+                selectedIndex: list1.selectedIndex,
+                originalType: parseInt(list1.listElements[list1.selectedIndex].dataset.type),
+            }
+            console.log(detail.action);
+            if(detail.action==="accept") {
+                list2.setEnabled(self.dialogChoice.selectedIndex, false);
+                dialog2.open();
+            }
+        })
+
+        dialog2.listen("MDCDialog:closed", function(event){
+            let detail = event.detail;
+            list2.setEnabled(self.dialogChoice.selectedIndex, true);
+            if(detail.action==="accept") {
+                let type = parseInt(list2.listElements[list2.selectedIndex].dataset.type);
+                self.dialogChoice.newType = type;
+                console.log(detail.action);
+                let counter = getCounter(type, self);
+                apiHandler.addSwitchedTrackEntry(self.dialogChoice.originalType, self.dialogChoice.newType, self.track)
+                    .done(function(result){
+                        let message = "Eintrag hinzugefügt: " + result.name;
+                        if(type !== 0) counter.el.innerHTML = counter.counter.increase();
+                        self.showSnackbar(message);
+                    })
+                    .fail(function(jqxhr, textstatus, error){
+                        let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
+                        let options = {
+                            timeout: -1,
+                            closeOnEscape: true,
+                            actionButton: {
+                                display: true,
+                                text: "Nagut",
+                            }
+                        }
+                        self.showSnackbar(message, options)
+                    });
+            }
+        })
 
         self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
         if(options.snackbar.show) {
             self.showSnackbar(options.snackbar.message);
         }
-
     });
 }
 
@@ -234,4 +295,4 @@ function getCounter (type, self) {
     return counter;
 
 }
-export {CheckinPage};
+export {StreckePage};

@@ -90,6 +90,13 @@
                     </div>
                 </div>
             </div>
+            <div class="switch-container">
+                <button id="switch-button" class="switch-button mdc-fab mdc-fab--extended">
+                    <div class="mdc-fab__ripple"></div>
+                    <span class="material-icons mdc-fab__icon">sync</span>
+                    <span class="mdc-fab__label">Impfstoff-Wechsel</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -107,4 +114,93 @@
 
         </div>
     </div>
+    <div id="dialog1" class="mdc-dialog">
+        <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface"
+                 role="alertdialog"
+                 aria-modal="true"
+                 aria-labelledby="my-dialog-title"
+                 aria-describedby="my-dialog-content">
+                <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                <h2 class="mdc-dialog__title" id="my-dialog-title">Impfstoff-Wechsel</h2>
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    <div class="mdc-deprecated-list-group">
+                        <h3 class="mdc-list-group__subheader">Geplant:</h3>
+                        <ul id="dialog-select-list1" class="mdc-deprecated-list mdc-deprecated-list--avatar-list">
+                            <li class="mdc-deprecated-list-item" role="option" data-type="1" tabindex="-1">
+                                <span class="mdc-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">BionTech</span>
+                            </li>
+
+                            <li class="mdc-deprecated-list-item" role="option" data-type="2">
+                                <span class="mdc-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">Moderna</span>
+                            </li>
+
+                            <li class="mdc-deprecated-list-item" role="option" data-type="3">
+                                <span class="mdc-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">Astrazenecca</span>
+                            </li>
+                            <li class="mdc-deprecated-list-divider" role="separator"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mdc-dialog__actions">
+                    <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Abbrechen</span>
+                    </button>
+                    <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Weiter</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+    <div id="dialog2" class="mdc-dialog">
+        <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface"
+                 role="alertdialog"
+                 aria-modal="true"
+                 aria-labelledby="my-dialog-title"
+                 aria-describedby="my-dialog-content">
+                <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                <h2 class="mdc-dialog__title" id="my-dialog-title">Impfstoff-Wechsel</h2>
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    <div class="mdc-deprecated-list-group">
+                        <h3 class="mdc-list-group__subheader">Gewechselt auf:</h3>
+                        <ul id="dialog-select-list2" class="mdc-deprecated-list mdc-deprecated-list--avatar-list">
+                            <li class="mdc-deprecated-list-item" role="option" data-type="1" tabindex="0">
+                                <span class="mdc-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">BionTech</span>
+                            </li>
+                            <li class="mdc-deprecated-list-item" role="option" data-type="2">
+                                <span class="mdc-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">Moderna</span>
+                            </li>
+                            <li class="mdc-deprecated-list-item" role="option" data-type="3">
+                                <span class="mdc-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">Astrazenecca</span>
+                            </li>
+                            <li class="mdc-deprecated-list-divider" role="separator"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mdc-dialog__actions">
+                    <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Abbrechen</span>
+                    </button>
+                    <button type="button" class="mdc-button mdc-dialog__button mdc-button--raised" data-mdc-dialog-action="accept">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Bestätigen</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
 </div>
+<div id="bottom-container"></div>

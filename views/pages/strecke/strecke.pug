@@ -1,0 +1,32 @@
+extends ../../layout
+block page_includes
+  script.
+    if(window.args === undefined) window.args = {};
+    window.args.strecke = {};
+    window.args.strecke.name = "!{trackName}";
+    window.args.strecke.id = "!{id}";
+    window.args.strecke.trackId = "!{trackId}";
+    window.args.title = "!{trackTitle}";
+
+
+
+  link(rel='stylesheet', href='/dist/strecke.css')
+  script(src="/dist/strecke.js")
+
+  link(rel='stylesheet', href='/css/preloader.css')
+
+
+
+
+
+block content
+  #wrapper.impflow-app.app-wrapper.protocol-app
+    #app-container.app-content-container.mdc-drawer-app-content.mdc-top-app-bar--fixed-adjust
+      #page-container.page-container.has-sidesheet
+      #sidesheet-container.sidesheet-container
+
+
+
+
+
+

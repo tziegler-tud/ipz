@@ -31,4 +31,6 @@ module.exports = {
     checkinData: require('./checkinDataScheme'),
     version: require('./versionScheme'),
     settings: require('./settingsScheme'),
+    trackData: require('./trackDataScheme'),
+    track: require('./trackScheme'),
 };

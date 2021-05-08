@@ -1,26 +1,26 @@
-@use "../../node_modules/@material/button";
-@use "../../node_modules/@material/list";
-@use "../../node_modules/@material/checkbox"; // Required only for data table with row selection.
-@use "../../node_modules/@material/icon-button"; // Required only for data table with column sorting.
-@use "../../node_modules/@material/data-table/data-table";
-@use "../../node_modules/@material/banner/styles";
-@use "../../node_modules/@material/banner";
-@use "../../node_modules/@material/snackbar/mdc-snackbar";
-@use "../../node_modules/@material/floating-label/mdc-floating-label";
-@use "../../node_modules/@material/line-ripple/mdc-line-ripple";
-@use "../../node_modules/@material/notched-outline/mdc-notched-outline";
-@use "../../node_modules/@material/textfield";
-@use "../../node_modules/@material/textfield/icon";
-@use "../../node_modules/@material/fab";
-@use "../../node_modules/@material/card";
+@use "../../../node_modules/@material/button";
+@use "../../../node_modules/@material/list";
+@use "../../../node_modules/@material/checkbox"; // Required only for data table with row selection.
+@use "../../../node_modules/@material/icon-button"; // Required only for data table with column sorting.
+@use "../../../node_modules/@material/data-table/data-table";
+@use "../../../node_modules/@material/banner/styles";
+@use "../../../node_modules/@material/banner";
+@use "../../../node_modules/@material/snackbar/mdc-snackbar";
+@use "../../../node_modules/@material/floating-label/mdc-floating-label";
+@use "../../../node_modules/@material/line-ripple/mdc-line-ripple";
+@use "../../../node_modules/@material/notched-outline/mdc-notched-outline";
+@use "../../../node_modules/@material/textfield";
+@use "../../../node_modules/@material/textfield/icon";
+@use "../../../node_modules/@material/fab";
+@use "../../../node_modules/@material/card";
+@use "../../../node_modules/@material/dialog";
+
+@import "../app_pages";
+@import "./../app_bottom";
 
 
-
-@import "./app_pages";
-
-
-@import "./variables";
-@import "./color-variables";
+@import "../variables";
+@import "../color-variables";
 
 @import "~material-icons-font/material-icons-font.css";
 
@@ -34,6 +34,7 @@
 @include icon.icon-core-styles;
 @include fab.core-styles;
 @include card.core-styles;
+@include dialog.core-styles;
 
 .mdc-snackbar {
   .mdc-snackbar__action {
@@ -65,8 +66,8 @@
       .choosing-container {
         min-width: 300px;
         margin: 10px;
-
         flex: 1 1 100%;
+
 
         .choosing-container-inner {
           display: flex;
@@ -152,6 +153,14 @@
             }
 
           }
+        }
+      }
+      .switch-container {
+        margin: 50px 20px 10px 20px;
+        flex: 1 1 100%;
+        min-width: 300px;
+        .switch-button {
+          @include button.container-fill-color(#5c5555);
         }
       }
     }

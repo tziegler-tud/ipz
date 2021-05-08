@@ -27,21 +27,8 @@ var Navigation = function(context, options){
         let defaults = {
             clock: undefined,
             sidesheet: false,
-            nav1: {
-                onclick: function(e){
-                    return e;
-                }
-            },
-            nav2: {
-                onclick: function(e){
-                    return e;
-                }
-            },
-            nav3: {
-                onclick: function(e){
-                    return e;
-                }
-            }
+            activeElement: undefined,
+
         }
         options = (options === undefined) ? {}: options;
         return Object.assign(defaults, options);
@@ -52,66 +39,62 @@ var Navigation = function(context, options){
 
 
     //load drawer template and attach to body
-    self.initialize = $.get(url, function (data) {
-        console.log("template found");
-        var template = Handlebars.compile(data);
-        // $(".app-drawer-container").prepend(template(context));
-        $(".app-wrapper").prepend(template(context));
+    self.initialize = new Promise((resolve, reject) => {
 
-        const topAppBarElement = document.querySelector('.mdc-top-app-bar');
-        const topAppBar = new MDCTopAppBar(topAppBarElement);
-        const drawer = MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
-        const listEl = document.querySelector('.mdc-drawer .mdc-deprecated-list');
-        const mainContentEl = document.querySelector('.app-content-container');
-        const navEntry1 = document.getElementById("app-link-page1");
-        const navEntry2 = document.getElementById("app-link-page2");
-        const navEntry3 = document.getElementById("app-link-page3");
+        $.get(url, function (data) {
+            console.log("template found");
+            var template = Handlebars.compile(data);
 
-        //hook nav events
-        // navEntry1.addEventListener("click", function(e){
-        //     options.nav1.onclick(e);
-        // });
-        navEntry2.addEventListener("click", function(e){
-            options.nav2.onclick(e);
-            if (phone.matches || tablet.matches) drawer.open = false;
-        });
-        navEntry3.addEventListener("click", function(e){
-            options.nav3.onclick(e);
-            if (phone.matches || tablet.matches) drawer.open = false;
-        });
+            //find tracks to build nav
+            self.getTracks().done(function(result) {
+                context.tracks = result;
+                $(".app-wrapper").prepend(template(context));
 
+                const topAppBarElement = document.querySelector('.mdc-top-app-bar');
+                const topAppBar = new MDCTopAppBar(topAppBarElement);
+                const drawer = MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+                const listEl = document.querySelector('.mdc-drawer .mdc-deprecated-list');
+                const mainContentEl = document.querySelector('.app-content-container');
+                self.navigationElements = document.getElementsByClassName("navigation-element");
 
-        if (options.clock !== undefined){
-            setInterval(function() {
-                $(options.clock).text(transformDateTimeString(Date.now()).time("hh:mm:ss"));
-            }, 1000);
-        }
-        listEl.addEventListener('click', (event) => {
-            // mainContentEl.querySelector('input, button').focus();
-        });
+                if (options.activeElement !== undefined){
+                    self.setActiveElement(options.activeElement);
+                }
 
-        document.body.addEventListener('MDCDrawer:closed', () => {
-            // mainContentEl.querySelector('input, button').focus();
-        });
-        // const buttonRipple = new MDCRipple(document.querySelector('.mdc-button'));
+                if (options.clock !== undefined){
+                    setInterval(function() {
+                        $(options.clock).text(transformDateTimeString(Date.now()).time("hh:mm:ss"));
+                    }, 1000);
+                }
+                listEl.addEventListener('click', (event) => {
+                    // mainContentEl.querySelector('input, button').focus();
+                });
 
-        topAppBar.setScrollTarget(mainContentEl);
-        topAppBar.listen('MDCTopAppBar:nav', () => {
-            drawer.open = !drawer.open;
-        });
+                document.body.addEventListener('MDCDrawer:closed', () => {
+                    // mainContentEl.querySelector('input, button').focus();
+                });
+                // const buttonRipple = new MDCRipple(document.querySelector('.mdc-button'));
 
-        if (!(phone.matches || tablet.matches)) {
-            //open drawer intially on desktop screen sizes
-            drawer.open = true;
+                topAppBar.setScrollTarget(mainContentEl);
+                topAppBar.listen('MDCTopAppBar:nav', () => {
+                    drawer.open = !drawer.open;
+                });
 
-        }
+                if (!(phone.matches || tablet.matches)) {
+                    //open drawer intially on desktop screen sizes
+                    drawer.open = true;
 
-        self.drawer = drawer;
-        self.topAppBar = topAppBar;
+                }
 
-        self.adjustWrapper(topAppBar);
-        $(window).on('resize', function () {
-            self.adjustWrapper(topAppBar);
+                self.drawer = drawer;
+                self.topAppBar = topAppBar;
+
+                self.adjustWrapper(topAppBar);
+                $(window).on('resize', function () {
+                    self.adjustWrapper(topAppBar);
+                });
+                resolve();
+            });
         });
     });
 
@@ -142,6 +125,12 @@ Navigation.prototype.setTitle = function(text){
     title.innerHTML = text;
 }
 
+Navigation.prototype.setActiveElement = function(domId){
+    //find in navigation elements
+    const el = this.navigationElements.namedItem(domId);
+    el.classList.add("mdc-deprecated-list-item--activated");
+}
+
 Navigation.prototype.adjustWrapper = function(topAppBar){
     //get viewport height
     const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
@@ -151,6 +140,10 @@ Navigation.prototype.adjustWrapper = function(topAppBar){
         height: (vh - navHeight) + "px",
         "padding-top": navHeight + "px"
     })
+}
+
+Navigation.prototype.getTracks = function(){
+    return $.get("/api/v1/track");
 }
 
 export {Navigation}

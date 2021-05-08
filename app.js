@@ -7,8 +7,11 @@ var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
+var trackRouter = require('./routes/strecke');
 var checkinDataRouter = require('./routes/api/checkinHandler');
 var checkoutDataRouter = require('./routes/api/checkoutHandler');
+var trackDataRouter = require('./routes/api/trackDataHandler');
+var trackApiHandler = require('./routes/api/trackHandler');
 
 
 
@@ -44,12 +47,15 @@ settingsService.initialize();
 
 app.use('/api/v1/checkin', checkinDataRouter);
 app.use('/api/v1/checkout', checkoutDataRouter);
+app.use('/api/v1/data/track', trackDataRouter);
+app.use('/api/v1/track', trackApiHandler);
 app.use("/api", function(req, res, next) {
   next(createError(404));
 });
 
 app.use("/api", errorHandler.apiErrorHandler);
 app.use('/', indexRouter);
+app.use('/strecke', trackRouter);
 // catch 404 and forward to error handler
 app.use("/*", function(req, res, next) {
   next(createError(404));
@@ -60,14 +66,14 @@ app.use("/", errorHandler.webErrorHandler);
 
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+// app.use(function(err, req, res, next) {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get('env') === 'development' ? err : {};
+//
+//   // render the error page
+//   res.status(err.status || 500);
+//   res.render('error');
+// });
 
 module.exports = app;

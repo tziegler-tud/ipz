@@ -31,6 +31,9 @@ body {
       overflow: scroll;
       flex: 1 1 auto;
       position: relative;
+      display: flex;
+      flex-flow: column nowrap;
+
 
     }
 

@@ -1,74 +1,77 @@
 var express = require('express');
 var router = express.Router();
 
-const checkinDataService = require('../../services/dataService');
+const trackService = require('../../services/trackService');
 const settingsService = require('../../services/settingsService');
 
 
 
-//hooked at /api/v1/checkin
+//hooked at /api/v1/track
 
 // routes
-router.post('/add', addData);
-router.get('/get', get);
-router.get('/counts', getCounts);
-router.post('/remove', remove)
+router.get('/', get);
+router.post('/add', add);
+router.post('/update/:id', update);
+router.delete('/remove/:id', remove);
+router.get('/:id', getById);
 
 /**
- * add Numbers to Checkin waiting list
- * req.body is expected to be of the form
- *  {amount: {Integer}, data: {Array<Integer>}}
+ * add track entity
  *
  * @param req
  * @param res
  * @param next
  */
-function addData (req, res, next){
+function add (req, res, next){
     //validate data
     let err = new Error("invalid arguments received")
     if (req.body === undefined) {
         next(err);
     }
-    if(req.body.type === undefined){
+    if(req.body.name === undefined){
         next(err)
     }
-
-    checkinDataService.add(req.body)
+    trackService.add(req.body)
         .then(result => res.json(result))
         .catch(err => next(err));
 }
 
 function get (req, res, next){
-    //validate data
-    checkinDataService.getAll()
-        .then(result => res.json(result))
-        .catch(err => next(err));
+    trackService.get()
+            .then(result => res.json(result))
+            .catch(err => next(err));
 }
 
-function getCounts (req, res, next){
-    //validate data
-    checkinDataService.getCounts({
-        status: 0
-    })
+function getById (req, res, next){
+    trackService.getById(req.params.id)
         .then(result => res.json(result))
         .catch(err => next(err));
 }
 
 function remove (req, res, next){
+    trackService.remove(req.params.id)
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
+
+/**
+ * finds and updates a track entity by the given id. failes if no matching entity is found.
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+function update (req, res, next){
     //validate data
     let err = new Error("invalid arguments received")
     if (req.body === undefined) {
         next(err);
     }
-    let args = req.body;
-    if(req.body.type === undefined){
+    if(req.body.name === undefined){
         next(err)
     }
-    if(req.body.amount === undefined){
-        args.amount = 1;
-    }
-
-    checkinDataService.remove(args)
+    trackService.update(req.params.id, req.body)
         .then(result => res.json(result))
         .catch(err => next(err));
 }

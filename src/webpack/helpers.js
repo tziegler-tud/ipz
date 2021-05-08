@@ -25,6 +25,104 @@ var transformDateTimeString = function(dateString, format) {
     };
 }
 
+/**
+ *
+ * @param args {Object}
+ * @returns {Counter}
+ * @constructor
+ */
+let Counter = function(args) {
+    let defaultArgs = {
+        start: 0,
+        min: null,
+        max: null,
+        step: 1,
+    }
+    args = (args === undefined) ? {}: args;
+    args = Object.assign(defaultArgs, args);
 
+    /**
+     * @type {Integer} count
+     */
+    this.count = args.start;
+    this.start = args.start;
+    this.min = args.min;
+    this.max = args.max;
+    this.step = args.step;
 
-export {transformDateTimeString}
+    /**
+     *
+     * @returns {*}
+     */
+    this.get = function(){
+        return this.count;
+    }
+
+    /**
+     *
+     * @returns {boolean|Integer}
+     */
+    this.increase = function(){
+        this.current = this.count;
+        this.count = this.count + this.step;
+        if(this.max !== null){
+            if(this.count > this.max){
+                console.warn("Counter: Max exceeded.");
+                this.count = this.current;
+                return false;
+            }
+        }
+        return this.count;
+    }
+
+    /**
+     *
+     * @returns {boolean|Integer}
+     */
+    this.decrease = function(){
+        this.current = this.count;
+        this.count = this.count - this.step;
+        if(this.min !== null){
+            if(this.count < this.min){
+                console.warn("Counter: Min exceeded.");
+                this.count = this.current;
+                return false;
+            }
+        }
+        return this.count;
+    }
+
+    /**
+     *
+     * @param val
+     * @returns {boolean|Integer}
+     */
+    this.set = function(val) {
+        let value = parseInt(val);
+        if (this.max !== null && value > this.max) {
+            return false;
+        }
+        else {
+            if (this.min !== null && value < this.min) {
+                console.warn("Counter: Min exceeded.");
+                return false;
+            }
+            else {
+                this.count = value;
+                return this.count;
+            }
+        }
+    }
+
+    /**
+     *
+     * @returns {Integer}
+     */
+    this.reset = function(){
+        this.count = this.start;
+        return this.count;
+    }
+    return this;
+}
+
+export {transformDateTimeString, Counter}

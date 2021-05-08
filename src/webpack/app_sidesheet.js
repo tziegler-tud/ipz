@@ -15,7 +15,7 @@ var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 /**
  *
- * @param type {String}
+ * @param type {String} Type of sidesheet. Valid types are: ["checkin", "wb1", "strecke"]
  * @param options {Object}
  * @param activePage {Page}
  * @returns {Sidesheet}
@@ -48,7 +48,12 @@ var Sidesheet = function(type, activePage, options){
     return self;
 }
 
-
+/**
+ *
+ * @param type {String} Type of sidesheet. Valid types are: ["checkin", "wb1", "strecke"]
+ * @param options {Object}
+ * @param activePage {Page}
+ */
 Sidesheet.prototype.setContent = function(type, activePage, options){
     let self = this;
     let defaultOptions = {
@@ -66,8 +71,12 @@ Sidesheet.prototype.setContent = function(type, activePage, options){
             url = "/webpack/templates/sidesheet/sidesheet-wb1.hbs";
             self.createWb1Page(activePage, options);
             break;
+        case "strecke":
+            url = "/webpack/templates/sidesheet/sidesheet-track.hbs";
+            self.createTrackPage(activePage, options);
+            break;
         default:
-            url = "/webpack/templates/sidesheet/sidesheet-checkin.hbs";
+
             break;
     }
     let context = {};
@@ -130,6 +139,31 @@ Sidesheet.prototype.createWb1Page = function(activePage, options){
         if(!options.show) self.hide();
     });
 }
+
+
+/**
+ *
+ * @param activePage
+ * @param options
+ */
+Sidesheet.prototype.createTrackPage = function(activePage, options){
+    let self = this;
+    let url = "/webpack/templates/sidesheet/sidesheet-track.hbs";
+    let context = {
+        title: "Einstellungen - Impfstrecke"
+    };
+    $.get(url, function (data) {
+        var template = Handlebars.compile(data);
+        self.container.innerHTML = template(context);
+        const switchControl = new MDCSwitch(document.querySelector('.mdc-switch'));
+        let cancelBtn = document.getElementById("sidesheet-cancel-button-element")
+        cancelBtn.addEventListener("click", function(){
+            self.hide();
+        })
+        if(!options.show) self.hide();
+    });
+}
+
 
 Sidesheet.prototype.show = function(){
     this.active = true;

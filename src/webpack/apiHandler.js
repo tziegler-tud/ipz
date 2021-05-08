@@ -11,8 +11,8 @@
  */
 /**
  * @typedef {Object} CheckinDataSchemeObject
- * @property {Integer} amount
- * @property {Integer[]} data
+ * @property {Integer} type
+ * @property {String} name
  * @property {CheckinDataSchemeObjectStatus} currentStatus
  * @property {CheckinDataSchemeObjectStatus[]} statusHistory
  */
@@ -52,7 +52,7 @@ var ApiHandler = function() {
     /**
      *
      * @typedef {Object} jquery-jqXHR-checkin
-     * @property {function(function(CheckinDataSchemeObject, String, jquery-jqXHR-checkoutdata))} done
+     * @property {function(function(CheckinDataSchemeObject, String, jquery-jqXHR-checkin))} done
      * @property {function(function(Error))} fail
      * @property {function(function())} always
      * @property {function(function())} then
@@ -82,6 +82,21 @@ var ApiHandler = function() {
             data: JSON.stringify(jsonData),
         });
     };
+
+    self.removeCheckinEntry = function(type){
+        let jsonData = {
+            type: type,
+            amount: 1,
+        }
+        return $.ajax({
+            url: "/api/v1/checkin/remove",
+            // make put for safety reasons :-)
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
+        });
+    }
 
     self.getCheckoutDataVersion = function(){
         return $.get({
@@ -261,6 +276,109 @@ var ApiHandler = function() {
             data: JSON.stringify(jsonData),
         });
     };
+
+    /**
+     * Impfstrecken
+     */
+
+    /**
+     * @typedef Track
+     * @param id {ObjectId} mongo id
+     * @param trackId {Number} human-readable index for track
+     * @param name {String} name
+     */
+
+    /**
+     *
+     * @param type {Integer} type 0=null, 1=B, 2=M, 3=A
+     * @param track {Track}
+     *
+     * @return {Object}
+     */
+    self.addTrackEntry = function (type, track) {
+        let jsonData = {
+            type: type,
+            track: track,
+            isSwitched: false,
+        }
+        return $.ajax({
+            url: "/api/v1/data/track/add",
+            // make put for safety reasons :-)
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
+        });
+    };
+
+    /**
+     *
+     * @param originalType {Integer} type 0=null, 1=B, 2=M, 3=A
+     * @param newType {Integer} type 0=null, 1=B, 2=M, 3=A
+     * @param track {Track}
+     *
+     *
+     * @return {Object}
+     */
+    self.addSwitchedTrackEntry = function (originalType, newType, track) {
+        let jsonData = {
+            type: newType,
+            track: track,
+            isSwitched: true,
+            switch: {
+                originalType: originalType,
+                newType: newType,
+            }
+        }
+        return $.ajax({
+            url: "/api/v1/data/track/add",
+            // make put for safety reasons :-)
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
+        });
+    };
+
+    self.removeTrackEntry = function (type, track) {
+        let jsonData = {
+            type: type,
+            trackId: track.id,
+        }
+        return $.ajax({
+            url: "/api/v1/data/track/remove",
+            // make put for safety reasons :-)
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
+        });
+    };
+
+    /**
+     * Gets the current set of track entries. These are the elements that were registered in the tracks.
+     *
+     * @returns {jquery-jqXHR-counter} jqXHR object return by jquery ajax call. Serves as a promise-like object, providing done, fail, always, then resolvers.
+     *
+     */
+    self.getTrackCounts = function (track, options) {
+        let self = this;
+        if (track === undefined) {
+            throw new Error("Invalid arguments received: track is undefined");
+        }
+        let defaultOptions = {
+
+        }
+        options = (options === undefined) ? {}: options;
+        options = Object.assign(defaultOptions, options);
+
+        return $.get({
+            url: "/api/v1/data/track/counts/"+track.id,
+            // make put for safety reasons :-)
+            type: 'GET',
+            contentType: "application/json; charset=UTF-8",
+        });
+    }
 }
 
 export let apiHandler = new ApiHandler();

@@ -30,20 +30,7 @@ let nav = new Navigation(
     {
         clock: ".navigation-clock",
         sidesheet: true,
-        nav1: {
-            onclick: function(){
-            }
-        },
-        nav2: {
-            onclick: function(){
-
-            }
-        },
-        nav3: {
-            onclick: function(){
-
-            }
-        }
+        activeElement: "app-link-checkin",
     },
 );
 

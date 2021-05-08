@@ -12,6 +12,7 @@ module.exports = {
     getCheckoutDataVersion,
     getCounts,
     add,
+    remove,
     checkout,
     updateVersion,
 };
@@ -78,22 +79,6 @@ async function add(object) {
     if(object.type === undefined) {
         throw new Error("Invalid arguments received: Type is undefined");
     }
-    let typeString = "";
-    switch(object.type) {
-        case 0:
-            typeString = "nicht angegeben";
-            break;
-        case 1:
-            typeString ="BionTech";
-            break;
-        case 2:
-            typeString ="Moderna";
-            break;
-        case 3:
-            typeString ="Astrazenecca";
-            break;
-
-    }
 
     //get checkout version
     let version = await Version.findOne({label: "wb2"});
@@ -112,7 +97,6 @@ async function add(object) {
     //create new object
     let checkinDataObject = {
         type: object.type,
-        name: typeString,
         currentStatus: {
             status: 0,
             text: "WB2",
@@ -127,6 +111,38 @@ async function add(object) {
     let checkinData = new CheckinData(checkinDataObject);
     await checkinData.save();
     return checkinData;
+}
+
+
+async function remove(args) {
+
+    if(args === undefined) {
+        throw new Error("Invalid arguments received: Payload is empty.");
+    }
+    let type = args.type;
+    let amount = args.amount;
+
+    if(args.type === undefined) {
+        throw new Error("Invalid arguments received: Type is undefined");
+    }
+
+    //get checkout version
+    let version = await Version.findOne({label: "wb2"});
+    if(!version){
+        console.log("no version file found. Generating new version history...")
+        version = new Version({
+            label: "wb2",
+            version: 1,
+            timestamp: Date.now(),
+        });
+    }
+    else {
+        version.version++;
+    }
+    version.save();
+
+    //delete last entry
+    return CheckinData.findOneAndRemove({"currentStatus.status": 0, "type": type});
 }
 
 async function checkout(entry) {

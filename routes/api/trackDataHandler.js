@@ -1,18 +1,20 @@
 var express = require('express');
 var router = express.Router();
 
-const checkinDataService = require('../../services/dataService');
+const trackDataService = require('../../services/trackDataService');
 const settingsService = require('../../services/settingsService');
 
 
 
-//hooked at /api/v1/checkin
+//hooked at /api/v1/data/track
 
 // routes
+router.get('/', get);
 router.post('/add', addData);
-router.get('/get', get);
-router.get('/counts', getCounts);
-router.post('/remove', remove)
+router.get('/counts', getAllCounts);
+router.get('/counts/:trackId', getCounts);
+router.post('/remove', remove);
+router.get('/:trackId', get);
 
 /**
  * add Numbers to Checkin waiting list
@@ -29,27 +31,41 @@ function addData (req, res, next){
     if (req.body === undefined) {
         next(err);
     }
-    if(req.body.type === undefined){
+    if(req.body.type === undefined || req.body.track === undefined){
         next(err)
     }
 
-    checkinDataService.add(req.body)
+    trackDataService.add(req.body)
         .then(result => res.json(result))
         .catch(err => next(err));
 }
 
 function get (req, res, next){
     //validate data
-    checkinDataService.getAll()
+    let trackId = req.params.trackId;
+    if(trackId !== undefined) {
+        trackDataService.getByTrack({id: trackId})
+            .then(result => res.json(result))
+            .catch(err => next(err));
+    }
+    else {
+        trackDataService.getAll()
+            .then(result => res.json(result))
+            .catch(err => next(err));
+    }
+}
+
+function getAllCounts (req, res, next){
+    //validate data
+    trackDataService.getCounts()
         .then(result => res.json(result))
         .catch(err => next(err));
 }
 
 function getCounts (req, res, next){
+    let trackId = req.params.trackId;
     //validate data
-    checkinDataService.getCounts({
-        status: 0
-    })
+    trackDataService.getCounts({id: trackId})
         .then(result => res.json(result))
         .catch(err => next(err));
 }
@@ -60,15 +76,18 @@ function remove (req, res, next){
     if (req.body === undefined) {
         next(err);
     }
-    let args = req.body;
     if(req.body.type === undefined){
         next(err)
     }
-    if(req.body.amount === undefined){
-        args.amount = 1;
+    if(req.body.trackId === undefined){
+        next(err)
+    }
+    let args = {
+        isSwitched: req.body.isSwitched,
+        originalType: req.body.originalType,
     }
 
-    checkinDataService.remove(args)
+    trackDataService.remove(req.body.type, req.body.trackId, args)
         .then(result => res.json(result))
         .catch(err => next(err));
 }

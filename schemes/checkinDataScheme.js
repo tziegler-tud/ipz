@@ -8,10 +8,6 @@ var checkinDataSchema = new Schema({
         type: Number,
         required: true,
     },
-    name: {
-        type: String,
-        required: true,
-    },
     currentStatus: {
         status: {
             type: Number,
@@ -35,6 +31,25 @@ var checkinDataSchema = new Schema({
 
         }
     }]
+})
+
+checkinDataSchema.virtual("name").get(function(){
+    let typeString = "";
+    switch(this.type) {
+        case 1:
+            typeString ="BionTech";
+            break;
+        case 2:
+            typeString ="Moderna";
+            break;
+        case 3:
+            typeString ="Astrazenecca";
+            break;
+        default:
+            typeString = "nicht angegeben";
+            break;
+    }
+    return typeString;
 })
 
 checkinDataSchema.set('toJSON', { virtuals: true, getters: true });
