@@ -54,9 +54,12 @@ async function getCounts(args) {
         return n + (element.type === 3);
     }, 0);
 
+    let total = counters.b + counters.m + counters.a
+
     let returnObject = {
         status: options.status,
         counters: counters,
+        total: total,
     }
 
     return returnObject;

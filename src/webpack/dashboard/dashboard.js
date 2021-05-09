@@ -66,6 +66,10 @@ Dashboard.prototype.intialize = function(type, activePage, options){
             url = "/webpack/templates/dashboard/dashboard-track.hbs";
             self.createTrackDashboard(activePage, url, options);
             break;
+        case "apotheke":
+            url = "/webpack/templates/dashboard/dashboard-apotheke.hbs";
+            self.createApothekeDashboard(activePage, url, options);
+            break;
         default:
             break;
     }
@@ -104,6 +108,43 @@ Dashboard.prototype.createManagementDashboard = function(activePage, url, option
         });
 
     })
+}
+
+Dashboard.prototype.createApothekeDashboard = function(activePage, url, options) {
+    let self = this;
+    //build context
+    $.get("/api/v1/checkin/counts/", function(checkinCounts){
+        $.get("/api/v1/data/track/counts/", function(trackCounts) {
+            $.get("/api/v1/data/track/getSwitched", function (switched) {
+                $.get(url, function (data) {
+                    let context = {
+                        header: "Übersicht - Impfstoffbedarf ",
+                        data: {
+                            checkin: {
+                                total: {
+                                    all: checkinCounts.total,
+                                    biontech: checkinCounts.counters.b,
+                                    moderna: checkinCounts.counters.m,
+                                    astra: checkinCounts.counters.a,
+                                }
+                            },
+                            track: {
+                                total: {
+                                    all: trackCounts.total,
+                                    biontech: trackCounts.counters.b,
+                                    moderna: trackCounts.counters.m,
+                                    astra: trackCounts.counters.a,
+                                }
+                            },
+                        }
+                    }
+                    var template = Handlebars.compile(data);
+                    self.container.innerHTML = template(context);
+                    // const dataTable = new MDCDataTable(document.querySelector('.mdc-data-table'));
+                });
+            });
+        });
+    });
 }
 
 Dashboard.prototype.createTrackDashboard = function(activePage, url, options) {

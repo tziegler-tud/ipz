@@ -19,6 +19,8 @@ module.exports = {
         strecke_style: "./src/webpack/strecke.scss",
         management: "./src/webpack/management.js",
         management_style: "./src/webpack/management.scss",
+        apotheke: "./src/webpack/apotheke.js",
+        apotheke_style: "./src/webpack/apotheke.scss",
         list: "./src/webpack/list.js",
         list_style: "./src/webpack/list.scss",
 
