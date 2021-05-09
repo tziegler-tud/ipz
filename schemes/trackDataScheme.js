@@ -54,6 +54,44 @@ trackDataSchema.virtual("name").get(function(){
     return typeString;
 })
 
+trackDataSchema.virtual("switch.originalTypeName").get(function(){
+    let typeString = "";
+    switch(this.switch.originalType) {
+        case 1:
+            typeString ="BionTech";
+            break;
+        case 2:
+            typeString ="Moderna";
+            break;
+        case 3:
+            typeString ="Astrazenecca";
+            break;
+        default:
+            typeString = "nicht angegeben";
+            break;
+    }
+    return typeString;
+})
+
+trackDataSchema.virtual("switch.newTypeName").get(function(){
+    let typeString = "";
+    switch(this.switch.newType) {
+        case 1:
+            typeString ="BionTech";
+            break;
+        case 2:
+            typeString ="Moderna";
+            break;
+        case 3:
+            typeString ="Astrazenecca";
+            break;
+        default:
+            typeString = "nicht angegeben";
+            break;
+    }
+    return typeString;
+})
+
 trackDataSchema.virtual("switch.newType").get(function(){
     return this.type;
 })

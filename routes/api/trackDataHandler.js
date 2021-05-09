@@ -14,7 +14,10 @@ router.post('/add', addData);
 router.get('/counts', getAllCounts);
 router.get('/counts/:trackId', getCounts);
 router.post('/remove', remove);
+router.get('/getSwitched', getSwitched);
+router.get('/getSwitched/:trackId', getSwitched);
 router.get('/:trackId', get);
+
 
 /**
  * add Numbers to Checkin waiting list
@@ -50,6 +53,21 @@ function get (req, res, next){
     }
     else {
         trackDataService.getAll()
+            .then(result => res.json(result))
+            .catch(err => next(err));
+    }
+}
+
+function getSwitched (req, res, next){
+    //validate data
+    let trackId = req.params.trackId;
+    if(trackId !== undefined) {
+        trackDataService.getByTrack({id: trackId}, {filter: "isSwitched", value: true})
+            .then(result => res.json(result))
+            .catch(err => next(err));
+    }
+    else {
+        trackDataService.getAll({filter: "isSwitched", value: true})
             .then(result => res.json(result))
             .catch(err => next(err));
     }

@@ -3,14 +3,16 @@ import {transformDateTimeString} from "./helpers";
 import {MDCSnackbar} from "@material/snackbar";
 import {MDCTabBar} from '@material/tab-bar';
 import {MDCTabIndicator} from '@material/tab-indicator';
+
 var $ = require( "jquery" );
 
 var phone = window.matchMedia("only screen and (max-device-width: 400px)");
 var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
+
 /**
  *
- * @param type {String} Type of bottom. Valid types are: ["checkin", "wb1", "strecke"]
+ * @param type {String} Type of bottom. Valid types are: ["mangement", "strecke"]
  * @param options {Object}
  * @param activePage {Page}
  * @returns {Bottom}
@@ -20,6 +22,7 @@ var Bottom = function(type, activePage, options){
     let self = this;
     let url;
     self.active = false;
+    self.page = activePage;
     var applyArgs = function(options){
         let defaults = {
             containerId: "bottom-container",
@@ -65,6 +68,10 @@ Bottom.prototype.setContent = function(type, activePage, options){
         case "wb1":
             url = "/webpack/templates/bottom/bottom-wb1.hbs";
             self.createWb1Page(activePage, options);
+            break;
+        case "management":
+            url = "/webpack/templates/bottom/bottom-management.hbs";
+            self.createManagementPage(activePage, options);
             break;
         case "strecke":
             url = "/webpack/templates/bottom/bottom-track.hbs";
@@ -117,30 +124,154 @@ Bottom.prototype.createTrackPage = function(activePage, options){
 
         const bottomTabs = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
         const tabIndicator = new MDCTabIndicator(document.querySelector('.mdc-tab-indicator'));
-        bottomTabs.listen("MDCTabBar:activated", function(event){
-            let detail = event.detail;
-            let index = detail.index;
-            console.log(index + " activated");
-        });
+
+        //find tab navigation interface on page
+        activePage.getTabNavigationInterface()
+            .then(function(i){
+                let tabs = i.tabs;
+                let autoIndex = 0;
+                /**
+                 * @type {Tab[]} tabs
+                 */
+                tabs.forEach(function(tab){
+                    //add index to tabs, if not already present from dom
+                    let index = tab.element.dataset.tabid;
+                    if (index===undefined){
+                        //auto-assign
+                        index = "a"+autoIndex
+                        autoIndex++;
+                        tab.element.dataset.tabid = index;
+                    }
+                    tab.index = index;
+                })
+
+                let mdcTabs = $(".mdc-tab");
+                let navsMap = {};
+                mdcTabs.each(function(element){
+                    let autoIndex = 0;
+                    //try to match tabid of mdc tab elements to tab indexes
+                    let index = this.dataset.tabid;
+                    if (index===undefined){
+                        //auto-assign
+                        index = "a"+autoIndex
+                        autoIndex++;
+                        this.dataset.tabid = index;
+                    }
+                    let mdcIndex = bottomTabs.foundation.adapter.getIndexOfTabById(this.id);
+                    navsMap[mdcIndex] = {
+                        index: index,
+                        element: this,
+                    };
+                })
+
+
+                bottomTabs.listen("MDCTabBar:activated", function(event){
+                    let detail = event.detail;
+                    let index = detail.index;
+                    console.log(index + " activated");
+
+                    //find tab by index
+                    let tabIndex = navsMap[index].index;
+                    let tab = tabs.find(function(tab){
+                        return (tab.index === tabIndex);
+                    })
+                    tab.activate();
+
+                });
+
+            })
+            .catch(function(error){
+                console.error(error);
+            })
+
     });
 }
 
 
-Bottom.prototype.show = function(){
-    this.active = true;
-    this.container.classList.add("bottom-active");
-      return true;
+/**
+ *
+ * @param activePage
+ * @param options
+ */
+Bottom.prototype.createManagementPage = function(activePage, options){
+    let self = this;
+    let url = "/webpack/templates/bottom/bottom-management.hbs";
+    let context = {
+
+    };
+    $.get(url, function (data) {
+        var template = Handlebars.compile(data);
+        self.container.innerHTML = template(context);
+
+        /**
+         * bottom nav
+         */
+
+        const bottomTabs = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
+        const tabIndicator = new MDCTabIndicator(document.querySelector('.mdc-tab-indicator'));
+
+        //find tab navigation interface on page
+        activePage.getTabNavigationInterface()
+            .then(function(i){
+                let tabs = i.tabs;
+                let autoIndex = 0;
+                /**
+                 * @type {Tab[]} tabs
+                 */
+                tabs.forEach(function(tab){
+                    //add index to tabs, if not already present from dom
+                    let index = tab.element.dataset.tabid;
+                    if (index===undefined){
+                        //auto-assign
+                        index = "a"+autoIndex
+                        autoIndex++;
+                        tab.element.dataset.tabid = index;
+                    }
+                    tab.index = index;
+                })
+
+                let mdcTabs = $(".mdc-tab");
+                let navsMap = {};
+                mdcTabs.each(function(element){
+                    let autoIndex = 0;
+                    //try to match tabid of mdc tab elements to tab indexes
+                    let index = this.dataset.tabid;
+                    if (index===undefined){
+                        //auto-assign
+                        index = "a"+autoIndex
+                        autoIndex++;
+                        this.dataset.tabid = index;
+                    }
+                    let mdcIndex = bottomTabs.foundation.adapter.getIndexOfTabById(this.id);
+                    navsMap[mdcIndex] = {
+                        index: index,
+                        element: this,
+                    };
+                })
+
+
+                bottomTabs.listen("MDCTabBar:activated", function(event){
+                    let detail = event.detail;
+                    let index = detail.index;
+                    console.log(index + " activated");
+
+                    //find tab by index
+                    let tabIndex = navsMap[index].index;
+                    let tab = tabs.find(function(tab){
+                        return (tab.index === tabIndex);
+                    })
+                    tab.activate();
+
+                });
+
+            })
+            .catch(function(error){
+                console.error(error);
+            })
+
+    });
 }
 
-Bottom.prototype.hide = function(){
-    this.active = false;
-    this.container.classList.remove("bottom-active");
-    return false;
-}
 
-Bottom.prototype.toggle = function(){
-    if(this.active) return this.hide();
-    else {return this.show()}
-}
 
 export {Bottom}

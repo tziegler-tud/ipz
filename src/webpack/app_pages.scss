@@ -32,7 +32,9 @@ input[type=number] {
 
 .app-page-wrapper {
   width: 100%;
-  flex: 1 1 100%;
+  flex: 1 1 auto;
+  height: calc(100% - 60px);
+  overflow:scroll;
 
   .app-page-header {
     width: 80%;
@@ -55,8 +57,29 @@ input[type=number] {
       margin: 0;
 
     }
+
+    @media #{$phone} {
+      margin: .5em auto .5em auto;
+    }
+
     padding: 0;
     margin: 2em auto 1em auto;
     width: 100%;
+  }
+}
+
+/**
+tabs
+ */
+
+.tabs {
+  .tab-container {
+    .tab {
+      display: none;
+    }
+
+    .tab--active {
+      display: block !important;
+    }
   }
 }

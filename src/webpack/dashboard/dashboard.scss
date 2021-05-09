@@ -1,0 +1,164 @@
+@use "../../../node_modules/@material/button";
+@use "../../../node_modules/@material/list";
+@use "../../../node_modules/@material/checkbox"; // Required only for data table with row selection.
+@use "../../../node_modules/@material/icon-button"; // Required only for data table with column sorting.
+@use "../../../node_modules/@material/data-table/data-table";
+@use "../../../node_modules/@material/snackbar/mdc-snackbar";
+@use "../../../node_modules/@material/floating-label/mdc-floating-label";
+@use "../../../node_modules/@material/line-ripple/mdc-line-ripple";
+@use "../../../node_modules/@material/notched-outline/mdc-notched-outline";
+@use "../../../node_modules/@material/fab";
+@use "../../../node_modules/@material/card";
+
+
+@import "../app_pages";
+@import "./../app_bottom";
+
+
+@import "../variables";
+@import "../color-variables";
+
+@import "~material-icons-font/material-icons-font.css";
+
+
+@include list.deprecated-core-styles;
+@include checkbox.core-styles;
+@include icon-button.core-styles;
+@include data-table.core-styles;
+@include data-table.theme-baseline;
+@include fab.core-styles;
+@include card.core-styles;
+
+.dashboard {
+  background-color: #fdfdfd;
+  .dashboard-inner {
+    .dashboard-header {
+      font-size: 110%;
+      margin: 0 0 0 10px;
+    }
+    .dashboard-component-container {
+      display: flex;
+      flex-flow: row wrap;
+
+      .dashboard-component {
+        padding: 10px;
+        background-color: #fff;
+        box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
+      }
+
+      .dashboard-component, .dashboard-subcomponent {
+        margin: 10px 0 10px 0;
+
+        &.dashboard-component--fullwidth {
+          flex: 1 1 100%;
+        }
+        &.dashboard-component--short {
+          flex: 1 1 auto;
+        }
+
+        &.dashboard-subcomponent-amount {
+          display: flex;
+          flex-flow: row wrap;
+          .dashboard-component-label {
+            flex: 1 1 auto;
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: flex-end;
+            .dashboard-component-label__text {
+              flex: 0 0 min-content;
+              font-size: 100%;
+              color: #0c2e38
+            }
+          }
+          .dashboard-component-value {
+            flex: 0 0 min-content;
+            margin-right: 10px;
+            display: flex;
+            flex-flow: column nowrap;
+            .dashboard-component-value__text {
+              flex: 0 0 min-content;
+              line-height: 100%;
+              font-size: 200%;
+              color: #202028;
+            }
+          }
+        }
+
+        .dashboard-component-header {
+          margin-bottom: 20px;
+          font-size: 120%;
+          color: #686868
+        }
+      }
+
+      /**
+        special classes
+         */
+
+      .dashboard-component-figures {
+
+        .dashboard-subcomponent-container {
+          display: grid;
+          grid-template-rows: auto auto;
+          grid-template-columns: 1fr 1fr 1fr;
+          grid-row-gap: 10px;
+          grid-template-areas:
+                    "main main main"
+                    "content1 content2 content3";
+        }
+
+        .figures-main {
+          grid-area: main;
+          font-size: 110%;
+          .dashboard-component-label__text {
+            font-size: 100%;
+            color: #0c2e38
+          }
+          .dashboard-component-value__text {
+            font-size: 200%;
+            color: #202028;
+          }
+
+        }
+        .figures-part {
+          .dashboard-component-label__text {
+            font-size: 100%;
+            color: #0c2e38
+          }
+          .dashboard-component-value__text {
+            font-size: 200%;
+            color: #202028;
+          }
+
+          &.figures--biontech {
+            .dashboard-component-value__text {
+              color: $biontech-color;
+            }
+          }
+          &.figures--moderna {
+            .dashboard-component-value__text {
+              color: $moderna-color;
+            }
+          }
+          &.figures--astra {
+            .dashboard-component-value__text {
+              color: $astra-color;
+            }
+          }
+
+        }
+
+      }
+
+      .dashboard-component-dataTable {
+        .dashboard-subcomponent-table {
+          width: 80%;
+          margin: 10px 0;
+          .mdc-data-table {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

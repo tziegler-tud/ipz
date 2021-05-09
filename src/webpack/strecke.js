@@ -57,7 +57,7 @@ function buildPage(track){
     );
 
     let streckePage = new StreckePage(track);
-    streckePage.show().done(function(){
+    streckePage.show({tabs: true}).done(function(){
         sidesheet = new Sidesheet("strecke", streckePage, {});
         bottomTabs =  new Bottom("strecke", streckePage, {})
 

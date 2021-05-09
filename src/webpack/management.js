@@ -4,6 +4,7 @@ import {Sidesheet} from "./app_sidesheet";
 import {ManagementPage} from "./app_managementPage";
 import {transformDateTimeString} from "./helpers";
 import "./handlebarsHelpers";
+import {Bottom} from "./app_bottom";
 const Handlebars = require("handlebars");
 var $ = require( "jquery" );
 
@@ -16,13 +17,13 @@ $(window).on('load',function() {
     // setTimeout(plr.hide,0);
 });
 
-let sidesheet;
+let sidesheet, bottomTabs;
 
 
 let nav = new Navigation(
     {
         pageData: {
-            navTitle: "Check In - Vorkontrolle",
+            navTitle: "Management",
             date: transformDateTimeString(Date.now()).date,
             time: transformDateTimeString(Date.now()).time("hh:mm:ss"),
         },
@@ -35,15 +36,16 @@ let nav = new Navigation(
 );
 
 let managementPage = new ManagementPage();
-managementPage.show()
-//     .done(function(){
-//     sidesheet = new Sidesheet("checkin", managementPage, {});
-// });
+managementPage.show({tabs: true})
+    .done(function(){
+    // sidesheet = new Sidesheet("checkin", managementPage, {});
+    bottomTabs =  new Bottom("management", managementPage, {})
+});
 
 nav.initialize
-    .done(function(){
+    .then(function(){
         nav.setAction("mdc-top-app-bar-action1", function(e, args){
-            sidesheet.toggle();
+            // sidesheet.toggle();
         })
     });
 

@@ -2,7 +2,10 @@ const Handlebars = require("handlebars");
 import "../handlebarsHelpers";
 import {Counter} from "../helpers";
 import {apiHandler} from "../apiHandler";
+
 import {Page} from "../app_page";
+import {Dashboard} from "../dashboard/dashboard";
+
 var $ = require( "jquery" );
 import {MDCRipple} from '@material/ripple';
 import {MDCSnackbar} from '@material/snackbar';
@@ -84,6 +87,7 @@ StreckePage.prototype.show = function(options){
 StreckePage.prototype.buildHtml = function(url, context, options){
     let self = this;
     let defaultOptions = {
+        tabs: false,
         snackbar: {
             show: false,
             message: "",
@@ -109,6 +113,19 @@ StreckePage.prototype.buildHtml = function(url, context, options){
         const list2 = new MDCList(document.querySelector('#dialog2 #dialog-select-list2'));
         const listItemRipples1 = list1.listElements.map((listItemEl) => new MDCRipple(listItemEl));
         const listItemRipples2 = list2.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+
+        //build dashboard
+        self.dashboard = new Dashboard("strecke", self, {containerId: "dashboard-container"});
+
+        //setup tab navigation interface
+        if (options.tabs){
+            self.tabs = self.initTabs();
+            //activate first tab
+            if(self.tabs[0] !== undefined) {
+                self.tabs[0].activate();
+            }
+        }
+
 
         list1.singleSelection = true;
         list2.singleSelection = true;
@@ -274,6 +291,90 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             self.showSnackbar(options.snackbar.message);
         }
     });
+}
+
+/**
+ * @typedef Tab
+ * @property {HTMLElement} element Dom Container of the tab. Class transitions are applied to this element.
+ * @property {function} activate activates the tab
+ * @property {function} deactivate deactivates the tab. this is usually called by the activate function, and you might not want to call this directly.
+ */
+
+/**
+ *
+ * returns this pages tab interface as a promise
+ *
+ * @returns {Promise<{tabs: Tab[]}>}
+ */
+StreckePage.prototype.getTabNavigationInterface = function(){
+    let self = this;
+    /**
+     *
+     * @type {{tabs: Tab[]}}
+     */
+    return new Promise((resolve, reject) => {
+        if (self.tabs === undefined || self.tabs.length === 0) {
+            //try to rebuild
+            let tabs = self.initTabs();
+            if(tabs.length > 0){
+                self.tabs = tabs;
+            }
+            else reject("Failed to build tabs.")
+        }
+        let i = {
+            tabs: self.tabs,
+        }
+        resolve(i);
+    });
+
+}
+
+StreckePage.prototype.refreshDashboard = function(){
+    let self = this;
+    //rebuild dashboard
+    self.dashboard = new Dashboard("strecke", self, {containerId: "dashboard-container"});
+}
+
+StreckePage.prototype.activateTab = function(element){
+    let self = this;
+    //remove active class from all tabs
+    self.tabs.forEach(function(tab){
+        tab.deactivate();
+    })
+    //add active class to current element
+    element.classList.add("tab--active");
+    self.refreshDashboard();
+    return true;
+}
+
+StreckePage.prototype.deactivateTab = function(element){
+    let self = this;
+    //remove active class from tab
+    element.classList.remove("tab--active");
+    return true;
+}
+
+StreckePage.prototype.initTabs = function() {
+    let self = this;
+    let msg = "Failed to initialize tab navigation: ";
+    let tabContainer = document.getElementsByClassName("tabs")[0];
+    if (tabContainer === undefined) console.error(msg + "tabs class not present.");
+    let tabs = document.querySelectorAll(".tabs .tab");
+    console.log("Setting up tabs: " + tabs.length + "tabs found.");
+    let tabArray = [];
+
+    tabs.forEach(function(el){
+        tabArray.push({
+            element: el,
+            activate: function(){
+                self.activateTab(el)
+            },
+            deactivate: function(){
+                self.deactivateTab(el)
+            }
+        })
+    })
+    return tabArray;
 }
 
 function getCounter (type, self) {

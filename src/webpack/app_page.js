@@ -47,4 +47,22 @@ Page.prototype.buildHtml = function(url, context){
 
 }
 
+/**
+ * @typedef Tab
+ * @property {HTMLElement} element Dom Container of the tab. Class transitions are applied to this element.
+ * @property {function} activate activates the tab
+ * @property {function} deactivate deactivates the tab. this is usually called by the activate function, and you might not want to call this directly.
+ */
+
+/**
+ * @abstract
+ * @returns {Promise<Tab[]>}
+ */
+Page.prototype.getTabNavigationInterface = function(){
+    /**
+     * abstract function
+     * concrete page class implements this function
+     */
+}
+
 export {Page};

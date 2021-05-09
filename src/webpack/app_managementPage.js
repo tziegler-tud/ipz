@@ -12,6 +12,8 @@ import {MDCDataTable} from '@material/data-table';
 import {MDCBanner} from '@material/banner';
 import {MDCTextField} from '@material/textfield';
 import {MDCTextFieldIcon} from '@material/textfield/icon';
+import {Dashboard} from "./dashboard/dashboard";
+import {StreckePage} from "./strecke/app_streckePage";
 
 var phone = window.matchMedia("only screen and (max-width: 50em)");
 
@@ -36,26 +38,17 @@ ManagementPage.prototype.hide = function(){
 
 ManagementPage.prototype.show = function(options){
     let self = this;
+    let context = {};
     if(self.active) {
         self.refresh(self,options);
         return;
     }
-    apiHandler.getCheckinCounts()
-        .done(function(result, textStatus, jqXHR){
-            let context = {
-                counters: {
-                    b: result.counters.b,
-                    m: result.counters.m,
-                    a: result.counters.a,
-                }
-            }
-            self.initialize = self.buildHtml(self.url, context);
-            self.active = true;
-            //enable refresh
-            clearInterval(self.refeshInterval);
-            self.refeshInterval = setInterval(self.refresh, 1000, self);
-            return self.initialize;
-        })
+    //render html
+    self.active = true;
+    self.refreshInterval = setInterval(self.refresh, 1000, self);
+    return this.buildHtml(self.url, context, options);
+
+
 }
 
 ManagementPage.prototype.refresh = function(self, options){
@@ -65,68 +58,26 @@ ManagementPage.prototype.refresh = function(self, options){
     if (!self.active){
         return null;
     }
-    apiHandler.getCheckoutDataVersion()
-        .done(function(result){
-            if(!result){
-                console.log("failed to obtain version information. Rebuilding...");
-                return self.update(options);
-            }
-            if(result.version === self.dataVersion){
-                //version matches, nothing to update
-                console.log("nothing to update");
-            }
-            else {
-                //if version does not match, get fresh server content
-                console.log("update found, rebuilding for version: " + result.version);
-                self.dataVersion = result.version;
-                return self.update(options);
+    self.update(options);
 
-            }
-        })
-        .fail(function(result){
-            console.error(result);
-            console.log("failed to obtain version information. Rebuilding...");
-            return self.update(options);
-        });
 }
 
 ManagementPage.prototype.update = function(options){
     let self = this;
+    //rebuild dashboard
+    self.dashboard = new Dashboard("management", self, {containerId: "dashboard-container"});
 
-    apiHandler.getCheckinCounts()
-        .done(function(result, textStatus, jqXHR) {
-            let context = {
-                counters: {
-                    b: result.counters.b,
-                    m: result.counters.m,
-                    a: result.counters.a,
-                }
-            }
-            self.initialize = self.buildHtml(self.url, context);
-            self.active = true;
-            //enable refresh
-            clearInterval(self.refeshInterval);
-            self.refeshInterval = setInterval(self.refresh, 1000, self);
-            return self.initialize;
-        })
 
-    // return apiHandler.getCheckinCounts()
-    //     .done(function(result){
-    //         //
-    //         // //update counters
-    //         self.counters.b.innerHTML = result.counters.b;
-    //         self.counters.m.innerHTML = result.counters.m;
-    //         self.counters.a.innerHTML = result.counters.a;
-    //     })
 }
 
 /**
  *
  * @param url {String}
  * @param context {Object}
+ * @param options {Object}
  * @returns {*}
  */
-ManagementPage.prototype.buildHtml = function(url, context){
+ManagementPage.prototype.buildHtml = function(url, context, options){
     let self = this;
     return $.get(url, function (data) {
         console.log("template found");
@@ -137,6 +88,18 @@ ManagementPage.prototype.buildHtml = function(url, context){
         pageContainer.append(template(context));
         self.page = document.getElementById("management-page");
         self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
+
+        //setup tab navigation interface
+        if (options.tabs){
+            self.tabs = self.initTabs();
+            //activate first tab
+            if(self.tabs[0] !== undefined) {
+                self.tabs[0].activate();
+            }
+        }
+
+        //build dashboard
+        self.dashboard = new Dashboard("management", self, {containerId: "dashboard-container"});
     });
 }
 
@@ -177,4 +140,92 @@ ManagementPage.prototype.showSnackbar = function(message, options) {
     }
     snackbar.open()
 }
+
+
+/**
+ * @typedef Tab
+ * @property {HTMLElement} element Dom Container of the tab. Class transitions are applied to this element.
+ * @property {function} activate activates the tab
+ * @property {function} deactivate deactivates the tab. this is usually called by the activate function, and you might not want to call this directly.
+ */
+
+/**
+ *
+ * returns this pages tab interface as a promise
+ *
+ * @returns {Promise<{tabs: Tab[]}>}
+ */
+ManagementPage.prototype.getTabNavigationInterface = function(){
+    let self = this;
+    /**
+     *
+     * @type {{tabs: Tab[]}}
+     */
+    return new Promise((resolve, reject) => {
+        if (self.tabs === undefined || self.tabs.length === 0) {
+            //try to rebuild
+            let tabs = self.initTabs();
+            if(tabs.length > 0){
+                self.tabs = tabs;
+            }
+            else reject("Failed to build tabs.")
+        }
+        let i = {
+            tabs: self.tabs,
+        }
+        resolve(i);
+    });
+
+}
+
+ManagementPage.prototype.refreshDashboard = function(){
+    let self = this;
+    //rebuild dashboard
+    self.dashboard = new Dashboard("management", self, {containerId: "dashboard-container"});
+}
+
+ManagementPage.prototype.activateTab = function(element){
+    let self = this;
+    //remove active class from all tabs
+    self.tabs.forEach(function(tab){
+        tab.deactivate();
+    })
+    //add active class to current element
+    element.classList.add("tab--active");
+    self.refreshDashboard();
+    return true;
+}
+
+ManagementPage.prototype.deactivateTab = function(element){
+    let self = this;
+    //remove active class from tab
+    element.classList.remove("tab--active");
+    return true;
+}
+
+ManagementPage.prototype.initTabs = function() {
+    let self = this;
+    let msg = "Failed to initialize tab navigation: ";
+    let tabContainer = document.getElementsByClassName("tabs")[0];
+    if (tabContainer === undefined) console.error(msg + "tabs class not present.");
+    let tabs = document.querySelectorAll(".tabs .tab");
+    console.log("Setting up tabs: " + tabs.length + "tabs found.");
+    let tabArray = [];
+
+    tabs.forEach(function(el){
+        tabArray.push({
+            element: el,
+            activate: function(){
+                self.activateTab(el)
+            },
+            deactivate: function(){
+                self.deactivateTab(el)
+            }
+        })
+    })
+    return tabArray;
+}
+
+
+
 export {ManagementPage};

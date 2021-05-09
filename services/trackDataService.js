@@ -18,12 +18,30 @@ module.exports = {
 /**
  * Gets all users
  */
-async function getAll() {
-    return TrackData.find();
+async function getAll(filter) {
+    if (filter===undefined || filter.filter === undefined || filter.value === undefined) {
+        return TrackData.find();
+    }
+    else {
+        let filterObj = {};
+        filterObj[filter.filter] = filter.value;
+        return TrackData.find(filterObj);
+    }
 }
 
-async function getByTrack(track) {
-    return TrackData.find({"track.id": track.id});
+async function getByTrack(track, filter) {
+    if (filter===undefined || filter.filter === undefined || filter.value === undefined) {
+        return TrackData.find({"track.id": track.id});
+    }
+    else {
+        let filterObj = {
+            "track.id": track.id,
+        };
+        filterObj[filter.filter] = filter.value;
+        // return TrackData.find({isSwitched: true});
+        return TrackData.find(filterObj);
+    }
+
 }
 
 async function getCounts(track) {
@@ -52,9 +70,12 @@ async function getCounts(track) {
         return n + (element.type === 3);
     }, 0);
 
+    let total = counters.b + counters.m + counters.a;
+
     let returnObject = {
         track: track.id,
         counters: counters,
+        total: total,
     }
 
     return returnObject;
@@ -89,7 +110,7 @@ async function add(object) {
     let isSwitched = object.isSwitched;
     let switchObj = {};
     if(isSwitched) {
-        switchObj.originalType = object.originalType;
+        switchObj = object.switch;
     }
 
     //get checkout version

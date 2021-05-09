@@ -16,6 +16,7 @@
 @use "../../../node_modules/@material/dialog";
 
 @import "../app_pages";
+@import "../dashboard/dashboard";
 @import "./../app_bottom";
 
 
@@ -72,9 +73,16 @@
         .choosing-container-inner {
           display: flex;
           flex-flow: row nowrap;
+          @media #{$phone} {
+            flex-flow: row wrap;
+          }
           .choosing-item {
             flex: 1 1 33%;
             padding: 10px;
+
+            @media #{$phone} {
+              flex: 1 1 100%;
+            }
 
 
             &.biontech {
@@ -109,6 +117,10 @@
                   font-family: monospace, "sans";
                   font-size: 300%;
 
+                  @media #{$phone} {
+                    font-size: 100%;
+                  }
+
                   .choosing-card-counter-loader {
                     font-size: 50%;
                   }
@@ -140,15 +152,24 @@
               }
               .choosing-card__text-section {
                 padding: 15px 10px 0 10px;
+                @media #{$phone} {
+                  padding: 5px 10px 0 10px;
+                }
                 .choosing-card-title {
                   font-weight: bold;
                   font-size: 110%;
+                  @media #{$phone} {
+                    font-size: 90%;
+                  }
                 }
 
               }
               .choosing-item-media {
                 height: 200px;
                 padding: 10px;
+                @media #{$phone} {
+                  height: 50px;
+                }
               }
             }
 

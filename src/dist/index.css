@@ -5312,7 +5312,9 @@ input[type=number] {
 
 .app-page-wrapper {
   width: 100%;
-  flex: 1 1 100%;
+  flex: 1 1 auto;
+  height: calc(100% - 60px);
+  overflow: scroll;
 }
 .app-page-wrapper .app-page-header {
   width: 80%;
@@ -5334,6 +5336,21 @@ input[type=number] {
     padding: 2em 2em;
     margin: 0;
   }
+}
+@media only screen and (max-width: 600px) {
+  .app-page-wrapper .app-page-content {
+    margin: 0.5em auto 0.5em auto;
+  }
+}
+
+/**
+tabs
+ */
+.tabs .tab-container .tab {
+  display: none;
+}
+.tabs .tab-container .tab--active {
+  display: block !important;
 }
 
 .mdc-deprecated-list {
