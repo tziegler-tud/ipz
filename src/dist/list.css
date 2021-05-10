@@ -6177,6 +6177,10 @@ input[type=number] {
 /**
 tabs
  */
+.tabs .tab-container {
+  height: 100%;
+  overflow: scroll;
+}
 .tabs .tab-container .tab {
   display: none;
 }

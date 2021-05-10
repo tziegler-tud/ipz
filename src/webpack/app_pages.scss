@@ -74,6 +74,8 @@ tabs
 
 .tabs {
   .tab-container {
+    height: 100%;
+    overflow: scroll;
     .tab {
       display: none;
     }

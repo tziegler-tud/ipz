@@ -83,27 +83,40 @@ Dashboard.prototype.addComponent = function(componentType) {
 Dashboard.prototype.createManagementDashboard = function(activePage, url, options) {
     let self = this;
     //build context
-    $.get("/api/v1/data/track/counts/", function(counts){
-        $.get("/api/v1/data/track/getSwitched", function(switched) {
-            $.get(url, function (data) {
-                let context = {
-                    header: "Übersicht - Impfstrecken ",
-                    data: {
-                        total: {
-                            all: counts.total,
-                            biontech: counts.counters.b,
-                            moderna: counts.counters.m,
-                            astra: counts.counters.a,
-                        },
-                        switch: {
-                            total: switched.length,
-                            table: switched,
+    $.get("/api/v1/checkin/counts/", function(checkinCounts){
+        $.get("/api/v1/data/track/counts/", function(trackCounts) {
+            $.get("/api/v1/data/track/getSwitched", function (switched) {
+                $.get(url, function (data) {
+                    let context = {
+                        header: "Übersicht - Impfstrecken ",
+                        data: {
+                            checkin: {
+                                total: {
+                                    all: checkinCounts.total,
+                                    biontech: checkinCounts.counters.b,
+                                    moderna: checkinCounts.counters.m,
+                                    astra: checkinCounts.counters.a,
+                                }
+                            },
+                            track: {
+                                total: {
+                                    all: trackCounts.total,
+                                    biontech: trackCounts.counters.b,
+                                    moderna: trackCounts.counters.m,
+                                    astra: trackCounts.counters.a,
+                                },
+                                switch: {
+                                    total: switched.length,
+                                    table: switched,
+                                }
+                            },
+
                         }
                     }
-                }
-                var template = Handlebars.compile(data);
-                self.container.innerHTML = template(context);
-                const dataTable = new MDCDataTable(document.querySelector('.mdc-data-table'));
+                    var template = Handlebars.compile(data);
+                    self.container.innerHTML = template(context);
+                    const dataTable = new MDCDataTable(document.querySelector('.mdc-data-table'));
+                });
             });
         });
 
