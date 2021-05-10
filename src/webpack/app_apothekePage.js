@@ -45,7 +45,7 @@ ApothekePage.prototype.show = function(options){
     }
     //render html
     self.active = true;
-    self.refreshInterval = setInterval(self.refresh, 1000, self);
+    self.refreshInterval = setInterval(self.refresh, 5000, self);
     return this.buildHtml(self.url, context, options);
 
 
@@ -181,7 +181,7 @@ ApothekePage.prototype.getTabNavigationInterface = function(){
 ApothekePage.prototype.refreshDashboard = function(){
     let self = this;
     //rebuild dashboard
-    self.dashboard = new Dashboard("management", self, {containerId: "dashboard-container"});
+    self.dashboard = new Dashboard("apotheke", self, {containerId: "dashboard-container"});
 }
 
 ApothekePage.prototype.activateTab = function(element){

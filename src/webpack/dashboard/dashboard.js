@@ -147,6 +147,10 @@ Dashboard.prototype.createApothekeDashboard = function(activePage, url, options)
                                     biontech: trackCounts.counters.b,
                                     moderna: trackCounts.counters.m,
                                     astra: trackCounts.counters.a,
+                                },
+                                switch: {
+                                    total: switched.length,
+                                    table: switched,
                                 }
                             },
                         }
