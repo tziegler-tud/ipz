@@ -33,4 +33,5 @@ module.exports = {
     settings: require('./settingsScheme'),
     trackData: require('./trackDataScheme'),
     track: require('./trackScheme'),
+    archive: require('./archiveScheme'),
 };

@@ -45,6 +45,15 @@ router.get('/apotheke', function(req, res, next) {
         });
 });
 
+/* GET settings page. */
+router.get('/settings', function(req, res, next) {
+    res.render('pages/settings',
+        {
+            title: "Einstellungen - ImpFlow Dresden",
+        });
+});
+
+
 
 
 module.exports = router;

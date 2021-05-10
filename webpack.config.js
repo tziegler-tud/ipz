@@ -23,6 +23,9 @@ module.exports = {
         apotheke_style: "./src/webpack/apotheke.scss",
         list: "./src/webpack/list.js",
         list_style: "./src/webpack/list.scss",
+        settings: "./src/webpack/settings.js",
+        settings_style: "./src/webpack/settings.scss",
+
 
     },
     output: {
