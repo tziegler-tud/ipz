@@ -37,6 +37,7 @@
     "mongoose": "^4.13.21",
     "mongoose-plugin-autoinc-fix": "^1.2.1",
     "morgan": "~1.9.1",
+    "node-schedule": "^2.0.0",
     "open-sans-fonts": "^1.6.2",
     "pug": "^3.0.2",
     "sass": "^1.32.8"

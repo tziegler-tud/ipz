@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
 
+var schedule = require ('node-schedule');
+
 var indexRouter = require('./routes/index');
 var trackRouter = require('./routes/strecke');
 var checkinDataRouter = require('./routes/api/checkinHandler');
@@ -13,6 +15,8 @@ var checkoutDataRouter = require('./routes/api/checkoutHandler');
 var trackDataRouter = require('./routes/api/trackDataHandler');
 var trackApiHandler = require('./routes/api/trackHandler');
 var archiveHandler = require('./routes/api/archiveHandler');
+
+var archiveService = require('./services/archiveService');
 
 
 
@@ -64,6 +68,17 @@ app.use("/*", function(req, res, next) {
 });
 app.use("/", errorHandler.webErrorHandler);
 
+
+//archive every day at midnight
+schedule.scheduleJob('59 1 * * *', () => {
+  archiveService.archiveCurrentDay()
+      .then(function(result){
+        console.log("Day archieved successfully")
+      })
+      .catch(function(error){
+        console.warn(error.message);
+      })
+})
 
 
 
