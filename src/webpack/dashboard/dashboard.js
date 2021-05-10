@@ -134,15 +134,20 @@ Dashboard.prototype.createApothekeDashboard = function(activePage, url, options)
                     let biontechSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 1);
                     let modernaSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 2);
                     let astraSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 3);
+
+                    let wasBiontech = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 1);
+                    let wasModerna = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 2);
+                    let wasAstra = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 3);
+
                     let context = {
                         header: "Übersicht - Apotheke ",
                         data: {
                             checkin: {
                                 total: {
                                     all: checkinCounts.total,
-                                    biontech: checkinCounts.counters.b,
-                                    moderna: checkinCounts.counters.m,
-                                    astra: checkinCounts.counters.a,
+                                    biontech: checkinCounts.counters.b + biontechSwitched.length - wasBiontech.length,
+                                    moderna: checkinCounts.counters.m + modernaSwitched.length - wasModerna.length,
+                                    astra: checkinCounts.counters.a +astraSwitched.length - wasAstra.length,
                                 }
                             },
                             track: {
