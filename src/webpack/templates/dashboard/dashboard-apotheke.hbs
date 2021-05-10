@@ -92,20 +92,55 @@
 
             </div>
 
-
-            <div class="dashboard-component dashboard-component--fullwidth dashboard-component-dataTable">
+            <div class="dashboard-component dashboard-component--fullwidth dashboard-component-figures">
                 <div class="dashboard-component-header">
                     Impfstoffwechsel
                 </div>
                 <div class="dashboard-subcomponent-container">
-                    <div class="dashboard-subcomponent dashboard-subcomponent-amount">
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-main">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.track.switch.total}}</span>
+                            <span class="dashboard-component-value__text">{{data.track.switch.total.all}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Gesamt</span>
                         </div>
                     </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--biontech">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.track.switch.total.biontech}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">BionTech</span>
+                        </div>
+
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--moderna">
+
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.track.switch.total.moderna}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Moderna</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--astra">
+
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.track.switch.total.astra}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Astrazenecca</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="dashboard-component dashboard-component--fullwidth dashboard-component-dataTable">
+                <div class="dashboard-component-header">
+                    Liste der Impfstoffwechsel
+                </div>
+                <div class="dashboard-subcomponent-container">
                     <div class="dashboard-subcomponent dashboard-subcomponent-table">
                         <div class="mdc-data-table">
                             <div class="mdc-data-table__table-container">

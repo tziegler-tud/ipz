@@ -23,7 +23,7 @@ let sidesheet, bottomTabs;
 let nav = new Navigation(
     {
         pageData: {
-            navTitle: "Management",
+            navTitle: "Apotheke",
             date: transformDateTimeString(Date.now()).date,
             time: transformDateTimeString(Date.now()).time("hh:mm:ss"),
         },
@@ -31,7 +31,7 @@ let nav = new Navigation(
     {
         clock: ".navigation-clock",
         sidesheet: true,
-        activeElement: "app-link-management",
+        activeElement: "app-link-apotheke",
     },
 );
 

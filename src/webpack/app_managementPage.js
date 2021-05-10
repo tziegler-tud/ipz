@@ -45,7 +45,7 @@ ManagementPage.prototype.show = function(options){
     }
     //render html
     self.active = true;
-    self.refreshInterval = setInterval(self.refresh, 1000, self);
+    self.refreshInterval = setInterval(self.refresh, 3000, self);
     return this.buildHtml(self.url, context, options);
 
 

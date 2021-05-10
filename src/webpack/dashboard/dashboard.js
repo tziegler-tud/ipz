@@ -130,8 +130,12 @@ Dashboard.prototype.createApothekeDashboard = function(activePage, url, options)
         $.get("/api/v1/data/track/counts/", function(trackCounts) {
             $.get("/api/v1/data/track/getSwitched", function (switched) {
                 $.get(url, function (data) {
+
+                    let biontechSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 1);
+                    let modernaSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 2);
+                    let astraSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 3);
                     let context = {
-                        header: "Übersicht - Impfstoffbedarf ",
+                        header: "Übersicht - Apotheke ",
                         data: {
                             checkin: {
                                 total: {
@@ -149,7 +153,12 @@ Dashboard.prototype.createApothekeDashboard = function(activePage, url, options)
                                     astra: trackCounts.counters.a,
                                 },
                                 switch: {
-                                    total: switched.length,
+                                    total: {
+                                        all: switched.length,
+                                        biontech: biontechSwitched.length,
+                                        moderna: modernaSwitched.length,
+                                        astra: astraSwitched.length,
+                                    },
                                     table: switched,
                                 }
                             },
