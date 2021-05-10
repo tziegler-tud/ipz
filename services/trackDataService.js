@@ -13,6 +13,7 @@ module.exports = {
     add,
     remove,
     updateVersion,
+    getLastOfAllTypes,
 };
 
 /**
@@ -184,10 +185,11 @@ async function remove(type, trackId, args) {
 
     //delete last entry
     if (isSwitched) {
-        return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched, "switch.originalType": switchObj.originalType});
+        return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched, "switch.originalType": switchObj.originalType}).sort("-timestamp");
     }
     else {
-        return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched});
+        // return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched}).sort("-timestamp");
+        return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched}).sort("-timestamp");
     }
 }
 
@@ -220,4 +222,39 @@ async function updateVersion(track, number) {
         }
     }
     return version.save();
+}
+
+async function getLastOfAllTypes(track, filter) {
+    let b, m, a;
+
+
+    if (filter===undefined || filter.filter === undefined || filter.value === undefined) {
+        b = await TrackData.findOne({"track.id": track.id, "type": 1}).sort('-timestamp');
+        m = await TrackData.findOne({"track.id": track.id, "type": 2}).sort('-timestamp');
+        a = await TrackData.findOne({"track.id": track.id, "type": 3}).sort('-timestamp');
+    }
+    else {
+        let filter1 = {
+            "type": 1,
+            "track.id": track.id,
+        };
+        let filter2 = {
+            "type": 2,
+            "track.id": track.id,
+        };
+        let filter3 = {
+            "type": 3,
+            "track.id": track.id,
+        };
+        filter1[filter.filter] = filter.value;
+        filter2[filter.filter] = filter.value;
+        filter3[filter.filter] = filter.value;
+        // return TrackData.find({isSwitched: true});
+        b = await TrackData.findOne(filter1).sort('-timestamp');
+        m = await TrackData.findOne(filter1).sort('-timestamp');
+        a = await TrackData.findOne(filter1).sort('-timestamp');
+    }
+
+    return {b: b,m: m, a: a};
+
 }

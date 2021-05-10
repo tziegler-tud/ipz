@@ -105,6 +105,12 @@
             }
 
             .choosing-card {
+              .timestamp {
+                font-size: 70%;
+                @media #{$phone} {
+                  font-size: 90%;
+                }
+              }
               .choosing-card__action-section {
                 .choosing-card-counter {
                   //left: 50%;
@@ -149,6 +155,7 @@
                     }
                   }
                 }
+
               }
               .choosing-card__text-section {
                 padding: 15px 10px 0 10px;

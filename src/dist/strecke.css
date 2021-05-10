@@ -20708,6 +20708,14 @@ a.mdc-list-item {
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item.astra .choosing-item-media {
   background-color: rgba(0, 19, 189, 0.2);
 }
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .timestamp {
+  font-size: 70%;
+}
+@media only screen and (max-width: 600px) {
+  .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .timestamp {
+    font-size: 90%;
+  }
+}
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .choosing-card__action-section .choosing-card-counter {
   top: unset;
   bottom: 20px;

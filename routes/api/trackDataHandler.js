@@ -17,6 +17,7 @@ router.post('/remove', remove);
 router.get('/getSwitched', getSwitched);
 router.get('/getSwitched/:trackId', getSwitched);
 router.get('/:trackId', get);
+router.post('/getLastOfAllTypes', getLastOfAllTypes);
 
 
 /**
@@ -106,6 +107,13 @@ function remove (req, res, next){
     }
 
     trackDataService.remove(req.body.type, req.body.trackId, args)
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
+function getLastOfAllTypes (req, res, next){
+    //validate data
+    trackDataService.getLastOfAllTypes(req.body.track, req.body.filter)
         .then(result => res.json(result))
         .catch(err => next(err));
 }

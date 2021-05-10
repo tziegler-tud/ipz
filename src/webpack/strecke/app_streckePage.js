@@ -1,6 +1,6 @@
 const Handlebars = require("handlebars");
 import "../handlebarsHelpers";
-import {Counter} from "../helpers";
+import {Counter, transformDateTimeString} from "../helpers";
 import {apiHandler} from "../apiHandler";
 
 import {Page} from "../app_page";
@@ -33,6 +33,7 @@ var StreckePage = function(track, args){
     self.url = "/webpack/templates/strecke_page.hbs";
     self.snackbar = undefined;
     self.counters = {};
+    self.timers = {};
     //get counters
     console.log(self.test);
     return self;
@@ -136,6 +137,8 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             list2.layout();
         });
 
+
+
         //get counters
         apiHandler.getTrackCounts(self.track)
             .done(function(result){
@@ -160,6 +163,28 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 self.counters.m.el.innerHTML = self.counters.m.counter.get();
                 self.counters.a.el.innerHTML = self.counters.a.counter.get();
             })
+
+        //update timers
+        self.timers = {
+            b: {
+                name: "BioNTech",
+                el: document.getElementById("biontech-timer"),
+                timeString: "",
+            },
+            m: {
+                name: "Moderna",
+                el: document.getElementById("moderna-timer"),
+                timeString: "",
+            },
+            a: {
+                name: "Astra",
+                el: document.getElementById("astra-timer"),
+                timeString: "",
+            }
+        };
+        self.updateTimer();
+
+
         //choosing-item event handlers
         $(".choosing-card__action-section").on("click", function(){
             let type = parseInt(this.dataset.type);
@@ -169,6 +194,7 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                     let message = "Eintrag hinzugefügt: " + result.name;
                     if(type !== 0) counter.el.innerHTML = counter.counter.increase();
                     self.showSnackbar(message);
+                    updateTimerLocal(type, self);
                 })
                 .fail(function(jqxhr, textstatus, error){
                     let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
@@ -225,6 +251,7 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 .done(function (result) {
                     let message = "Eintrag entfernt: " + result.name;
                     if (type !== 0) c.el.innerHTML = c.counter.decrease();
+                    self.updateTimer(type);
                     self.showSnackbar(message);
                 })
                 .fail(function(jqxhr, textstatus, error){
@@ -395,5 +422,61 @@ function getCounter (type, self) {
     }
     return counter;
 
+}
+
+function getChoosingTimer(type, self){
+    let timer;
+    switch(type) {
+        case 0:
+            timer = undefined
+            break;
+        case 1:
+            timer = self.timers.b;
+            break;
+        case 2:
+            timer = self.timers.m;
+            break;
+        case 3:
+            timer = self.timers.a;
+            break;
+    }
+    return timer;
+}
+
+function updateTimerLocal (type, self) {
+    let timer = getChoosingTimer(type, self);
+    let time = transformDateTimeString(new Date(), "hh:mm").time("hh:mm");
+    timer.el.innerHTML = time;
+
+}
+
+StreckePage.prototype.updateTimer = function (type){
+    let self = this;
+    //update timers
+    apiHandler.getLastTrackItems(self.track)
+        .done(function(result){
+            if(result.b === null) {
+                self.timers.b.timeString = "";
+            }
+            else {
+                self.timers.b.timeString = transformDateTimeString(result.b.timestamp, "hh:mm").time("hh:mm");
+            }
+            if(result.m === null) {
+                self.timers.m.timeString = "";
+            }
+            else {
+                self.timers.m.timeString = transformDateTimeString(result.m.timestamp, "hh:mm").time("hh:mm");
+            }
+            if(result.a === null) {
+                self.timers.a.timeString = "";
+            }
+            else {
+                self.timers.a.timeString = transformDateTimeString(result.a.timestamp, "hh:mm").time("hh:mm");
+            }
+
+            self.timers.b.el.innerHTML = self.timers.b.timeString;
+            self.timers.m.el.innerHTML = self.timers.m.timeString;
+            self.timers.a.el.innerHTML = self.timers.a.timeString;
+        })
 }
 export {StreckePage};

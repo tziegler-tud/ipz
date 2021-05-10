@@ -345,7 +345,7 @@ var ApiHandler = function() {
             type: type,
             trackId: track.id,
         }
-        return $.ajax({
+        let ret = $.ajax({
             url: "/api/v1/data/track/remove",
             // make put for safety reasons :-)
             type: 'POST',
@@ -353,6 +353,7 @@ var ApiHandler = function() {
             dataType: 'json',
             data: JSON.stringify(jsonData),
         });
+        return ret;
     };
 
     /**
@@ -377,6 +378,32 @@ var ApiHandler = function() {
             // make put for safety reasons :-)
             type: 'GET',
             contentType: "application/json; charset=UTF-8",
+        });
+    }
+
+    self.getLastTrackItems = function (track, options) {
+        let self = this;
+        if (track === undefined) {
+            throw new Error("Invalid arguments received: track is undefined");
+        }
+        let defaultOptions = {
+
+        }
+        options = (options === undefined) ? {}: options;
+        options = Object.assign(defaultOptions, options);
+
+        let jsonData = {
+            track: track,
+            filter: undefined,
+        }
+
+        return $.get({
+            url: "/api/v1/data/track/getLastOfAllTypes",
+            // make put for safety reasons :-)
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
         });
     }
 }
