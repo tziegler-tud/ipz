@@ -14,6 +14,7 @@ module.exports = {
     remove,
     updateVersion,
     getLastOfAllTypes,
+    clearAll,
 };
 
 /**
@@ -257,4 +258,8 @@ async function getLastOfAllTypes(track, filter) {
 
     return {b: b,m: m, a: a};
 
+}
+
+async function clearAll() {
+    return TrackData.remove({});
 }

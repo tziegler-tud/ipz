@@ -15,6 +15,7 @@ module.exports = {
     remove,
     update,
     archiveCurrentDay,
+    resetCurrentDay,
 };
 
 /**
@@ -107,4 +108,10 @@ async function archiveCurrentDay() {
         return todaysArchive.save();
     }
 
+}
+
+async function resetCurrentDay() {
+    // copy ArchiveObject properties to user
+    trackDataService.clearAll();
+    checkinDataService.clearAll();
 }

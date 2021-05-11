@@ -15,6 +15,7 @@ module.exports = {
     remove,
     checkout,
     updateVersion,
+    clearAll,
 };
 
 /**
@@ -216,3 +217,6 @@ function addMinutes(date, minutes) {
     return new Date(date + minutes*60000).getTime();
 }
 
+async function clearAll() {
+    return CheckinData.remove({});
+}

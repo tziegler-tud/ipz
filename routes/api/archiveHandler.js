@@ -16,6 +16,7 @@ router.delete('/remove/:id', remove);
 router.get('/:id', getById);
 
 router.post('/archiveCurrentDay', archiveCurrentDay);
+router.delete('/resetCurrentDay', resetCurrentDay);
 
 
 /**
@@ -82,6 +83,13 @@ function update (req, res, next){
 function archiveCurrentDay (req, res, next) {
     //store current db collections in archive collection
     archiveService.archiveCurrentDay()
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
+function resetCurrentDay (req, res, next) {
+    //store current db collections in archive collection
+    archiveService.resetCurrentDay()
         .then(result => res.json(result))
         .catch(err => next(err));
 }

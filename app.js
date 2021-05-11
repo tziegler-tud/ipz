@@ -70,10 +70,19 @@ app.use("/", errorHandler.webErrorHandler);
 
 
 //archive every day at midnight
-schedule.scheduleJob('59 1 * * *', () => {
+schedule.scheduleJob('0 2 * * *', () => {
   archiveService.archiveCurrentDay()
       .then(function(result){
-        console.log("Day archieved successfully")
+        console.log("Day archieved successfully");
+        console.log("resetting current day...");
+        archiveService.resetCurrentDay()
+            .then(function(result){
+                console.log("current day reset successful.");
+            })
+            .catch(function(error){
+                console.warn(error.message);
+            })
+
       })
       .catch(function(error){
         console.warn(error.message);
