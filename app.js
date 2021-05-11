@@ -70,7 +70,7 @@ app.use("/", errorHandler.webErrorHandler);
 
 
 //archive every day at midnight
-schedule.scheduleJob('0 2 * * *', () => {
+schedule.scheduleJob('58 23 * * *', () => {
   archiveService.archiveCurrentDay()
       .then(function(result){
         console.log("Day archieved successfully");
