@@ -189,12 +189,15 @@ StreckePage.prototype.buildHtml = function(url, context, options){
         $(".choosing-card__action-section").on("click", function(){
             let type = parseInt(this.dataset.type);
             let counter = getCounter(type, self);
+            var clickAudio = new Audio('/sounds/success.mp3');
+            clickAudio.play();
             apiHandler.addTrackEntry(type, self.track)
                 .done(function(result){
                     let message = "Eintrag hinzugefügt: " + result.name;
                     if(type !== 0) counter.el.innerHTML = counter.counter.increase();
                     self.showSnackbar(message);
                     updateTimerLocal(type, self);
+                    clickAudio.play();
                 })
                 .fail(function(jqxhr, textstatus, error){
                     let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
