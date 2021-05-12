@@ -12,7 +12,8 @@ const settingsService = require('../../services/settingsService');
 router.post('/add', addData);
 router.get('/get', get);
 router.get('/counts', getCounts);
-router.post('/remove', remove)
+router.post('/remove', remove);
+router.post('/getLastOfAllTypes', getLastOfAllTypes);
 
 /**
  * add Numbers to Checkin waiting list
@@ -72,5 +73,13 @@ function remove (req, res, next){
         .then(result => res.json(result))
         .catch(err => next(err));
 }
+
+function getLastOfAllTypes (req, res, next){
+    //validate data
+    checkinDataService.getLastOfAllTypes(req.body.track, req.body.filter)
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
 
 module.exports = router;

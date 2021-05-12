@@ -16,6 +16,7 @@ module.exports = {
     checkout,
     updateVersion,
     clearAll,
+    getLastOfAllTypes,
 };
 
 /**
@@ -136,7 +137,7 @@ async function remove(args) {
     version.save();
 
     //delete last entry
-    return CheckinData.findOneAndRemove({"currentStatus.status": 0, "type": type});
+    return CheckinData.findOneAndRemove({"currentStatus.status": 0, "type": type}).sort({"currentStatus.timestamp": -1});
 }
 
 async function checkout(entry) {
@@ -209,4 +210,37 @@ function addMinutes(date, minutes) {
 
 async function clearAll() {
     return CheckinData.remove({});
+}
+
+
+async function getLastOfAllTypes(filter) {
+    let b, m, a;
+
+
+    if (filter===undefined || filter.filter === undefined || filter.value === undefined) {
+        b = await CheckinData.findOne({"type": 1}).sort({'currentStatus.timestamp': -1});
+        m = await CheckinData.findOne({"type": 2}).sort({'currentStatus.timestamp': -1});
+        a = await CheckinData.findOne({"type": 3}).sort({'currentStatus.timestamp': -1});
+    }
+    else {
+        let filter1 = {
+            "type": 1,
+        };
+        let filter2 = {
+            "type": 2,
+        };
+        let filter3 = {
+            "type": 3,
+        };
+        filter1[filter.filter] = filter.value;
+        filter2[filter.filter] = filter.value;
+        filter3[filter.filter] = filter.value;
+        // return TrackData.find({isSwitched: true});
+        b = await CheckinData.findOne(filter1).sort({'currentStatus.timestamp': -1});
+        m = await CheckinData.findOne(filter1).sort({'currentStatus.timestamp': -1});
+        a = await CheckinData.findOne(filter1).sort({'currentStatus.timestamp': -1});
+    }
+
+    return {b: b,m: m, a: a};
+
 }

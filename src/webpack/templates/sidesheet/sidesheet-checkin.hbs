@@ -4,63 +4,24 @@
             <i id="sidesheet-cancel-button-element" class="sidesheet-cancel-button-element material-icons mdc-button__icon" aria-hidden="true">clear</i>
         </div>
         <div class="sidesheet__header">
-            <h3 class="sidesheet__title">Einstellungen - Vorkontrolle</h3>
+            <h3 class="sidesheet__title">{{this.title}}</h3>
         </div>
-        <div class="sidesheet__body mdc-deprecated-list">
-            <li class="mdc-deprecated-list-item" role="checkbox" aria-checked="false">
-                <span class="mdc-deprecated-list-item__ripple"></span>
-                <span class="mdc-deprecated-list-item__graphic">
-                    <div class="mdc-checkbox">
-                        <input type="checkbox" class="mdc-checkbox__native-control" id="demo-list-checkbox-item-1"/>
-                        <div class="mdc-checkbox__background">
-                            <svg class="mdc-checkbox__checkmark"
-                               viewBox="0 0 24 24">
-                            <path class="mdc-checkbox__checkmark-path"
-                                  fill="none"
-                                  d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                            </svg>
-                            <div class="mdc-checkbox__mixedmark"></div>
+        <div class="sidesheet__body">
+            <ul class="settings-list">
+                <li class="settings-list-item">
+                    <div class="settings-list-item__label">Ton bei Eingabe</div>
+                    <div class="settings-list-item__action">
+                        <div class="mdc-switch mdc-switch--checked">
+                            <div class="mdc-switch__track"></div>
+                            <div class="mdc-switch__thumb-underlay">
+                                <div class="mdc-switch__thumb"></div>
+                                <input type="checkbox" id="sound-switch" class="mdc-switch__native-control" role="switch" aria-checked="true" checked>
+                            </div>
                         </div>
                     </div>
-                </span>
-                <label class="mdc-deprecated-list-item__text" for="demo-list-checkbox-item-1">Option 1</label>
-            </li>
-            <li class="mdc-deprecated-list-item" role="checkbox" aria-checked="false">
-                <span class="mdc-deprecated-list-item__ripple"></span>
-                <span class="mdc-deprecated-list-item__graphic">
-                    <div class="mdc-checkbox">
-                        <input type="checkbox" class="mdc-checkbox__native-control" id="demo-list-checkbox-item-2"/>
-                        <div class="mdc-checkbox__background">
-                            <svg class="mdc-checkbox__checkmark"
-                                 viewBox="0 0 24 24">
-                            <path class="mdc-checkbox__checkmark-path"
-                                  fill="none"
-                                  d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                            </svg>
-                            <div class="mdc-checkbox__mixedmark"></div>
-                        </div>
-                    </div>
-                </span>
-                <label class="mdc-deprecated-list-item__text" for="demo-list-checkbox-item-2">Option 2</label>
-            </li>
-            <li class="mdc-deprecated-list-item" role="checkbox" aria-checked="false">
-                <span class="mdc-deprecated-list-item__ripple"></span>
-                <span class="mdc-deprecated-list-item__graphic">
-                    <div class="mdc-checkbox">
-                        <input type="checkbox" class="mdc-checkbox__native-control" id="demo-list-checkbox-item-3"/>
-                        <div class="mdc-checkbox__background">
-                            <svg class="mdc-checkbox__checkmark"
-                                 viewBox="0 0 24 24">
-                            <path class="mdc-checkbox__checkmark-path"
-                                  fill="none"
-                                  d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                            </svg>
-                            <div class="mdc-checkbox__mixedmark"></div>
-                        </div>
-                    </div>
-                </span>
-                <label class="mdc-deprecated-list-item__text" for="demo-list-checkbox-item-3">Option 3</label>
-            </li>
+                </li>
+                <li role="separator" class="settings-list-separator"></li>
+            </ul>
         </div>
     </div>
 </div>

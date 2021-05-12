@@ -5,6 +5,12 @@ const trackDataService = require('../../services/trackDataService');
 const settingsService = require('../../services/settingsService');
 
 
+//simulate load
+// router.post("*", wait);
+
+function wait(req,res,next){
+    setTimeout(next,10000)
+}
 
 //hooked at /api/v1/data/track
 
