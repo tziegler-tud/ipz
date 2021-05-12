@@ -127,6 +127,20 @@
                     font-size: 100%;
                   }
 
+                  &.processing {
+                    &:before {
+                      content: " ";
+                      display: block;
+                      width: 16px;
+                      height: 16px;
+                      margin: 8px;
+                      border-radius: 50%;
+                      border: 6px solid #333;
+                      border-color: #333 transparent #333 transparent;
+                      animation: lds-dual-ring 1.2s linear infinite;
+                    }
+                  }
+
                   .choosing-card-counter-loader {
                     font-size: 50%;
                   }

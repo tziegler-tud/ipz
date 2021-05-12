@@ -94,7 +94,19 @@ Sidesheet.prototype.createCheckinPage = function(activePage, options){
     $.get(url, function (data) {
         var template = Handlebars.compile(data);
         self.container.innerHTML = template(context);
-        let list = new MDCList(document.querySelector('.sidesheet .mdc-deprecated-list'));
+
+        const switchControl = new MDCSwitch(document.querySelector('.mdc-switch'));
+        let soundSwitch = document.getElementById("sound-switch");
+        soundSwitch.addEventListener("change", function(e){
+            if(this.checked) {
+                //enable sound
+                activePage.setSound(true);
+            }
+            else {
+                activePage.setSound(false)
+            }
+        })
+
         let cancelBtn = document.getElementById("sidesheet-cancel-button-element")
         cancelBtn.addEventListener("click", function(){
             self.hide();
@@ -156,6 +168,19 @@ Sidesheet.prototype.createTrackPage = function(activePage, options){
         var template = Handlebars.compile(data);
         self.container.innerHTML = template(context);
         const switchControl = new MDCSwitch(document.querySelector('.mdc-switch'));
+
+        let soundSwitch = document.getElementById("sound-switch");
+        soundSwitch.addEventListener("change", function(e){
+            if(this.checked) {
+                //enable sound
+                activePage.setSound(true);
+            }
+            else {
+                activePage.setSound(false)
+            }
+        })
+
+
         let cancelBtn = document.getElementById("sidesheet-cancel-button-element")
         cancelBtn.addEventListener("click", function(){
             self.hide();

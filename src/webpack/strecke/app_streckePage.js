@@ -34,6 +34,44 @@ var StreckePage = function(track, args){
     self.snackbar = undefined;
     self.counters = {};
     self.timers = {};
+    self.mutex = false;
+    self.soundEnabled = true;
+
+
+    self.soundboard = {
+        sound: null,
+        init: function (bool) {
+            self.soundboard.sound = new Audio();
+            self.soundEnabled = bool;
+        },
+        play: function (soundType) {
+            if (!self.soundEnabled){
+                return new Promise(function(resolve, reject){
+                    resolve();
+                })
+            }
+            let src;
+            switch (soundType) {
+                case "click":
+                    src = "/sounds/click.ogg";
+                    break;
+                case "success":
+                    src = "/sounds/success.mp3";
+                    break;
+                case "fail":
+                    break;
+                default:
+                    src = "/sounds/click.ogg";
+                    break;
+
+            }
+            self.soundboard.sound.src = src;
+            return self.soundboard.sound.play();
+        }
+    };
+
+    self.soundboard.init(true);
+
     //get counters
     console.log(self.test);
     return self;
@@ -186,18 +224,25 @@ StreckePage.prototype.buildHtml = function(url, context, options){
 
 
         //choosing-item event handlers
-        $(".choosing-card__action-section").on("click", function(){
+        $(".choosing-card__action-section").on("click", function(e){
+            if(self.mutex) return false;
+            self.mutex = true;
             let type = parseInt(this.dataset.type);
             let counter = getCounter(type, self);
-            var clickAudio = new Audio('/sounds/success.mp3');
-            clickAudio.play();
+            counter.el.classList.add("processing");
+
+            // self.soundboard.play("click");
             apiHandler.addTrackEntry(type, self.track)
                 .done(function(result){
                     let message = "Eintrag hinzugefügt: " + result.name;
                     if(type !== 0) counter.el.innerHTML = counter.counter.increase();
+                    counter.el.classList.remove("processing");
                     self.showSnackbar(message);
                     updateTimerLocal(type, self);
-                    clickAudio.play();
+                    self.soundboard.play("success")
+                        .then(function(){
+                            self.mutex = false
+                        })
                 })
                 .fail(function(jqxhr, textstatus, error){
                     let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
@@ -209,7 +254,8 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                             text: "Nagut",
                         }
                     }
-                    self.showSnackbar(message, options)
+                    self.showSnackbar(message, options);
+                    self.mutex = false;
                 });
         })
 
@@ -242,6 +288,8 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 });
         })
         $(".remove-button").on("click", function() {
+            if(self.mutex) return false;
+            self.mutex = true;
             let type = parseInt($(this).closest(".choosing-item").data("type"));
             /**
              * @type {Object} c
@@ -250,12 +298,18 @@ StreckePage.prototype.buildHtml = function(url, context, options){
              * @property {String} name
              */
             let c = getCounter(type, self);
+            if (c.counter.get() === 0) {
+                self.mutex = false;
+                return false;
+            }
             apiHandler.removeTrackEntry(type, self.track)
                 .done(function (result) {
                     let message = "Eintrag entfernt: " + result.name;
                     if (type !== 0) c.el.innerHTML = c.counter.decrease();
-                    self.updateTimer(type);
+                    self.updateTimer();
+                    self.soundboard.play("success")
                     self.showSnackbar(message);
+                    self.mutex = false;
                 })
                 .fail(function(jqxhr, textstatus, error){
                     let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
@@ -267,8 +321,10 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                             text: "Nagut",
                         }
                     }
-                    self.showSnackbar(message, options)
+                    self.showSnackbar(message, options);
+                    self.mutex = false;
                 });
+            self.mutex = false;
         });
         $(".switch-button").on("click", function() {
             self.dialogChoice = {};
@@ -406,6 +462,13 @@ StreckePage.prototype.initTabs = function() {
     })
     return tabArray;
 }
+
+
+StreckePage.prototype.setSound = function(bool){
+    this.soundEnabled = bool;
+    return this.soundEnabled;
+}
+
 
 function getCounter (type, self) {
     let counter;

@@ -40,7 +40,7 @@ checkinPage.show().done(function(){
 });
 
 nav.initialize
-    .done(function(){
+    .then(function(){
         nav.setAction("mdc-top-app-bar-action1", function(e, args){
             sidesheet.toggle();
         })

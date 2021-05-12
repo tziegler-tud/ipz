@@ -406,6 +406,28 @@ var ApiHandler = function() {
             data: JSON.stringify(jsonData),
         });
     }
+
+    self.getLastCheckinItems = function (options) {
+        let self = this;
+        let defaultOptions = {
+
+        }
+        options = (options === undefined) ? {}: options;
+        options = Object.assign(defaultOptions, options);
+
+        let jsonData = {
+            filter: undefined,
+        }
+
+        return $.get({
+            url: "/api/v1/checkin/getLastOfAllTypes",
+            // make put for safety reasons :-)
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
+        });
+    }
 }
 
 export let apiHandler = new ApiHandler();
