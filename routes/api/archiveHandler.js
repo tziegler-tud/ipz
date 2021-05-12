@@ -13,11 +13,11 @@ router.get('/', get);
 router.post('/add', add);
 router.post('/update/:id', update);
 router.delete('/remove/:id', remove);
-router.get('/:id', getById);
 
 router.post('/archiveCurrentDay', archiveCurrentDay);
 router.delete('/resetCurrentDay', resetCurrentDay);
 
+router.get('/:id', getById);
 
 /**
  * add archive document
@@ -93,5 +93,4 @@ function resetCurrentDay (req, res, next) {
         .then(result => res.json(result))
         .catch(err => next(err));
 }
-
 module.exports = router;

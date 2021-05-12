@@ -25,8 +25,8 @@ module.exports = {
         list_style: "./src/webpack/list.scss",
         settings: "./src/webpack/settings.js",
         settings_style: "./src/webpack/settings.scss",
-
-
+        statistics: "./src/webpack/statistics.js",
+        statistics_style: "./src/webpack/statistics.scss",
     },
     output: {
         path: path.join(__dirname, "./src/dist"),

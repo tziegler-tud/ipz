@@ -15,6 +15,7 @@ var checkoutDataRouter = require('./routes/api/checkoutHandler');
 var trackDataRouter = require('./routes/api/trackDataHandler');
 var trackApiHandler = require('./routes/api/trackHandler');
 var archiveHandler = require('./routes/api/archiveHandler');
+var statisticsHandler = require('./routes/api/statisticsHandler');
 
 var archiveService = require('./services/archiveService');
 
@@ -55,6 +56,7 @@ app.use('/api/v1/checkout', checkoutDataRouter);
 app.use('/api/v1/data/track', trackDataRouter);
 app.use('/api/v1/track', trackApiHandler);
 app.use('/api/v1/archive', archiveHandler);
+app.use('/api/v1/statistics', statisticsHandler);
 app.use("/api", function(req, res, next) {
   next(createError(404));
 });

@@ -38,24 +38,20 @@ async function getCounts(args) {
             options.status = args.status;
         }
     }
-    let data = await CheckinData.find({"currentStatus.status": options.status});
-    //count them
-    let counters = {
-        b: 0,
-        m: 0,
-        a: 0,
-    }
-    counters.b = data.reduce(function(n, element) {
-        return n + (element.type === 1);
-    }, 0);
-    counters.m = data.reduce(function(n, element) {
-        return n + (element.type === 2);
-    }, 0);
-    counters.a = data.reduce(function(n, element) {
-        return n + (element.type === 3);
-    }, 0);
+    let data1 = CheckinData.count({"type": 1});
+    let data2 = CheckinData.count({"type": 2});
+    let data3 = CheckinData.count({"type": 3});
 
-    let total = counters.b + counters.m + counters.a
+    //wait for query to finish
+    const data = await Promise.all([data1, data2, data3]);
+    //count them
+
+    let counters = {
+        b: data[0],
+        m: data[1],
+        a: data[2]
+    }
+    let total = data[0] + data[1] + data[2];
 
     let returnObject = {
         status: options.status,
@@ -101,14 +97,8 @@ async function add(object) {
     //create new object
     let checkinDataObject = {
         type: object.type,
-        currentStatus: {
-            status: 0,
-            text: "WB2",
-            timestamp: Date.now(),
-        },
-        statusHistory: [],
+        timestamp: Date.now(),
     }
-    checkinDataObject.statusHistory.push(checkinDataObject.currentStatus);
 
     //check if numbers are already registered
     // CheckinData.find({ data: data })

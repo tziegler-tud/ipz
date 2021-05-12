@@ -9,6 +9,8 @@
  * @property {String} text
  * @property {Date} timestamp
  */
+import {transformDateTimeString} from "./helpers";
+
 /**
  * @typedef {Object} CheckinDataSchemeObject
  * @property {Integer} type
@@ -34,6 +36,25 @@ var ApiArchiveHandler = function() {
             data: JSON.stringify(jsonData),
         });
     };
+
+    self.getStatistics = function (date) {
+        if (date === undefined) {
+            date = transformDateTimeString(Date.now()).date;
+        }
+        let jsonData = {
+            date: date,
+        }
+        return $.ajax({
+            url: "/api/v1/statistics",
+            // make put for safety reasons :-)
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
+        });
+    };
+
+
 }
 
 export let apiArchiveHandler = new ApiArchiveHandler();

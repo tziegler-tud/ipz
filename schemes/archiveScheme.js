@@ -14,6 +14,12 @@ var archiveSchema = new Schema({
         default: dateTransformer.transformDateTimeString(this.timestamp).date,
     },
     data: {
+        trackDatas: [{
+
+        }],
+        checkindatas: [{
+
+        }]
 
     }
 })

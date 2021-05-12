@@ -8,29 +8,10 @@ var checkinDataSchema = new Schema({
         type: Number,
         required: true,
     },
-    currentStatus: {
-        status: {
-            type: Number,
-            default: 0,
-        },
-        text: {
-            type: String,
-        },
-        timestamp: {
-
-        }
-    },
-    statusHistory: [{
-        status: {
-            type: String,
-        },
-        text: {
-            type: String,
-        },
-        timestamp: {
-
-        }
-    }]
+    timestamp: {
+        type: Date,
+        default: Date.now,
+    }
 })
 
 checkinDataSchema.virtual("name").get(function(){
