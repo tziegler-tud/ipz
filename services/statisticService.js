@@ -25,8 +25,8 @@ async function getById(id) {
     let archive, trackData, checkinData, date;
     if(id === undefined) {
         //get current
-        const trackDataPromise = trackDataService.getAll();
-        const checkinDataPromise = checkinDataService.getAll();
+        const trackDataPromise = trackDataService.getAll({sort: {"timestamp": -1}});
+        const checkinDataPromise = checkinDataService.getAll("timestamp");
         const data = await Promise.all([trackDataPromise, checkinDataPromise]);
         trackData = data[0];
         checkinData = data[1];
@@ -63,8 +63,18 @@ async function getByDate(dateString) {
     else {
         //get by date
         archive = await Archive.findOne({"date": dateString});
-        trackData = archive.data.trackDatas;
-        checkinData = archive.data.checkindatas;
+        trackData = archive.data.trackDatas.sort(function(a,b){
+            return a.timestamp - b.timestamp;
+        });
+        checkinData = archive.data.checkindatas.sort(function(a,b){
+            if(a.timestamp === undefined){
+                return a.currentStatus.timestamp - b.currentStatus.timestamp;
+            }
+            else {
+                return a.timestamp - b.timestamp;
+            }
+
+        });
     }
 
     let archiveData = {
@@ -82,9 +92,10 @@ function parseDataToOutputFormat(archiveData){
 
     //transform trackData to Array of objects: [{x: Date, y:count}]
     let trackStatisticData = archiveData.trackData.map(function(trackEntry, index){
-        let trackDate = new Date(trackEntry.timestamp);
+        // let trackDate = new Date(trackEntry.timestamp);
+        let trackDate = parseToMilliseconds(trackEntry.timestamp);
         let trackValue = trackEntry.type;
-        return {x: trackDate, y:index }
+        return {x: trackDate, y:index+1 }
     })
 
     //transform checkinData to Array of objects: [{x: Date, y:count}]
@@ -94,17 +105,19 @@ function parseDataToOutputFormat(archiveData){
         if(archiveData.checkinData[0].currentStatus !== undefined){
             //old format
             checkinStatisticData = archiveData.checkinData.map(function(entry, index){
-                let checkinDate = new Date(entry.currentStatus.timestamp);
+                // let checkinDate = new Date(entry.currentStatus.timestamp);
+                let checkinDate = parseToMilliseconds(entry.currentStatus.timestamp);
                 let checkinValue = entry.type;
-                return {x: checkinDate, y:index }
+                return {x: checkinDate, y:index+1 }
             })
 
         }
         else {
             checkinStatisticData = archiveData.checkinData.map(function(entry, index){
-                let checkinDate = new Date(entry.timestamp);
+                // let checkinDate = new Date(entry.timestamp);
+                let checkinDate = parseToMilliseconds(entry.timestamp);
                 let checkinValue = entry.type;
-                return {x: checkinDate, y:index }
+                return {x: checkinDate, y:index+1 }
             })
         }
     }
@@ -122,4 +135,18 @@ function parseDataToOutputFormat(archiveData){
     //     return index;
     // })
 
+}
+
+function parseToMilliseconds(dateRepresentation) {
+    //date can be either milliseconds, ISOString or Date object
+    switch(typeof(dateRepresentation)){
+        case "number":
+            //date is in milliseconds
+            return dateRepresentation;
+        case "string":
+            //date is in ISOFormat
+            return Date.parse(dateRepresentation);
+        case "object":
+            return dateRepresentation.getTime();
+    }
 }

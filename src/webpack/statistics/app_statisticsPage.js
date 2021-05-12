@@ -3,6 +3,7 @@ import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 // import date-fns locale:
 import {de} from 'date-fns/locale';
+import { formatDistance, subDays } from 'date-fns'
 
 
 const Handlebars = require("handlebars");
@@ -67,12 +68,14 @@ StatisticsPage.prototype.buildHtml = function(url, context){
                         backgroundColor: 'rgb(255, 99, 132)',
                         borderColor: 'rgb(255, 99, 132)',
                         data: result.checkinData,
+                        // parsing: false,
                     },
                     {
                         label: 'TrackData',
                         backgroundColor: 'rgb(10,81,220)',
                         borderColor: 'rgb(10,81,220)',
-                        data: result.trackData
+                        data: result.trackData,
+                        // parsing: false,
                     }]
                 };
 
@@ -80,15 +83,17 @@ StatisticsPage.prototype.buildHtml = function(url, context){
                     type: 'line',
                     data,
                     options: {
+                        parsing: false,
                         scales: {
-                            xAxes: [{
+                            x: {
                                 type: 'time',
-                            }],
-                            // adapters: {
-                            //     date: {
-                            //         locale: de
-                            //     }
-                            // }
+                            }
+
+                        //     // adapters: {
+                        //     //     date: {
+                        //     //         locale: de
+                        //     //     }
+                        //     // }
                         }
                     }
                 };

@@ -20,14 +20,24 @@ module.exports = {
 /**
  * Gets all users
  */
-async function getAll(filter) {
+async function getAll(args) {
+    let filter = args.filter;
+    let sort= args.sort;
+    let query
     if (filter===undefined || filter.filter === undefined || filter.value === undefined) {
-        return TrackData.find();
+        query = TrackData.find();
     }
     else {
         let filterObj = {};
         filterObj[filter.filter] = filter.value;
-        return TrackData.find(filterObj);
+        query = TrackData.find(filterObj);
+    }
+
+    if(sort === undefined) {
+        return query;
+    }
+    else {
+        return query.sort(sort);
     }
 }
 
