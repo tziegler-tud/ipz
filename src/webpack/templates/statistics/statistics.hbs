@@ -1,6 +1,26 @@
 <div class="app-page-wrapper statistics-page">
     <div class="app-page-content">
         <div id="statistics-container" class="statistics-container">
+            <div class="statistics-sidenav">
+                <ul class="statistics-list">
+                    {{#each days}}
+                       <li class="statistics-list-item">
+                           <div class="statistics-list-item-inner">
+                               <div class="statistics-list-title">
+                                    {{this.date}}
+                               </div>
+                               <div class="statistics-list-subcontent">
+                                    {{this.total}}
+                               </div>
+                           </div>
+                       </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="statistics-content">
+
+            </div>
+
             <div>
                 <canvas id="myChart"></canvas>
             </div>

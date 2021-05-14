@@ -4,7 +4,7 @@ import {MDCDrawer} from "@material/drawer";
 import {MDCRipple} from "@material/ripple";
 import {MDCSwitch} from '@material/switch';
 
-import {apiHandler} from "./apiHandler";
+import {apiHandler} from "./apiHandlers/apiHandler";
 
 const Handlebars = require("handlebars");
 import {transformDateTimeString} from "./helpers";

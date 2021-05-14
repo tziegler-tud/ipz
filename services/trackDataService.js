@@ -23,7 +23,7 @@ module.exports = {
 async function getAll(args) {
     let filter = args.filter;
     let sort= args.sort;
-    let query
+    let query;
     if (filter===undefined || filter.filter === undefined || filter.value === undefined) {
         query = TrackData.find();
     }

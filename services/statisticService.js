@@ -5,6 +5,7 @@ const settingsService = require('./settingsService');
 const trackService = require('./trackService');
 const trackDataService = require('./trackDataService');
 const checkinDataService = require('./dataService');
+const archiveService = require('./archiveService');
 
 const dateTransformer = require('../helpers/dateTransformer');
 
@@ -12,6 +13,7 @@ module.exports = {
     get,
     getByDate,
     getById,
+    getOverview,
 };
 
 /**
@@ -135,6 +137,30 @@ function parseDataToOutputFormat(archiveData){
     //     return index;
     // })
 
+}
+
+async function getOverview() {
+    //get today
+    let todayPromise = trackDataService.getCounts();
+    let archiveDataPromise = Archive.find({}).sort("-timestamp");
+    //wait for promises to resolve
+    const data = await Promise.all([todayPromise, archiveDataPromise]);
+    let today = data[0];
+    let archiveData = data[1];
+
+    //return dates and totals
+    let entries = [];
+    entries.push({
+        date: dateTransformer.transformDateTimeString(new Date()).date,
+        total: today.total,
+    })
+    archiveData.forEach(function(archiveElement){
+        entries.push({
+            date: archiveElement.date,
+            total: archiveElement.data.trackDatas.length,
+        })
+    })
+    return entries;
 }
 
 function parseToMilliseconds(dateRepresentation) {

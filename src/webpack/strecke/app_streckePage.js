@@ -1,7 +1,7 @@
 const Handlebars = require("handlebars");
 import "../handlebarsHelpers";
 import {Counter, transformDateTimeString} from "../helpers";
-import {apiHandler} from "../apiHandler";
+import {apiHandler} from "../apiHandlers/apiHandler";
 
 import {Page} from "../app_page";
 import {Dashboard} from "../dashboard/dashboard";

@@ -5,7 +5,7 @@ import {MDCRipple} from "@material/ripple";
 import {MDCSwitch} from '@material/switch';
 import {MDCDataTable} from '@material/data-table';
 
-import {apiHandler} from "../apiHandler";
+import {apiHandler} from "../apiHandlers/apiHandler";
 
 const Handlebars = require("handlebars");
 import {transformDateTimeString} from "../helpers";

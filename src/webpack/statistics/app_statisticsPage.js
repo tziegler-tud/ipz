@@ -9,7 +9,8 @@ import { formatDistance, subDays } from 'date-fns'
 const Handlebars = require("handlebars");
 import "../handlebarsHelpers";
 
-import {apiArchiveHandler} from "../apiArchiveHandler";
+import {apiArchiveHandler} from "../apiHandlers/apiArchiveHandler";
+import {apiStatisticsHandler} from "../apiHandlers/apiStatisticsHandler";
 import {Page} from "../app_page";
 var $ = require( "jquery" );
 
@@ -49,27 +50,44 @@ StatisticsPage.prototype.show = function(options){
  */
 StatisticsPage.prototype.buildHtml = function(url, context){
     let self = this;
-    return $.get(url, function (templateData) {
-        console.log("statistics template found");
-        var template = Handlebars.compile(templateData);
-        //reset page content
-        let pageContainer = $("#page-container");
-        pageContainer.empty();
-        pageContainer.append(template(context));
-        self.page = document.getElementById("statistics-page");
-        self.dataTableContainer = document.getElementById("statistics-container");
-
-        apiArchiveHandler.getStatistics("11.05.2021")
+    return new Promise(function(reject, resolve){
+        apiStatisticsHandler.getOverview()
             .done(function(result){
+                //render page
+                $.get(url, function (templateData) {
+                    console.log("statistics template found");
+                    var template = Handlebars.compile(templateData);
+                    //reset page content
+                    let pageContainer = $("#page-container");
+                    pageContainer.empty();
+                    pageContainer.append(template(context));
+                    self.page = document.getElementById("statistics-page");
+                    self.dataTableContainer = document.getElementById("statistics-container");
+                    //get statistics overview
+                    self.displayData(result[0])
+            })
 
-                const data = {
-                    datasets: [{
-                        label: 'CheckinData',
-                        backgroundColor: 'rgb(255, 99, 132)',
-                        borderColor: 'rgb(255, 99, 132)',
-                        data: result.checkinData,
-                        // parsing: false,
-                    },
+
+    })
+
+
+
+    });
+}
+
+StatisticsPage.prototype.displayData = function(statisticsEntry){
+
+    apiStatisticsHandler.getStatistics(statisticsEntry.date)
+        .done(function(result){
+
+            const data = {
+                datasets: [{
+                    label: 'CheckinData',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: result.checkinData,
+                    // parsing: false,
+                },
                     {
                         label: 'TrackData',
                         backgroundColor: 'rgb(10,81,220)',
@@ -77,34 +95,33 @@ StatisticsPage.prototype.buildHtml = function(url, context){
                         data: result.trackData,
                         // parsing: false,
                     }]
-                };
+            };
 
-                const config = {
-                    type: 'line',
-                    data,
-                    options: {
-                        parsing: false,
-                        scales: {
-                            x: {
-                                type: 'time',
-                            }
+            const config = {
+                type: 'line',
+                data,
+                options: {
+                    parsing: false,
+                    scales: {
+                        x: {
+                            type: 'time',
+                        }
 
                         //     // adapters: {
                         //     //     date: {
                         //     //         locale: de
                         //     //     }
                         //     // }
-                        }
                     }
-                };
+                }
+            };
 
-                var myChart = new Chart(
-                    document.getElementById('myChart'),
-                    config
-                );
-                console.log("test");
-            })
-    });
+            var myChart = new Chart(
+                document.getElementById('myChart'),
+                config
+            );
+            console.log("test");
+        })
 }
 
 export {StatisticsPage};

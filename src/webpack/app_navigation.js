@@ -19,6 +19,7 @@ var tablet = window.matchMedia("only screen and (min-width: 600px) and (max-widt
 var Navigation = function(context, options){
     let self = this;
     let url;
+    self.drawer = null;
 
     if (phone.matches || tablet.matches) url = '/webpack/templates/navigation-mobile.hbs';
     else url = '/webpack/templates/navigation.hbs';
@@ -28,6 +29,7 @@ var Navigation = function(context, options){
             clock: undefined,
             sidesheet: false,
             activeElement: undefined,
+            open: true,
 
         }
         options = (options === undefined) ? {}: options;
@@ -81,9 +83,8 @@ var Navigation = function(context, options){
                 });
 
                 if (!(phone.matches || tablet.matches)) {
-                    //open drawer intially on desktop screen sizes
-                    drawer.open = true;
-
+                    //open drawer initially on desktop screen sizes
+                    drawer.open = self.options.open;
                 }
 
                 self.drawer = drawer;
@@ -144,6 +145,14 @@ Navigation.prototype.adjustWrapper = function(topAppBar){
 
 Navigation.prototype.getTracks = function(){
     return $.get("/api/v1/track");
+}
+
+Navigation.prototype.show = function(){
+    this.drawer.open = true;
+}
+
+Navigation.prototype.hide = function(){
+    this.drawer.open = false;
 }
 
 export {Navigation}

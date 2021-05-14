@@ -3,7 +3,7 @@ import {MDCDrawer} from "@material/drawer";
 const Handlebars = require("handlebars");
 import "../handlebarsHelpers";
 
-import {apiArchiveHandler} from "../apiArchiveHandler";
+import {apiArchiveHandler} from "../apiHandlers/apiArchiveHandler";
 import {Page} from "../app_page";
 var $ = require( "jquery" );
 import {MDCRipple} from '@material/ripple';

@@ -2,7 +2,7 @@ import {MDCDrawer} from "@material/drawer";
 
 const Handlebars = require("handlebars");
 import "./handlebarsHelpers";
-import {apiHandler} from "./apiHandler";
+import {apiHandler} from "./apiHandlers/apiHandler";
 import {Page} from "./app_page";
 var $ = require( "jquery" );
 import {MDCRipple} from '@material/ripple';

@@ -31,6 +31,7 @@ let nav = new Navigation(
         clock: ".navigation-clock",
         sidesheet: true,
         activeElement: "app-link-statistics",
+        open: false,
     },
 );
 
@@ -44,6 +45,7 @@ nav.initialize
     .then(function(){
         nav.setAction("mdc-top-app-bar-action1", function(e, args){
             sidesheet.toggle();
-        })
+        });
+        nav.hide();
     });
 
