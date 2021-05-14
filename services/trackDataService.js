@@ -21,6 +21,11 @@ module.exports = {
  * Gets all users
  */
 async function getAll(args) {
+    let defaults = {
+    }
+    args = (args === undefined) ? {}: args;
+    args = Object.assign(defaults, args);
+
     let filter = args.filter;
     let sort= args.sort;
     let query;

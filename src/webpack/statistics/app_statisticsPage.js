@@ -25,6 +25,8 @@ var StatisticsPage = function(args) {
     self.entries = undefined;
     self.page = undefined;
     self.dataVersion = 0;
+    self.chart = null;
+    self.listElements;
     //get current entries
     let context = {};
     //render html
@@ -39,21 +41,17 @@ StatisticsPage.prototype.hide = function(){
 StatisticsPage.prototype.show = function(options){
     let self = this;
     let context = {}
-    self.buildHtml(self.url, context);
+    return self.buildHtml(self.url, context);
 }
 
-/**
- *
- * @param url {String}
- * @param context {ContextObject}
- * @returns {*}
- */
 StatisticsPage.prototype.buildHtml = function(url, context){
     let self = this;
     return new Promise(function(reject, resolve){
+        //get statistics overview
         apiStatisticsHandler.getOverview()
             .done(function(result){
                 //render page
+                context.days = result;
                 $.get(url, function (templateData) {
                     console.log("statistics template found");
                     var template = Handlebars.compile(templateData);
@@ -63,8 +61,22 @@ StatisticsPage.prototype.buildHtml = function(url, context){
                     pageContainer.append(template(context));
                     self.page = document.getElementById("statistics-page");
                     self.dataTableContainer = document.getElementById("statistics-container");
-                    //get statistics overview
-                    self.displayData(result[0])
+
+                    //setup list elements
+                    self.listElements = $(".statistics-clickable-list-item");
+                    //display first result
+                    self.displayData("current");
+                    self.activateListElement(self.listElements[0])
+
+                    //hook click handlers to list items
+
+                    self.listElements.on("click", function(){
+                        if(this.classList.contains("active")) return;
+                        let date = this.dataset.date;
+                        if (date === undefined) return false;
+                        self.displayData(date);
+                        self.activateListElement(this);
+                    })
             })
 
 
@@ -75,9 +87,11 @@ StatisticsPage.prototype.buildHtml = function(url, context){
     });
 }
 
-StatisticsPage.prototype.displayData = function(statisticsEntry){
+StatisticsPage.prototype.displayData = function(date){
+    let self = this;
+    if (self.chart !== null) self.chart.destroy();
 
-    apiStatisticsHandler.getStatistics(statisticsEntry.date)
+    apiStatisticsHandler.getStatistics(date)
         .done(function(result){
 
             const data = {
@@ -116,12 +130,26 @@ StatisticsPage.prototype.displayData = function(statisticsEntry){
                 }
             };
 
-            var myChart = new Chart(
+            self.chart = new Chart(
                 document.getElementById('myChart'),
                 config
             );
             console.log("test");
         })
+}
+
+StatisticsPage.prototype.activateListElement = function(element) {
+    let self = this;
+    //detect if list elements were initialized
+    if (self.listElements === undefined) {
+        //setup
+        self.listElements = $(".statistics-clickable-list-item");
+
+    }
+    self.listElements.each(function(){
+        this.classList.remove("active");
+    })
+    element.classList.add("active");
 }
 
 export {StatisticsPage};

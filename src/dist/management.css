@@ -6313,6 +6313,18 @@ input[type=number] {
     margin: 0.5em auto 0.5em auto;
   }
 }
+.app-page-wrapper .app-page-content.full-width {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.app-page-wrapper .app-page-content.full-height {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
 
 /**
 tabs
@@ -7509,6 +7521,18 @@ input[type=number] {
   .app-page-wrapper .app-page-content {
     margin: 0.5em auto 0.5em auto;
   }
+}
+.app-page-wrapper .app-page-content.full-width {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.app-page-wrapper .app-page-content.full-height {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 /**

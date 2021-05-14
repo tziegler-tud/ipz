@@ -31,7 +31,7 @@ var Dashboard = function(type, activePage, options){
             containerId: "dashboard-container",
         }
         options = (options === undefined) ? {}: options;
-        return Object.assign(defaults, activePage, options);
+        return Object.assign(defaults, options);
     };
     //options
     self.options = applyArgs(options);

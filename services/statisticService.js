@@ -153,11 +153,13 @@ async function getOverview() {
     entries.push({
         date: dateTransformer.transformDateTimeString(new Date()).date,
         total: today.total,
+        current: true,
     })
     archiveData.forEach(function(archiveElement){
         entries.push({
             date: archiveElement.date,
             total: archiveElement.data.trackDatas.length,
+            current: false,
         })
     })
     return entries;

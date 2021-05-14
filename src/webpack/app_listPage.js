@@ -28,22 +28,7 @@ var ListPage = function(args){
     let context = {};
     //render html
 
-    /**
-     * @typedef {Object} ContextObject
-     *
-     * @property {boolean} isEmpty true if no entries were found
-     * @property {boolean} updateBanner true if first entry differs from previous set
-     * @property {CheckinDataSchemeObject[]} entries checkout data array
-     */
 
-    /**
-     *
-     * creates a context object from the api response
-     *
-     * @param result {CheckinDataSchemeObject[]}
-     * @param options {Object}
-     * @returns {ContextObject}
-     */
     self.buildContext = function(result, options){
 
         let defaultOptions = {
@@ -51,9 +36,7 @@ var ListPage = function(args){
         options = (options === undefined) ? {}: options;
         options = Object.assign(defaultOptions, options);
 
-        /**
-         * @type {ContextObject} context
-         */
+
         let context = {
             isEmpty: true,
             entries: result,
