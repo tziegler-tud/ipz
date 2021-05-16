@@ -78,9 +78,12 @@ async function archiveCurrentDay() {
     let today = dateTransformer.transformDateTimeString(Date.now()).date;
     let todaysArchive = await Archive.findOne({"date": today});
 
+    let args = {
+        sort: {"timestamp": 1},
+    }
     //create new object
-    let trackData = await trackDataService.getAll();
-    let checkinData = await checkinDataService.getAll();
+    let trackData = await trackDataService.getAll(args);
+    let checkinData = await checkinDataService.getAll(args);
     let tracks = await trackService.get();
     let settings = await settingsService.get();
 

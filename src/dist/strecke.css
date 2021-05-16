@@ -4875,6 +4875,39 @@ a.mdc-list-item {
 .mdc-drawer {
   width: 300px;
 }
+.mdc-drawer :not(.mdc-deprecated-list--non-interactive) > .mdc-deprecated-list-item--activated::before {
+  opacity: 0.12;
+  /* @alternate */
+  opacity: var(--mdc-ripple-activated-opacity, 0.12);
+}
+.mdc-drawer :not(.mdc-deprecated-list--non-interactive) > .mdc-deprecated-list-item--activated::before, .mdc-drawer :not(.mdc-deprecated-list--non-interactive) > .mdc-deprecated-list-item--activated::after {
+  background-color: rgba(132, 22, 22, 0.2);
+  /* @alternate */
+  background-color: var(--mdc-ripple-color, rgba(132, 22, 22, 0.2));
+}
+.mdc-drawer :not(.mdc-deprecated-list--non-interactive) > .mdc-deprecated-list-item--activated:hover::before, .mdc-drawer :not(.mdc-deprecated-list--non-interactive) > .mdc-deprecated-list-item--activated.mdc-ripple-surface--hover::before {
+  opacity: 0.16;
+  /* @alternate */
+  opacity: var(--mdc-ripple-hover-opacity, 0.16);
+}
+.mdc-drawer :not(.mdc-deprecated-list--non-interactive) > .mdc-deprecated-list-item--activated.mdc-ripple-upgraded--background-focused::before, .mdc-drawer :not(.mdc-deprecated-list--non-interactive) > .mdc-deprecated-list-item--activated:not(.mdc-ripple-upgraded):focus::before {
+  transition-duration: 75ms;
+  opacity: 0.24;
+  /* @alternate */
+  opacity: var(--mdc-ripple-focus-opacity, 0.24);
+}
+.mdc-drawer :not(.mdc-deprecated-list--non-interactive) > .mdc-deprecated-list-item--activated:not(.mdc-ripple-upgraded)::after {
+  transition: opacity 150ms linear;
+}
+.mdc-drawer :not(.mdc-deprecated-list--non-interactive) > .mdc-deprecated-list-item--activated:not(.mdc-ripple-upgraded):active::after {
+  transition-duration: 75ms;
+  opacity: 0.24;
+  /* @alternate */
+  opacity: var(--mdc-ripple-press-opacity, 0.24);
+}
+.mdc-drawer :not(.mdc-deprecated-list--non-interactive) > .mdc-deprecated-list-item--activated.mdc-ripple-upgraded {
+  --mdc-ripple-fg-opacity: var(--mdc-ripple-press-opacity, 0.24);
+}
 .mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing) + .mdc-drawer-app-content {
   /* @noflip */
   margin-left: 300px;

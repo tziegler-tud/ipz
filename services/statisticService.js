@@ -27,8 +27,8 @@ async function getById(id) {
     let archive, trackData, checkinData, date;
     if(id === undefined) {
         //get current
-        const trackDataPromise = trackDataService.getAll({sort: {"timestamp": -1}});
-        const checkinDataPromise = checkinDataService.getAll("timestamp");
+        const trackDataPromise = trackDataService.getAll({sort: {"timestamp": 1}});
+        const checkinDataPromise = checkinDataService.getAll({sort: {"timestamp":1}});
         const data = await Promise.all([trackDataPromise, checkinDataPromise]);
         trackData = data[0];
         checkinData = data[1];

@@ -22,8 +22,30 @@ module.exports = {
 /**
  * Gets all users
  */
-async function getAll() {
-    return CheckinData.find();
+async function getAll(args) {
+    let defaults = {
+    }
+    args = (args === undefined) ? {}: args;
+    args = Object.assign(defaults, args);
+
+    let filter = args.filter;
+    let sort= args.sort;
+    let query;
+    if (filter===undefined || filter.filter === undefined || filter.value === undefined) {
+        query = CheckinData.find();
+    }
+    else {
+        let filterObj = {};
+        filterObj[filter.filter] = filter.value;
+        query = CheckinData.find(filterObj);
+    }
+
+    if(sort === undefined) {
+        return query;
+    }
+    else {
+        return query.sort(sort);
+    }
 }
 
 async function getCheckoutData() {
@@ -82,19 +104,19 @@ async function add(object) {
     }
 
     //get checkout version
-    let version = await Version.findOne({label: "wb2"});
-    if(!version){
-        console.log("no version file found. Generating new version history...")
-       version = new Version({
-            label: "wb2",
-            version: 1,
-            timestamp: Date.now(),
-        });
-    }
-    else {
-        version.version++;
-    }
-    version.save();
+    // let version = await Version.findOne({label: "wb2"});
+    // if(!version){
+    //     console.log("no version file found. Generating new version history...")
+    //    version = new Version({
+    //         label: "wb2",
+    //         version: 1,
+    //         timestamp: Date.now(),
+    //     });
+    // }
+    // else {
+    //     version.version++;
+    // }
+    // version.save();
     //create new object
     let checkinDataObject = {
         type: object.type,
@@ -115,29 +137,30 @@ async function remove(args) {
         throw new Error("Invalid arguments received: Payload is empty.");
     }
     let type = args.type;
-    let amount = args.amount;
 
     if(args.type === undefined) {
         throw new Error("Invalid arguments received: Type is undefined");
     }
 
     //get checkout version
-    let version = await Version.findOne({label: "wb2"});
-    if(!version){
-        console.log("no version file found. Generating new version history...")
-        version = new Version({
-            label: "wb2",
-            version: 1,
-            timestamp: Date.now(),
-        });
-    }
-    else {
-        version.version++;
-    }
-    version.save();
+    // let version = await Version.findOne({label: "wb2"});
+    // if(!version){
+    //     console.log("no version file found. Generating new version history...")
+    //     version = new Version({
+    //         label: "wb2",
+    //         version: 1,
+    //         timestamp: Date.now(),
+    //     });
+    // }
+    // else {
+    //     version.version++;
+    // }
+    // version.save();
 
     //delete last entry
-    return CheckinData.findOneAndRemove({"currentStatus.status": 0, "type": type}).sort({"currentStatus.timestamp": -1});
+
+    // return CheckinData.findOneAndRemove({"type": type}).sort({"currentStatus.timestamp": -1});
+    return CheckinData.findOneAndRemove({"type": type}).sort({"timestamp": -1});
 }
 
 async function checkout(entry) {

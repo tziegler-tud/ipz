@@ -120,6 +120,17 @@ StatisticsPage.prototype.displayData = function(date){
                     scales: {
                         x: {
                             type: 'time',
+                            time: {
+                                displayFormats: {
+                                    millisecond: 'hh:mm'
+                                },
+
+                            },
+                            // ticks: {
+                            //     callback: function(value) {
+                            //         return new Date(value).toLocaleDateString('de-DE', {month:'short', year:'numeric'});
+                            //     },
+                            // },
                         }
 
                         //     // adapters: {

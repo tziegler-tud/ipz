@@ -74,7 +74,7 @@ function getSwitched (req, res, next){
             .catch(err => next(err));
     }
     else {
-        trackDataService.getAll({filter: "isSwitched", value: true})
+        trackDataService.getAll({filter: {filter: "isSwitched", value: true}})
             .then(result => res.json(result))
             .catch(err => next(err));
     }

@@ -355,19 +355,19 @@ CheckinPage.prototype.updateTimer = function (type){
                 self.timers.b.timeString = "";
             }
             else {
-                self.timers.b.timeString = transformDateTimeString(result.b.currentStatus.timestamp, "hh:mm").time("hh:mm");
+                self.timers.b.timeString = transformDateTimeString(result.b.timestamp, "hh:mm").time("hh:mm");
             }
             if(result.m === null) {
                 self.timers.m.timeString = "";
             }
             else {
-                self.timers.m.timeString = transformDateTimeString(result.m.currentStatus.timestamp, "hh:mm").time("hh:mm");
+                self.timers.m.timeString = transformDateTimeString(result.m.timestamp, "hh:mm").time("hh:mm");
             }
             if(result.a === null) {
                 self.timers.a.timeString = "";
             }
             else {
-                self.timers.a.timeString = transformDateTimeString(result.a.currentStatus.timestamp, "hh:mm").time("hh:mm");
+                self.timers.a.timeString = transformDateTimeString(result.a.timestamp, "hh:mm").time("hh:mm");
             }
 
             self.timers.b.el.innerHTML = self.timers.b.timeString;

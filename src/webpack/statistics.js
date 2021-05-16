@@ -32,7 +32,7 @@ let nav = new Navigation(
         sidesheet: true,
         activeElement: "app-link-statistics",
         open: false,
-        topbar: false,
+        topbar: true,
     },
 );
 
@@ -40,9 +40,7 @@ let statisticsPage = new StatisticsPage();
 statisticsPage.show()
     .then(function(){
     // sidesheet = new Sidesheet("checkin", managementPage, {});
-        nav.setAction("statistics-hamburger", function(e, args, nav){
-            nav.toggle();
-        }, {})
+
 });
 
 nav.initialize
@@ -50,7 +48,7 @@ nav.initialize
         nav.setAction("mdc-top-app-bar-action1", function(e, args){
             sidesheet.toggle();
         });
-        nav.addSubpage("statistics", {}, true, "app-link-statistics");
+        nav.addSubpage("statistics", {}, true, "app-link-statistics", true);
 
     });
 

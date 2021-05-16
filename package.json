@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@fontsource/open-sans": "^4.2.2",
+    "@material-icons/font": "^1.0.9",
     "@material/banner": "^11.0.0",
     "@material/button": "^11.0.0",
     "@material/card": "^11.0.0",

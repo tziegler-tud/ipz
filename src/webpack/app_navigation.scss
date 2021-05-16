@@ -8,6 +8,7 @@
 @import "./variables";
 @import "./color-variables";
 
+//@import "../../node_modules/@material-icons/font/css/all.css";
 @import "~material-icons-font/material-icons-font.css";
 //
 @include drawer.core-styles;
@@ -28,6 +29,7 @@
 }
 
 .mdc-drawer {
+  @include drawer.activated-overlay-color(rgba(132, 22, 22, 0.2));
   @include drawer.width(300px);
   @media #{$tablet} {
     @include drawer.width(350px);

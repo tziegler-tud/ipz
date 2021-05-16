@@ -20,6 +20,7 @@ var Navigation = function(context, options){
     let self = this;
     let url;
     self.drawer = null;
+    self.persistentSubpage = null;
 
     if (phone.matches || tablet.matches) url = '/webpack/templates/navigation/navigation-mobile.hbs';
     else url = '/webpack/templates/navigation/navigation.hbs';
@@ -70,9 +71,6 @@ var Navigation = function(context, options){
                 topAppBarElement.classList.add("topbar--disabled");
             }
 
-            document.body.addEventListener('MDCDrawer:closed', () => {
-                // mainContentEl.querySelector('input, button').focus();
-            });
             // const buttonRipple = new MDCRipple(document.querySelector('.mdc-button'));
 
 
@@ -90,6 +88,10 @@ var Navigation = function(context, options){
                 self.adjustWrapper(self.topAppBar);
             });
 
+            document.body.addEventListener('MDCDrawer:closed', () => {
+                self.subpageHandler.showPersistent();
+            });
+
 
             //find tracks to build main element
             self.getTracks().done(function(result) {
@@ -98,6 +100,7 @@ var Navigation = function(context, options){
                     var template = Handlebars.compile(data);
                     self.subpageHandler.addMain(context)
                         .then(function(){
+                            self.persistentSubpage = self.subpageHandler.main;
                             const listEl = document.querySelector('.mdc-drawer .mdc-deprecated-list');
                             if (options.activeElement !== undefined){
                                 self.setActiveElement(options.activeElement);
@@ -179,15 +182,17 @@ Navigation.prototype.show = function(){
 
 Navigation.prototype.hide = function(){
     this.drawer.open = false;
+    this.subpageHandler.showPersistent();
 }
 
 Navigation.prototype.toggle = function(){
     this.drawer.open = !this.drawer.open;
+    if(!this.drawer.open) this.subpageHandler.showPersistent();
 }
 
-Navigation.prototype.addSubpage = function(type, context, show, navElementId){
+Navigation.prototype.addSubpage = function(type, context, show, navElementId, persistent){
     //proxies to subpageHandler
-    this.subpageHandler.addSubpage(type, context, show, navElementId);
+    let subpage = this.subpageHandler.addSubpage(type, context, show, navElementId, persistent);
 }
 
 let SubpageHandler = function(subpageContainer){
@@ -208,6 +213,7 @@ let SubpageHandler = function(subpageContainer){
     this.main = null;
 
     this.current = undefined;
+    this.persistent = undefined;
 
     this.addMain = function(context){
         return new Promise(function(resolve, reject){
@@ -217,6 +223,7 @@ let SubpageHandler = function(subpageContainer){
                 .then(function(html){
                     appendSubpage(main, html);
                     self.main = main;
+                    self.persistent = main;
                     self.current = main;
                     main.show();
                     resolve();
@@ -225,7 +232,7 @@ let SubpageHandler = function(subpageContainer){
         })
     }
 
-    this.addSubpage = function(type, context, show, navElementId){
+    this.addSubpage = function(type, context, show, navElementId, persistent){
         //create new id
         counter++;
         let subpage = new Subpage(counter, type, context);
@@ -248,7 +255,11 @@ let SubpageHandler = function(subpageContainer){
                         self.showSubpage(subpage.id);
                     })
                 }
+                if (persistent) {
+                    self.persistent = subpage;
+                }
             })
+        return subpage;
 
     }
     this.showMain = function(){
@@ -266,6 +277,20 @@ let SubpageHandler = function(subpageContainer){
         page.show();
         this.current = page;
         return true;
+    }
+
+    this.showPersistent = function(){
+        if (this.persistent === null || this.persistent === undefined) {
+            //dont do anything
+            return;
+        }
+        else {
+            this.showSubpage(this.persistent.id)
+        }
+    }
+
+    this.getMain = function() {
+        return this.main;
     }
 
     function appendSubpage(subpage, html){

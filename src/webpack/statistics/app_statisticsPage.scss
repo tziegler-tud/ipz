@@ -1,10 +1,25 @@
+@use "../../../node_modules/@material/drawer";
+@use "../../../node_modules/@material/top-app-bar";
+@use "../../../node_modules/@material/top-app-bar/mdc-top-app-bar";
 
 @import "../app_pages";
 
 @import "../variables";
 @import "../color-variables";
 
+@include drawer.core-styles;
+@include drawer.dismissible-core-styles;
+@include drawer.modal-core-styles;
+
 @import "~material-icons-font/material-icons-font.css";
+
+.mdc-top-app-bar {
+  @include top-app-bar.fill-color($statistics-color);
+}
+
+.mdc-drawer {
+
+}
 
 
 .statistics-page {
