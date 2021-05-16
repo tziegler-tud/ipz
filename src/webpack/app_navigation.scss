@@ -16,6 +16,10 @@
 @include list.deprecated-core-styles;
 @include icon-button.core-styles;
 
+
+.topbar--disabled {
+  display: none !important;
+}
 .mdc-top-app-bar {
   @include top-app-bar.fill-color($nav-color);
 
@@ -40,3 +44,12 @@
 }
 
 
+.navigation-subpage {
+  display: none;
+  &.navigation-subpage--disabled {
+    display: none !important;
+  }
+  &.navigation-subpage--active {
+    display: block;
+  }
+}

@@ -1,0 +1,81 @@
+<div class="app-page-wrapper statistics-page">
+    <div class="app-page-content full-width full-height">
+        <div id="statistics-container" class="statistics-container">
+            <aside class="mdc-drawer statistics-sidenav collapsed">
+<!--                <div class="mdc-drawer__header statistics-nav-header">-->
+<!--                    <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Open navigation menu">menu</button>-->
+<!--                </div>-->
+                <div class="mdc-drawer__content statistics-">
+                    <nav class="mdc-deprecated-list">
+                        <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Open navigation menu">menu</button>
+                        <div role="separator" class="mdc-deprecated-list-divider"></div>
+                        <a class="mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#" aria-current="page">
+                            <span class="mdc-deprecated-list-item__ripple"></span>
+                            <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">inbox</i>
+                            <span class="mdc-deprecated-list-item__text">Dashboard</span>
+                        </a>
+                        <a class="mdc-deprecated-list-item" href="#">
+                            <span class="mdc-deprecated-list-item__ripple"></span>
+                            <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">send</i>
+                            <span class="mdc-deprecated-list-item__text">Tageszahlen</span>
+                        </a>
+                        <a class="mdc-deprecated-list-item" href="#">
+                            <span class="mdc-deprecated-list-item__ripple"></span>
+                            <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">drafts</i>
+                            <span class="mdc-deprecated-list-item__text">Auswertungen</span>
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+<!--            <div class="statistics-sidenav">-->
+<!--                <div class="statistics-nav-header">-->
+<!--                    <div class="nav-hamburger">-->
+<!--                        <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Open navigation menu">menu</button>-->
+
+<!--                    </div>-->
+<!--                    <div class="nav-label">-->
+<!--                        <span id="nav-title" class="mdc-top-app-bar__title">{{pageData.navTitle}}</span>-->
+<!--                    </div>-->
+<!--                    <div class="nav-close">-->
+
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <ul class="statistics-list">-->
+<!--                    {{#each days}}-->
+<!--                        {{#if this.current}}-->
+<!--                            <li id="statistics-entry--date" class="statistics-list-item statistics-clickable-list-item" data-date="current">-->
+<!--                                <div class="statistics-list-item-inner">-->
+<!--                                    <div class="statistics-list-title">-->
+<!--                                        {{this.date}}-->
+<!--                                    </div>-->
+<!--                                    <div class="statistics-list-subcontent">-->
+<!--                                        {{this.total}}-->
+<!--                                    </div>-->
+<!--                                    <div class="statistics-list-subcontent">-->
+<!--                                        live-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </li>-->
+<!--                        {{else}}-->
+<!--                            <li id="statistics-entry--date" class="statistics-list-item statistics-clickable-list-item" data-date="{{this.date}}">-->
+<!--                                <div class="statistics-list-item-inner">-->
+<!--                                    <div class="statistics-list-title">-->
+<!--                                        {{this.date}}-->
+<!--                                    </div>-->
+<!--                                    <div class="statistics-list-subcontent">-->
+<!--                                        {{this.total}}-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </li>-->
+<!--                        {{/if}}-->
+<!--                    {{/each}}-->
+<!--                </ul>-->
+<!--            </div>-->
+            <div class="statistics-content">
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

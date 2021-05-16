@@ -45,7 +45,7 @@ trackDataSchema.virtual("name").get(function(){
             typeString ="Moderna";
             break;
         case 3:
-            typeString ="Astrazenecca";
+            typeString ="Astrazeneca";
             break;
         default:
             typeString = "nicht angegeben";
@@ -64,7 +64,7 @@ trackDataSchema.virtual("switch.originalTypeName").get(function(){
             typeString ="Moderna";
             break;
         case 3:
-            typeString ="Astrazenecca";
+            typeString ="Astrazeneca";
             break;
         default:
             typeString = "nicht angegeben";
@@ -83,7 +83,7 @@ trackDataSchema.virtual("switch.newTypeName").get(function(){
             typeString ="Moderna";
             break;
         case 3:
-            typeString ="Astrazenecca";
+            typeString ="Astrazeneca";
             break;
         default:
             typeString = "nicht angegeben";

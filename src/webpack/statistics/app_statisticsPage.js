@@ -21,7 +21,7 @@ var phone = window.matchMedia("only screen and (max-width: 50em)");
 
 var StatisticsPage = function(args) {
     let self = Page.apply(this, args);
-    self.url = "/webpack/templates/statistics/statistics.hbs";
+    self.url = "/webpack/templates/statistics/statistics-container.hbs";
     self.entries = undefined;
     self.page = undefined;
     self.dataVersion = 0;
@@ -46,7 +46,7 @@ StatisticsPage.prototype.show = function(options){
 
 StatisticsPage.prototype.buildHtml = function(url, context){
     let self = this;
-    return new Promise(function(reject, resolve){
+    return new Promise(function(resolve, reject){
         //get statistics overview
         apiStatisticsHandler.getOverview()
             .done(function(result){
@@ -77,6 +77,7 @@ StatisticsPage.prototype.buildHtml = function(url, context){
                         self.displayData(date);
                         self.activateListElement(this);
                     })
+                    resolve();
             })
 
 

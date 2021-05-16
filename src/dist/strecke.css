@@ -4863,6 +4863,10 @@ a.mdc-list-item {
   --mdc-ripple-fg-opacity: var(--mdc-ripple-press-opacity, 0.12);
 }
 
+.topbar--disabled {
+  display: none !important;
+}
+
 .mdc-top-app-bar {
   background-color: #00293c;
   z-index: 7;
@@ -4908,6 +4912,16 @@ a.mdc-list-item {
   .mdc-drawer .mdc-deprecated-list-item {
     font-size: 110%;
   }
+}
+
+.navigation-subpage {
+  display: none;
+}
+.navigation-subpage.navigation-subpage--disabled {
+  display: none !important;
+}
+.navigation-subpage.navigation-subpage--active {
+  display: block;
 }
 
 .mdc-banner__text {

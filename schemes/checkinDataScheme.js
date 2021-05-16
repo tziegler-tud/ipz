@@ -24,7 +24,7 @@ checkinDataSchema.virtual("name").get(function(){
             typeString ="Moderna";
             break;
         case 3:
-            typeString ="Astrazenecca";
+            typeString ="Astrazeneca";
             break;
         default:
             typeString = "nicht angegeben";

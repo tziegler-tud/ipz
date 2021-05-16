@@ -32,20 +32,25 @@ let nav = new Navigation(
         sidesheet: true,
         activeElement: "app-link-statistics",
         open: false,
+        topbar: false,
     },
 );
 
 let statisticsPage = new StatisticsPage();
 statisticsPage.show()
-//     .done(function(){
-//     sidesheet = new Sidesheet("checkin", managementPage, {});
-// });
+    .then(function(){
+    // sidesheet = new Sidesheet("checkin", managementPage, {});
+        nav.setAction("statistics-hamburger", function(e, args, nav){
+            nav.toggle();
+        }, {})
+});
 
 nav.initialize
     .then(function(){
         nav.setAction("mdc-top-app-bar-action1", function(e, args){
             sidesheet.toggle();
         });
-        nav.hide();
+        nav.addSubpage("statistics", {}, true, "app-link-statistics");
+
     });
 
