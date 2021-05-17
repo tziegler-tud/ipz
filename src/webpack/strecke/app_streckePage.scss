@@ -105,6 +105,20 @@
             }
 
             .choosing-card {
+
+              .choosing-card-counter-container {
+                display: grid;
+                grid-template-rows: auto;
+                grid-template-columns: 50% 50%;
+
+                .choosing-card-counter-part {
+                  &.first {
+                    border-right: 1px solid #333;
+                  }
+
+
+                }
+              }
               .timestamp {
                 font-size: 70%;
                 @media #{$phone} {

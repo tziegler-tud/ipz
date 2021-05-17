@@ -148,10 +148,13 @@ StreckePage.prototype.buildHtml = function(url, context, options){
         });
         const dialog1 = new MDCDialog(document.querySelector('#dialog1'));
         const dialog2 = new MDCDialog(document.querySelector('#dialog2'));
+        const dialog3 = new MDCDialog(document.querySelector('#dialog3'));
         const list1 = new MDCList(document.querySelector('#dialog1 #dialog-select-list1'));
         const list2 = new MDCList(document.querySelector('#dialog2 #dialog-select-list2'));
+        const list3 = new MDCList(document.querySelector('#dialog3 #dialog-select-list3'));
         const listItemRipples1 = list1.listElements.map((listItemEl) => new MDCRipple(listItemEl));
         const listItemRipples2 = list2.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+        const listItemRipples3 = list3.listElements.map((listItemEl) => new MDCRipple(listItemEl));
 
         //build dashboard
         self.dashboard = new Dashboard("strecke", self, {containerId: "dashboard-container"});
@@ -168,11 +171,15 @@ StreckePage.prototype.buildHtml = function(url, context, options){
 
         list1.singleSelection = true;
         list2.singleSelection = true;
+        list3.singleSelection = true;
         dialog1.listen('MDCDialog:opened', () => {
             list1.layout();
         });
         dialog2.listen('MDCDialog:opened', () => {
             list2.layout();
+        });
+        dialog3.listen('MDCDialog:opened', () => {
+            list3.layout();
         });
 
 
@@ -183,23 +190,44 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 self.counters = {
                     b: {
                         name: "BioNTech",
-                        el: document.getElementById("biontech-counter"),
-                        counter: new Counter({start: result.counters.b, min: 0, step: 1}),
+                        first: {
+                            el: document.getElementById("biontech-counter--first"),
+                            counter: new Counter({start: result.counters.b.first, min: 0, step: 1}),
+                        },
+                        second: {
+                            el: document.getElementById("biontech-counter--second"),
+                            counter: new Counter({start: result.counters.b.second, min: 0, step: 1}),
+                        },
                     },
                     m: {
                         name: "Moderna",
-                        el: document.getElementById("moderna-counter"),
-                        counter: new Counter({start: result.counters.m, min: 0, step: 1}),
+                        first: {
+                            el: document.getElementById("moderna-counter--first"),
+                            counter: new Counter({start: result.counters.m.first, min: 0, step: 1}),
+                        },
+                        second: {
+                            el: document.getElementById("moderna-counter--second"),
+                            counter: new Counter({start: result.counters.m.second, min: 0, step: 1}),
+                        },
                     },
                     a: {
                         name: "Astra",
-                        el: document.getElementById("astra-counter"),
-                        counter: new Counter({start: result.counters.a, min: 0, step: 1}),
+                        first: {
+                            el: document.getElementById("astra-counter--first"),
+                            counter: new Counter({start: result.counters.a.first, min: 0, step: 1}),
+                        },
+                        second: {
+                            el: document.getElementById("astra-counter--second"),
+                            counter: new Counter({start: result.counters.a.second, min: 0, step: 1}),
+                        },
                     }
                 };
-                self.counters.b.el.innerHTML = self.counters.b.counter.get();
-                self.counters.m.el.innerHTML = self.counters.m.counter.get();
-                self.counters.a.el.innerHTML = self.counters.a.counter.get();
+                self.counters.b.first.el.innerHTML = self.counters.b.first.counter.get();
+                self.counters.b.second.el.innerHTML = self.counters.b.second.counter.get();
+                self.counters.m.first.el.innerHTML = self.counters.m.first.counter.get();
+                self.counters.m.second.el.innerHTML = self.counters.m.second.counter.get();
+                self.counters.a.first.el.innerHTML = self.counters.a.first.counter.get();
+                self.counters.a.second.el.innerHTML = self.counters.a.second.counter.get();
             })
 
         //update timers
@@ -228,13 +256,16 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             if(self.mutex) return false;
             self.mutex = true;
             let type = parseInt(this.dataset.type);
-            let counter = getCounter(type, self);
+            let secondString = this.dataset.second;
+            let second = (secondString === "true");
+            let secondNumber = (second) ? 2 : 1;
+            let counter = getCounter(type, self, second);
             counter.el.classList.add("processing");
 
             // self.soundboard.play("click");
-            apiHandler.addTrackEntry(type, self.track)
+            apiHandler.addTrackEntry(type, self.track, second)
                 .done(function(result){
-                    let message = "Eintrag hinzugefügt: " + result.name;
+                    let message = "Eintrag hinzugefügt: " + result.name + "(" + secondNumber + ")";
                     if(type !== 0) counter.el.innerHTML = counter.counter.increase();
                     counter.el.classList.remove("processing");
                     self.showSnackbar(message);
@@ -268,11 +299,14 @@ StreckePage.prototype.buildHtml = function(url, context, options){
              * @property {Counter} counter
              * @property {String} name
              */
-            let c = getCounter(type, self);
-            c.el.innerHTML = '<span class="choosing-card-counter-loader lds-dual-ring"></span>';
+            let c1 = getCounter(type, self, false);
+            let c2 = getCounter(type, self, true);
+            c1.el.innerHTML = '<span class="choosing-card-counter-loader lds-dual-ring"></span>';
+            c2.el.innerHTML = '<span class="choosing-card-counter-loader lds-dual-ring"></span>';
             apiHandler.getTrackCounts(self.track)
                 .done(function(result){
-                    c.el.innerHTML = c.counter.set(getCounter(type, result));
+                    c1.el.innerHTML = c1.counter.set(getCounter(type, result, false));
+                    c2.el.innerHTML = c2.counter.set(getCounter(type, result, true));
                 })
                 .fail(function(jqxhr, textstatus, error){
                     let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
@@ -346,15 +380,25 @@ StreckePage.prototype.buildHtml = function(url, context, options){
         dialog2.listen("MDCDialog:closed", function(event){
             let detail = event.detail;
             list2.setEnabled(self.dialogChoice.selectedIndex, true);
+            console.log(detail.action);
             if(detail.action==="accept") {
-                let type = parseInt(list2.listElements[list2.selectedIndex].dataset.type);
-                self.dialogChoice.newType = type;
+                self.dialogChoice.selectedIndex2 = list2.selectedIndex;
+                self.dialogChoice.newType = parseInt(list2.listElements[list2.selectedIndex].dataset.type);
+                dialog3.open();
+            }
+        })
+
+        dialog3.listen("MDCDialog:closed", function(event){
+            let detail = event.detail;
+            if(detail.action==="accept") {
+                let secondString = parseInt(list3.listElements[list3.selectedIndex].dataset.second);
+                let second = (secondString === "true");
                 console.log(detail.action);
-                let counter = getCounter(type, self);
-                apiHandler.addSwitchedTrackEntry(self.dialogChoice.originalType, self.dialogChoice.newType, self.track)
+                let counter = getCounter(self.dialogChoice.newType, self, second);
+                apiHandler.addSwitchedTrackEntry(self.dialogChoice.originalType, self.dialogChoice.newType, self.track, second)
                     .done(function(result){
                         let message = "Eintrag hinzugefügt: " + result.name;
-                        if(type !== 0) counter.el.innerHTML = counter.counter.increase();
+                        if(self.dialogChoice.newType !== 0) counter.el.innerHTML = counter.counter.increase();
                         self.showSnackbar(message);
                     })
                     .fail(function(jqxhr, textstatus, error){
@@ -470,20 +514,23 @@ StreckePage.prototype.setSound = function(bool){
 }
 
 
-function getCounter (type, self) {
+function getCounter (type, self, second) {
+    if (second === undefined) {
+        second = false;
+    }
     let counter;
     switch(type) {
         case 0:
             counter = undefined
             break;
         case 1:
-            counter = self.counters.b;
+            counter = (second) ? self.counters.b.second : self.counters.b.first;
             break;
         case 2:
-            counter = self.counters.m;
+            counter =  (second) ? self.counters.m.second : self.counters.m.first;
             break;
         case 3:
-            counter = self.counters.a;
+            counter =  (second) ? self.counters.a.second : self.counters.a.first;
             break;
     }
     return counter;

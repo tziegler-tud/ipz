@@ -11,6 +11,10 @@ var checkinDataSchema = new Schema({
     timestamp: {
         type: Date,
         default: Date.now,
+    },
+    second: {
+        type: Boolean,
+        default: false,
     }
 })
 

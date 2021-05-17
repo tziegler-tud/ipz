@@ -292,14 +292,17 @@ var ApiHandler = function() {
      *
      * @param type {Integer} type 0=null, 1=B, 2=M, 3=A
      * @param track {Track}
+     * @param second {Boolean} true if second
      *
      * @return {Object}
      */
-    self.addTrackEntry = function (type, track) {
+    self.addTrackEntry = function (type, track, second) {
+
         let jsonData = {
             type: type,
             track: track,
             isSwitched: false,
+            second: second,
         }
         return $.ajax({
             url: "/api/v1/data/track/add",

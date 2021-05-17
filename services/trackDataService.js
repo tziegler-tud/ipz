@@ -62,39 +62,64 @@ async function getByTrack(track, filter) {
 }
 
 async function getCounts(track) {
-    let data;
-    if(track === undefined) {
-        //find all tracks
-        track = 0;
-        data = await TrackData.find();
-    }
-    else {
-        data = await TrackData.find({"track.id": track.id});
-    }
-    //count them
-    let counters = {
-        b: 0,
-        m: 0,
-        a: 0,
-    }
-    counters.b = data.reduce(function(n, element) {
-        return n + (element.type === 1);
-    }, 0);
-    counters.m = data.reduce(function(n, element) {
-        return n + (element.type === 2);
-    }, 0);
-    counters.a = data.reduce(function(n, element) {
-        return n + (element.type === 3);
-    }, 0);
+    // let data;
+    // if(track === undefined) {
+    //     //find all tracks
+    //     track = 0;
+    //     data = await TrackData.find();
+    // }
+    // else {
+    //     data = await TrackData.find({"track.id": track.id});
+    // }
+    // //count them
+    // let counters = {
+    //     b: 0,
+    //     m: 0,
+    //     a: 0,
+    // }
+    // counters.b = data.reduce(function(n, element) {
+    //     return n + (element.type === 1);
+    // }, 0);
+    // counters.m = data.reduce(function(n, element) {
+    //     return n + (element.type === 2);
+    // }, 0);
+    // counters.a = data.reduce(function(n, element) {
+    //     return n + (element.type === 3);
+    // }, 0);
+    //
+    // let total = counters.b + counters.m + counters.a;
+    //
+    // let returnObject = {
+    //     track: track.id,
+    //     counters: counters,
+    //     total: total,
+    // }
+    // return returnObject;
 
-    let total = counters.b + counters.m + counters.a;
+
+    let dataB1 = TrackData.count({"type": 1, "second": false});
+    let dataB2 = TrackData.count({"type": 1, "second": true});
+    let dataM1 = TrackData.count({"type": 2, "second": false});
+    let dataM2 = TrackData.count({"type": 2, "second": true});
+    let dataA1 = TrackData.count({"type": 3, "second": false});
+    let dataA2 = TrackData.count({"type": 3, "second": true});
+
+    //wait for query to finish
+    const data = await Promise.all([dataB1, dataB2, dataM1, dataM2, dataA1, dataA2]);
+    //count them
+
+    let counters = {
+        b: {first: data[0], second: data[1]},
+        m: {first: data[2], second: data[3]},
+        a: {first: data[4], second: data[5]},
+    }
+    let total = data[0] + data[1] + data[2] + data[3] + data[4] + data[5];
 
     let returnObject = {
         track: track.id,
         counters: counters,
         total: total,
     }
-
     return returnObject;
 }
 

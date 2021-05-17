@@ -8,6 +8,10 @@ var trackDataSchema = new Schema({
         type: Number,
         required: true,
     },
+    second: {
+        type: Boolean,
+        default: false,
+    },
     track: {
         id: {
             type: Schema.Types.ObjectId

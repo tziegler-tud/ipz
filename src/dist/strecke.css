@@ -20779,6 +20779,14 @@ a.mdc-list-item {
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item.astra .choosing-item-media {
   background-color: rgba(0, 19, 189, 0.2);
 }
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .choosing-card-counter-container {
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: 50% 50%;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .choosing-card-counter-container .choosing-card-counter-part.first {
+  border-right: 1px solid #333;
+}
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .timestamp {
   font-size: 70%;
 }
