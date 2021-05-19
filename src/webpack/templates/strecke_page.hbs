@@ -285,5 +285,44 @@
         </div>
         <div class="mdc-dialog__scrim"></div>
     </div>
+    <div id="dialog-remove" class="mdc-dialog">
+        <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface"
+                 role="alertdialog"
+                 aria-modal="true"
+                 aria-labelledby="my-dialog-title"
+                 aria-describedby="my-dialog-content">
+                <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                <h2 class="mdc-dialog__title" id="my-dialog-title">Eintrag löschen</h2>
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    <div class="mdc-deprecated-list-group">
+                        <h3 class="mdc-list-group__subheader">Erst-/ Zweitimpfung:</h3>
+                        <ul id="dialog-select-remove" class="mdc-deprecated-list mdc-deprecated-list--avatar-list">
+                            <li class="mdc-deprecated-list-item" role="option" data-second="false" tabindex="0">
+                                <span class="mdc-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">Erstimpfung</span>
+                            </li>
+                            <li class="mdc-deprecated-list-item" role="option" data-second="true">
+                                <span class="mdc-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">Zweitimpfung</span>
+                            </li>
+                            <li class="mdc-deprecated-list-divider" role="separator"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mdc-dialog__actions">
+                    <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Abbrechen</span>
+                    </button>
+                    <button type="button" class="mdc-button mdc-dialog__button mdc-button--raised" data-mdc-dialog-action="accept">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Bestätigen</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
 </div>
 <div id="bottom-container"></div>

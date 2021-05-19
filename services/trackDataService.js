@@ -252,30 +252,18 @@ async function remove(type, trackId, args) {
     if(isSwitched) {
         switchObj.originalType = args.originalType;
     }
-
-    //get version
-    let label = "track"+trackId;
-    let version = await Version.findOne({label: label});
-    if(!version){
-        console.log("no version file found. Generating new version history...")
-        version = new Version({
-            label: label,
-            version: 1,
-            timestamp: Date.now(),
-        });
+    let second = false;
+    if(args.second) {
+        second = args.second;
     }
-    else {
-        version.version++;
-    }
-    version.save();
 
     //delete last entry
     if (isSwitched) {
-        return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched, "switch.originalType": switchObj.originalType}).sort("-timestamp");
+        return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "second": second, "isSwitched": isSwitched, "switch.originalType": switchObj.originalType}).sort("-timestamp");
     }
     else {
         // return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched}).sort("-timestamp");
-        return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched}).sort("-timestamp");
+        return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "second": second, "isSwitched": isSwitched}).sort("-timestamp");
     }
 }
 

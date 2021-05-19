@@ -378,10 +378,11 @@ var ApiHandler = function() {
         return ret;
     };
 
-    self.removeTrackEntry = function (type, track) {
+    self.removeTrackEntry = function (type, track, second) {
         let jsonData = {
             type: type,
             trackId: track.id,
+            second: second,
         }
         let ret = $.ajax({
             url: "/api/v1/data/track/remove",

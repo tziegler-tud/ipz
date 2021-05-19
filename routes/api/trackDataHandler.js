@@ -124,6 +124,7 @@ function remove (req, res, next){
         next(err)
     }
     let args = {
+        second: req.body.second,
         isSwitched: req.body.isSwitched,
         originalType: req.body.originalType,
     }

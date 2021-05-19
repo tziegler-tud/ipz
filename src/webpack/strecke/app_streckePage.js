@@ -149,12 +149,15 @@ StreckePage.prototype.buildHtml = function(url, context, options){
         const dialog1 = new MDCDialog(document.querySelector('#dialog1'));
         const dialog2 = new MDCDialog(document.querySelector('#dialog2'));
         const dialog3 = new MDCDialog(document.querySelector('#dialog3'));
+        const dialogRemove = new MDCDialog(document.querySelector('#dialog-remove'));
         const list1 = new MDCList(document.querySelector('#dialog1 #dialog-select-list1'));
         const list2 = new MDCList(document.querySelector('#dialog2 #dialog-select-list2'));
         const list3 = new MDCList(document.querySelector('#dialog3 #dialog-select-list3'));
+        const listRemove = new MDCList(document.querySelector('#dialog-remove #dialog-select-remove'));
         const listItemRipples1 = list1.listElements.map((listItemEl) => new MDCRipple(listItemEl));
         const listItemRipples2 = list2.listElements.map((listItemEl) => new MDCRipple(listItemEl));
         const listItemRipples3 = list3.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+        const listItemRipplesRemove = listRemove.listElements.map((listItemEl) => new MDCRipple(listItemEl));
 
         //build dashboard
         self.dashboard = new Dashboard("strecke", self, {containerId: "dashboard-container"});
@@ -172,6 +175,7 @@ StreckePage.prototype.buildHtml = function(url, context, options){
         list1.singleSelection = true;
         list2.singleSelection = true;
         list3.singleSelection = true;
+        listRemove.singleSelection = true;
         dialog1.listen('MDCDialog:opened', () => {
             list1.layout();
         });
@@ -325,41 +329,58 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             if(self.mutex) return false;
             self.mutex = true;
             let type = parseInt($(this).closest(".choosing-item").data("type"));
-            /**
-             * @type {Object} c
-             * @property {HTMLElement} el
-             * @property {Counter} counter
-             * @property {String} name
-             */
-            let c = getCounter(type, self);
-            if (c.counter.get() === 0) {
-                self.mutex = false;
-                return false;
-            }
-            apiHandler.removeTrackEntry(type, self.track)
-                .done(function (result) {
-                    let message = "Eintrag entfernt: " + result.name;
-                    if (type !== 0) c.el.innerHTML = c.counter.decrease();
-                    self.updateTimer();
-                    self.soundboard.play("success")
-                    self.showSnackbar(message);
-                    self.mutex = false;
-                })
-                .fail(function(jqxhr, textstatus, error){
-                    let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
-                    let options = {
-                        timeout: -1,
-                        closeOnEscape: true,
-                        actionButton: {
-                            display: true,
-                            text: "Nagut",
-                        }
+
+
+            dialogRemove.open();
+
+            let removeFunc = function(event){
+                console.log("closed");
+                let detail = event.detail;
+                if(detail.action==="accept") {
+                    let second = (listRemove.listElements[listRemove.selectedIndex].dataset.second === "true");
+                    /**
+                     * @type {Object} c
+                     * @property {HTMLElement} el
+                     * @property {Counter} counter
+                     * @property {String} name
+                     */
+                    let c = getCounter(type, self, second);
+                    if (c.counter.get() === 0) {
+                        self.mutex = false;
+                        return false;
                     }
-                    self.showSnackbar(message, options);
+                    apiHandler.removeTrackEntry(type, self.track, second)
+                        .done(function (result) {
+                            let message = "Eintrag entfernt: " + result.name;
+                            if (type !== 0) c.el.innerHTML = c.counter.decrease();
+                            self.updateTimer();
+                            self.soundboard.play("success")
+                            self.showSnackbar(message);
+                            self.mutex = false;
+                        })
+                        .fail(function(jqxhr, textstatus, error){
+                            let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
+                            let options = {
+                                timeout: -1,
+                                closeOnEscape: true,
+                                actionButton: {
+                                    display: true,
+                                    text: "Nagut",
+                                }
+                            }
+                            self.showSnackbar(message, options);
+                            self.mutex = false;
+                        });
                     self.mutex = false;
-                });
-            self.mutex = false;
-        });
+
+                }
+                self.mutex = false;
+                dialogRemove.unlisten("MDCDialog:closed", removeFunc);
+            }
+
+            dialogRemove.listen("MDCDialog:closed", removeFunc);
+
+        })
         $(".switch-button").on("click", function() {
             self.dialogChoice = {};
             dialog1.open();
@@ -415,6 +436,7 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                     });
             }
         })
+
 
         self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
         if(options.snackbar.show) {
