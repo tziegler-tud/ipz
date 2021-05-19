@@ -17,9 +17,11 @@ function wait(req,res,next){
 // routes
 router.get('/', get);
 router.post('/add', addData);
+router.post('/update', update);
 router.get('/counts', getAllCounts);
 router.get('/counts/:trackId', getCounts);
 router.post('/remove', remove);
+router.post('/removeById', removeById);
 router.get('/getSwitched', getSwitched);
 router.get('/getSwitched/:trackId', getSwitched);
 router.get('/:trackId', get);
@@ -63,6 +65,20 @@ function get (req, res, next){
             .then(result => res.json(result))
             .catch(err => next(err));
     }
+}
+
+function update (req, res, next) {
+    let err = new Error("invalid arguments received")
+    if (req.body === undefined) {
+        next(err);
+    }
+    if(req.body.id === undefined){
+        next(err);
+    }
+
+    trackDataService.update(req.body.id, req.body)
+        .then(result => res.json(result))
+        .catch(err => next(err));
 }
 
 function getSwitched (req, res, next){
@@ -113,6 +129,22 @@ function remove (req, res, next){
     }
 
     trackDataService.remove(req.body.type, req.body.trackId, args)
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
+
+function removeById (req, res, next){
+    //validate data
+    let err = new Error("invalid arguments received")
+    if (req.body === undefined) {
+        next(err);
+    }
+    if(req.body.id === undefined){
+        next(err)
+    }
+
+    trackDataService.removeById(req.body.id)
         .then(result => res.json(result))
         .catch(err => next(err));
 }

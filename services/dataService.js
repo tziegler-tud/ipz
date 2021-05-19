@@ -103,28 +103,11 @@ async function add(object) {
         throw new Error("Invalid arguments received: Type is undefined");
     }
 
-    //get checkout version
-    // let version = await Version.findOne({label: "wb2"});
-    // if(!version){
-    //     console.log("no version file found. Generating new version history...")
-    //    version = new Version({
-    //         label: "wb2",
-    //         version: 1,
-    //         timestamp: Date.now(),
-    //     });
-    // }
-    // else {
-    //     version.version++;
-    // }
-    // version.save();
     //create new object
     let checkinDataObject = {
         type: object.type,
-        timestamp: Date.now(),
     }
 
-    //check if numbers are already registered
-    // CheckinData.find({ data: data })
     let checkinData = new CheckinData(checkinDataObject);
     await checkinData.save();
     return checkinData;
@@ -241,9 +224,9 @@ async function getLastOfAllTypes(filter) {
 
 
     if (filter===undefined || filter.filter === undefined || filter.value === undefined) {
-        b = await CheckinData.findOne({"type": 1}).sort({'currentStatus.timestamp': -1});
-        m = await CheckinData.findOne({"type": 2}).sort({'currentStatus.timestamp': -1});
-        a = await CheckinData.findOne({"type": 3}).sort({'currentStatus.timestamp': -1});
+        b = await CheckinData.findOne({"type": 1}).sort({'timestamp': -1});
+        m = await CheckinData.findOne({"type": 2}).sort({'timestamp': -1});
+        a = await CheckinData.findOne({"type": 3}).sort({'timestamp': -1});
     }
     else {
         let filter1 = {
@@ -259,9 +242,9 @@ async function getLastOfAllTypes(filter) {
         filter2[filter.filter] = filter.value;
         filter3[filter.filter] = filter.value;
         // return TrackData.find({isSwitched: true});
-        b = await CheckinData.findOne(filter1).sort({'currentStatus.timestamp': -1});
-        m = await CheckinData.findOne(filter1).sort({'currentStatus.timestamp': -1});
-        a = await CheckinData.findOne(filter1).sort({'currentStatus.timestamp': -1});
+        b = await CheckinData.findOne(filter1).sort({'timestamp': -1});
+        m = await CheckinData.findOne(filter2).sort({'timestamp': -1});
+        a = await CheckinData.findOne(filter3).sort({'timestamp': -1});
     }
 
     return {b: b,m: m, a: a};

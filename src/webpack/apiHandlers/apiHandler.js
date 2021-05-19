@@ -343,6 +343,41 @@ var ApiHandler = function() {
         });
     };
 
+    self.updateSwitchedEntry = function(id, originalType, newType) {
+        let jsonData = {
+            id: id,
+            type: newType,
+            isSwitched: true,
+            switch: {
+                originalType: originalType,
+                newType: newType,
+            }
+        }
+        return $.ajax({
+            url: "/api/v1/data/track/update",
+            // make put for safety reasons :-)
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
+        });
+    }
+
+    self.removeTrackEntryById = function (id) {
+        let jsonData = {
+            id: id,
+        }
+        let ret = $.ajax({
+            url: "/api/v1/data/track/removeById",
+            // make put for safety reasons :-)
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
+        });
+        return ret;
+    };
+
     self.removeTrackEntry = function (type, track) {
         let jsonData = {
             type: type,

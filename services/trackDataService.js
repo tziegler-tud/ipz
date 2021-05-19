@@ -12,6 +12,8 @@ module.exports = {
     getCounts,
     add,
     remove,
+    removeById,
+    update,
     updateVersion,
     getLastOfAllTypes,
     clearAll,
@@ -96,13 +98,32 @@ async function getCounts(track) {
     // }
     // return returnObject;
 
+    let dataB1;
+    let dataB2;
+    let dataM1;
+    let dataM2;
+    let dataA1;
+    let dataA2;
 
-    let dataB1 = TrackData.count({"type": 1, "second": false});
-    let dataB2 = TrackData.count({"type": 1, "second": true});
-    let dataM1 = TrackData.count({"type": 2, "second": false});
-    let dataM2 = TrackData.count({"type": 2, "second": true});
-    let dataA1 = TrackData.count({"type": 3, "second": false});
-    let dataA2 = TrackData.count({"type": 3, "second": true});
+    if(track === undefined) {
+            //find all tracks
+            track = 0;
+            dataB1 = TrackData.count({"type": 1, "second": false});
+            dataB2 = TrackData.count({"type": 1, "second": true});
+            dataM1 = TrackData.count({"type": 2, "second": false});
+            dataM2 = TrackData.count({"type": 2, "second": true});
+            dataA1 = TrackData.count({"type": 3, "second": false});
+            dataA2 = TrackData.count({"type": 3, "second": true});
+        }
+        else {
+            dataB1 = TrackData.count({"track.id": track.id, "type": 1, "second": false});
+            dataB2 = TrackData.count({"track.id": track.id, "type": 1, "second": true});
+            dataM1 = TrackData.count({"track.id": track.id, "type": 2, "second": false});
+            dataM2 = TrackData.count({"track.id": track.id, "type": 2, "second": true});
+            dataA1 = TrackData.count({"track.id": track.id, "type": 3, "second": false});
+            dataA2 = TrackData.count({"track.id": track.id, "type": 3, "second": true});
+        }
+
 
     //wait for query to finish
     const data = await Promise.all([dataB1, dataB2, dataM1, dataM2, dataA1, dataA2]);
@@ -174,6 +195,7 @@ async function add(object) {
     let trackDataObject = {
         type: object.type,
         track: object.track,
+        second: object.second,
         isSwitched: isSwitched,
         switch: switchObj,
     }
@@ -184,6 +206,29 @@ async function add(object) {
     await trackData.save();
     return trackData;
 }
+
+
+async function update(id, object) {
+    //validate
+    if (object === undefined) {
+        throw new Error("empty payload");
+    }
+
+    //find entry
+    let entry = await TrackData.findById(id);
+
+    //create new object
+    let trackDataObject = object;
+
+    Object.assign(entry, trackDataObject);
+
+    //check if numbers are already registered
+    // CheckinData.find({ data: data })
+    await entry.save();
+    return entry;
+}
+
+
 
 /**
  * @param type {Integer}
@@ -232,6 +277,16 @@ async function remove(type, trackId, args) {
         // return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched}).sort("-timestamp");
         return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched}).sort("-timestamp");
     }
+}
+
+async function removeById(id) {
+    if(id === undefined) {
+        throw new Error("Invalid arguments received: Track is undefined");
+    }
+
+    // let trackEntry = await TrackData.findById(id);
+    //delete by Id
+    return TrackData.findByIdAndRemove(id);
 }
 
 

@@ -9,6 +9,9 @@
 @use "../../../node_modules/@material/notched-outline/mdc-notched-outline";
 @use "../../../node_modules/@material/fab";
 @use "../../../node_modules/@material/card";
+@use "../../../node_modules/@material/list/mdc-list";
+@use "../../../node_modules/@material/menu-surface/mdc-menu-surface";
+@use "../../../node_modules/@material/menu/mdc-menu";
 
 
 @import "../app_pages";
@@ -160,5 +163,14 @@
         }
       }
     }
+  }
+}
+
+.switch-entry-menu {
+  right: 0 !important;
+  left: unset !important;
+
+  .switch-entry-menu__delete {
+    color: #af1616;
   }
 }
