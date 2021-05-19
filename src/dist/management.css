@@ -16770,6 +16770,9 @@ a.mdc-list-item {
   right: 0 !important;
   left: unset !important;
 }
+.switch-entry-menu .switch-entry-menu__delete {
+  color: #af1616;
+}
 
 .mdc-deprecated-list {
   -moz-osx-font-smoothing: grayscale;

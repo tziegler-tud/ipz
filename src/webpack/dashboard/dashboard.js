@@ -5,6 +5,7 @@ import {MDCRipple} from "@material/ripple";
 import {MDCSwitch} from '@material/switch';
 import {MDCDataTable} from '@material/data-table';
 import {MDCMenu} from '@material/menu';
+import {MDCDialog} from '@material/dialog';
 
 
 import {apiHandler} from "../apiHandlers/apiHandler";
@@ -27,6 +28,7 @@ var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 var Dashboard = function(type, activePage, options){
     let self = this;
     let url;
+    self.editMenuId = null;
     self.activePage = activePage;
     var applyArgs = function(options){
         let defaults = {
@@ -206,6 +208,43 @@ Dashboard.prototype.createTrackDashboard = function(activePage, url, options) {
                 var template = Handlebars.compile(data);
                 self.container.innerHTML = template(context);
                 const dataTable = new MDCDataTable(document.querySelector('.mdc-data-table'));
+                const deleteDialog = new MDCDialog(document.querySelector('#switch-delete-dialog'));
+                const editDialog = new MDCDialog(document.querySelector('#switch-edit-dialog'));
+                const list1 = new MDCList(document.querySelector('#switch-edit-dialog #dialog-select-list1'));
+                const list2 = new MDCList(document.querySelector('#switch-edit-dialog #dialog-select-list2'));
+                const listItemRipples1 = list1.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+                const listItemRipples2 = list2.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+
+                list1.singleSelection = true;
+                list2.singleSelection = true;
+
+                deleteDialog.listen("MDCDialog:closed", function(event){
+                    let detail = event.detail;
+                    if(detail.action==="delete") {
+                        //delete switch entry
+                        apiHandler.removeTrackEntryById(self.editMenuId)
+                            .done(function(result){
+                                self.activePage.refreshDashboard();
+                            })
+                        self.editMenuId = null;
+
+
+                    }
+                })
+                editDialog.listen("MDCDialog:closed", function(event){
+                    let detail = event.detail;
+                    let originalType = parseInt(list1.listElements[list1.selectedIndex].dataset.type);
+                    let newType =  parseInt(list2.listElements[list2.selectedIndex].dataset.type);
+                    if(detail.action==="accept") {
+                        //update switch entry
+                        apiHandler.updateSwitchedEntry(self.editMenuId, originalType, newType)
+                            .done(function(result){
+                                self.activePage.refreshDashboard();
+                            });
+                        self.editMenuId = null;
+
+                    }
+                })
 
                 //switched entry modification dialog
                 let selector = ".switch-entry-menu";
@@ -213,9 +252,27 @@ Dashboard.prototype.createTrackDashboard = function(activePage, url, options) {
                     let i = this.dataset.index;
                     let id = this.dataset.id;
                     let menuElement = document.getElementById("switch-entry-menu--" + i);
+                    let top = this.offsetTop;
                     let menu = new MDCMenu(menuElement);
+                    menuElement.style.transform = "translateY("+top+"px)";
+                    let outer = this;
+
                     $(this).on("click", function(){
+                        self.editMenuId = outer.dataset.id;
                         menu.open = true;
+                    })
+
+                    menu.listen("MDCMenu:selected", function(e){
+                        let detail = e.detail;
+                        let item = detail.item;
+                        //edit clicked
+                        if (item.dataset.action === "edit") {
+                            editDialog.open();
+                        }
+                        if (item.dataset.action === "delete") {
+                            deleteDialog.open();
+                        }
+
                     })
 
                 })

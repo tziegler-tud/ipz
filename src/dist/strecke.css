@@ -16805,6 +16805,9 @@ a.mdc-list-item {
   right: 0 !important;
   left: unset !important;
 }
+.switch-entry-menu .switch-entry-menu__delete {
+  color: #af1616;
+}
 
 /**
  * @license

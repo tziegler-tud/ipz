@@ -12,6 +12,8 @@ module.exports = {
     getCounts,
     add,
     remove,
+    removeById,
+    update,
     updateVersion,
     getLastOfAllTypes,
     clearAll,
@@ -160,6 +162,29 @@ async function add(object) {
     return trackData;
 }
 
+
+async function update(id, object) {
+    //validate
+    if (object === undefined) {
+        throw new Error("empty payload");
+    }
+
+    //find entry
+    let entry = await TrackData.findById(id);
+
+    //create new object
+    let trackDataObject = object;
+
+    Object.assign(entry, trackDataObject);
+
+    //check if numbers are already registered
+    // CheckinData.find({ data: data })
+    await entry.save();
+    return entry;
+}
+
+
+
 /**
  * @param type {Integer}
  * @param trackId {ObjectId}
@@ -207,6 +232,16 @@ async function remove(type, trackId, args) {
         // return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched}).sort("-timestamp");
         return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched}).sort("-timestamp");
     }
+}
+
+async function removeById(id) {
+    if(id === undefined) {
+        throw new Error("Invalid arguments received: Track is undefined");
+    }
+
+    // let trackEntry = await TrackData.findById(id);
+    //delete by Id
+    return TrackData.findByIdAndRemove(id);
 }
 
 
