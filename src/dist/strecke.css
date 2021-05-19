@@ -24298,7 +24298,7 @@ a.mdc-list-item {
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .sublabel {
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .sublabel span {
   display: block;
