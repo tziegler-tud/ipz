@@ -24295,6 +24295,15 @@ a.mdc-list-item {
     font-size: 90%;
   }
 }
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .sublabel {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .sublabel span {
+  display: block;
+  flex: 1 1 50%;
+}
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .choosing-card__action-section .choosing-card-counter {
   top: unset;
   bottom: 20px;

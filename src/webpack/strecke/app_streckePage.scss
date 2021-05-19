@@ -125,6 +125,17 @@
                   font-size: 90%;
                 }
               }
+              .sublabel {
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: space-between;
+
+                span {
+                  display: block;
+                  flex: 1 1 50%;
+                }
+              }
+
               .choosing-card__action-section {
                 .choosing-card-counter {
                   //left: 50%;
