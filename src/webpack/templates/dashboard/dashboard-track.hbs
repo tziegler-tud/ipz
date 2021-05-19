@@ -73,11 +73,24 @@
                                     </thead>
                                     <tbody class="mdc-data-table__content">
                                     {{#each data.switch.table}}
-                                        <tr class="mdc-data-table__row">
+                                        <tr class="mdc-data-table__row mdc-menu-surface--anchor">
                                             <th class="mdc-data-table__cell" scope="row">{{this.switch.originalTypeName}}</th>
                                             <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{this.switch.newTypeName}}</td>
                                             <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{transformTimeString this.timestamp}}</td>
+                                            <td class="switch-entry-actions" data-index="{{@index}}" data-id="{{this.id}}"><button class="material-icons mdc-icon-button" aria-label="Options">more_vert</button></td>
                                         </tr>
+                                        <div id="switch-entry-menu--{{@index}}" class="mdc-menu mdc-menu-surface switch-entry-menu">
+                                            <ul class="mdc-deprecated-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                                                <li class="mdc-deprecated-list-item" role="menuitem">
+                                                    <span class="mdc-deprecated-list-item__ripple"></span>
+                                                    <span class="mdc-deprecated-list-item__text">A Menu Item</span>
+                                                </li>
+                                                <li class="mdc-deprecated-list-item" role="menuitem">
+                                                    <span class="mdc-deprecated-list-item__ripple"></span>
+                                                    <span class="mdc-deprecated-list-item__text">Another Menu Item</span>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     {{/each}}
                                     </tbody>
                                 </table>

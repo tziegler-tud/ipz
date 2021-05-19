@@ -4,6 +4,8 @@ import {MDCDrawer} from "@material/drawer";
 import {MDCRipple} from "@material/ripple";
 import {MDCSwitch} from '@material/switch';
 import {MDCDataTable} from '@material/data-table';
+import {MDCMenu} from '@material/menu';
+
 
 import {apiHandler} from "../apiHandlers/apiHandler";
 
@@ -204,6 +206,20 @@ Dashboard.prototype.createTrackDashboard = function(activePage, url, options) {
                 var template = Handlebars.compile(data);
                 self.container.innerHTML = template(context);
                 const dataTable = new MDCDataTable(document.querySelector('.mdc-data-table'));
+
+                //switched entry modification dialog
+                let selector = ".switch-entry-menu";
+                $(".switch-entry-actions").each(function(index){
+                    let i = this.dataset.index;
+                    let id = this.dataset.id;
+                    let menuElement = document.getElementById("switch-entry-menu--" + i);
+                    let menu = new MDCMenu(menuElement);
+                    $(this).on("click", function(){
+                        menu.open = true;
+                    })
+
+                })
+
             });
         });
 
