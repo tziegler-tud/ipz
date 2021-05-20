@@ -12,9 +12,11 @@
 @use "../../node_modules/@material/textfield";
 @use "../../node_modules/@material/textfield/icon";
 @use "../../node_modules/@material/fab";
+@use "../../node_modules/@material/dialog";
 
 @import "./app_pages";
 @import "./dashboard/dashboard";
+@import "./app_bottom";
 
 @import "./variables";
 @import "./color-variables";
@@ -30,6 +32,7 @@
 @include textfield.core-styles;
 @include icon.icon-core-styles;
 @include fab.core-styles;
+@include dialog.core-styles;
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

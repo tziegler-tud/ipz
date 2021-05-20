@@ -26,6 +26,7 @@ var ManagementPage = function(args){
     self.page = undefined;
     self.dataVersion = 0;
     self.refreshInterval = undefined;
+    self.refreshEnabled = true;
     //get current entries
     //render html
 
@@ -55,11 +56,19 @@ ManagementPage.prototype.refresh = function(self, options){
 
     console.log("refreshing page");
     //check if this page is active
-    if (!self.active){
+    if (!self.active || !self.refreshEnabled){
         return null;
     }
     self.update(options);
 
+}
+
+ManagementPage.prototype.disableRefresh = function(){
+    this.refreshEnabled = false;
+}
+
+ManagementPage.prototype.enableRefresh = function(){
+    this.refreshEnabled = true;
 }
 
 ManagementPage.prototype.update = function(options){
