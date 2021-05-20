@@ -412,7 +412,7 @@ StreckePage.prototype.buildHtml = function(url, context, options){
         dialog3.listen("MDCDialog:closed", function(event){
             let detail = event.detail;
             if(detail.action==="accept") {
-                let secondString = parseInt(list3.listElements[list3.selectedIndex].dataset.second);
+                let secondString = list3.listElements[list3.selectedIndex].dataset.second;
                 let second = (secondString === "true");
                 console.log(detail.action);
                 let counter = getCounter(self.dialogChoice.newType, self, second);
@@ -487,6 +487,39 @@ StreckePage.prototype.refreshDashboard = function(){
     self.dashboard = new Dashboard("strecke", self, {containerId: "dashboard-container"});
 }
 
+StreckePage.prototype.refreshCounters = function(){
+    let self = this;
+    if(self.counters.b === undefined) return false;
+    apiHandler.getTrackCounts(self.track)
+        .done(function(result){
+            self.counters.b.first.counter.set(result.counters.b.first);
+            self.counters.b.second.counter.set(result.counters.b.second);
+            self.counters.m.first.counter.set(result.counters.m.first);
+            self.counters.m.second.counter.set(result.counters.m.second);
+            self.counters.a.first.counter.set(result.counters.a.first);
+            self.counters.a.second.counter.set(result.counters.a.second);
+
+            self.counters.b.first.el.innerHTML = self.counters.b.first.counter.get();
+            self.counters.b.second.el.innerHTML = self.counters.b.second.counter.get();
+            self.counters.m.first.el.innerHTML = self.counters.m.first.counter.get();
+            self.counters.m.second.el.innerHTML = self.counters.m.second.counter.get();
+            self.counters.a.first.el.innerHTML = self.counters.a.first.counter.get();
+            self.counters.a.second.el.innerHTML = self.counters.a.second.counter.get();
+        })
+        .fail(function(jqxhr, textstatus, error){
+            let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
+            let options = {
+                timeout: -1,
+                closeOnEscape: true,
+                actionButton: {
+                    display: true,
+                    text: "Nagut",
+                }
+            }
+            self.showSnackbar(message, options)
+        });
+}
+
 StreckePage.prototype.activateTab = function(element){
     let self = this;
     //remove active class from all tabs
@@ -496,6 +529,7 @@ StreckePage.prototype.activateTab = function(element){
     //add active class to current element
     element.classList.add("tab--active");
     self.refreshDashboard();
+    self.refreshCounters();
     return true;
 }
 

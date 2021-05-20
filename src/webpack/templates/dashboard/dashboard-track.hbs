@@ -111,6 +111,7 @@
                                     <tr class="mdc-data-table__header-row">
                                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Geplant</th>
                                         <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Wechsel auf</th>
+                                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Erst-/Zweitimpfung</th>
                                         <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Uhrzeit</th>
                                     </tr>
                                     </thead>
@@ -119,6 +120,7 @@
                                         <tr class="mdc-data-table__row">
                                             <th class="mdc-data-table__cell" scope="row">{{this.switch.originalTypeName}}</th>
                                             <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{this.switch.newTypeName}}</td>
+                                            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{#if this.second}}2.{{else}}1.{{/if}}</td>
                                             <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{transformTimeString this.timestamp}}</td>
                                             <td class="switch-entry-actions" data-index="{{@index}}" data-id="{{this.id}}"><button class="material-icons mdc-icon-button" aria-label="Options">more_vert</button></td>
                                         </tr>
@@ -211,6 +213,18 @@
                             <li class="mdc-deprecated-list-item" role="option" data-type="3">
                                 <span class="mdc-list-item__ripple"></span>
                                 <span class="mdc-deprecated-list-item__text">Astrazenecca</span>
+                            </li>
+                            <li class="mdc-deprecated-list-divider" role="separator"></li>
+                        </ul>
+                        <h3 class="mdc-list-group__subheader">Erst-/ Zweitimpfung:</h3>
+                        <ul id="dialog-select-list3" class="mdc-deprecated-list mdc-deprecated-list--avatar-list">
+                            <li class="mdc-deprecated-list-item" role="option" data-second="false" tabindex="0">
+                                <span class="mdc-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">Erstimpfung</span>
+                            </li>
+                            <li class="mdc-deprecated-list-item" role="option" data-second="true">
+                                <span class="mdc-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">Zweitimpfung</span>
                             </li>
                             <li class="mdc-deprecated-list-divider" role="separator"></li>
                         </ul>

@@ -212,11 +212,14 @@ Dashboard.prototype.createTrackDashboard = function(activePage, url, options) {
                 const editDialog = new MDCDialog(document.querySelector('#switch-edit-dialog'));
                 const list1 = new MDCList(document.querySelector('#switch-edit-dialog #dialog-select-list1'));
                 const list2 = new MDCList(document.querySelector('#switch-edit-dialog #dialog-select-list2'));
+                const list3 = new MDCList(document.querySelector('#switch-edit-dialog #dialog-select-list3'));
                 const listItemRipples1 = list1.listElements.map((listItemEl) => new MDCRipple(listItemEl));
                 const listItemRipples2 = list2.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+                const listItemRipples3 = list3.listElements.map((listItemEl) => new MDCRipple(listItemEl));
 
                 list1.singleSelection = true;
                 list2.singleSelection = true;
+                list3.singleSelection = true;
 
                 deleteDialog.listen("MDCDialog:closed", function(event){
                     let detail = event.detail;
@@ -235,9 +238,11 @@ Dashboard.prototype.createTrackDashboard = function(activePage, url, options) {
                     let detail = event.detail;
                     let originalType = parseInt(list1.listElements[list1.selectedIndex].dataset.type);
                     let newType =  parseInt(list2.listElements[list2.selectedIndex].dataset.type);
+                    let secondString = list3.listElements[list3.selectedIndex].dataset.second;
+                    let second = (secondString === "true");
                     if(detail.action==="accept") {
                         //update switch entry
-                        apiHandler.updateSwitchedEntry(self.editMenuId, originalType, newType)
+                        apiHandler.updateSwitchedEntry(self.editMenuId, originalType, newType, second)
                             .done(function(result){
                                 self.activePage.refreshDashboard();
                             });

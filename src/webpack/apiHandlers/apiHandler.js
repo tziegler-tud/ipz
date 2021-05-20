@@ -319,19 +319,22 @@ var ApiHandler = function() {
      * @param originalType {Integer} type 0=null, 1=B, 2=M, 3=A
      * @param newType {Integer} type 0=null, 1=B, 2=M, 3=A
      * @param track {Track}
+     * @param second {Boolean} true if Zweitimpfung
      *
      *
      * @return {Object}
      */
-    self.addSwitchedTrackEntry = function (originalType, newType, track) {
+    self.addSwitchedTrackEntry = function (originalType, newType, track, second) {
         let jsonData = {
             type: newType,
             track: track,
+            second: second,
             isSwitched: true,
             switch: {
                 originalType: originalType,
                 newType: newType,
-            }
+            },
+
         }
         return $.ajax({
             url: "/api/v1/data/track/add",
@@ -343,10 +346,11 @@ var ApiHandler = function() {
         });
     };
 
-    self.updateSwitchedEntry = function(id, originalType, newType) {
+    self.updateSwitchedEntry = function(id, originalType, newType, second) {
         let jsonData = {
             id: id,
             type: newType,
+            second: second,
             isSwitched: true,
             switch: {
                 originalType: originalType,
