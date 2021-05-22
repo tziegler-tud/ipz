@@ -78,14 +78,45 @@ async function archiveCurrentDay() {
     let today = dateTransformer.transformDateTimeString(Date.now()).date;
     let todaysArchive = await Archive.findOne({"date": today});
 
-    let args = {
-        sort: {"timestamp": 1},
-    }
-    //create new object
-    let trackData = await trackDataService.getAll(args);
-    let checkinData = await checkinDataService.getAll(args);
+
+    /*
+    Careful: sorting limits results to 1000 documents in mongo 2.6. To prevent this for now, we must retrieve the data unsorted and do a custom sorting.
+     This is a major setback in performance, but acceptable as this happens only once a day at midnight.
+     TODO: Update Mongo version on rasperry pi to >3.2 (64bit) and let mongo sort the data
+     */
+
+    /*
+    code for mongo >3.2
+    */
+    // let args = {
+    //     sort: {"timestamp": 1},
+    // }
+    //
+    // //create new object
+    // let trackData = await trackDataService.getAll(args);
+    // let checkinData = await checkinDataService.getAll(args);
+    // let tracks = await trackService.get();
+    // let settings = await settingsService.get();
+
+    /*
+    code for mongo 2.6
+     */
+    let trackData = await trackDataService.getAll();
+    let checkinData = await checkinDataService.getAll();
     let tracks = await trackService.get();
     let settings = await settingsService.get();
+
+    //sort track and checkin data by timestamp
+    trackData.sort(function(first, second){
+        return first.timestamp - second.timestamp;
+    })
+
+    checkinData.sort(function(first, second){
+        return first.timestamp - second.timestamp;
+    })
+
+
+
 
     let ArchiveObject = {
         timestamp: Date.now(),

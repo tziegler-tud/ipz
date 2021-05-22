@@ -27,11 +27,34 @@ async function getById(id) {
     let archive, trackData, checkinData, date;
     if(id === undefined) {
         //get current
-        const trackDataPromise = trackDataService.getAll({sort: {"timestamp": 1}});
-        const checkinDataPromise = checkinDataService.getAll({sort: {"timestamp":1}});
+
+        /*
+        code for mongo >3.2
+         */
+
+        // const trackDataPromise = trackDataService.getAll({sort: {"timestamp": 1}});
+        // const checkinDataPromise = checkinDataService.getAll({sort: {"timestamp":1}});
+
+        /*
+        code for mongo 2.6
+       */
+        // TODO: Update mongo on pi to >3.2 and re-enable query sorting.
+
+        const trackDataPromise = trackDataService.getAll();
+        const checkinDataPromise = checkinDataService.getAll();
+
         const data = await Promise.all([trackDataPromise, checkinDataPromise]);
         trackData = data[0];
         checkinData = data[1];
+
+        //sort track and checkin data by timestamp
+        trackData.sort(function(first, second){
+            return first.timestamp - second.timestamp;
+        })
+
+        checkinData.sort(function(first, second){
+            return first.timestamp - second.timestamp;
+        })
         date = dateTransformer.transformDateTimeString(Date.now()).date;
 
     }
@@ -160,6 +183,7 @@ async function getOverview() {
             date: archiveElement.date,
             total: archiveElement.data.trackDatas.length,
             current: false,
+            archiveId: archiveElement.id,
         })
     })
     return entries;
