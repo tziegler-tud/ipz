@@ -74,6 +74,10 @@ Dashboard.prototype.intialize = function(type, activePage, options){
             url = "/webpack/templates/dashboard/dashboard-apotheke.hbs";
             self.createApothekeDashboard(activePage, url, options);
             break;
+        case "modules":
+            url = "/webpack/templates/dashboard/dashboard-container.hbs";
+            self.createModularDashboard(activePage, url, options);
+            break;
         default:
             break;
     }
@@ -83,6 +87,22 @@ Dashboard.prototype.intialize = function(type, activePage, options){
 Dashboard.prototype.addComponent = function(componentType) {
 
 }
+Dashboard.prototype.createModularDashboard = function(activePage, url, options) {
+    let self = this;
+    self.isModular = true;
+    self.modules = [];
+
+
+
+    $.get(url, function (data) {
+        let context = {
+            header: options.header,
+        }
+        var template = Handlebars.compile(data);
+        self.container.innerHTML = template(context);
+    });
+}
+
 
 Dashboard.prototype.createManagementDashboard = function(activePage, url, options) {
     let self = this;
