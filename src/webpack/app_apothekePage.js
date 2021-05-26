@@ -26,6 +26,7 @@ var ApothekePage = function(args){
     self.page = undefined;
     self.dataVersion = 0;
     self.refreshInterval = undefined;
+    self.dashboards = [];
     //get current entries
     //render html
 
@@ -65,7 +66,7 @@ ApothekePage.prototype.refresh = function(self, options){
 ApothekePage.prototype.update = function(options){
     let self = this;
     //rebuild dashboard
-    self.dashboard = new Dashboard("apotheke", self, {containerId: "dashboard-container"});
+    self.refreshDashboard();
 
 
 }
@@ -99,7 +100,11 @@ ApothekePage.prototype.buildHtml = function(url, context, options){
         }
 
         //build dashboard
-        self.dashboard = new Dashboard("apotheke", self, {containerId: "dashboard-container"});
+        // self.dashboard = new Dashboard("apotheke", self, {containerId: "dashboard-container"});
+        self.figures = new Dashboard("modules", self, {containerId: "dashboard-container"});
+        self.figures.addComponent("figures-apotheke");
+
+        self.dashboards.push(self.figures);
     });
 }
 
@@ -181,7 +186,9 @@ ApothekePage.prototype.getTabNavigationInterface = function(){
 ApothekePage.prototype.refreshDashboard = function(){
     let self = this;
     //rebuild dashboard
-    self.dashboard = new Dashboard("apotheke", self, {containerId: "dashboard-container"});
+    self.dashboards.forEach(function(dashboard) {
+        dashboard.refresh();
+    });
 }
 
 ApothekePage.prototype.activateTab = function(element){

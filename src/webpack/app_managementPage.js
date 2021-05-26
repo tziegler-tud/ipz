@@ -27,6 +27,7 @@ var ManagementPage = function(args){
     self.dataVersion = 0;
     self.refreshInterval = undefined;
     self.refreshEnabled = true;
+    self.dashboards = [];
     //get current entries
     //render html
 
@@ -74,7 +75,8 @@ ManagementPage.prototype.enableRefresh = function(){
 ManagementPage.prototype.update = function(options){
     let self = this;
     //rebuild dashboard
-    self.dashboard = new Dashboard("management", self, {containerId: "dashboard-container"});
+    // self.dashboard = new Dashboard("management", self, {containerId: "dashboard-container"});
+    self.refreshDashboard();
 
 
 }
@@ -98,6 +100,15 @@ ManagementPage.prototype.buildHtml = function(url, context, options){
         self.page = document.getElementById("management-page");
         self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
 
+        self.figures = new Dashboard("modules", self, {containerId: "dashboard-container"});
+        self.figures.addComponent("figures-management");
+
+        self.switches = new Dashboard("modules", self, {containerId: "switched-container"});
+        self.switches.addComponent("switches");
+
+        self.dashboards.push(self.figures);
+        self.dashboards.push(self.switches);
+
         //setup tab navigation interface
         if (options.tabs){
             self.tabs = self.initTabs();
@@ -108,7 +119,7 @@ ManagementPage.prototype.buildHtml = function(url, context, options){
         }
 
         //build dashboard
-        self.dashboard = new Dashboard("management", self, {containerId: "dashboard-container"});
+        // self.dashboard = new Dashboard("management", self, {containerId: "dashboard-container"});
     });
 }
 
@@ -190,7 +201,10 @@ ManagementPage.prototype.getTabNavigationInterface = function(){
 ManagementPage.prototype.refreshDashboard = function(){
     let self = this;
     //rebuild dashboard
-    self.dashboard = new Dashboard("management", self, {containerId: "dashboard-container"});
+    // self.dashboard = new Dashboard("management", self, {containerId: "dashboard-container"});
+    self.dashboards.forEach(function(dashboard) {
+        dashboard.refresh();
+    });
 }
 
 ManagementPage.prototype.activateTab = function(element){

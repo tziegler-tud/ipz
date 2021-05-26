@@ -150,6 +150,13 @@
             }
           }
 
+          &.figures--vials {
+            .dashboard-component-value__text {
+              color: #333 !important;
+            }
+
+          }
+
         }
 
       }

@@ -16793,6 +16793,9 @@ a.mdc-list-item {
 .dashboard .dashboard-inner .dashboard-component-container .dashboard-component-figures .figures-part.figures--astra .dashboard-component-value__text {
   color: #0013bd;
 }
+.dashboard .dashboard-inner .dashboard-component-container .dashboard-component-figures .figures-part.figures--vials .dashboard-component-value__text {
+  color: #333 !important;
+}
 .dashboard .dashboard-inner .dashboard-component-container .dashboard-component-dataTable .dashboard-subcomponent-table {
   width: 80%;
   margin: 10px 0;

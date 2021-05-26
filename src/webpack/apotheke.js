@@ -39,7 +39,7 @@ let apothekePage = new ApothekePage();
 apothekePage.show({tabs: true})
     .done(function(){
     // sidesheet = new Sidesheet("checkin", managementPage, {});
-    bottomTabs =  new Bottom("management", apothekePage, {})
+    // bottomTabs =  new Bottom("management", apothekePage, {})
 });
 
 nav.initialize
