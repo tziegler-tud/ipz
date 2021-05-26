@@ -206,14 +206,23 @@ DashboardComponent.prototype.getData = function(){
                             let wasModerna = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 2);
                             let wasAstra = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 3);
 
+                            let adjustedBiontech = checkinCounts.counters.b + biontechSwitched.length - wasBiontech.length;
+                            let adjustedModerna = checkinCounts.counters.m + modernaSwitched.length - wasModerna.length;
+                            let adjustedAstra = checkinCounts.counters.a + astraSwitched.length - wasAstra.length;
+
                             let data = {
                                 checkin: {
                                     total: {
                                         all: checkinCounts.total,
-                                        biontech: checkinCounts.counters.b + biontechSwitched.length - wasBiontech.length,
-                                        moderna: checkinCounts.counters.m + modernaSwitched.length - wasModerna.length,
-                                        astra: checkinCounts.counters.a + astraSwitched.length - wasAstra.length,
-                                    }
+                                        biontech: adjustedBiontech,
+                                        moderna: adjustedModerna,
+                                        astra: adjustedAstra,
+                                    },
+                                    vials: {
+                                        biontech: Math.ceil((adjustedBiontech) / vialSize.biontech),
+                                        moderna: Math.ceil((adjustedModerna) / vialSize.moderna),
+                                        astra: Math.ceil((adjustedAstra) / vialSize.astra),
+                                    },
                                 },
                                 track: {
                                     total: {
