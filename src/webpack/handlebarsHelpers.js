@@ -16,3 +16,7 @@ Handlebars.registerHelper('checklength', function (v1, v2, options) {
     }
     return options.inverse(this);
 });
+
+Handlebars.registerHelper('add', function (x, y) {
+    return x+y;
+});

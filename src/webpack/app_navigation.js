@@ -21,6 +21,7 @@ var Navigation = function(context, options){
     let url;
     self.drawer = null;
     self.persistentSubpage = null;
+    self.navigationElements = [];
 
     if (phone.matches || tablet.matches) url = '/webpack/templates/navigation/navigation-mobile.hbs';
     else url = '/webpack/templates/navigation/navigation.hbs';
@@ -57,7 +58,7 @@ var Navigation = function(context, options){
             self.navigationElements = document.getElementsByClassName("navigation-element");
             const topAppBarElement = document.querySelector('.mdc-top-app-bar');
             self.subpageContainer = document.querySelector('.subpage-container');
-            self.subpageHandler = new SubpageHandler(self.subpageContainer);
+            self.subpageHandler = new SubpageHandler(self.subpageContainer, self);
 
             if (self.options.topbar) {
                 const topAppBar = new MDCTopAppBar(topAppBarElement);
@@ -153,9 +154,15 @@ Navigation.prototype.setTitle = function(text){
 }
 
 Navigation.prototype.setActiveElement = function(domId){
+    let self = this;
     //find in navigation elements
+    Array.prototype.forEach.call(self.navigationElements, function(el) {
+        // Do stuff here
+        el.classList.remove("mdc-deprecated-list-item--activated");
+    });
     const el = this.navigationElements.namedItem(domId);
     el.classList.add("mdc-deprecated-list-item--activated");
+
 }
 
 Navigation.prototype.adjustWrapper = function(topAppBar){
@@ -193,9 +200,10 @@ Navigation.prototype.toggle = function(){
 Navigation.prototype.addSubpage = function(type, context, show, navElementId, persistent){
     //proxies to subpageHandler
     let subpage = this.subpageHandler.addSubpage(type, context, show, navElementId, persistent);
+    return subpage;
 }
 
-let SubpageHandler = function(subpageContainer){
+let SubpageHandler = function(subpageContainer, navObject){
     let self = this;
     let counter = 0;
     self.subpageContainer = subpageContainer;
@@ -242,6 +250,8 @@ let SubpageHandler = function(subpageContainer){
                 if(show) {
                     self.showSubpage(subpage.id)
                 }
+                //add subpage navigation elements
+                navObject.navigationElements = document.getElementsByClassName("navigation-element");
                 //hook event listener to show main
                 $(".navigation-subpage-mainlink").on("click", function(){
                     self.showMain();
@@ -325,6 +335,10 @@ let Subpage = function(id, type, context){
             subpageUrl = '/webpack/templates/navigation/subpage-statistics.hbs';
             this.title = "statistics";
             break;
+        case "management":
+            subpageUrl = '/webpack/templates/navigation/subpage-management.hbs';
+            this.title = "Teamleiter";
+            break;
         default:
             //main
             subpageUrl = '/webpack/templates/navigation/subpage-main.hbs'
@@ -342,6 +356,7 @@ let Subpage = function(id, type, context){
             subpageWrapper.classList.add("navigation-subpage-" + self.title);
             subpageWrapper.innerHTML = template(context);
             self.container = subpageWrapper;
+            self.navigationElements = document.getElementsByClassName("navigation-element");
 
             resolve(subpageWrapper);
         })

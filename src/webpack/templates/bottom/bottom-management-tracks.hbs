@@ -1,0 +1,24 @@
+<div id="bottom" class="app-bottom bottom-navigation">
+    <div class="bottom-navigation-inner">
+        <div class="mdc-tab-bar" role="tablist">
+            <div class="mdc-tab-scroller">
+                <div class="mdc-tab-scroller__scroll-area">
+                    <div class="mdc-tab-scroller__scroll-content">
+                        {{#each tracks}}
+                            <button id="tab{{add @index 1}}" class="mdc-tab {{#if @first}}mdc-tab--active{{/if}}" role="tab" aria-selected="true" data-tabid="{{add @index 1}}" tabindex="0">
+                            <span class="mdc-tab__content">
+                                <span class="mdc-tab__icon material-icons" aria-hidden="true">trending_up</span>
+                                <span class="mdc-tab__text-label">{{this.name}}</span>
+                            </span>
+                                <span class="mdc-tab-indicator {{#if @first}}mdc-tab-indicator--active{{/if}} ">
+                                <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                            </span>
+                                <span class="mdc-tab__ripple"></span>
+                            </button>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

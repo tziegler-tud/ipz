@@ -15,10 +15,11 @@ var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
  * @param type {String} Type of bottom. Valid types are: ["mangement", "strecke"]
  * @param options {Object}
  * @param activePage {Page}
+ * @param context {Object}
  * @returns {Bottom}
  * @constructor
  */
-var Bottom = function(type, activePage, options){
+var Bottom = function(type, activePage, options, context){
     let self = this;
     let url;
     self.active = false;
@@ -37,11 +38,11 @@ var Bottom = function(type, activePage, options){
         //try again later
         $(window).on("load", function(){
             self.container = document.getElementById(self.options.containerId);
-            self.setContent(type, activePage, options);
+            self.setContent(type, activePage, options, context);
         })
     }
     else {
-        self.setContent(type, activePage, options);
+        self.setContent(type, activePage, options, context);
     }
     return self;
 }
@@ -51,8 +52,9 @@ var Bottom = function(type, activePage, options){
  * @param type {String} Type of bottom bar. Valid types are: ["checkin", "wb1", "strecke"]
  * @param options {Object}
  * @param activePage {Page}
+ * @param context {Object}
  */
-Bottom.prototype.setContent = function(type, activePage, options){
+Bottom.prototype.setContent = function(type, activePage, options, context){
     let self = this;
     let defaultOptions = {
         show: false,
@@ -71,17 +73,19 @@ Bottom.prototype.setContent = function(type, activePage, options){
             break;
         case "management":
             url = "/webpack/templates/bottom/bottom-management.hbs";
-            self.createManagementPage(activePage, options);
+            self.createManagementPage(activePage, url, options, context);
+            break;
+        case "management-tracks":
+            url = "/webpack/templates/bottom/bottom-management-tracks.hbs";
+            self.createManagementPage(activePage, url, options, context);
             break;
         case "strecke":
             url = "/webpack/templates/bottom/bottom-track.hbs";
-            self.createTrackPage(activePage, options);
+            self.createTrackPage(activePage, url, options, context);
             break;
         default:
-
             break;
     }
-    let context = {};
 }
 
 /**
@@ -105,15 +109,13 @@ Bottom.prototype.createWb1Page = function(activePage, options){
 
 /**
  *
- * @param activePage
- * @param options
+ * @param activePage {Page}
+ * @param url {String}
+ * @param options {Object}
  */
-Bottom.prototype.createTrackPage = function(activePage, options){
+Bottom.prototype.createTrackPage = function(activePage, url, options, context){
     let self = this;
-    let url = "/webpack/templates/bottom/bottom-track.hbs";
-    let context = {
-
-    };
+    context = (context === undefined) ? {} : context;
     $.get(url, function (data) {
         var template = Handlebars.compile(data);
         self.container.innerHTML = template(context);
@@ -186,19 +188,19 @@ Bottom.prototype.createTrackPage = function(activePage, options){
 
     });
 }
+
 
 
 /**
  *
- * @param activePage
- * @param options
+ * @param activePage {Page}
+ * @param url {String}
+ * @param options {Object}
+ * @param context {Object}
  */
-Bottom.prototype.createManagementPage = function(activePage, options){
+Bottom.prototype.createManagementPage = function(activePage, url, options, context){
     let self = this;
-    let url = "/webpack/templates/bottom/bottom-management.hbs";
-    let context = {
-
-    };
+    context = (context === undefined) ? {} : context;
     $.get(url, function (data) {
         var template = Handlebars.compile(data);
         self.container.innerHTML = template(context);
@@ -271,6 +273,8 @@ Bottom.prototype.createManagementPage = function(activePage, options){
 
     });
 }
+
+
 
 
 

@@ -70,7 +70,7 @@ var Dashboard = function(type, activePage, options){
     return self;
 }
 
-var DashboardComponent = function(componentType, dashboard, index) {
+var DashboardComponent = function(componentType, dashboard, index, args) {
     let self = this;
     this.url = "";
     this.dashboard = dashboard;
@@ -79,14 +79,27 @@ var DashboardComponent = function(componentType, dashboard, index) {
         case "switches":
             this.url = "/webpack/templates/dashboard/modules/switches.hbs";
             this.dataType = "switches";
+            this.args = args;
             break;
         case "figures-management":
             this.url = "/webpack/templates/dashboard/modules/figures-management.hbs";
             this.dataType = "figures-management";
+            this.args = args;
             break;
         case "figures-apotheke":
             this.url = "/webpack/templates/dashboard/modules/figures-apotheke.hbs";
             this.dataType = "figures-apotheke";
+            this.args = args;
+            break;
+        case "figures-track":
+            this.url = "/webpack/templates/dashboard/modules/figures-track.hbs";
+            this.dataType = "figures-track";
+            this.args = args;
+            break;
+        case "switches-track":
+            this.url = "/webpack/templates/dashboard/modules/switches.hbs";
+            this.dataType = "switches-track";
+            this.args = args;
             break;
         default:
             break;
@@ -94,10 +107,10 @@ var DashboardComponent = function(componentType, dashboard, index) {
 
     this.init = new Promise(function(resolve, reject){
         //get data
-        self.getData()
+        self.getData(args)
             .then(function(data){
                 //add module html
-                self.buildComponentHtml(dashboard, data, false)
+                self.buildComponentHtml(dashboard, data, false, args)
                     .done(function(){
                         resolve();
                     })
@@ -107,7 +120,7 @@ var DashboardComponent = function(componentType, dashboard, index) {
     return this;
 }
 
-DashboardComponent.prototype.buildComponentHtml = function(dashboard, context, updateExisting){
+DashboardComponent.prototype.buildComponentHtml = function(dashboard, context, updateExisting, args){
     let self = this;
     return $.get(this.url, function (data) {
         let c = {
@@ -122,6 +135,7 @@ DashboardComponent.prototype.buildComponentHtml = function(dashboard, context, u
         else {
             let componentContainer = document.createElement("div");
             componentContainer.style.order = self.index;
+            componentContainer.classList.add("dashboard-module-wrapper");
             componentContainer.innerHTML = template(c);
             $(dashboard.moduleContainer).append(componentContainer);
             self.componentContainer = componentContainer;
@@ -133,7 +147,7 @@ DashboardComponent.prototype.refresh = function(){
     //reload component html
     let self = this;
     return new Promise(function(resolve, reject){
-        self.getData()
+        self.getData(self.args)
             .then(function(data){
                 self.buildComponentHtml(self.dashboard, data, true)
                     .done(function(){
@@ -143,7 +157,8 @@ DashboardComponent.prototype.refresh = function(){
     });
 }
 
-DashboardComponent.prototype.getData = function(){
+DashboardComponent.prototype.getData = function(args){
+    let dataUrl;
     //get data from server
     switch(this.dataType){
         case "switches":
@@ -160,9 +175,10 @@ DashboardComponent.prototype.getData = function(){
             });
             break;
         case "figures-management":
+            dataUrl = "/api/v1/data/track/counts/";
             return new Promise(function(resolve, reject){
                 $.get("/api/v1/checkin/counts/", function (checkinCounts) {
-                    $.get("/api/v1/data/track/counts/", function (trackCounts) {
+                    $.get(dataUrl, function (trackCounts) {
                         let data = {
                             checkin: {
                                 total: {
@@ -253,6 +269,70 @@ DashboardComponent.prototype.getData = function(){
                 });
             })
             break;
+        case "figures-track":
+            return new Promise(function(resolve, reject){
+                if (args.track === undefined || args.track.id === undefined) {
+                    let err = new Error("Failed to build track dashboard: track object missing in args.")
+                    reject(err);
+                }
+                dataUrl = "/api/v1/data/track/counts/"+args.track.id;
+                let switchUrl = "/api/v1/data/track/getSwitched/"+args.track.id;
+                $.get(dataUrl, function (trackCounts) {
+                    $.get(switchUrl, function(switched){
+                        let biontechSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 1);
+                        let modernaSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 2);
+                        let astraSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 3);
+                        let data = {
+                            track: {
+                                total: {
+                                    all: trackCounts.total,
+                                    biontech: trackCounts.counters.b,
+                                    moderna: trackCounts.counters.m,
+                                    astra: trackCounts.counters.a,
+                                }
+                            },
+                            switch: {
+                                total: {
+                                    all: switched.length,
+                                    biontech: biontechSwitched.length,
+                                    moderna: modernaSwitched.length,
+                                    astra: astraSwitched.length,
+                                },
+                                table: switched,
+                            }
+                        }
+                        resolve(data);
+                    })
+                });
+            })
+            break;
+        case "switches-track":
+            return new Promise(function(resolve, reject){
+                if (args.track === undefined || args.track.id === undefined) {
+                    let err = new Error("Failed to build track dashboard: track object missing in args.")
+                    reject(err);
+                }
+                dataUrl = "/api/v1/data/track/getSwitched/"+args.track.id;
+                $.get(dataUrl, function(switched){
+                    let biontechSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 1);
+                    let modernaSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 2);
+                    let astraSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 3);
+                    let data = {
+                        switch: {
+                            total: {
+                                all: switched.length,
+                                biontech: biontechSwitched.length,
+                                moderna: modernaSwitched.length,
+                                astra: astraSwitched.length,
+                            },
+                            table: switched,
+                        }
+                    }
+                    resolve(data);
+                })
+            });
+            break;
+
         default:
             return new Promise(function(resolve, reject){
                 let data = {}
@@ -302,7 +382,7 @@ Dashboard.prototype.initialize = function(type, activePage, options){
     let context = {};
 }
 
-Dashboard.prototype.addComponent = function(componentType) {
+Dashboard.prototype.addComponent = function(componentType, args) {
     let self = this;
     if (!self.isModular) {
         console.error("failed to add dashboard component: Dashboard is not modular.");
@@ -310,11 +390,14 @@ Dashboard.prototype.addComponent = function(componentType) {
     }
     let index = self.moduleCounter;
     self.moduleCounter++;
-    self.init
-        .then(function(){
-            let component = new DashboardComponent(componentType, self, index);
-            self.modules.push(component);
-        })
+    return new Promise(function(resolve, reject) {
+        self.init
+            .then(function () {
+                let component = new DashboardComponent(componentType, self, index, args);
+                self.modules.push(component);
+                resolve(component);
+            })
+    });
 }
 
 Dashboard.prototype.refresh = function(){
@@ -364,6 +447,7 @@ Dashboard.prototype.createManagementDashboard = function(activePage, url, option
         $.get("/api/v1/checkin/counts/", function (checkinCounts) {
             $.get("/api/v1/data/track/counts/", function (trackCounts) {
                 $.get("/api/v1/data/track/getSwitched", function (switched) {
+
                     $.get(url, function (data) {
                         let context = {
                             header: "Übersicht - Impfstrecken ",

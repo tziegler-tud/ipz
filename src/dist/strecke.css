@@ -16804,6 +16804,17 @@ a.mdc-list-item {
   width: 100%;
 }
 
+/*
+modules
+ */
+.dashboard-module-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+.dashboard-module-container .dashboard-module-wrapper {
+  flex: 0 0 100%;
+}
+
 .switch-entry-menu {
   right: 0 !important;
   left: unset !important;

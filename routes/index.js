@@ -22,11 +22,12 @@ router.get('/checkin', function(req, res, next) {
 
 /* GET management page. */
 router.get('/management', function(req, res, next) {
-    res.render('pages/management',
+    res.render('pages/management/management',
         {
             title: "Teamleiter - ImpFLow Dresden",
         });
 });
+
 
 /* GET list page. */
 router.get('/list', function(req, res, next) {

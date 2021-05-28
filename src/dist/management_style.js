@@ -81,20 +81,20 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/webpack/management.scss");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/webpack/management/management.scss");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/webpack/management.scss":
-/*!*************************************!*\
-  !*** ./src/webpack/management.scss ***!
-  \*************************************/
+/***/ "./src/webpack/management/management.scss":
+/*!************************************************!*\
+  !*** ./src/webpack/management/management.scss ***!
+  \************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = (__webpack_require__.p + \"management.css\");\n\n//# sourceURL=webpack:///./src/webpack/management.scss?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = (__webpack_require__.p + \"management.css\");\n\n//# sourceURL=webpack:///./src/webpack/management/management.scss?");
 
 /***/ })
 
