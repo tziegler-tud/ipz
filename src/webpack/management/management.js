@@ -37,10 +37,12 @@ let nav = new Navigation(
 
 let pages  = [];
 let managementDashboardPage = new ManagementModulePage("dashboard");
+let managementTotalPage = new ManagementModulePage("total");
 let managementTracksPage = new ManagementModulePage("tracks");
 let managementStatisticsPage = new ManagementModulePage("statistics");
 
 pages.push(managementDashboardPage);
+pages.push(managementTotalPage);
 pages.push(managementTracksPage);
 pages.push(managementStatisticsPage);
 
@@ -68,9 +70,20 @@ nav.initialize
                     managementDashboardPage.show({tabs: true})
                         .done(function(){
                             // sidesheet = new Sidesheet("checkin", managementPage, {});
-                            bottomTabs =  new Bottom("management", managementDashboardPage, {})
                         });
-                })
+                });
+                nav.setAction("nav-management-subpage--total", function(e, args) {
+                    nav.setActiveElement("nav-management-subpage--total");
+                    pages.forEach(function(page){
+                        if (page.active){
+                            page.hide();
+                        }
+                    })
+                    managementTotalPage.show({tabs: true})
+                        .done(function(){
+                            // sidesheet = new Sidesheet("checkin", managementPage, {});
+                        });
+                });
                 nav.setAction("nav-management-subpage--tracks", function(e, args) {
                     nav.setActiveElement("nav-management-subpage--tracks");
                     pages.forEach(function(page){

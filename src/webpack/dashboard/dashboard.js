@@ -70,11 +70,12 @@ var Dashboard = function(type, activePage, options){
     return self;
 }
 
-var DashboardComponent = function(componentType, dashboard, index, args) {
+var DashboardComponent = function(componentType, dashboard, index, args, buildFunc) {
     let self = this;
     this.url = "";
     this.dashboard = dashboard;
     this.index = index;
+    this.buildFunc = buildFunc;
     switch(componentType){
         case "switches":
             this.url = "/webpack/templates/dashboard/modules/switches.hbs";
@@ -112,6 +113,7 @@ var DashboardComponent = function(componentType, dashboard, index, args) {
                 //add module html
                 self.buildComponentHtml(dashboard, data, false, args)
                     .done(function(){
+                        if(buildFunc !== undefined) buildFunc(self)
                         resolve();
                     })
             })
@@ -124,7 +126,6 @@ DashboardComponent.prototype.buildComponentHtml = function(dashboard, context, u
     let self = this;
     return $.get(this.url, function (data) {
         let c = {
-            // header: options.header,
             data: context,
         }
         var template = Handlebars.compile(data);
@@ -146,11 +147,13 @@ DashboardComponent.prototype.buildComponentHtml = function(dashboard, context, u
 DashboardComponent.prototype.refresh = function(){
     //reload component html
     let self = this;
+    if (self.refreshEnabled === false) return
     return new Promise(function(resolve, reject){
         self.getData(self.args)
             .then(function(data){
                 self.buildComponentHtml(self.dashboard, data, true)
                     .done(function(){
+                        if(self.buildFunc !== undefined) self.buildFunc(self)
                         resolve();
                     })
             })
@@ -382,7 +385,7 @@ Dashboard.prototype.initialize = function(type, activePage, options){
     let context = {};
 }
 
-Dashboard.prototype.addComponent = function(componentType, args) {
+Dashboard.prototype.addComponent = function(componentType, args, buildFunc) {
     let self = this;
     if (!self.isModular) {
         console.error("failed to add dashboard component: Dashboard is not modular.");
@@ -393,9 +396,11 @@ Dashboard.prototype.addComponent = function(componentType, args) {
     return new Promise(function(resolve, reject) {
         self.init
             .then(function () {
-                let component = new DashboardComponent(componentType, self, index, args);
-                self.modules.push(component);
-                resolve(component);
+                let component = new DashboardComponent(componentType, self, index, args, buildFunc);
+                component.init.then(function(){
+                    self.modules.push(component);
+                    resolve(component);
+                });
             })
     });
 }
