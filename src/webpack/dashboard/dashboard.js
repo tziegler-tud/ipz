@@ -169,7 +169,7 @@ DashboardComponent.prototype.getData = function(args){
                 $.get("/api/v1/data/track/getSwitched", function (switched) {
                     let data = {
                         switch: {
-                            total: switched.length,
+                            total: { all: switched.length},
                             table: switched,
                         }
                     }
