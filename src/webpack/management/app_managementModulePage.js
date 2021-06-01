@@ -210,10 +210,11 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
             self.figures.addComponent("figures-management");
 
             self.switches = new Dashboard("modules", self, {containerId: "switched-container"});
-            self.switches.addComponent("switches");
+            self.switches.addComponent("switches", {}, buildSwitch);
 
             self.dashboards.push(self.figures);
             self.dashboards.push(self.switches);
+
 
             //setup tab navigation interface
             if (options.tabs) {
@@ -224,6 +225,8 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                 }
             }
             let bottomTabs =  new Bottom("management", self, {}, {});
+            self.tabs[0].dashboard = self.figures;
+            self.tabs[1].dashboard = self.switches;
         });
     }
 
@@ -602,6 +605,101 @@ ManagementModulePage.prototype.initTabs = function() {
     return tabArray;
 }
 
+
+function buildSwitch(component, activePage){
+    let self  = activePage;
+    //switch dashboard setup
+    let componentContainer = component.componentContainer;
+    const dataTable = new MDCDataTable(componentContainer.querySelector('#mdc-data-table'));
+    const deleteDialog = new MDCDialog(componentContainer.querySelector('#switch-delete-dialog'));
+    const editDialog = new MDCDialog(componentContainer.querySelector('#switch-edit-dialog'));
+    const alertDialog = new MDCDialog(componentContainer.querySelector('#track-alert-dialog'));
+    const list1 = new MDCList(componentContainer.querySelector('#switch-edit-dialog #dialog-select-list1'));
+    const list2 = new MDCList(componentContainer.querySelector('#switch-edit-dialog #dialog-select-list2'));
+    const list3 = new MDCList(componentContainer.querySelector('#switch-edit-dialog #dialog-select-list3'));
+    const listItemRipples1 = list1.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+    const listItemRipples2 = list2.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+    const listItemRipples3 = list3.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+
+    list1.singleSelection = true;
+    list2.singleSelection = true;
+    list3.singleSelection = true;
+
+    alertDialog.listen("MDCDialog:opened", function (event) {
+        self.disableRefresh();
+    });
+    alertDialog.listen("MDCDialog:closed", function (event) {
+        self.refreshDashboard();
+        self.enableRefresh();
+    });
+
+    deleteDialog.listen("MDCDialog:closed", function (event) {
+        self.enableRefresh();
+        let detail = event.detail;
+        if (detail.action === "delete") {
+            //delete switch entry
+            apiHandler.removeTrackEntryById(self.editMenuId)
+                .done(function (result) {
+                    alertDialog.open();
+                })
+            self.editMenuId = null;
+
+
+        }
+    })
+    editDialog.listen("MDCDialog:closed", function (event) {
+        self.enableRefresh();
+        let detail = event.detail;
+        let originalType = parseInt(list1.listElements[list1.selectedIndex].dataset.type);
+        let newType = parseInt(list2.listElements[list2.selectedIndex].dataset.type);
+        let secondString = list3.listElements[list3.selectedIndex].dataset.second;
+        let second = (secondString === "true");
+        if (detail.action === "accept") {
+            //update switch entry
+            apiHandler.updateSwitchedEntry(self.editMenuId, originalType, newType, second)
+                .done(function (result) {
+                    alertDialog.open();
+                });
+            self.editMenuId = null;
+
+        }
+    })
+
+    //switched entry modification dialog
+    let selector = ".switch-entry-menu";
+    $(componentContainer).find(".switch-entry-actions").each(function (index) {
+        let i = this.dataset.index;
+        let id = this.dataset.id;
+        let menuElement = componentContainer.querySelector("#switch-entry-menu--" + i);
+        let top = this.offsetTop;
+        let menu = new MDCMenu(menuElement);
+        menuElement.style.transform = "translateY(" + top + "px)";
+        let outer = this;
+
+        $(this).on("click", function () {
+            self.disableRefresh();
+            self.editMenuId = outer.dataset.id;
+            menu.open = true;
+        })
+
+        menu.listen("MDCMenu:selected", function (e) {
+            let detail = e.detail;
+            let item = detail.item;
+            //edit clicked
+            if (item.dataset.action === "edit") {
+                editDialog.open();
+            } else {
+                if (item.dataset.action === "delete") {
+                    deleteDialog.open();
+                } else {
+                    self.enableRefresh();
+                }
+            }
+
+        })
+
+    })
+}
 
 
 export {ManagementModulePage};

@@ -113,7 +113,7 @@ var DashboardComponent = function(componentType, dashboard, index, args, buildFu
                 //add module html
                 self.buildComponentHtml(dashboard, data, false, args)
                     .done(function(){
-                        if(buildFunc !== undefined) buildFunc(self)
+                        if(buildFunc !== undefined) buildFunc(self, dashboard.activePage);
                         resolve();
                     })
             })

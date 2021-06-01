@@ -46,10 +46,10 @@ pages.push(managementTotalPage);
 pages.push(managementTracksPage);
 pages.push(managementStatisticsPage);
 
-managementDashboardPage.show({tabs: true})
+managementTotalPage.show({tabs: true})
     .done(function(){
         // sidesheet = new Sidesheet("checkin", managementPage, {});
-        bottomTabs =  new Bottom("management", managementDashboardPage, {})
+        // bottomTabs =  new Bottom("management", managementTotalPage, {})
     });
 
 nav.initialize
@@ -60,18 +60,18 @@ nav.initialize
         let subpage = nav.addSubpage("management", {}, true, "app-link-management", true);
         subpage.init
             .then(function(){
-                nav.setAction("nav-management-subpage--dashboard", function(e, args) {
-                    nav.setActiveElement("nav-management-subpage--dashboard");
-                    pages.forEach(function(page){
-                        if (page.active){
-                            page.hide();
-                        }
-                    })
-                    managementDashboardPage.show({tabs: true})
-                        .done(function(){
-                            // sidesheet = new Sidesheet("checkin", managementPage, {});
-                        });
-                });
+                // nav.setAction("nav-management-subpage--dashboard", function(e, args) {
+                //     nav.setActiveElement("nav-management-subpage--dashboard");
+                //     pages.forEach(function(page){
+                //         if (page.active){
+                //             page.hide();
+                //         }
+                //     })
+                //     managementDashboardPage.show({tabs: true})
+                //         .done(function(){
+                //             // sidesheet = new Sidesheet("checkin", managementPage, {});
+                //         });
+                // });
                 nav.setAction("nav-management-subpage--total", function(e, args) {
                     nav.setActiveElement("nav-management-subpage--total");
                     pages.forEach(function(page){
@@ -108,7 +108,7 @@ nav.initialize
                     managementStatisticsPage.show({tabs: true})
                         .done(function(){
                             // sidesheet = new Sidesheet("checkin", managementPage, {});
-                            bottomTabs =  new Bottom("management", managementStatisticsPage, {})
+                            // bottomTabs =  new Bottom("management", managementStatisticsPage, {})
                         });
                 })
             })
