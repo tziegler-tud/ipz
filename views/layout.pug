@@ -7,6 +7,13 @@ html
 
     block page_includes
 
+
+    if (user !== undefined)
+      script.
+        window.user = {};
+        window.user.username = "#{user.username}";
+        window.user._id = "#{user._id}";
+
   body
     //include preloader
     block content

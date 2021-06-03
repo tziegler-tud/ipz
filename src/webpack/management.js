@@ -22,6 +22,7 @@ let sidesheet, bottomTabs;
 
 let nav = new Navigation(
     {
+        user: window.user,
         pageData: {
             navTitle: "Management",
             date: transformDateTimeString(Date.now()).date,

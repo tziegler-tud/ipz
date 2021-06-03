@@ -1,0 +1,196 @@
+@use '../../node_modules/@material/button/mdc-button';
+@use '../../node_modules/@material/button';
+
+@use "../../node_modules/@material/floating-label/mdc-floating-label";
+@use "../../node_modules/@material/line-ripple/mdc-line-ripple";
+@use "../../node_modules/@material/notched-outline/mdc-notched-outline";
+@use "../../node_modules/@material/textfield";
+@use "../../node_modules/@material/textfield/helper-text";
+@use "../../node_modules/@material/textfield/icon";
+
+@use "./preloader";
+
+
+@import "./variables";
+@import "./color-variables";
+
+
+
+@include textfield.core-styles;
+@include helper-text.helper-text-core-styles;
+@include icon.icon-core-styles;
+
+.mdc-text-field{
+  @include textfield.focused-outline-color(rgba(0, 41, 60, 0.55));
+  @include textfield.placeholder-color(#666);
+  @include textfield.label-color(#00293c);
+  @include textfield.caret-color(#00293c);
+
+}
+
+.mdc-floating-label--required::after {
+  content: "";
+}
+
+.submit-button {
+  @include button.container-fill-color(#c31d34);
+}
+
+
+.centered {
+  position: relative;
+
+  @media #{$desktop}, #{$tablet} {
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+}
+
+.register-button {
+  margin-top: 15px;
+
+}
+.login-link {
+  color: $primary-color;
+  font-size: 90%;
+  text-decoration: none;
+}
+
+.wrapper-full-height {
+  height: 100vh;
+  width: 100vw;
+
+  font-family: "Open Sans", Roboto, sans-serif
+}
+
+.login-page {
+  width: 100%;
+  height: 100%;
+  font-size: 80%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+
+  @media #{$desktop}, #{$tablet} {
+  display: block;
+  font-size: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+
+  .login-page-container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    position: relative;
+
+
+
+    @media #{$desktop}, #{$tablet} {
+    font-size: 100%;
+    height: 100%;
+    flex-flow: row nowrap;
+
+  }
+
+    .login-additional-box {
+      display: flex;
+      height: 100%;
+      flex: 1 1 50%;
+      position: relative;
+      font-size: 80%;
+      flex-flow: row wrap;
+
+      justify-content: center;
+
+      @media #{$desktop}, #{$tablet} {
+      font-size: 100%;
+      justify-content: center;
+    }
+
+      .additonal-content-container {
+        padding: 1em;
+        display: flex;
+        @media #{$desktop}, #{$tablet} {
+        display: block;
+      }
+
+        .img-container{
+          width: 100%;
+          max-width: 250px;
+          margin: 0 auto;
+          @media #{$tablet} {
+          max-width: 400px;
+        }
+          @media #{$desktop} {
+          max-width: 500px;
+        }
+          img {
+            width: 100%;
+          }
+        }
+        .impflow-label {
+          font-size: 500%;
+          span {
+
+          }
+
+        }
+      }
+    }
+
+    .login-content {
+      flex: 1 1 50%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      @media #{$desktop}, #{$tablet} {
+      justify-content: flex-start;
+    }
+      .login-content-inner {
+        padding: 1em 5%;
+        .login-form-container {
+
+          .login-form-greeter{
+            margin-bottom: 5em;
+            .greeter-label {
+              font-size: 250%;
+            }
+            .greeter-content {
+              font-size: 150%;
+            }
+
+          }
+          .login-form-content {
+            font-size: 110%;
+            .login-form {
+              label {
+                display: block;
+                margin-bottom: 1em;
+              }
+              .login-form-inp {
+                font-size: 100%;
+                position: relative;
+              }
+              .login-form-submit{
+                font-size: 100%;
+                display: block;
+                padding: .5em 1em;
+                border-radius: 4px;
+                background-color: $primary-color;
+                color: #fff;
+                border: none;
+                box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

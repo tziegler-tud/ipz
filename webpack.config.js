@@ -13,6 +13,9 @@ module.exports = {
     entry: {
         index: "./src/webpack/index.js",
         index_style: "./src/webpack/index.scss",
+        login: "./src/webpack/login.js",
+        register: "./src/webpack/register.js",
+        login_style: "./src/webpack/login.scss",
         checkin: "./src/webpack/checkin.js",
         checkin_style: "./src/webpack/checkin.scss",
         strecke: "./src/webpack/strecke.js",

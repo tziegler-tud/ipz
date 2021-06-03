@@ -15,12 +15,14 @@ const passport = require('./config/passport');
 var schedule = require ('node-schedule');
 
 var indexRouter = require('./routes/index');
+var loginRouter = require('./routes/login');
 var trackRouter = require('./routes/strecke');
 var checkinDataRouter = require('./routes/api/checkinHandler');
 var checkoutDataRouter = require('./routes/api/checkoutHandler');
 var trackDataRouter = require('./routes/api/trackDataHandler');
 var trackApiHandler = require('./routes/api/trackHandler');
 var taskApiHandler = require('./routes/api/taskHandler');
+var userApiHandler = require('./routes/api/userHandler');
 var archiveHandler = require('./routes/api/archiveHandler');
 var statisticsHandler = require('./routes/api/statisticsHandler');
 
@@ -59,7 +61,8 @@ app.use(session({
     store: new FileStore(),
     secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {expires: new Date(253402300000000)}
 }));
 
 app.use(passport.initialize());
@@ -68,7 +71,7 @@ app.use(passport.session());
 webAuth = function(req, res, next){
     if (!req.isAuthenticated()) {
         // req.session.redirectTo = req.originalUrl; //strange bug setting favicon as url, disable until fixed
-        res.status(401).redirect('/');
+        res.status(401).redirect('/login');
     } else {
         next();
     }
@@ -90,13 +93,16 @@ app.use('/api/v1/checkout', checkoutDataRouter);
 app.use('/api/v1/data/track', trackDataRouter);
 app.use('/api/v1/track', trackApiHandler);
 app.use('/api/v1/task', taskApiHandler);
+app.use('/api/v1/user', userApiHandler);
 app.use('/api/v1/archive', archiveHandler);
 app.use('/api/v1/statistics', statisticsHandler);
 app.use("/api", function(req, res, next) {
   next(createError(404));
 });
-
 app.use("/api", errorHandler.apiErrorHandler);
+
+app.use('/login', loginRouter);
+app.use('/', webAuth);
 app.use('/', indexRouter);
 app.use('/strecke', trackRouter);
 // catch 404 and forward to error handler

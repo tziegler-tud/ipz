@@ -19,6 +19,7 @@ function getTrackPage (req, res, next) {
         .then(function(track){
             res.render('pages/strecke/strecke',
                 {
+                    user: req.user,
                     title: titleString + track.name,
                     id: track.id,
                     trackId: track.trackId,
@@ -38,6 +39,7 @@ function getIndexPage (req, res, next) {
 
     res.render('pages/strecke/index',
         {
+            user: req.user,
             title: titleString,
             streckeId: streckeId,
             streckeTitle: titleString,

@@ -35,4 +35,5 @@ module.exports = {
     track: require('./trackScheme'),
     archive: require('./archiveScheme'),
     task: require('./taskScheme'),
+    user: require('./userScheme'),
 };

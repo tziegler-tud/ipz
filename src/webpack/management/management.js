@@ -13,15 +13,16 @@ var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 $(window).on('load',function() {
     console.log("finished loading, hiding preloader");
-    // let plr = new preloader();
-    // setTimeout(plr.hide,0);
-});
+    let plr = new preloader();
+    setTimeout(plr.hide,0);
+
 
 let sidesheet, bottomTabs;
 
 
 let nav = new Navigation(
     {
+        user: window.user,
         pageData: {
             navTitle: "Management",
             date: transformDateTimeString(Date.now()).date,
@@ -57,7 +58,7 @@ nav.initialize
         nav.setAction("mdc-top-app-bar-action1", function(e, args){
             // sidesheet.toggle();
         })
-        let subpage = nav.addSubpage("management", {}, true, "app-link-management", true);
+        let subpage = nav.addSubpage("management", {user: window.user}, true, "app-link-management", true);
         subpage.init
             .then(function(){
                 // nav.setAction("nav-management-subpage--dashboard", function(e, args) {
@@ -114,3 +115,4 @@ nav.initialize
             })
     });
 
+});

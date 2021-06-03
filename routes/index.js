@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
   res.render('index',
       {
           title: "ImpFLow Dresden - Startseite",
+          user: req.user,
           items: [
               {
                   name: "CheckIn - Wartebereich II",
@@ -39,62 +40,13 @@ router.get('/', function(req, res, next) {
   //   res.redirect('/management');
 });
 
-router.get('/login', function(req, res, next) {
-    if(req.isAuthenticated()) {
-        res.redirect('/')
-    } else {
-        res.render('index', {
-            title: "ImpFLow Dresden - Startseite",
-            items: [
-                {
-                    name: "CheckIn - Wartebereich II",
-                    url: "/checkin",
-                    auth: false,
-                    class: "checkin",
-                },
-                {
-                    name: "Impfstrecke",
-                    url: "/tracks",
-                    auth: false,
-                    class: "track"
-                },
-                {
-                    name: "Apotheke",
-                    url: "/apotheke",
-                    auth: false,
-                    class: "apotheke"
-                },
-                {
-                    name: "Teamleiter",
-                    url: "/management",
-                    auth: true,
-                    class: "management"
-                }
-            ]
-        });
-    }
-});
-
-/* POST user login */
-router.post('/login', function(req, res, next) {
-    if(req.isAuthenticated()) {
-        res.redirect('/management')
-    } else {
-        passport.authenticate('local', {}, (err, user, info) => {
-            if (!user) { return res.redirect("/login"); }
-            req.login(user, (err) => {
-                var redirectTo = req.session.redirectTo || "/management";
-                res.redirect(redirectTo);
-            })
-        })(req, res, next);
-    }
-});
 
 
 /* GET checkin page. */
 router.get('/checkin', function(req, res, next) {
     res.render('pages/checkin',
         {
+            user: req.user,
             title: "CheckIn - ImpFLow Dresden",
         });
 });
@@ -104,6 +56,7 @@ router.get('/checkin', function(req, res, next) {
 router.get('/management', function(req, res, next) {
     res.render('pages/management/management',
         {
+            user: req.user,
             title: "Teamleiter - ImpFLow Dresden",
         });
 });
@@ -113,6 +66,7 @@ router.get('/management', function(req, res, next) {
 router.get('/list', function(req, res, next) {
     res.render('pages/list',
         {
+            user: req.user,
             title: "Teamleiter - ImpFLow Dresden",
         });
 });
@@ -122,6 +76,7 @@ router.get('/list', function(req, res, next) {
 router.get('/apotheke', function(req, res, next) {
     res.render('pages/apotheke',
         {
+            user: req.user,
             title: "Apotheke - ImpFlow Dresden",
         });
 });
@@ -130,6 +85,7 @@ router.get('/apotheke', function(req, res, next) {
 router.get('/settings', function(req, res, next) {
     res.render('pages/settings',
         {
+            user: req.user,
             title: "Einstellungen - ImpFlow Dresden",
         });
 });
@@ -138,6 +94,7 @@ router.get('/settings', function(req, res, next) {
 router.get('/statistics', function(req, res, next) {
     res.render('pages/statistics',
         {
+            user: req.user,
             title: "Statistik - ImpFlow Dresden",
         });
 });

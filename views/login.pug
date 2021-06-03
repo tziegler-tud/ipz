@@ -1,0 +1,79 @@
+doctype html
+html
+  head
+    title= title
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    link(rel="shortcut icon" type="image/x-icon" href="static/icons/favicon.ico")
+
+    script(src='/dist/login.js')
+    link(rel='stylesheet' type='text/css' href='/dist/login.css')
+
+
+
+
+
+  body
+    include preloader
+    #wrapper.wrapper-full-height
+      .login-page
+        .login-page-container
+          .login-additional-box
+            .additonal-content-container.centered
+              .img-container
+                img(src="/images/drk_logo_kv.jpg")
+              //.impflow-label
+              //  span.acc1 uni
+              //  span.acc2 Sams
+                .clear
+              .clear
+          .login-content
+            .login-content-inner.centered
+              .login-form-container
+                .login-form-greeter
+                  .greeter-label
+                    | Willkommen bei ImpFlow Dresden.
+                  .greeter-content
+                    | Dieses Gerät kennen wir noch nicht.
+                  .greeter-content
+                    | Bitte anmelden oder neu registrieren.
+                  .greeter-content
+                    a(href="/register")
+                      button.register-button.mdc-button.mdc-button--outlined
+                        .mdc-button__ripple
+                        .mdc-button__label.login-link
+                          | Neues Gerät registrieren
+                .login-form-content
+                  //form#login-form01.login-form(action='login' method='POST')
+                  //  .login-form-inp
+                  //    input#login-inp01.floating-label-field.floating-label-field--s3(name="username" type="text" placeholder="username")
+                  //    label.floating-label(for='login-inp01') username
+                  //  .login-form-inp
+                  //    input#login-inp02.login-form-inp.floating-label-field.floating-label-field--s3(name="password" type="password" placeholder="password")
+                  //    label.floating-label(for='login-inp02') password
+                  //  input#login-submit.login-form-submit(type="submit" value="login")
+
+                  form#login-form01.login-form(action='login' method='POST')
+                    label#mdcTextField1.mdc-text-field.mdc-text-field--outlined
+                      span.mdc-notched-outline
+                        span.mdc-notched-outline__leading
+                        span.mdc-notched-outline__notch
+                          span#label1.mdc-floating-label Gerätename
+                        span.mdc-notched-outline__trailing
+                      input.mdc-text-field__input(type='text', name="username", aria-labelledby='label1' required)
+
+
+                    label#mdcTextField2.mdc-text-field.mdc-text-field--outlined
+                      span.mdc-notched-outline
+                        span.mdc-notched-outline__leading
+                        span.mdc-notched-outline__notch
+                          span#label2.mdc-floating-label Passwort
+                        span.mdc-notched-outline__trailing
+                      input.mdc-text-field__input(type='password', name="password" , aria-labelledby='label2' required)
+                    button.submit-button.mdc-button.mdc-button--raised.next
+                      .mdc-button__ripple
+                      span.mdc-button__label
+                        | login
+
+
+
