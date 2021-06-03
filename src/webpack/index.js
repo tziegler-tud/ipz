@@ -2,6 +2,7 @@ import {preloader} from "./preloader";
 import {Navigation} from "./app_navigation";
 import {Sidesheet} from "./app_sidesheet";
 import {transformDateTimeString} from "./helpers";
+
 import "./handlebarsHelpers";
 const Handlebars = require("handlebars");
 var $ = require( "jquery" );
@@ -13,33 +14,20 @@ $(window).on('load',function() {
     console.log("finished loading, hiding preloader");
     // let plr = new preloader();
     // setTimeout(plr.hide,0);
+
+    let nav = new Navigation(
+        {
+            pageData: {
+                navTitle: "ImpFlow Dresden - Startseite",
+                date: transformDateTimeString(Date.now()).date,
+                time: transformDateTimeString(Date.now()).time("hh:mm:ss"),
+            },
+        },
+        {
+            clock: ".navigation-clock",
+            sidesheet: false,
+            open: false,
+        },
+    );
 });
 
-
-let nav = new Navigation(
-    {
-        pageData: {
-            navTitle: "Check In - Vorkontrolle",
-            date: transformDateTimeString(Date.now()).date,
-            time: transformDateTimeString(Date.now()).time("hh:mm:ss"),
-        },
-    },
-    {
-        clock: ".navigation-clock",
-        sidesheet: true,
-        nav1: {
-            onclick: function(){
-            }
-        },
-        nav2: {
-            onclick: function(){
-
-            }
-        },
-        nav3: {
-            onclick: function(){
-
-            }
-        }
-    },
-);

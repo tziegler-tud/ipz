@@ -1,13 +1,93 @@
 var express = require('express');
 var router = express.Router();
+var uuid = require('uuid');
+const passport = require('passport');
+const bodyParser = require("body-parser");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  // res.render('index',
-  //     {
-  //       title: "ImpFLow Dresden - Startseite",
-  //     });
-    res.redirect('/management');
+  res.render('index',
+      {
+          title: "ImpFLow Dresden - Startseite",
+          items: [
+              {
+                  name: "CheckIn - Wartebereich II",
+                  url: "/checkin",
+                  auth: false,
+                  class: "checkin",
+              },
+              {
+                  name: "Impfstrecke",
+                  url: "/tracks",
+                  auth: false,
+                  class: "track"
+              },
+              {
+                  name: "Apotheke",
+                  url: "/apotheke",
+                  auth: false,
+                  class: "apotheke"
+              },
+              {
+                  name: "Teamleiter",
+                  url: "/management",
+                  auth: true,
+                  class: "management"
+              }
+            ]
+      });
+  //   res.redirect('/management');
+});
+
+router.get('/login', function(req, res, next) {
+    if(req.isAuthenticated()) {
+        res.redirect('/')
+    } else {
+        res.render('index', {
+            title: "ImpFLow Dresden - Startseite",
+            items: [
+                {
+                    name: "CheckIn - Wartebereich II",
+                    url: "/checkin",
+                    auth: false,
+                    class: "checkin",
+                },
+                {
+                    name: "Impfstrecke",
+                    url: "/tracks",
+                    auth: false,
+                    class: "track"
+                },
+                {
+                    name: "Apotheke",
+                    url: "/apotheke",
+                    auth: false,
+                    class: "apotheke"
+                },
+                {
+                    name: "Teamleiter",
+                    url: "/management",
+                    auth: true,
+                    class: "management"
+                }
+            ]
+        });
+    }
+});
+
+/* POST user login */
+router.post('/login', function(req, res, next) {
+    if(req.isAuthenticated()) {
+        res.redirect('/management')
+    } else {
+        passport.authenticate('local', {}, (err, user, info) => {
+            if (!user) { return res.redirect("/login"); }
+            req.login(user, (err) => {
+                var redirectTo = req.session.redirectTo || "/management";
+                res.redirect(redirectTo);
+            })
+        })(req, res, next);
+    }
 });
 
 

@@ -1,11 +1,16 @@
 var createError = require('http-errors');
 var express = require('express');
+const session = require("express-session");
+const FileStore = require('session-file-store')(session);
+const { v4: uuidv4 } = require('uuid');
 var path = require('path');
 var fs = require('fs');
 var cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
+
+const passport = require('./config/passport');
 
 var schedule = require ('node-schedule');
 
@@ -15,6 +20,7 @@ var checkinDataRouter = require('./routes/api/checkinHandler');
 var checkoutDataRouter = require('./routes/api/checkoutHandler');
 var trackDataRouter = require('./routes/api/trackDataHandler');
 var trackApiHandler = require('./routes/api/trackHandler');
+var taskApiHandler = require('./routes/api/taskHandler');
 var archiveHandler = require('./routes/api/archiveHandler');
 var statisticsHandler = require('./routes/api/statisticsHandler');
 
@@ -43,6 +49,31 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(bodyParser.text());
 
+
+app.use(session({
+    genid: (req) => {
+        console.log('Inside the session middleware');
+        console.log(req.sessionID);
+        return uuidv4() // use UUIDs for session IDs
+    },
+    store: new FileStore(),
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+webAuth = function(req, res, next){
+    if (!req.isAuthenticated()) {
+        // req.session.redirectTo = req.originalUrl; //strange bug setting favicon as url, disable until fixed
+        res.status(401).redirect('/');
+    } else {
+        next();
+    }
+};
+
 // create a write stream (in append mode)
 var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
 app.use(logger('common', { stream: accessLogStream }));
@@ -58,6 +89,7 @@ app.use('/api/v1/checkin', checkinDataRouter);
 app.use('/api/v1/checkout', checkoutDataRouter);
 app.use('/api/v1/data/track', trackDataRouter);
 app.use('/api/v1/track', trackApiHandler);
+app.use('/api/v1/task', taskApiHandler);
 app.use('/api/v1/archive', archiveHandler);
 app.use('/api/v1/statistics', statisticsHandler);
 app.use("/api", function(req, res, next) {
