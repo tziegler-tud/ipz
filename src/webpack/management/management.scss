@@ -2,6 +2,18 @@
 @use "../app_navigation";
 @use "../app_managementPage";
 @use "../app_sidesheet";
+@use "../preloader";
 
+
+.devices-content {
+  .devices-list-container {
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
+    .devices-list {
+      width: 100%;
+    }
+  }
+}
 
 

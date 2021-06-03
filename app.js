@@ -23,8 +23,10 @@ var trackDataRouter = require('./routes/api/trackDataHandler');
 var trackApiHandler = require('./routes/api/trackHandler');
 var taskApiHandler = require('./routes/api/taskHandler');
 var userApiHandler = require('./routes/api/userHandler');
+var deviceApiHandler = require('./routes/api/deviceHandler');
 var archiveHandler = require('./routes/api/archiveHandler');
 var statisticsHandler = require('./routes/api/statisticsHandler');
+var authenticationHandler = require('./routes/api/authenticationHandler');
 
 var archiveService = require('./services/archiveService');
 
@@ -51,6 +53,9 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(bodyParser.text());
 
+//user manager
+var userManager = require("./services/userManager");
+
 
 app.use(session({
     genid: (req) => {
@@ -62,7 +67,7 @@ app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true,
-    cookie: {expires: new Date(253402300000000)}
+    cookie: {secure: false, expires: new Date(253402300000000)}
 }));
 
 app.use(passport.initialize());
@@ -73,6 +78,17 @@ webAuth = function(req, res, next){
         // req.session.redirectTo = req.originalUrl; //strange bug setting favicon as url, disable until fixed
         res.status(401).redirect('/login');
     } else {
+        userManager.refresh(req.user);
+        next();
+    }
+};
+
+apiAuth = function(req, res, next){
+    if (!req.isAuthenticated()) {
+        // req.session.redirectTo = req.originalUrl; //strange bug setting favicon as url, disable until fixed
+        res.status(401).send();
+    } else {
+        userManager.refresh(req.user);
         next();
     }
 };
@@ -88,20 +104,25 @@ app.use(cookieParser());
 var settingsService = require('./services/settingsService');
 settingsService.initialize();
 
+
+
+app.use("/api", apiAuth);
 app.use('/api/v1/checkin', checkinDataRouter);
 app.use('/api/v1/checkout', checkoutDataRouter);
 app.use('/api/v1/data/track', trackDataRouter);
 app.use('/api/v1/track', trackApiHandler);
 app.use('/api/v1/task', taskApiHandler);
 app.use('/api/v1/user', userApiHandler);
+app.use('/api/v1/devices', deviceApiHandler);
 app.use('/api/v1/archive', archiveHandler);
 app.use('/api/v1/statistics', statisticsHandler);
+app.use('/api/v1/authentication', authenticationHandler);
 app.use("/api", function(req, res, next) {
   next(createError(404));
 });
 app.use("/api", errorHandler.apiErrorHandler);
 
-app.use('/login', loginRouter);
+app.use('/', loginRouter);
 app.use('/', webAuth);
 app.use('/', indexRouter);
 app.use('/strecke', trackRouter);

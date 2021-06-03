@@ -1,0 +1,47 @@
+<div class="app-page-wrapper management-page tabs">
+
+    <!--        <div class="app-page-header">-->
+    <!--            <div class="page-title">-->
+    <!--                Check In - Vorkontrolle-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <div class="tab-container">
+        <div id="tab--devices" class="app-page-content tab" data-tabid="1">
+            <div id="devices-container">
+                <div class="devices-content">
+                    <div class="devices-list-container">
+                        <ul class="devices-list mdc-deprecated-list mdc-deprecated-list--two-line">
+                            <h3 class="mdc-list-group__subheader">Verbundene Geräte</h3>
+                            {{#each devices}}
+                                <li class="mdc-deprecated-list-item">
+                                    <span class="mdc-deprecated-list-item__ripple"></span>
+                                    <span class="mdc-deprecated-list-item__text">
+                                      <span class="mdc-deprecated-list-item__primary-text">{{this.user.username}}</span>
+                                      <span class="mdc-deprecated-list-item__secondary-text">{{transformDateTimeString this.connect}} / {{transformDateTimeString (timeFromNow this.decay)}}</span>
+                                    </span>
+                                </li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="mdc-snackbar">
+        <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+            <div class="mdc-snackbar__label" aria-atomic="false">
+                Hier könnte Ihre Meldung stehen.
+            </div>
+            <div class="mdc-snackbar__actions" aria-atomic="true">
+                <button type="button" class="mdc-button mdc-snackbar__action">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label"></span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="bottom-container"></div>

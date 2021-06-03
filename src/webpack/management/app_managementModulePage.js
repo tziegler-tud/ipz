@@ -56,9 +56,16 @@ ManagementModulePage.prototype.show = function(options){
         self.refresh(self,options);
         return;
     }
+    let defaults = {
+        refresh: true,
+        tabs: true,
+    }
+    options = (options === undefined) ? {}: options;
+    Object.assign(defaults, options);
+
     //render html
     self.active = true;
-    self.refreshInterval = setInterval(self.refresh, 5000, self);
+    if (options.refresh) self.refreshInterval = setInterval(self.refresh, 5000, self);
     return this.buildModule(self.type, options);
 
 
@@ -87,7 +94,7 @@ ManagementModulePage.prototype.update = function(options){
     let self = this;
     //rebuild dashboard
     // self.dashboard = new Dashboard("management", self, {containerId: "dashboard-container"});
-    self.refreshActiveTab();
+    if(options.tabs) self.refreshActiveTab();
 
 
 }
@@ -155,6 +162,10 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
             break;
         case "statistics":
             module = new ManagementPageModule(self, moduleType, buildStatistics, buildArgs);
+            break;
+        case "devices":
+            module = new ManagementPageModule(self, moduleType, buildDevices, buildArgs);
+            break;
         default:
             break;
     }
@@ -461,6 +472,46 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
 
         });
     }
+
+    function buildDevices(buildArgs, self){
+        let url = "/webpack/templates/management/devices.hbs";
+        let context = {};
+        return new Promise(function(resolve, reject) {
+            $.get("/api/v1/devices/connected")
+                .done(function (devices) {
+                    context.devices = devices;
+                    $.get(url, function (data) {
+                        console.log("template found");
+                        var template = Handlebars.compile(data);
+                        let container = $(buildArgs.containerSelector);
+                        container.empty();
+                        container.append(template(context));
+
+                        //setup tab navigation interface
+                        if (options.tabs) {
+                            self.tabs = self.initTabs();
+                            //activate first tab
+                            if (self.tabs[0] !== undefined) {
+                                self.tabs[0].activate();
+                            }
+                        }
+                        resolve();
+                    });
+                })
+                .fail(function(jqxhr, textstatus, error){
+                    let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
+                    let options = {
+                        timeout: -1,
+                        closeOnEscape: true,
+                        actionButton: {
+                            display: true,
+                            text: "Nagut",
+                        }
+                    }
+                    self.showSnackbar(message, options);
+                });
+        });
+    }
 }
 
 
@@ -483,6 +534,7 @@ ManagementModulePage.prototype.showSnackbar = function(message, options) {
         let bar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
         if(bar) {
             self.snackbar = bar;
+            snackbar = bar;
         }
         else {
             return false;

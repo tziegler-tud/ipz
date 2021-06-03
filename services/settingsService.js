@@ -1,4 +1,6 @@
 const db = require('../schemes/mongo');
+const bcrypt = require('bcrypt');
+// const AuthenticationService = require("./authenticationService");
 
 const Settings = db.settings;
 const Version = db.version;
@@ -8,7 +10,6 @@ module.exports = {
     get,
     update,
     reset,
-    getCheckinSettings,
     getCheckoutSettings,
     updateCheckinSettings,
     updateCheckoutSettings,
@@ -21,7 +22,7 @@ let defaults = {
 async function initialize(){
     console.log("Initializing settings service...")
     let settings = await Settings.findOne();
-    if(settings) console.log("Settings found. Ready to go.")
+    if(settings) console.log("Settings found. Ready to go.");
     else {
         console.log("No settings found. Creating new settings from defaults.")
         let newSettings = new Settings(defaults);
@@ -49,10 +50,10 @@ async function getCheckoutSettings() {
     return settings.checkoutSettings;
 }
 
-async function getCheckinSettings() {
+async function getAuthenticationSettings() {
     let settings = await Settings.findOne();
     if(!settings) throw new Error("unable to read settings from database.");
-    return settings.checkinSettings;
+    return settings.authentication;
 }
 
 async function update(settingsObject) {

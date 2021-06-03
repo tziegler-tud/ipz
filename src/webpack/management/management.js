@@ -41,11 +41,13 @@ let managementDashboardPage = new ManagementModulePage("dashboard");
 let managementTotalPage = new ManagementModulePage("total");
 let managementTracksPage = new ManagementModulePage("tracks");
 let managementStatisticsPage = new ManagementModulePage("statistics");
+let managementDevicesPage = new ManagementModulePage("devices");
 
 pages.push(managementDashboardPage);
 pages.push(managementTotalPage);
 pages.push(managementTracksPage);
 pages.push(managementStatisticsPage);
+pages.push(managementDevicesPage);
 
 managementTotalPage.show({tabs: true})
     .done(function(){
@@ -107,9 +109,20 @@ nav.initialize
                         }
                     })
                     managementStatisticsPage.show({tabs: true})
-                        .done(function(){
+                        .then(function(){
                             // sidesheet = new Sidesheet("checkin", managementPage, {});
                             // bottomTabs =  new Bottom("management", managementStatisticsPage, {})
+                        });
+                })
+                nav.setAction("nav-management-subpage--devices", function(e, args) {
+                    nav.setActiveElement("nav-management-subpage--devices");
+                    pages.forEach(function(page){
+                        if (page.active){
+                            page.hide();
+                        }
+                    })
+                    managementDevicesPage.show({tabs: true, refresh: false})
+                        .then(function(){
                         });
                 })
             })

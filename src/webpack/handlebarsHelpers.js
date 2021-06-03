@@ -20,3 +20,8 @@ Handlebars.registerHelper('checklength', function (v1, v2, options) {
 Handlebars.registerHelper('add', function (x, y) {
     return x+y;
 });
+
+
+Handlebars.registerHelper('timeFromNow', function (x) {
+    return Date.now() + x;
+});

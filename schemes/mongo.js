@@ -36,4 +36,5 @@ module.exports = {
     archive: require('./archiveScheme'),
     task: require('./taskScheme'),
     user: require('./userScheme'),
+    authenticator: require('./authenticatorScheme'),
 };

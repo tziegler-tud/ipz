@@ -22,6 +22,16 @@ var settingsSchema = new Schema({
                 default: 1,
             }
         }
+    },
+    authentication: {
+        authenticators: [{
+            name: {
+                type: String,
+            },
+            hash: {
+
+            }
+        }]
     }
 })
 

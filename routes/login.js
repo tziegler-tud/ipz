@@ -4,6 +4,9 @@ var uuid = require('uuid');
 const passport = require('passport');
 const bodyParser = require("body-parser");
 
+const authenticationService = require("../services/authenticationService");
+const userService = require("../services/userService");
+
 var app = express();
 
 app.use(bodyParser.urlencoded({
@@ -34,7 +37,9 @@ router.post('/login', function(req, res, next) {
       if (!user) { return res.redirect("/login"); }
       req.login(user, (err) => {
         var redirectTo = req.session.redirectTo || "/management";
-        res.redirect(redirectTo);
+        req.session.save(() => {
+          res.redirect(redirectTo);
+        });
       })
     })(req, res, next);
   }
@@ -62,13 +67,20 @@ router.post('/register', function(req, res, next) {
   if(req.isAuthenticated()) {
     res.redirect('/management')
   } else {
-    passport.authenticate('local', {}, (err, user, info) => {
-      if (!user) { return res.redirect("/login"); }
-      req.login(user, (err) => {
-        var redirectTo = req.session.redirectTo || "/management";
-        res.redirect(redirectTo);
-      })
-    })(req, res, next);
+      //check authentication
+      if(authenticationService.authenticate(req.body.authentication, "Teamleiter")){
+        //create new user
+        let userObject = {username: req.body.username, password: req.body.password}
+        let user = userService.add(userObject)
+            .then(function(user){
+                req.login(user, (err) => {
+                  var redirectTo = req.session.redirectTo || "/management";
+                  req.session.save(() => {
+                    res.redirect(redirectTo);
+                  });
+                })(req, res, next);
+            })
+      }
   }
 });
 

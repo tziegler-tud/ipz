@@ -1,74 +1,117 @@
-const db = require('../schemes/mongo');
+const UserService = require("./userService");
 const bcrypt = require('bcrypt');
-const User = db.user;
-const settingsService = require('./settingsService');
 
-module.exports = {
-    get,
-    getById,
-    getByUsername,
-    add,
-    remove,
-    update,
-};
+const db = require('../schemes/mongo');
+const Authenticator = db.authenticator;
 
-/**
- * Gets all users
- */
-async function get() {
-    return User.find();
-}
-
-async function getById(id) {
-    return User.findById(id);
-}
-
-async function getByUsername(name) {
-    return User.findOne({username: name});
-}
-
-async function add(userObject) {
-    //validate
-    if (userObject === undefined) {
-        throw new Error("empty payload");
-    }
-    if(userObject.username === undefined) {
-        throw new Error("Invalid arguments received: username is undefined");
+class UserManager {
+    constructor() {
+        let self = this;
+        this.defaultDecay =  300000; //in ms
+        console.log("initializing user runtime service...\n");
+        //might wanna do smt here later
+        this.activeUsers = [];
+        this.registeredUsers = [];
+        UserService.get()
+            .then(users => {
+                users.forEach(function(user){
+                    self.registeredUsers.push({user: user, connect: false, decay: false});
+                });
+            })
+        //load authentication information from database
+        console.log("user runtime service initialized succesfully.");
     }
 
-    //create new object
+    connect(user){
+        let i = this.activeUsers.findIndex(active => active.user.id === user.id);
+        if (i === -1) {
+            let userObj = {user: user, connect: Date.now(), decay: Date.now() + this.defaultDecay};
+            // user.connect = Date.now();
+            // user.decay = Date.now() + this.defaultDecay;
+            this.activeUsers.push(userObj);
+            console.log("user " + user.username + " connected");
+            setTimeout(this.decayUser, this.defaultDecay, userObj, this);
+            return true;
+        }
+        else {
+            this.refreshIndex(i);
+            return true;
+        }
 
-    let userDbObject = new User(userObject);
-    if (userObject.password) {
-        const salt = await bcrypt.genSalt(10);
-        userDbObject.hash = await bcrypt.hash(userObject.password, salt);
     }
-    await userDbObject.save();
-    return userDbObject;
+
+    disconnect(user, reason){
+        //TODO: set Timeout
+        let i = this.activeUsers.findIndex(active => active.user.id === user.id);
+        if (i === -1) {
+            console.log("Failed to disconnect user " + user.username + ": user is not connected");
+            return false;
+        }
+        else {
+            this.activeUsers.splice(i,1);
+            let msg = "user " + user.username + " disconnected.";
+            if (typeof(reason) === "string"){
+                msg = msg + " Reason: " + reason;
+            }
+            console.log(msg);
+            return true;
+        }
+    }
+
+    refresh(user){
+        let i = this.activeUsers.findIndex(active => active.id === user.id);
+        if (i === -1) {
+            this.connect(user);
+            return true;
+        }
+        else {
+            this.activeUsers[i].decay = Date.now() + this.defaultDecay;
+            return true;
+        }
+    }
+
+    refreshIndex(index){
+        this.activeUsers[index].decay = this.defaultDecay;
+        return true;
+    }
+
+    decayUser(userObj, self){
+        if (Date.now() > userObj.decay){
+            let reason = "decayed due to inactivity";
+            self.disconnect(userObj.user, reason);
+        }
+        else {
+            setTimeout(self.decayUser, userObj.user.decay, userObj, self)
+        }
+    }
+
+    getRegisteredUsers(){
+        let self = this;
+        return new Promise(function(resolve, reject){
+            resolve(self.registeredUsers);
+        });
+    }
+
+    getConnectedUsers(){
+        let self = this;
+        return new Promise(function(resolve, reject){
+            resolve(self.activeUsers);
+        });
+    }
+
+    getById(id){
+        let self = this;
+        return new Promise(function(resolve, reject){
+            let userObj = self.registeredUsers.find(userObj => userObj.user.id === id)
+            if(userObj) {
+                resolve(userObj);
+            }
+            else reject("User not found.");
+
+        });
+    }
 }
 
-/**
- *
- * @param id {ObjectId}
- * @returns {Promise<*>}
- */
-async function remove(id) {
-    if(id === undefined) {
-        throw new Error("Invalid arguments received: id is empty.");
-    }
-    return User.findByIdAndRemove(id);
-}
+let userManager = new UserManager();
 
-
-
-async function update(id, userObject) {
-    if(userObject === undefined ||id === undefined) {
-       throw new Error("Failed to update user: Invalid arguments received")
-    }
-    //find current entry
-    let user = await User.findById(id);
-    // copy userObject properties to user
-    Object.assign(user, userObject);
-    //save to db
-    return user.save();
-}
+module.exports = userManager;
