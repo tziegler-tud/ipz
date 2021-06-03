@@ -18,7 +18,7 @@ hoked at /login
 
 router.get('/login', function(req, res, next) {
   if(req.isAuthenticated()) {
-    res.redirect('/')
+    res.redirect('/management')
   } else {
     res.render('login', { title: 'ImpFlow Dresden - Login' });
   }
