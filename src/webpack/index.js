@@ -18,7 +18,7 @@ $(window).on('load',function() {
     let nav = new Navigation(
         {
             pageData: {
-                navTitle: "ImpFlow Dresden - Startseite",
+                navTitle: "ImpfApp Dresden - Startseite",
                 date: transformDateTimeString(Date.now()).date,
                 time: transformDateTimeString(Date.now()).time("hh:mm:ss"),
             },

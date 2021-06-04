@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
 
+
 const passport = require('./config/passport');
 
 var schedule = require ('node-schedule');
@@ -29,11 +30,7 @@ var statisticsHandler = require('./routes/api/statisticsHandler');
 var authenticationHandler = require('./routes/api/authenticationHandler');
 
 var archiveService = require('./services/archiveService');
-
-
-
 var errorHandler = require("./helpers/error-handler");
-
 
 global.appRoot = path.resolve(__dirname);
 

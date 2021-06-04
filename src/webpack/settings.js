@@ -22,7 +22,7 @@ let sidesheet;
 let nav = new Navigation(
     {
         pageData: {
-            navTitle: "Einstellungen - ImpFlow Dresden",
+            navTitle: "Einstellungen - ImpfApp Dresden",
             date: transformDateTimeString(Date.now()).date,
             time: transformDateTimeString(Date.now()).time("hh:mm:ss"),
         },

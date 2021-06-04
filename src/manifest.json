@@ -1,0 +1,36 @@
+{
+  "name": "ImpfApp Dresden",
+  "short_name": "ImpfApp Dresden",
+  "description": "App des Impfzentrums Dresden",
+  "start_url": "/login",
+  "display": "standalone",
+  "background_color": "#fce6e7",
+  "theme_color": "#fff",
+  "orientation": "natural",
+  "icons": [
+    {
+      "src": "/images/icons/pwa/android-72x72.png",
+      "type": "image/png", "sizes": "72x72"
+    },
+    {
+      "src": "/images/icons/pwa/android-96x96.png",
+      "type": "image/png", "sizes": "96x96"
+    },
+    {
+      "src": "/images/icons/pwa/android-144x144.png",
+      "type": "image/png", "sizes": "144x144"
+    },
+    {
+      "src": "/images/icons/pwa/apple-touch-icon-180x180.png",
+      "type": "image/png", "sizes": "180x180"
+    },
+    {
+      "src": "/images/icons/pwa/pwa-192x192.png",
+      "type": "image/png", "sizes": "192x192"
+    },
+    {
+      "src": "/images/icons/pwa/pwa-512x512.png",
+      "type": "image/png", "sizes": "512x512"
+    }
+  ]
+}

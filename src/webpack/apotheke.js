@@ -23,7 +23,7 @@ let sidesheet, bottomTabs;
 let nav = new Navigation(
     {
         pageData: {
-            navTitle: "Apotheke",
+            navTitle: "Apotheke - ImpfApp Dresden",
             date: transformDateTimeString(Date.now()).date,
             time: transformDateTimeString(Date.now()).time("hh:mm:ss"),
         },

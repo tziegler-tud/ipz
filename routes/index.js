@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 router.get('/', function(req, res, next) {
   res.render('index',
       {
-          title: "ImpFLow Dresden - Startseite",
+          title: "ImpfApp Dresden - Startseite",
           user: req.user,
           items: [
               {
@@ -47,7 +47,7 @@ router.get('/checkin', function(req, res, next) {
     res.render('pages/checkin',
         {
             user: req.user,
-            title: "CheckIn - ImpFLow Dresden",
+            title: "CheckIn - ImpfApp Dresden",
         });
 });
 
@@ -57,7 +57,7 @@ router.get('/management', function(req, res, next) {
     res.render('pages/management/management',
         {
             user: req.user,
-            title: "Teamleiter - ImpFLow Dresden",
+            title: "Teamleiter - ImpfApp Dresden",
         });
 });
 
@@ -67,7 +67,7 @@ router.get('/list', function(req, res, next) {
     res.render('pages/list',
         {
             user: req.user,
-            title: "Teamleiter - ImpFLow Dresden",
+            title: "Teamleiter - ImpfApp Dresden",
         });
 });
 
@@ -77,7 +77,7 @@ router.get('/apotheke', function(req, res, next) {
     res.render('pages/apotheke',
         {
             user: req.user,
-            title: "Apotheke - ImpFlow Dresden",
+            title: "Apotheke - ImpfApp Dresden",
         });
 });
 
@@ -86,7 +86,7 @@ router.get('/settings', function(req, res, next) {
     res.render('pages/settings',
         {
             user: req.user,
-            title: "Einstellungen - ImpFlow Dresden",
+            title: "Einstellungen - ImpfApp Dresden",
         });
 });
 
@@ -95,7 +95,7 @@ router.get('/statistics', function(req, res, next) {
     res.render('pages/statistics',
         {
             user: req.user,
-            title: "Statistik - ImpFlow Dresden",
+            title: "Statistik - ImpfApp Dresden",
         });
 });
 
@@ -104,7 +104,7 @@ router.get('/device', function(req, res, next) {
     res.render('pages/device',
         {
             user: req.user,
-            title: "Mein Gerät - ImpFlow Dresden",
+            title: "Mein Gerät - ImpfApp Dresden",
         });
 });
 
