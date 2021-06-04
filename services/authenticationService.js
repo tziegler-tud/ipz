@@ -34,16 +34,18 @@ class AuthService {
     async authenticate(password, authenticationName){
         let auth = this.authenticators[authenticationName];
         if (auth === undefined) {
-            console.log("Authentication as " + authenticationName + " failed: no matching authenticator found.");
-            return false;
+            let msg = "Authentication as " + authenticationName + " failed: no matching authenticator found.";
+            console.log(msg);
+            throw new Error(msg);
         }
         if (await bcrypt.compare(password, auth)){
             console.log("Authentication as " + authenticationName + " successful.")
             return true;
         }
         else {
-            console.log("Authentication as " + authenticationName + " failed: password is wrong.");
-            return false;
+            let msg = "Authentication as " + authenticationName + " failed: password is wrong."
+            console.log(msg);
+            throw new Error(msg);
         }
     }
 

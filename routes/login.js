@@ -46,8 +46,9 @@ router.post('/login', function(req, res, next) {
 });
 
 router.all("/logout", function(req, res, next) {
-  req.logout();
-  res.redirect("/");
+  req.session.destroy(function (err) {
+    res.redirect('/login'); //Inside a callback… bulletproof!
+  });
 });
 
 /*
@@ -68,19 +69,24 @@ router.post('/register', function(req, res, next) {
     res.redirect('/management')
   } else {
       //check authentication
-      if(authenticationService.authenticate(req.body.authentication, "Teamleiter")){
-        //create new user
-        let userObject = {username: req.body.username, password: req.body.password}
-        let user = userService.add(userObject)
-            .then(function(user){
-                req.login(user, (err) => {
-                  var redirectTo = req.session.redirectTo || "/management";
-                  req.session.save(() => {
-                    res.redirect(redirectTo);
-                  });
-                })(req, res, next);
-            })
-      }
+      authenticationService.authenticate(req.body.authentication, "Teamleiter")
+          .then(function(){
+            //create new user
+            let userObject = {username: req.body.username, password: req.body.password}
+            let user = userService.add(userObject)
+                .then(function(user){
+                  req.login(user, (err) => {
+                    var redirectTo = req.session.redirectTo || "/management";
+                    req.session.save(() => {
+                      res.redirect(redirectTo);
+                    });
+                  })(req, res, next);
+                })
+          })
+          .catch(function(reason){
+            let e = new Error("Login failed: " + reason);
+            next(e);
+          })
   }
 });
 

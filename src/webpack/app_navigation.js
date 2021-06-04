@@ -23,6 +23,11 @@ var Navigation = function(context, options){
     self.persistentSubpage = null;
     self.navigationElements = [];
 
+
+    if (context.user === undefined && window.user !== undefined) {
+        context.user = window.user;
+    }
+
     if (phone.matches || tablet.matches) url = '/webpack/templates/navigation/navigation-mobile.hbs';
     else url = '/webpack/templates/navigation/navigation.hbs';
 

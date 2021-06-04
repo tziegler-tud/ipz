@@ -61,11 +61,12 @@ ManagementModulePage.prototype.show = function(options){
         tabs: true,
     }
     options = (options === undefined) ? {}: options;
-    Object.assign(defaults, options);
+    options = Object.assign(defaults, options);
+    self.options = options
 
     //render html
     self.active = true;
-    if (options.refresh) self.refreshInterval = setInterval(self.refresh, 5000, self);
+    if (options.refresh) self.refreshInterval = setInterval(self.refresh, 5000, self, options);
     return this.buildModule(self.type, options);
 
 

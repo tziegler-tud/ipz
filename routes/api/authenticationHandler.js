@@ -16,7 +16,7 @@ router.get('/name/:name', getByName);
 router.get('/:id', getById);
 
 /**
- * add task entity
+ * add authenticator
  *
  * @param req
  * @param res

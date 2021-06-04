@@ -17,4 +17,6 @@ window.onload = function() {
     console.log("finished loading, hiding preloader");
     let plr = new preloader();
     setTimeout(plr.hide,0);
+
+    
 };

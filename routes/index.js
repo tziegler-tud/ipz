@@ -99,6 +99,15 @@ router.get('/statistics', function(req, res, next) {
         });
 });
 
+/* GET device page. */
+router.get('/device', function(req, res, next) {
+    res.render('pages/device',
+        {
+            user: req.user,
+            title: "Mein Gerät - ImpFlow Dresden",
+        });
+});
+
 
 
 module.exports = router;

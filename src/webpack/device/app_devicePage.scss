@@ -1,0 +1,81 @@
+@use "../../../node_modules/@material/drawer";
+@use "../../../node_modules/@material/top-app-bar";
+@use "../../../node_modules/@material/top-app-bar/mdc-top-app-bar";
+
+@import "../app_pages";
+
+@import "../variables";
+@import "../color-variables";
+
+@include drawer.core-styles;
+@include drawer.dismissible-core-styles;
+@include drawer.modal-core-styles;
+
+@import "~material-icons-font/material-icons-font.css";
+
+.mdc-top-app-bar {
+  @include top-app-bar.fill-color($statistics-color);
+}
+
+.mdc-drawer {
+
+}
+
+
+.statistics-page {
+
+  .statistics-container {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    height: 100%;
+
+
+    .statistics-sidenav {
+      flex: 0 0 200px;
+
+      &.collapsed {
+        flex: 0 0 60px;
+        .statistics-list {
+
+        }
+      }
+      .statistics-list {
+        height: 100%;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        border-right: 1px solid #ADADAD;
+        border-top: 1px solid #ADADAD;
+
+        .statistics-list-item {
+          padding: 20px 10px;
+          border-bottom: 1px solid #ADADAD;
+
+          &.active {
+            background-color: #a0c98a;
+          }
+
+          &.statistics-clickable-list-item {
+            cursor: pointer;
+          }
+          .statistics-list-item-inner {
+            .statistics-list-title {
+              color: #333;
+
+            }
+            .statistics-list-subcontent {
+              font-size: 110%;
+              color: #888;
+            }
+          }
+        }
+      }
+    }
+    .statistics-content {
+      flex: 1 1 auto;
+
+    }
+  }
+
+}

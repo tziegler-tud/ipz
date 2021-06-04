@@ -4,14 +4,13 @@ html
     title=title
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
 
-    block page_includes
-
-
     if (user !== undefined)
       script.
         window.user = {};
         window.user.username = "#{user.username}";
         window.user._id = "#{user._id}";
+
+    block page_includes
 
   body
     //include preloader

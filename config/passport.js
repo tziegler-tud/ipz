@@ -65,7 +65,9 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
     UserService.getById(id)
-        .then(user => user ? done(null, user): done(null, false))
+        .then(function(user){
+            user ? done(null, user): done(null, false)
+        })
         .catch(err => console.log(err))
 });
 

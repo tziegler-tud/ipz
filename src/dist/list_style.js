@@ -90,11 +90,10 @@
 /*!*******************************!*\
   !*** ./src/webpack/list.scss ***!
   \*******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = (__webpack_require__.p + \"list.css\");\n\n//# sourceURL=webpack:///./src/webpack/list.scss?");
+eval("throw new Error(\"Module build failed (from ./node_modules/sass-loader/dist/cjs.js):\\nSassError: Can't find stylesheet to import.\\n  ╷\\n3 │ @use \\\"./app_listPage\\\";\\n  │ ^^^^^^^^^^^^^^^^^^^^^\\n  ╵\\n  src/webpack/list.scss 3:1  root stylesheet\");\n\n//# sourceURL=webpack:///./src/webpack/list.scss?");
 
 /***/ })
 

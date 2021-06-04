@@ -12,6 +12,10 @@ var userSchema = new Schema({
         type: "String",
         required: true,
     },
+    deviceType: {
+        type: "String",
+        default: "unset",
+    },
     allowedTasks: [
         {
             type: Schema.Types.ObjectId,

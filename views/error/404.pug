@@ -6,15 +6,17 @@ html
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     link(rel="shortcut icon" type="image/x-icon" href="static/icons/favicon.ico")
 
-    link(rel='stylesheet', href='/css/error.css')
+    link(rel='stylesheet', href='/dist/login.css')
 
 
   body
     #wrapper.wrapper-full-height.error-page
       section#sec1.sec-middle.content-section.color-generic
         #content1.sec-content.sec-full-width.sec-nomargin.center-in-container
+          .img-container
+            img(src="/images/drk_logo_kv.jpg")
+          .clear
           #content1-heading.sec-heading.center-in-container
-            .clear
             #error-container.errorbox
               #error-container-inner.errorbox-inner
                 .errorbox-heading
@@ -24,6 +26,6 @@ html
                 .errorbox-body.hudge
                   | Die Seite wurde nicht gefunden.
                 .errorbox-link.content-link
-                  a(href="/unisams") Zurück zur Startseite
+                  a(href="/") Zurück zur Startseite
 
     //include footer

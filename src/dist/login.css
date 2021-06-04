@@ -812,6 +812,109 @@ preloader
     stroke-dashoffset: 0;
   }
 }
+#sec1 {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  font-size: 90%;
+  font-family: "Open Sans", Sans;
+}
+@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+  #sec1 {
+    font-size: 100%;
+  }
+}
+#sec1 #content1 {
+  margin: 0 5%;
+  width: 90%;
+  font-size: 90%;
+  text-align: center;
+}
+@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+  #sec1 #content1 {
+    margin: 0 25% 0 25%;
+    width: 50%;
+    font-size: 100%;
+  }
+  #sec1 #content1 .sec-heading .img-container img {
+    width: 100%;
+  }
+  #sec1 #content1 .sec-heading .unisams-label {
+    display: block !important;
+    float: left;
+  }
+}
+#sec1 #content1 .sec-heading {
+  display: inline-block;
+}
+#sec1 #content1 .sec-heading .img-container {
+  max-width: 10em;
+}
+#sec1 #content1 .sec-heading .img-container img {
+  max-width: 10em;
+}
+#sec1 #content1 .sec-heading .unisams-label {
+  display: none;
+  float: left;
+  font-size: 400%;
+}
+#sec1 #content1 .sec-heading .unisams-label .acc1 {
+  color: #333;
+}
+#sec1 #content1 .sec-heading .unisams-label .acc2 {
+  color: #00293c;
+}
+#error-container {
+  text-align: center;
+  max-width: 40em;
+  margin: 1em auto;
+  position: relative;
+}
+#error-container #error-container-inner {
+  width: 100%;
+}
+#error-container #error-container-inner .errorbox-heading {
+  color: #c31d34;
+  font-size: 400%;
+}
+#error-container #error-container-inner .errorbox-status {
+  padding: 0 0 20px 0;
+  color: #00293c;
+  font-size: 500%;
+}
+#error-container #error-container-inner .errorbox-body {
+  padding: 0 0 10px 0;
+  font-size: 110%;
+}
+@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+  #error-container #error-container-inner .errorbox-body {
+    font-size: 100%;
+  }
+}
+#error-container #error-container-inner .errorbox-body.large {
+  font-size: 120%;
+}
+@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+  #error-container #error-container-inner .errorbox-body.large {
+    font-size: 110%;
+  }
+}
+#error-container #error-container-inner .errorbox-body.hudge {
+  font-size: 150%;
+}
+@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+  #error-container #error-container-inner .errorbox-body.hudge {
+    font-size: 130%;
+  }
+}
+#error-container #error-container-inner .errorbox-body span {
+  display: block;
+  width: 100%;
+  padding: 0 0 5px 0;
+}
+
 .mdc-text-field--filled {
   --mdc-ripple-fg-size: 0;
   --mdc-ripple-left: 0;
