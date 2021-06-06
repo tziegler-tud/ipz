@@ -71,17 +71,18 @@ class UserManager {
     }
 
     refreshIndex(index){
-        this.activeUsers[index].decay = this.defaultDecay;
+        this.activeUsers[index].decay = Date.now() + this.defaultDecay;
         return true;
     }
 
     decayUser(userObj, self){
+        console.log(Date.now())
         if (Date.now() > userObj.decay){
             let reason = "decayed due to inactivity";
             self.disconnect(userObj.user, reason);
         }
         else {
-            setTimeout(self.decayUser, userObj.user.decay, userObj, self)
+            setTimeout(self.decayUser, self.defaultDecay, userObj, self)
         }
     }
 

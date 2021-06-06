@@ -31,12 +31,13 @@ let nav = new Navigation(
         clock: ".navigation-clock",
         sidesheet: true,
         activeElement: "app-link-device",
-        open: false,
+        open: true,
         topbar: true,
     },
 );
 
-let devicePage = new DevicePage();
+let context = {user: window.user};
+let devicePage = new DevicePage({}, context);
 devicePage.show()
     .then(function(){
     // sidesheet = new Sidesheet("checkin", managementPage, {});

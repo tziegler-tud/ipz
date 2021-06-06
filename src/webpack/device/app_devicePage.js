@@ -10,13 +10,13 @@ var phone = window.matchMedia("only screen and (max-width: 50em)");
 
 
 
-var DevicePage = function(args) {
+var DevicePage = function(args, context) {
     let self = Page.apply(this, args);
     self.url = "/webpack/templates/device.hbs";
     self.entries = undefined;
     self.page = undefined;
     //get current entries
-    let context = {};
+    self.context = (context === undefined) ? {} : context;
     //render html
 }
 
@@ -28,7 +28,11 @@ DevicePage.prototype.hide = function(){
 
 DevicePage.prototype.show = function(options){
     let self = this;
-    let context = {}
+    let context = self.context;
+    if (context.user === undefined){
+        if (window.user !== undefined) context.user = window.user;
+        else context.user = {username: "undefined"}
+    }
     return self.buildHtml(self.url, context);
 }
 

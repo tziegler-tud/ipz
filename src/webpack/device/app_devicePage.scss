@@ -22,60 +22,104 @@
 }
 
 
-.statistics-page {
 
-  .statistics-container {
-    display: flex;
-    flex-flow: row nowrap;
-    width: 100%;
-    height: 100%;
+.userinfo-container {
+
+  width: 100%;
+  background-color: $page-bg-color;
+}
+.userinfo-inner {
+
+  padding: 1em 0;
+  display: flex;
+  flex-flow: row wrap;
+
+  @media #{$desktop}, #{$tablet} {
+  padding: 1em;
+}
+
+  .userinfo-section {
+    .userinfo-section-inner {
+      display: flex;
+      flex-flow: column wrap;
+
+      margin-bottom: 2em;
+    }
+
+    &.userinfo-card {
+      flex: 1 1 auto;
+      margin-bottom: 0;
 
 
-    .statistics-sidenav {
-      flex: 0 0 200px;
+      .userinfo-section-inner {
+        margin: 20px 0;
+        padding: 15px;
+        background-color: $page-bg-color;
+        box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
 
-      &.collapsed {
-        flex: 0 0 60px;
-        .statistics-list {
-
+        @media #{$desktop}, #{$tablet} {
+          margin: 20px;
         }
       }
-      .statistics-list {
-        height: 100%;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        border-right: 1px solid #ADADAD;
-        border-top: 1px solid #ADADAD;
 
-        .statistics-list-item {
-          padding: 20px 10px;
-          border-bottom: 1px solid #ADADAD;
+      &.card-full {
+        flex: 0 0 100%;
+      }
+      &.card-half {
 
-          &.active {
-            background-color: #a0c98a;
-          }
-
-          &.statistics-clickable-list-item {
-            cursor: pointer;
-          }
-          .statistics-list-item-inner {
-            .statistics-list-title {
-              color: #333;
-
-            }
-            .statistics-list-subcontent {
-              font-size: 110%;
-              color: #888;
-            }
-          }
-        }
+        @media #{$desktop}, #{$tablet} {
+        flex: 1 0 50%;
+        min-width: 30em;
+      }
       }
     }
-    .statistics-content {
+    .userinfo-sectionheader {
+      font-size: 120%;
+      margin-bottom: .5em;
+      color: #666;
+      padding: 12px 12px 0 12px;
+
+      font-variant: small-caps;
+      letter-spacing: .15em;
+    }
+
+    .userinfo-itemList {
+
+    }
+
+    ul.qualificationList {
+      .inner {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .userinfo-item {
+
       flex: 1 1 auto;
 
+      span.userinfo-item-label, label.userinfo-item-label {
+        width: 100%;
+        float: left;
+        display: block;
+        margin-bottom: .5em;
+
+        @media #{$desktop}, #{$tablet} {
+          width: auto;
+        }
+
+        &.userinfo-attribute-name {
+
+          width: 100%;
+          margin-right: 2em;
+          margin-bottom: 0;
+
+          color: #555;
+
+          @media #{$desktop}, #{$tablet} {
+            width: 8em;
+          }
+        }
+      }
     }
   }
-
 }

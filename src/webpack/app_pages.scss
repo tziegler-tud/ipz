@@ -49,19 +49,19 @@ input[type=number] {
 
   .app-page-content {
 
-    font-size: 120%;
+    @media #{$tablet} {
+      font-size: 120%;
+    }
 
     @media #{$desktop} {
       width: calc(100% - 4em);
       padding: 2em 2em;
       margin: 0;
-
     }
 
     @media #{$phone} {
       margin: .5em auto .5em auto;
     }
-
     padding: 0;
     margin: 2em auto 1em auto;
     width: 100%;
@@ -71,6 +71,7 @@ input[type=number] {
       margin-right:  0;
       padding-left: 0;
       padding-right: 0;
+      width: 100%;
     }
     &.full-height {
       margin-top: 0;

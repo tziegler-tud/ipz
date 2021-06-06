@@ -69,3 +69,155 @@ body {
     }
   }
 }
+
+/*
+cards
+ */
+
+.cards-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+.card {
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
+  &.card-full {
+    flex: 1 1 100%;
+  }
+  &.card-half {
+    flex: 1 1 50%;
+  }
+}
+
+/*
+page elements
+ */
+
+
+.itemlist-header-container{
+  width: 100%;
+  border-bottom: 1px solid #666;
+  ul.itemlist {
+    .inner {
+      //grid-template-columns: 2fr 1fr 1fr 20px !important;
+    }
+  }
+}
+
+.itemlist-content-container{
+  ul.itemlist {
+    width: 100%;
+  }
+}
+
+ul.itemlist {
+  &.border {
+    li {
+      .inner {
+
+        .item-property {
+          //&:not(:last-of-type) {
+          //  border-right: 1px solid #AAA;
+          //}
+          border-right: 1px solid #AAA;
+        }
+      }
+    }
+  }
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
+
+  $bgCol1: #ffffff;
+  $bgCol2: #f9f9f9;
+  $text-hover-color: rgba(124, 0, 26, 0.2);
+
+  display: flex;
+  flex-flow: column wrap;
+
+  font-weight: lighter;
+
+  li {
+
+    flex: 1 1 auto;
+    background-color: $bgCol1;
+
+    &:nth-child(odd) {
+      background-color: $bgCol2;
+    }
+
+    &.borderBottom {
+      border-bottom: 1px solid #666;
+    }
+
+    .itemDelete {
+      svg {
+        width: 1em;
+      }
+    }
+
+    .inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+      //padding: 0 1em;
+
+      .item-property {
+        padding: .5em 0;
+        position: relative;
+        margin-left: 10px;
+        flex: 0 0 240px;
+
+        &.after {
+          content: "";
+          display: block;
+          width: 100%;
+          position: absolute;
+          bottom: -3px;
+          left: 0;
+        }
+
+        &:hover > &.after {
+          border-bottom-color: $text-hover-color;
+        }
+      }
+    }
+  }
+
+  &:not(.itemlist-noSelect){
+    li {
+      &:not(.noSelect):hover {
+        background-color: rgba(124, 0, 26, 0.2);
+        cursor: pointer;
+      }
+    }
+  }
+  &:not(.noHover) {
+    li {
+      &:not(.noSelect):hover {
+        background-color: rgba(124, 0, 26, 0.2);
+      }
+    }
+  }
+
+  &.itemlist-style-clean {
+    li {
+      background-color: transparent;
+
+      .inner {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+  &.itemlist-noSelect {
+    li:hover {
+      cursor: default;
+
+      span {
+        cursor: text;
+      }
+    }
+  }
+}

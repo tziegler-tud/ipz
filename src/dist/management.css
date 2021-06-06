@@ -553,6 +553,104 @@ body {
   }
 }
 
+/*
+cards
+ */
+.cards-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.card {
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+}
+.card.card-full {
+  flex: 1 1 100%;
+}
+.card.card-half {
+  flex: 1 1 50%;
+}
+
+/*
+page elements
+ */
+.itemlist-header-container {
+  width: 100%;
+  border-bottom: 1px solid #666;
+}
+.itemlist-content-container ul.itemlist {
+  width: 100%;
+}
+
+ul.itemlist {
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
+  display: flex;
+  flex-flow: column wrap;
+  font-weight: lighter;
+}
+ul.itemlist.border li .inner .item-property {
+  border-right: 1px solid #AAA;
+}
+ul.itemlist li {
+  flex: 1 1 auto;
+  background-color: #ffffff;
+}
+ul.itemlist li:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+ul.itemlist li.borderBottom {
+  border-bottom: 1px solid #666;
+}
+ul.itemlist li .itemDelete svg {
+  width: 1em;
+}
+ul.itemlist li .inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+}
+ul.itemlist li .inner .item-property {
+  padding: 0.5em 0;
+  position: relative;
+  margin-left: 10px;
+  flex: 0 0 240px;
+}
+ul.itemlist li .inner .item-property.after {
+  content: "";
+  display: block;
+  width: 100%;
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+}
+ul.itemlist li .inner .item-property:hover > ul.itemlist li .inner .item-property.after {
+  border-bottom-color: rgba(124, 0, 26, 0.2);
+}
+ul.itemlist:not(.itemlist-noSelect) li:not(.noSelect):hover {
+  background-color: rgba(124, 0, 26, 0.2);
+  cursor: pointer;
+}
+ul.itemlist:not(.noHover) li:not(.noSelect):hover {
+  background-color: rgba(124, 0, 26, 0.2);
+}
+ul.itemlist.itemlist-style-clean li {
+  background-color: transparent;
+}
+ul.itemlist.itemlist-style-clean li .inner {
+  padding-left: 0;
+  padding-right: 0;
+}
+ul.itemlist.itemlist-noSelect li:hover {
+  cursor: default;
+}
+ul.itemlist.itemlist-noSelect li:hover span {
+  cursor: text;
+}
+
 .mdc-touch-target-wrapper {
   display: inline;
 }
@@ -6378,10 +6476,14 @@ input[type=number] {
   font-family: "Open Sans", Sans, sans-serif;
 }
 .app-page-wrapper .app-page-content {
-  font-size: 120%;
   padding: 0;
   margin: 2em auto 1em auto;
   width: 100%;
+}
+@media only screen and (min-width: 600px) and (max-width: 1280px) {
+  .app-page-wrapper .app-page-content {
+    font-size: 120%;
+  }
 }
 @media only screen and (min-width: 1280px) {
   .app-page-wrapper .app-page-content {
@@ -6400,6 +6502,7 @@ input[type=number] {
   margin-right: 0;
   padding-left: 0;
   padding-right: 0;
+  width: 100%;
 }
 .app-page-wrapper .app-page-content.full-height {
   margin-top: 0;
@@ -11079,10 +11182,14 @@ input[type=number] {
   font-family: "Open Sans", Sans, sans-serif;
 }
 .app-page-wrapper .app-page-content {
-  font-size: 120%;
   padding: 0;
   margin: 2em auto 1em auto;
   width: 100%;
+}
+@media only screen and (min-width: 600px) and (max-width: 1280px) {
+  .app-page-wrapper .app-page-content {
+    font-size: 120%;
+  }
 }
 @media only screen and (min-width: 1280px) {
   .app-page-wrapper .app-page-content {
@@ -11101,6 +11208,7 @@ input[type=number] {
   margin-right: 0;
   padding-left: 0;
   padding-right: 0;
+  width: 100%;
 }
 .app-page-wrapper .app-page-content.full-height {
   margin-top: 0;
