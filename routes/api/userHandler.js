@@ -15,6 +15,9 @@ router.post('/update/:id', update);
 router.delete('/remove/:id', remove);
 router.get('/name/:name', getByName);
 router.get('/:id', getById);
+router.post("/addTask/:id", addTask);
+router.post("/removeTask/:id", removeTask);
+
 
 /**
  * add task entity
@@ -83,4 +86,33 @@ function update (req, res, next){
         .catch(err => next(err));
 }
 
+
+function addTask (req, res, next){
+    //validate data
+    let err = new Error("invalid arguments received")
+    if (req.body === undefined) {
+        next(err);
+    }
+    if(req.body.task === undefined){
+        next(err)
+    }
+    userService.addTask(req.params.id, req.body.task)
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
+
+function removeTask (req, res, next){
+    //validate data
+    let err = new Error("invalid arguments received")
+    if (req.body === undefined) {
+        next(err);
+    }
+    if(req.body.task === undefined){
+        next(err)
+    }
+    userService.removeTask(req.params.id, req.body.task)
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
 module.exports = router;

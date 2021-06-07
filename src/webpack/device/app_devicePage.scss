@@ -2,6 +2,13 @@
 @use "../../../node_modules/@material/top-app-bar";
 @use "../../../node_modules/@material/top-app-bar/mdc-top-app-bar";
 
+
+@use "../../../node_modules/@material/button";
+@use "../../../node_modules/@material/list";
+@use "../../../node_modules/@material/checkbox"; // Required only for data table with row selection.
+@use "../../../node_modules/@material/icon-button"; // Required only for data table with column sorting.
+@use "../../../node_modules/@material/switch";
+
 @import "../app_pages";
 
 @import "../variables";
@@ -10,6 +17,9 @@
 @include drawer.core-styles;
 @include drawer.dismissible-core-styles;
 @include drawer.modal-core-styles;
+@include checkbox.core-styles;
+@include icon-button.core-styles;
+@include switch.core-styles;
 
 @import "~material-icons-font/material-icons-font.css";
 

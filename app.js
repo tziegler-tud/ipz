@@ -82,7 +82,6 @@ webAuth = function(req, res, next){
 
 apiAuth = function(req, res, next){
     if (!req.isAuthenticated()) {
-        // req.session.redirectTo = req.originalUrl; //strange bug setting favicon as url, disable until fixed
         res.status(401).send();
     } else {
         userManager.refresh(req.user);

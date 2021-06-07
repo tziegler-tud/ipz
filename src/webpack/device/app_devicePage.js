@@ -5,6 +5,9 @@ import {apiStatisticsHandler} from "../apiHandlers/apiStatisticsHandler";
 import {Page} from "../app_page";
 var $ = require( "jquery" );
 
+import {MDCRipple} from "@material/ripple";
+import {MDCSwitch} from '@material/switch';
+
 
 var phone = window.matchMedia("only screen and (max-width: 50em)");
 
@@ -39,30 +42,24 @@ DevicePage.prototype.show = function(options){
 DevicePage.prototype.buildHtml = function(url, context){
     let self = this;
     return new Promise(function(resolve, reject){
-        //get statistics overview
-        apiStatisticsHandler.getOverview()
-            .done(function(result){
-                //render page
-                context.days = result;
-                $.get(url, function (templateData) {
-                    console.log("device template found");
-                    var template = Handlebars.compile(templateData);
-                    //reset page content
-                    let pageContainer = $("#page-container");
-                    pageContainer.empty();
-                    pageContainer.append(template(context));
-                    self.page = document.getElementById("device-page");
-                    self.dataTableContainer = document.getElementById("device-container");
+        $.get(url, function (templateData) {
+            console.log("device template found");
+            var template = Handlebars.compile(templateData);
+            //reset page content
+            let pageContainer = $("#page-container");
+            pageContainer.empty();
+            pageContainer.append(template(context));
+            self.page = document.getElementById("device-page");
+            self.dataTableContainer = document.getElementById("device-container");
 
-                    resolve();
-            })
+            // const switchControls = document.querySelectorAll(".mdc-switch").map(function(switch){
+            //     new MDCSwitch(switch);
+            // })
 
 
+            resolve();
+        })
     })
-
-
-
-    });
 }
 
 export {DevicePage};

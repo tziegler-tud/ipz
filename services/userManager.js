@@ -22,10 +22,11 @@ class UserManager {
         console.log("user runtime service initialized succesfully.");
     }
 
-    connect(user){
+    connect(user, task){
+        if (task === undefined) task = {}
         let i = this.activeUsers.findIndex(active => active.user.id === user.id);
         if (i === -1) {
-            let userObj = {user: user, connect: Date.now(), decay: Date.now() + this.defaultDecay};
+            let userObj = {user: user, connect: Date.now(), decay: Date.now() + this.defaultDecay, currentTask: task};
             // user.connect = Date.now();
             // user.decay = Date.now() + this.defaultDecay;
             this.activeUsers.push(userObj);
@@ -35,6 +36,7 @@ class UserManager {
         }
         else {
             this.refreshIndex(i);
+            this.setActiveTask(this.activeUsers[i], task)
             return true;
         }
 
@@ -58,7 +60,8 @@ class UserManager {
         }
     }
 
-    refresh(user){
+    refresh(user, task){
+
         let i = this.activeUsers.findIndex(active => active.id === user.id);
         if (i === -1) {
             this.connect(user);
@@ -66,6 +69,7 @@ class UserManager {
         }
         else {
             this.activeUsers[i].decay = Date.now() + this.defaultDecay;
+            if(task !== undefined) this.setActiveTask(this.activeUsers[i], task)
             return true;
         }
     }
@@ -110,6 +114,11 @@ class UserManager {
             else reject("User not found.");
 
         });
+    }
+
+    setActiveTask(userObj, task) {
+        userObj.currentTask = task;
+        return userObj;
     }
 }
 

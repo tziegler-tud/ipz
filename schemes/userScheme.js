@@ -24,6 +24,7 @@ var userSchema = new Schema({
     ]
 })
 
+userSchema.set("usePushEach", true);
 userSchema.set('toJSON', { virtuals: true, getters: true });
 
 module.exports = mongoose.model('user', userSchema);

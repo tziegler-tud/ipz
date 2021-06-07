@@ -7,9 +7,7 @@ html
 
     if (user !== undefined)
       script.
-        window.user = {};
-        window.user.username = "#{user.username}";
-        window.user._id = "#{user._id}";
+        window.user = !{JSON.stringify(user)}
 
     block page_includes
 

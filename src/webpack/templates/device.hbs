@@ -24,11 +24,40 @@
                         <div class="userinfo-sectionheader"><span>Allgemeine Daten</span></div>
                         <div>
                             <ul class="userlist itemlist itemlist-style-clean itemlist-noSelect userinfo-itemList">
-                                <li class="user-entry userkey-entry"><a class="inner">
-                                    <div class="item-property userkey-entry-title"><span>Login-Name:</span></div>
-                                    <div class="item-property userkey-entry-value"><span>{{user.username}}</span></div>
-                                    <div class="clear"></div>
-                                </a></li>
+                                <li class="user-entry userkey-entry">
+                                    <a class="inner">
+                                        <div class="item-property userkey-entry-title"><span>Login-Name:</span></div>
+                                        <div class="item-property userkey-entry-value"><span>{{user.username}}</span></div>
+                                        <div class="clear"></div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="userinfo-sectionheader"><span>Freigabe für Aufgaben</span></div>
+                        <div>
+                            <ul class="userlist itemlist itemlist-style-clean itemlist-noSelect userinfo-itemList">
+                                {{#each user.allowedTasks}}
+                                    <li class="user-entry userkey-entry">
+                                        <a class="inner">
+                                            <div class="item-property userkey-entry-title"><span>{{this.name}}</span></div>
+                                            <div class="item-property userkey-entry-value"><span>
+                                                <div class="mdc-checkbox">
+                                                    <input type="checkbox" class="mdc-checkbox__native-control" id="demo-list-checkbox-item-3"/>
+                                                    <div class="mdc-checkbox__background">
+                                                        <svg class="mdc-checkbox__checkmark"
+                                                             viewBox="0 0 24 24">
+                                                        <path class="mdc-checkbox__checkmark-path"
+                                                              fill="none"
+                                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                                                        </svg>
+                                                        <div class="mdc-checkbox__mixedmark"></div>
+                                                    </div>
+                                                </div>
+                                            </span></div>
+                                            <div class="clear"></div>
+                                        </a>
+                                    </li>
+                                {{/each}}
                             </ul>
                         </div>
                     </div>

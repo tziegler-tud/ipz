@@ -23,15 +23,20 @@ app.set('port', port);
 
 console.log(process.cwd());
 const options = {
-  key: fs.readFileSync('bin/ext.key'),
-  cert: fs.readFileSync('bin/ext.crt')
+  key: fs.readFileSync('bin/ipz.key'),
+  cert: fs.readFileSync('bin/ipz.crt')
 };
 
+var httpServer = http.createServer(options, app);
 var server = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
+httpServer.listen("8080", "0.0.0.0");
+httpServer.on('error', onError);
+httpServer.on('listening', onListeningHttp);
+
 
 server.listen(port, "0.0.0.0");
 server.on('error', onError);
@@ -94,5 +99,13 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+function onListeningHttp() {
+  var addr = httpServer.address();
+  var bind = typeof addr === 'string'
+      ? 'pipe ' + addr
+      : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }

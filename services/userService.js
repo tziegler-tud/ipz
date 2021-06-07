@@ -1,6 +1,7 @@
 const db = require('../schemes/mongo');
 const bcrypt = require('bcrypt');
 const User = db.user;
+const Task = db.task;
 const settingsService = require('./settingsService');
 
 module.exports = {
@@ -10,6 +11,9 @@ module.exports = {
     add,
     remove,
     update,
+    addTask,
+    removeTask,
+
 };
 
 /**
@@ -20,11 +24,11 @@ async function get() {
 }
 
 async function getById(id) {
-    return User.findById(id);
+    return User.findById(id).populate("allowedTasks");
 }
 
 async function getByUsername(name) {
-    return User.findOne({username: name});
+    return User.findOne({username: name}).populate("allowedTasks");
 }
 
 async function add(userObject) {
@@ -71,4 +75,38 @@ async function update(id, userObject) {
     Object.assign(user, userObject);
     //save to db
     return user.save();
+}
+
+
+async function addTask (id, taskId){
+    //find current entry
+    let user = await User.findById(id);
+    if (user === undefined) throw new Error("User not found.");
+
+    let task = await Task.findById(taskId);
+    if (!task) throw new Error('Task not found');
+
+    //check if user already has userGroup assigned
+    if(user.allowedTasks.includes(taskId)){
+        console.log("User " + user.username + " already has allowed task " + task.name + " assigned.");
+        return user;
+    }
+    user.allowedTasks.push(task._id);
+    await user.save();
+    return user;
+}
+
+async function removeTask (id, taskId) {
+    let user = await User.findById(id);
+    if (user === undefined) throw new Error("User not found.");
+    let index = user.allowedTasks.indexOf(taskId);
+    if (index === -1) {
+        throw new Error("Task not found.");
+    }
+    else {
+        user.allowedTasks.splice(index, 1);
+    }
+    //update user
+    user.save();
+    return user;
 }
