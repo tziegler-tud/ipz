@@ -91,10 +91,9 @@
   !*** ./src/webpack/device/device.scss ***!
   \****************************************/
 /*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = (__webpack_require__.p + \"device.css\");\n\n//# sourceURL=webpack:///./src/webpack/device/device.scss?");
+eval("throw new Error(\"Module build failed (from ./node_modules/sass-loader/dist/cjs.js):\\nError: ENOENT: no such file or directory, open '/home/tom/WebstormProjects/ipz/src/webpack/device/device.scss'\");\n\n//# sourceURL=webpack:///./src/webpack/device/device.scss?");
 
 /***/ })
 

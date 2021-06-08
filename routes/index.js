@@ -62,14 +62,7 @@ router.get('/management', function(req, res, next) {
 });
 
 
-/* GET list page. */
-router.get('/list', function(req, res, next) {
-    res.render('pages/list',
-        {
-            user: req.user,
-            title: "Teamleiter - ImpfApp Dresden",
-        });
-});
+
 
 
 /* GET apotheke page. */

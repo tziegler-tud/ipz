@@ -21,7 +21,7 @@ import 'chartjs-adapter-date-fns';
 // import date-fns locale:
 import {de} from 'date-fns/locale';
 import { formatDistance, subDays } from 'date-fns'
-import {Bottom} from "../app_bottom";
+import {Bottom} from "../bottom/app_bottom";
 import {MDCDialog} from "@material/dialog";
 import {MDCMenu} from "@material/menu";
 

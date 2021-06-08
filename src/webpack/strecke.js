@@ -1,7 +1,7 @@
 import {preloader} from "./preloader";
 import {Navigation} from "./app_navigation";
 import {Sidesheet} from "./app_sidesheet";
-import {Bottom} from "./app_bottom";
+import {Bottom} from "./bottom/app_bottom";
 import {StreckePage} from "./strecke/app_streckePage";
 import {transformDateTimeString} from "./helpers";
 import "./handlebarsHelpers";

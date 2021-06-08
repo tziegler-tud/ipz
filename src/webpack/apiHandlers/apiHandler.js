@@ -471,6 +471,26 @@ var ApiHandler = function() {
             data: JSON.stringify(jsonData),
         });
     }
+
+    /*
+    user section
+     */
+
+    self.getAllUser = function(options){
+        let self = this;
+        let defaultOptions = {
+
+        }
+        options = (options === undefined) ? {}: options;
+        options = Object.assign(defaultOptions, options);
+
+        return $.get({
+            url: "/api/v1/user",
+            // make put for safety reasons :-)
+            type: 'GET',
+            contentType: "application/json; charset=UTF-8",
+        });
+    }
 }
 
 export let apiHandler = new ApiHandler();

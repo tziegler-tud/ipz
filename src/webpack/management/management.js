@@ -4,7 +4,7 @@ import {Sidesheet} from "../app_sidesheet";
 import {ManagementModulePage} from "./app_managementModulePage";
 import {transformDateTimeString} from "../helpers";
 import "../handlebarsHelpers";
-import {Bottom} from "../app_bottom";
+import {Bottom} from "../bottom/app_bottom";
 const Handlebars = require("handlebars");
 var $ = require( "jquery" );
 

@@ -18,6 +18,7 @@ var schedule = require ('node-schedule');
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var trackRouter = require('./routes/strecke');
+var userRouter = require('./routes/user');
 var checkinDataRouter = require('./routes/api/checkinHandler');
 var checkoutDataRouter = require('./routes/api/checkoutHandler');
 var trackDataRouter = require('./routes/api/trackDataHandler');
@@ -121,6 +122,7 @@ app.use("/api", errorHandler.apiErrorHandler);
 app.use('/', loginRouter);
 app.use('/', webAuth);
 app.use('/', indexRouter);
+app.use('/user', userRouter);
 app.use('/strecke', trackRouter);
 // catch 404 and forward to error handler
 app.use("/*", function(req, res, next) {

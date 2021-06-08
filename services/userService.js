@@ -7,7 +7,9 @@ const settingsService = require('./settingsService');
 module.exports = {
     get,
     getById,
+    getByIdWithHash,
     getByUsername,
+    getByUsernameWithHash,
     add,
     remove,
     update,
@@ -20,14 +22,22 @@ module.exports = {
  * Gets all users
  */
 async function get() {
-    return User.find();
+    return User.find().select("-hash");
 }
 
 async function getById(id) {
+    return User.findById(id).populate("allowedTasks").select("-hash");
+}
+
+async function getByIdWithHash(id) {
     return User.findById(id).populate("allowedTasks");
 }
 
 async function getByUsername(name) {
+    return User.findOne({username: name}).populate("allowedTasks").select("-hash");
+}
+
+async function getByUsernameWithHash(name) {
     return User.findOne({username: name}).populate("allowedTasks");
 }
 

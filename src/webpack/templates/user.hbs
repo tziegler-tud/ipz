@@ -1,0 +1,48 @@
+<div class="app-page-wrapper user-page tabs">
+        <!--    <div class="app-page-header">-->
+        <!--        <div class="page-title">-->
+        <!--            Mein Gerät-->
+        <!--        </div>-->
+        <!--    </div>-->
+        <div class="app-page-content full-width">
+            <div id="user-container infocards-container">
+                <div class="infocards-inner ">
+                    <div class="infocards-section infocards-card card-full">
+                        <div class="infocards-section-inner">
+                            <div class="infocards-sectionheader"><span>Bekannte Nutzer</span></div>
+                            <ul class="mdc-deprecated-list mdc-deprecated-list--two-line">
+                                <!--                            <h3 class="mdc-list-group__subheader card-header">Bekannte Geräte</h3>-->
+                                {{#each users}}
+                                    <li class="mdc-deprecated-list-item">
+                                        <span class="mdc-deprecated-list-item__ripple"></span>
+                                        <span class="mdc-deprecated-list-item__text">
+                                          <span class="mdc-deprecated-list-item__primary-text">{{this.username}}</span>
+                                          <span class="mdc-deprecated-list-item__secondary-text">{{this.role}}</span>
+                                        </span>
+                                    </li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="mdc-snackbar">
+        <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+            <div class="mdc-snackbar__label" aria-atomic="false">
+                Hier könnte Ihre Meldung stehen.
+            </div>
+            <div class="mdc-snackbar__actions" aria-atomic="true">
+                <button type="button" class="mdc-button mdc-snackbar__action">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label"></span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="bottom-container"></div>

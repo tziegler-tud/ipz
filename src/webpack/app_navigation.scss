@@ -31,8 +31,10 @@
 .mdc-drawer {
   @include drawer.activated-overlay-color(rgba(132, 22, 22, 0.2));
   @include drawer.width(300px);
+  overflow-y: auto;
   @media #{$tablet} {
     @include drawer.width(350px);
+
     .mdc-drawer__title {
       font-size: 140%;
     }

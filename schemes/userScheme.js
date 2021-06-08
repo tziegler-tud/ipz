@@ -21,7 +21,10 @@ var userSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "task"
         }
-    ]
+    ],
+    role: {
+
+    }
 })
 
 userSchema.set("usePushEach", true);

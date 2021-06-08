@@ -1,0 +1,58 @@
+@use "../../../node_modules/@material/button";
+@use "../../../node_modules/@material/icon-button"; // Required only for data table with column sorting.
+
+@use "../../../node_modules/@material/tab-bar/mdc-tab-bar";
+@use "../../../node_modules/@material/tab-scroller/mdc-tab-scroller";
+@use "../../../node_modules/@material/tab-indicator/mdc-tab-indicator";
+@use "../../../node_modules/@material/tab/mdc-tab";
+
+
+@import "../variables";
+@import "../color-variables";
+
+@import "~material-icons-font/material-icons-font.css";
+
+@include icon-button.core-styles;
+
+.app-bottom {
+  width: 100%;
+  height: 60px;
+
+  background-color: $nav-color;
+
+  &.bottom-navigation {
+    .bottom-navigation-inner {
+    }
+  }
+}
+
+.mdc-tab-bar {
+  .mdc-tab {
+    .mdc-tab-indicator .mdc-tab-indicator__content--underline {
+      border-color: #efefef;
+    }
+    .mdc-tab__content {
+      .mdc-tab__text-label {
+        color: #adadad;
+      }
+      .mdc-tab__icon {
+        color: #adadad;
+      }
+
+    }
+
+  }
+
+  .mdc-tab--active {
+    .mdc-tab__content {
+      .mdc-tab__text-label {
+        color: #efefef;
+      }
+      .mdc-tab__icon {
+        color: #efefef;
+      }
+
+    }
+
+  }
+}

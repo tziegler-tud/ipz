@@ -1,9 +1,9 @@
 @use "../common";
 @use "../app_navigation";
-@use "../app_managementPage";
+@use "./app_managementModulePage";
 @use "../app_sidesheet";
 @use "../preloader";
-
+@use "../bottom/app_bottom";
 
 .devices-content {
   .devices-list-container {
