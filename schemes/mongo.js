@@ -37,4 +37,5 @@ module.exports = {
     task: require('./taskScheme'),
     user: require('./userScheme'),
     authenticator: require('./authenticatorScheme'),
+    role: require('./roleScheme'),
 };

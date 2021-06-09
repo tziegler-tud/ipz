@@ -2,6 +2,7 @@ const db = require('../schemes/mongo');
 const bcrypt = require('bcrypt');
 const User = db.user;
 const Task = db.task;
+const Role = db.role;
 const settingsService = require('./settingsService');
 
 module.exports = {
@@ -15,6 +16,7 @@ module.exports = {
     update,
     addTask,
     removeTask,
+    setUserRole,
 
 };
 
@@ -26,19 +28,19 @@ async function get() {
 }
 
 async function getById(id) {
-    return User.findById(id).populate("allowedTasks").select("-hash");
+    return User.findById(id).populate("allowedTasks", "-hash").select("-hash");
 }
 
 async function getByIdWithHash(id) {
-    return User.findById(id).populate("allowedTasks");
+    return User.findById(id).populate("allowedTasks", "-hash");
 }
 
 async function getByUsername(name) {
-    return User.findOne({username: name}).populate("allowedTasks").select("-hash");
+    return User.findOne({username: name}).populate("allowedTasks", "-hash").select("-hash");
 }
 
 async function getByUsernameWithHash(name) {
-    return User.findOne({username: name}).populate("allowedTasks");
+    return User.findOne({username: name}).populate("allowedTasks", "-hash");
 }
 
 async function add(userObject) {
@@ -118,5 +120,19 @@ async function removeTask (id, taskId) {
     }
     //update user
     user.save();
+    return user;
+}
+
+
+async function setUserRole (id, roleId){
+    //find current entry
+    let user = await User.findById(id);
+    if (user === undefined) throw new Error("User not found.");
+
+    let role = await Role.findById(roleId);
+    if (!role) throw new Error('Role not found');
+
+    user.role = role;
+    await user.save();
     return user;
 }

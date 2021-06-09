@@ -17,6 +17,7 @@ router.get('/name/:name', getByName);
 router.get('/:id', getById);
 router.post("/addTask/:id", addTask);
 router.post("/removeTask/:id", removeTask);
+router.post("/setRole/:id", setUserRole);
 
 
 /**
@@ -115,4 +116,19 @@ function removeTask (req, res, next){
         .then(result => res.json(result))
         .catch(err => next(err));
 }
+
+function setUserRole (req, res, next){
+    //validate data
+    let err = new Error("invalid arguments received")
+    if (req.body === undefined) {
+        next(err);
+    }
+    if(req.body.role === undefined){
+        next(err)
+    }
+    userService.setUserRole(req.params.id, req.body.role)
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
 module.exports = router;

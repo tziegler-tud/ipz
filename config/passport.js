@@ -25,6 +25,8 @@ passport.use(
             // check the password
             if(username === user._doc.username && await bcrypt.compare(password, user._doc.hash)) {
                 console.log('password ok');
+                //do not return hash
+                delete user._doc.hash;
                 return done(null, user);
             } else {
                 console.log('login failed');

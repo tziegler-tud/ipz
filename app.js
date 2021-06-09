@@ -29,6 +29,7 @@ var deviceApiHandler = require('./routes/api/deviceHandler');
 var archiveHandler = require('./routes/api/archiveHandler');
 var statisticsHandler = require('./routes/api/statisticsHandler');
 var authenticationHandler = require('./routes/api/authenticationHandler');
+var roleHandler = require('./routes/api/roleHandler');
 
 var archiveService = require('./services/archiveService');
 var errorHandler = require("./helpers/error-handler");
@@ -102,6 +103,7 @@ var settingsService = require('./services/settingsService');
 settingsService.initialize();
 
 
+app.use('/', loginRouter);
 
 app.use("/api", apiAuth);
 app.use('/api/v1/checkin', checkinDataRouter);
@@ -114,12 +116,12 @@ app.use('/api/v1/devices', deviceApiHandler);
 app.use('/api/v1/archive', archiveHandler);
 app.use('/api/v1/statistics', statisticsHandler);
 app.use('/api/v1/authentication', authenticationHandler);
+app.use('/api/v1/role', roleHandler);
 app.use("/api", function(req, res, next) {
   next(createError(404));
 });
 app.use("/api", errorHandler.apiErrorHandler);
 
-app.use('/', loginRouter);
 app.use('/', webAuth);
 app.use('/', indexRouter);
 app.use('/user', userRouter);

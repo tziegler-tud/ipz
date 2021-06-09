@@ -3,6 +3,7 @@
 @use "../../../node_modules/@material/checkbox"; // Required only for data table with row selection.
 @use "../../../node_modules/@material/icon-button"; // Required only for data table with column sorting.
 @use "../../../node_modules/@material/switch";
+@use "../../../node_modules/@material/banner/styles";
 
 @import "../app_pages";
 
@@ -15,6 +16,12 @@
 
 @import "~material-icons-font/material-icons-font.css";
 
+
+.save-button {
+  margin-right: 10px;
+  @include button.container-fill-color($primary-color);
+  @include button.ink-color(#fff);
+}
 
 .userinfo-container {
 

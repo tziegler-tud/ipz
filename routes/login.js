@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 
 /*
-hoked at /login
+hoked at /
 * */
 
 router.get('/login', function(req, res, next) {
@@ -26,7 +26,6 @@ router.get('/login', function(req, res, next) {
     res.render('login', { title: 'ImpFlow Dresden - Login' });
   }
 });
-
 
 /* POST user login */
 router.post('/login', function(req, res, next) {
@@ -45,11 +44,31 @@ router.post('/login', function(req, res, next) {
   }
 });
 
+router.post('/api/v1/login', function(req, res, next) {
+  if(req.isAuthenticated()) {
+    return res.status(200).json(req.user);
+  } else {
+    passport.authenticate('local', {}, (err, user, info) => {
+      if (!user) { return res.status(401).send()}
+      req.login(user, (err) => {
+        return res.status(200).json(req.user);
+      })
+    })(req, res, next);
+  }
+});
+
 router.all("/logout", function(req, res, next) {
   req.session.destroy(function (err) {
     res.redirect('/login'); //Inside a callback… bulletproof!
   });
 });
+
+router.all("/api/v1/logout", function(req, res, next) {
+  req.session.destroy(function (err) {
+    res.status(200).send(); //Inside a callback… bulletproof!
+  });
+});
+
 
 /*
 register

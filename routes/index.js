@@ -44,6 +44,7 @@ router.get('/', function(req, res, next) {
 
 /* GET checkin page. */
 router.get('/checkin', function(req, res, next) {
+    req.user._doc.currentTask = "checkin";
     res.render('pages/checkin',
         {
             user: req.user,
@@ -54,6 +55,7 @@ router.get('/checkin', function(req, res, next) {
 
 /* GET management page. */
 router.get('/management', function(req, res, next) {
+    req.user._doc.currentTask = "management";
     res.render('pages/management/management',
         {
             user: req.user,
@@ -67,6 +69,7 @@ router.get('/management', function(req, res, next) {
 
 /* GET apotheke page. */
 router.get('/apotheke', function(req, res, next) {
+    req.user._doc.currentTask = "apotheke";
     res.render('pages/apotheke',
         {
             user: req.user,

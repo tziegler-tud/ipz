@@ -1,4 +1,29 @@
 <div class="app-page-wrapper device-page">
+    <div class="userinfo-save-banner">
+        <div class="mdc-banner" role="banner">
+            <div class="mdc-banner__fixed">
+                <div class="mdc-banner__content"
+                     role="status"
+                     aria-live="assertive">
+                    <div class="mdc-banner__graphic-text-wrapper">
+                        <div class="mdc-banner__text">
+                            Änderungen speichern?
+                        </div>
+                    </div>
+                    <div class="mdc-banner__actions">
+                        <button type="button" class="save-button mdc-button mdc-button--outlined mdc-banner__primary-action">
+                            <div class="mdc-button__ripple"></div>
+                            <div class="mdc-button__label">Speichern</div>
+                        </button>
+                        <button type="button" class="cancel-button mdc-button mdc-banner__secondary-action mdc-button--outlined">
+                            <div class="mdc-button__ripple"></div>
+                            <div class="mdc-button__label">Abbrechen</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <!--    <div class="app-page-header">-->
 <!--        <div class="page-title">-->
 <!--            Mein Gerät-->
@@ -34,7 +59,7 @@
                                 <li class="user-entry userkey-entry">
                                     <a class="inner">
                                         <div class="item-property userkey-entry-title"><span>Rolle:</span></div>
-                                        <div class="item-property userkey-entry-value"><span>{{user.role}}</span></div>
+                                        <div class="item-property userkey-entry-value"><span>{{user.role.name}}</span></div>
                                         <div class="clear"></div>
                                     </a>
                                 </li>
@@ -48,16 +73,11 @@
                                         <a class="inner">
                                             <div class="item-property userkey-entry-title"><span>{{this.name}}</span></div>
                                             <div class="item-property userkey-entry-value"><span>
-                                                <div class="mdc-checkbox">
-                                                    <input type="checkbox" class="mdc-checkbox__native-control" id="demo-list-checkbox-item-3"/>
-                                                    <div class="mdc-checkbox__background">
-                                                        <svg class="mdc-checkbox__checkmark"
-                                                             viewBox="0 0 24 24">
-                                                        <path class="mdc-checkbox__checkmark-path"
-                                                              fill="none"
-                                                              d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                                                        </svg>
-                                                        <div class="mdc-checkbox__mixedmark"></div>
+                                                <div class="mdc-switch mdc-switch--checked">
+                                                    <div class="mdc-switch__track"></div>
+                                                    <div class="mdc-switch__thumb-underlay">
+                                                        <div class="mdc-switch__thumb"></div>
+                                                        <input type="checkbox" id="sound-switch" class="mdc-switch__native-control" role="switch" aria-checked="true" checked>
                                                     </div>
                                                 </div>
                                             </span></div>

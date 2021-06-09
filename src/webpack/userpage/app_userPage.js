@@ -1,5 +1,7 @@
 const Handlebars = require("handlebars");
 import "../handlebarsHelpers";
+import {MDCBanner} from '@material/banner';
+
 
 import {apiStatisticsHandler} from "../apiHandlers/apiStatisticsHandler";
 import {Page} from "../app_page";
@@ -55,6 +57,18 @@ UserPage.prototype.buildHtml = function(url, context){
             // const switchControls = document.querySelectorAll(".mdc-switch").map(function(switch){
             //     new MDCSwitch(switch);
             // })
+            const banner = new MDCBanner(document.querySelector('.mdc-banner'));
+            banner.listen("MDCBanner:closed", function(detail){
+                console.log(detail);
+            })
+
+            const switches = [].map.call(document.querySelectorAll(".mdc-switch"), function(el) {
+                let s = new MDCSwitch(el);
+                s.listen('change', function(event){
+                    banner.open()
+                })
+            });
+
 
 
             resolve();

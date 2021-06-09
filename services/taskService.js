@@ -10,6 +10,8 @@ module.exports = {
     add,
     remove,
     update,
+    getByIdWithHash,
+    getByNameWithHash,
 };
 
 /**
@@ -20,11 +22,19 @@ async function get() {
 }
 
 async function getById(id) {
-    return Task.findById(id).select("-password");
+    return Task.findById(id).select("-hash");
 }
 
 async function getByName(name) {
-    return Task.find({name: name}).select("-password");
+    return Task.find({name: name}).select("-hash");
+}
+
+async function getByIdWithHash(id) {
+    return Task.findById(id);
+}
+
+async function getByNameWithHash(name) {
+    return Task.find({name: name});
 }
 
 async function add(taskObject) {
