@@ -61,3 +61,21 @@ nav.initialize
             sidesheet.toggle();
         });
     });
+
+Notification.requestPermission().then((result) => {
+    if (result === 'granted') {
+        randomNotification();
+    }
+});
+
+function randomNotification() {
+    const notifTitle = window.user.username;
+    const notifBody = "current user is: " + window.user.name;
+    const notifImg = "/images/bg-square.jpg";
+    const options = {
+        body: notifBody,
+        icon: notifImg,
+    };
+    new Notification(notifTitle, options);
+    setTimeout(randomNotification, 30000);
+}

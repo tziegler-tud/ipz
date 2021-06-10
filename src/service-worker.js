@@ -7,3 +7,7 @@ self.addEventListener("activate", event => {
 self.addEventListener('fetch', function(event) {
     console.log('Fetch!', event.request);
 });
+
+self.addEventListener('push', (e) => {
+    console.log(e)
+});
