@@ -12,6 +12,10 @@ var userSchema = new Schema({
         type: "String",
         required: true,
     },
+    displayname: {
+        type: String,
+        default: this.username,
+    },
     deviceType: {
         type: "String",
         default: "unset",
@@ -23,9 +27,15 @@ var userSchema = new Schema({
         }
     ],
     role: {
-
+        type: Schema.Types.ObjectId,
+        ref: "role"
     }
 })
+
+userSchema.virtual("name").get(function() {
+   if (this.displayname === undefined) return this.username;
+   return this.displayname;
+});
 
 userSchema.set("usePushEach", true);
 userSchema.set('toJSON', { virtuals: true, getters: true });

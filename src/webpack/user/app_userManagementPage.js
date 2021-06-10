@@ -77,6 +77,13 @@ UserManagementPage.prototype.buildHtml = function(url, context, options){
                     if(options.snackbar.show) {
                         self.showSnackbar(options.snackbar.message);
                     }
+
+                    $(".userlist-entry").each(function(index) {
+                        let userid = this.dataset.userid;
+                        this.addEventListener("click", function(){
+                            window.location = "/user/"+userid
+                        })
+                    })
                     resolve();
                 })
             })

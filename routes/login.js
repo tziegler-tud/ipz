@@ -95,7 +95,7 @@ router.post('/register', function(req, res, next) {
             let user = userService.add(userObject)
                 .then(function(user){
                   req.login(user, (err) => {
-                    var redirectTo = req.session.redirectTo || "/management";
+                    var redirectTo = req.session.redirectTo || "/user/current";
                     req.session.save(() => {
                       res.redirect(redirectTo);
                     });

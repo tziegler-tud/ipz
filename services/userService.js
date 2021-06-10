@@ -24,23 +24,23 @@ module.exports = {
  * Gets all users
  */
 async function get() {
-    return User.find().select("-hash");
+    return User.find().populate("role").select("-hash");
 }
 
 async function getById(id) {
-    return User.findById(id).populate("allowedTasks", "-hash").select("-hash");
+    return User.findById(id).populate("role").populate("allowedTasks", "-hash").select("-hash");
 }
 
 async function getByIdWithHash(id) {
-    return User.findById(id).populate("allowedTasks", "-hash");
+    return User.findById(id).populate("role").populate("allowedTasks", "-hash");
 }
 
 async function getByUsername(name) {
-    return User.findOne({username: name}).populate("allowedTasks", "-hash").select("-hash");
+    return User.findOne({username: name}).populate("role").populate("allowedTasks", "-hash").select("-hash");
 }
 
 async function getByUsernameWithHash(name) {
-    return User.findOne({username: name}).populate("allowedTasks", "-hash");
+    return User.findOne({username: name}).populate("role").populate("allowedTasks", "-hash");
 }
 
 async function add(userObject) {

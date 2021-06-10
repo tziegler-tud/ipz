@@ -25,3 +25,18 @@ Handlebars.registerHelper('add', function (x, y) {
 Handlebars.registerHelper('timeFromNow', function (x) {
     return Date.now() + x;
 });
+
+Handlebars.registerHelper('userHasRole', function (user, role) {
+    //handle populated and non-populated cases
+
+    if (user.role === undefined) return false;
+    let userRoleId = (user.role.id === undefined) ? user.role : user.role.id;
+    let roleId = (role.id === undefined) ? role : role.id;
+    return (userRoleId === roleId);
+});
+
+Handlebars.registerHelper("navEntryAllowed", function(taskName, allowedTasks){
+    //find whether allowedTasks contains an entry with the given name. Note that this is not save, i.e. make sure Tasks have unique names
+    let index = allowedTasks.findIndex(task => task.name === taskName);
+    return (index > -1)
+})

@@ -4,6 +4,7 @@
 @use "../../../node_modules/@material/icon-button"; // Required only for data table with column sorting.
 @use "../../../node_modules/@material/switch";
 @use "../../../node_modules/@material/banner/styles";
+@use "../../../node_modules/@material/snackbar/mdc-snackbar";
 
 @import "../app_pages";
 
@@ -118,6 +119,18 @@
           @media #{$desktop}, #{$tablet} {
             width: 8em;
           }
+        }
+      }
+
+      .userinfo-select {
+        width: 100%;
+        margin-right: 2em;
+        margin-bottom: 0;
+
+        color: #555;
+
+        @media #{$desktop}, #{$tablet} {
+          width: 8em;
         }
       }
     }

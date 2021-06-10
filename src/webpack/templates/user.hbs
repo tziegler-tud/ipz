@@ -13,10 +13,10 @@
                             <ul class="mdc-deprecated-list mdc-deprecated-list--two-line">
                                 <!--                            <h3 class="mdc-list-group__subheader card-header">Bekannte Geräte</h3>-->
                                 {{#each users}}
-                                    <li class="mdc-deprecated-list-item">
+                                    <li class="mdc-deprecated-list-item userlist-entry" data-userid={{this._id}}>
                                         <span class="mdc-deprecated-list-item__ripple"></span>
                                         <span class="mdc-deprecated-list-item__text">
-                                          <span class="mdc-deprecated-list-item__primary-text">{{this.username}}</span>
+                                          <span class="mdc-deprecated-list-item__primary-text">{{this.name}}</span>
                                           <span class="mdc-deprecated-list-item__secondary-text">{{this.role.name}}</span>
                                         </span>
                                     </li>

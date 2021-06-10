@@ -78,9 +78,7 @@ function update (req, res, next){
     let err = new Error("invalid arguments received")
     if (req.body === undefined) {
         next(err);
-    }
-    if(req.body.name === undefined){
-        next(err)
+        return;
     }
     userService.update(req.params.id, req.body)
         .then(result => res.json(result))

@@ -491,6 +491,42 @@ var ApiHandler = function() {
             contentType: "application/json; charset=UTF-8",
         });
     }
+
+    self.updateUser = function(userid, userObj){
+        let jsonData = userObj;
+        return $.ajax({
+            url: "/api/v1/user/update/"+userid,
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(jsonData),
+
+        });
+    }
+
+    self.getUser = function(userid){
+        return $.get({
+            url: "/api/v1/user/"+userid,
+            type: 'GET',
+            contentType: "application/json; charset=UTF-8",
+        });
+    }
+
+    self.getRoles = function(){
+        return $.get({
+            url: "/api/v1/role",
+            type: 'GET',
+            contentType: "application/json; charset=UTF-8",
+        });
+    }
+
+    self.getTasks = function(){
+        return $.get({
+            url: "/api/v1/task",
+            type: 'GET',
+            contentType: "application/json; charset=UTF-8",
+        });
+    }
 }
 
 export let apiHandler = new ApiHandler();

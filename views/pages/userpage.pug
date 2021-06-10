@@ -1,10 +1,24 @@
 extends ../layout
 
 block page_includes
+
+  if (exploredUser !== undefined)
+    script.
+     window.exploredUser = !{JSON.stringify(exploredUser)}
+  if (exploredUser !== undefined)
+    script.
+      window.exploredUserId = "#{exploredUserId}"
+  script.
+    window.currentUser = #{currentUser};
+
+
+
   link(rel='stylesheet', href='/dist/userpage.css')
   script(src="/dist/userpage.js")
 
   link(rel='stylesheet', href='/css/preloader.css')
+
+
 
 
 

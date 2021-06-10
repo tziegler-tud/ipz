@@ -1,6 +1,6 @@
 <div class="mdc-drawer__content">
     <div class="mdc-drawer__header">
-        <h3 class="mdc-drawer__title">{{user.username}}</h3>
+        <h3 class="mdc-drawer__title">{{user.name}}</h3>
         <h6 class="mdc-drawer__subtitle">{{user.role.name}}</h6>
         <a href="/logout" class="mdc-button mdc-button--outlined">
             <div class="mdc-button__ripple"></div>
@@ -12,6 +12,7 @@
         <h6 class="mdc-drawer__subtitle">{{pageData.date}}</h6>
     </div>
     <div class="mdc-deprecated-list-group">
+        {{#if (navEntryAllowed "Checkin" user.allowedTasks)}}
         <h3 class="mdc-deprecated-list-group__subheader">CheckIn & Wartebereich</h3>
         <div class="mdc-deprecated-list">
             <a id="app-link-checkin" class="navigation-element mdc-deprecated-list-item" href="/checkin" aria-current="page">
@@ -25,43 +26,54 @@
 <!--                    <span class="mdc-deprecated-list-item__text">Wartebereich II</span>-->
 <!--                </a>-->
         </div>
+        {{/if}}
         <div class="mdc-deprecated-list">
         <h3 class="mdc-deprecated-list-group__subheader">Impfstrecke & Apotheke</h3>
             {{#each tracks}}
-                <a id="app-link-strecke--{{this.id}}" class="navigation-element mdc-deprecated-list-item" href="/strecke/{{this.id}}" >
-                    <span class="mdc-deprecated-list-item__ripple"></span>
-                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">coronavirus</i>
-                    <span class="mdc-deprecated-list-item__text">Impfstrecke {{this.name}}</span>
-                </a>
+                {{#if (navEntryAllowed (add "Impfstrecke " this.name) ../user.allowedTasks)}}
+                    <a id="app-link-strecke--{{this.id}}" class="navigation-element mdc-deprecated-list-item" href="/strecke/{{this.id}}">
+                        <span class="mdc-deprecated-list-item__ripple"></span>
+                        <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">coronavirus</i>
+                        <span class="mdc-deprecated-list-item__text">Impfstrecke {{this.name}}</span>
+                    </a>
+                {{/if}}
             {{/each}}
-
+            {{#if (navEntryAllowed "Apotheke" user.allowedTasks)}}
             <a id="app-link-apotheke" class="navigation-element mdc-deprecated-list-item" href="/apotheke" >
                 <span class="mdc-deprecated-list-item__ripple"></span>
                 <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">people</i>
                 <span class="mdc-deprecated-list-item__text">Apotheke</span>
             </a>
+            {{/if}}
 
         </div>
+
+        {{#if (navEntryAllowed "Teamleiter - Übersicht" user.allowedTasks)}}
         <div class="mdc-deprecated-list">
             <h3 class="mdc-deprecated-list-group__subheader">Leitung</h3>
-            <a id="app-link-management" class="navigation-element mdc-deprecated-list-item" href="/management" >
-                <span class="mdc-deprecated-list-item__ripple"></span>
-                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">announcement</i>
-                <span class="mdc-deprecated-list-item__text">Teamleiter</span>
-            </a>
+                <a id="app-link-management" class="navigation-element mdc-deprecated-list-item" href="/management" >
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">announcement</i>
+                    <span class="mdc-deprecated-list-item__text">Teamleiter</span>
+                </a>
+        {{/if}}
         </div>
         <div class="mdc-deprecated-list">
             <h3 class="mdc-deprecated-list-group__subheader">Entwicklung</h3>
+            {{#if (navEntryAllowed "Statistik" user.allowedTasks)}}
             <a id="app-link-statistics" class="navigation-element mdc-deprecated-list-item" href="/statistics" >
                 <span class="mdc-deprecated-list-item__ripple"></span>
                 <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">trending_up</i>
                 <span class="mdc-deprecated-list-item__text">Statistik</span>
             </a>
+            {{/if}}
+            {{#if (navEntryAllowed "Nutzerverwaltung" user.allowedTasks)}}
             <a id="app-link-usermanagement" class="navigation-element mdc-deprecated-list-item" href="/user" >
                 <span class="mdc-deprecated-list-item__ripple"></span>
                 <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">announcement</i>
                 <span class="mdc-deprecated-list-item__text">Nutzer & Geräte</span>
             </a>
+            {{/if}}
             <a id="app-link-device" class="navigation-element mdc-deprecated-list-item" href="/user/current" >
                 <span class="mdc-deprecated-list-item__ripple"></span>
                 <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">tablet_android</i>

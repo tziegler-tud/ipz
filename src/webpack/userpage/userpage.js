@@ -2,6 +2,7 @@ import {preloader} from "../preloader";
 import {Navigation} from "../app_navigation";
 import {Sidesheet} from "../app_sidesheet";
 import {UserPage} from "./app_userPage";
+import {apiHandler} from "../apiHandlers/apiHandler"
 import {transformDateTimeString} from "../helpers";
 import "../handlebarsHelpers";
 const Handlebars = require("handlebars");
@@ -18,6 +19,7 @@ $(window).on('load',function() {
 
 let sidesheet;
 
+let activeId = (window.currentUser) ? "app-link-device" : "app-link-usermanagement"
 
 let nav = new Navigation(
     {
@@ -30,18 +32,28 @@ let nav = new Navigation(
     {
         clock: ".navigation-clock",
         sidesheet: true,
-        activeElement: "app-link-device",
+        activeElement: activeId,
         open: true,
         topbar: true,
     },
 );
 
-let context = {user: window.user};
+let context = {user: window.user, exploredUser: window.exploredUser};
 let devicePage = new UserPage({}, context);
-devicePage.show()
+
+let options = (window.exploredUser !== undefined) ? {} : {snackbar: {
+            show: true,
+            message: "Error: Failed to retrieve user data.",
+            actionButton: {
+                display: true,
+                text: "Nagut",
+            }
+        }}
+devicePage.show(options)
     .then(function(){
-    // sidesheet = new Sidesheet("checkin", managementPage, {});
-});
+        // sidesheet = new Sidesheet("checkin", managementPage, {});
+    });
+
 
 nav.initialize
     .then(function(){

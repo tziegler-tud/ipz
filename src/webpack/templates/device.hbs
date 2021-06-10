@@ -1,6 +1,6 @@
 <div class="app-page-wrapper device-page">
     <div class="userinfo-save-banner">
-        <div class="mdc-banner" role="banner">
+        <div class="mdc-banner mdc-banner--mobile-stacked" role="banner">
             <div class="mdc-banner__fixed">
                 <div class="mdc-banner__content"
                      role="status"
@@ -30,66 +30,87 @@
 <!--        </div>-->
 <!--    </div>-->
     <div class="app-page-content full-width">
-            <div class="userinfo-inner">
-                <div class="userinfo-section userinfo-card card-full userwidget-description">
-                    <div class="userinfo-section-inner">
-                        <div class="userinfo-sectionheader"><span>Mein Gerät</span></div>
-                        <div>
-                            <ul class="userlist itemlist itemlist-style-clean itemlist-noSelect userinfo-itemList">
-                                <li class="userinfo-item user-entry userkey-entry"><a class="inner">
-                                    <div class="item-property userkey-entry-title"><span class="userinfo-item-label userinfo-attribute-name">Username:</span></div>
-                                    <div class="item-property userkey-entry-value"><span class="userinfo-item-label">{{user.username}}</span></div>
-                                </a></li>
-                                <li class="userinfo-item user-entry userkey-entry"><a class="inner">
-                                    <div class="item-property userkey-entry-title"><span class="userinfo-item-label userinfo-attribute-name">id:</span></div>
-                                    <div class="item-property userkey-entry-value"><span class="userinfo-item-label">{{user._id}}</span></div>
-                                </a></li>
-                            </ul>
-                        </div>
-                        <div class="userinfo-sectionheader"><span>Allgemeine Daten</span></div>
-                        <div>
-                            <ul class="userlist itemlist itemlist-style-clean itemlist-noSelect userinfo-itemList">
+        <div class="userinfo-inner">
+            <div class="userinfo-section userinfo-card card-full userwidget-description">
+                <div class="userinfo-section-inner">
+                    <div class="userinfo-sectionheader"><span>Mein Gerät</span></div>
+                    <div>
+                        <ul class="userlist itemlist itemlist-style-clean itemlist-noSelect userinfo-itemList">
+                            <li class="userinfo-item user-entry userkey-entry"><a class="inner">
+                                <div class="item-property userkey-entry-title"><span class="userinfo-item-label userinfo-attribute-name">Username:</span></div>
+                                <div class="item-property userkey-entry-value"><span class="userinfo-item-label">{{exploredUser.username}}</span></div>
+                            </a></li>
+                            <li class="userinfo-item user-entry userkey-entry"><a class="inner">
+                                <div class="item-property userkey-entry-title"><span class="userinfo-item-label userinfo-attribute-name">id:</span></div>
+                                <div class="item-property userkey-entry-value"><span class="userinfo-item-label">{{exploredUser._id}}</span></div>
+                            </a></li>
+                        </ul>
+                    </div>
+                    <div class="userinfo-sectionheader"><span>Allgemeine Daten</span></div>
+                    <div>
+                        <ul class="userlist itemlist itemlist-style-clean itemlist-noSelect userinfo-itemList">
+                            <li class="user-entry userkey-entry">
+                                <a class="inner">
+                                    <div class="item-property userkey-entry-title"><span>Anzeige-Name:</span></div>
+                                    <div class="item-property userkey-entry-value"><input class="userkey-entry-edit" type="text" value="{{exploredUser.name}}" data-key="displayname" disabled/></div>
+                                    <div class="clear"></div>
+                                </a>
+                            </li>
+                            <li class="user-entry userkey-entry">
+                                <a class="inner">
+                                    <div class="item-property userkey-entry-title"><span class="userinfo-item-label userinfo-attribute-name">Rolle:</span></div>
+                                    <div class="item-property userkey-entry-value">
+                                        <select class="userinfo-select userkey-entry-edit" data-key="role" disabled>
+                                            <option value="null" selected disabled>Bitte auswählen</option>
+                                            {{#each roles}}
+                                                <option value="{{this.id}}" {{#if (userHasRole ../exploredUser this)}}selected{{/if}}>{{this.name}} </option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+<!--                                    <div class="item-property userkey-entry-value"><span>{{exploredUser.role.name}}</span></div>-->
+                                    <div class="clear"></div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="userinfo-sectionheader"><span>Freigabe für Aufgaben</span></div>
+                    <div>
+                        <ul class="userlist itemlist itemlist-style-clean itemlist-noSelect userinfo-itemList">
+                            {{#each tasks}}
                                 <li class="user-entry userkey-entry">
                                     <a class="inner">
-                                        <div class="item-property userkey-entry-title"><span>Login-Name:</span></div>
-                                        <div class="item-property userkey-entry-value"><span>{{user.username}}</span></div>
-                                        <div class="clear"></div>
-                                    </a>
-                                </li>
-                                <li class="user-entry userkey-entry">
-                                    <a class="inner">
-                                        <div class="item-property userkey-entry-title"><span>Rolle:</span></div>
-                                        <div class="item-property userkey-entry-value"><span>{{user.role.name}}</span></div>
-                                        <div class="clear"></div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="userinfo-sectionheader"><span>Freigabe für Aufgaben</span></div>
-                        <div>
-                            <ul class="userlist itemlist itemlist-style-clean itemlist-noSelect userinfo-itemList">
-                                {{#each user.allowedTasks}}
-                                    <li class="user-entry userkey-entry">
-                                        <a class="inner">
-                                            <div class="item-property userkey-entry-title"><span>{{this.name}}</span></div>
-                                            <div class="item-property userkey-entry-value"><span>
-                                                <div class="mdc-switch mdc-switch--checked">
-                                                    <div class="mdc-switch__track"></div>
-                                                    <div class="mdc-switch__thumb-underlay">
-                                                        <div class="mdc-switch__thumb"></div>
-                                                        <input type="checkbox" id="sound-switch" class="mdc-switch__native-control" role="switch" aria-checked="true" checked>
-                                                    </div>
+                                        <div class="item-property userkey-entry-title"><span>{{this.name}}</span></div>
+                                        <div class="item-property userkey-entry-value"><span>
+                                            <div class="mdc-switch mdc-switch--checked" data-taskid="{{this.id}}">
+                                                <div class="mdc-switch__track"></div>
+                                                <div class="mdc-switch__thumb-underlay">
+                                                    <div class="mdc-switch__thumb"></div>
+                                                    <input type="checkbox" id="sound-switch" class="mdc-switch__native-control" role="switch" aria-checked="true" value="{{this.id}}">
                                                 </div>
-                                            </span></div>
-                                            <div class="clear"></div>
-                                        </a>
-                                    </li>
-                                {{/each}}
-                            </ul>
-                        </div>
+                                            </div>
+                                        </span></div>
+                                        <div class="clear"></div>
+                                    </a>
+                                </li>
+                            {{/each}}
+                        </ul>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="mdc-snackbar">
+        <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+            <div class="mdc-snackbar__label" aria-atomic="false">
+                Hier könnte Ihre Meldung stehen.
+            </div>
+            <div class="mdc-snackbar__actions" aria-atomic="true">
+                <button type="button" class="mdc-button mdc-snackbar__action">
+                    <div class="mdc-button__ripple"></div>
+                    <span class="mdc-button__label"></span>
+                </button>
+            </div>
 
+        </div>
     </div>
 </div>
