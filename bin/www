@@ -9,6 +9,7 @@ var debug = require('debug')('ipz:server');
 var http = require('http');
 const https = require('https');
 const fs = require('fs');
+const path = require("path");
 
 /**
  * Get port from environment and store in Express.
@@ -23,8 +24,8 @@ app.set('port', port);
 
 console.log(process.cwd());
 const options = {
-  key: fs.readFileSync('bin/ipz.key'),
-  cert: fs.readFileSync('bin/ipz.crt')
+  key: fs.readFileSync(path.resolve(__dirname, "./ipz.key")),
+  cert: fs.readFileSync(path.resolve(__dirname, 'ipz.crt'))
 };
 
 var httpServer = http.createServer(options, app);

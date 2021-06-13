@@ -58,15 +58,19 @@ devicePage.show(options)
 nav.initialize
     .then(function(){
         nav.setAction("mdc-top-app-bar-action1", function(e, args){
-            sidesheet.toggle();
+            // sidesheet.toggle();
+            Notification.requestPermission().then((result) => {
+                if (result === 'granted') {
+                    console.log("permission granted")
+                    randomNotification();
+
+                }
+            });
         });
     });
 
-Notification.requestPermission().then((result) => {
-    if (result === 'granted') {
-        randomNotification();
-    }
-});
+
+
 
 function randomNotification() {
     const notifTitle = window.user.username;
@@ -76,6 +80,14 @@ function randomNotification() {
         body: notifBody,
         icon: notifImg,
     };
-    new Notification(notifTitle, options);
-    setTimeout(randomNotification, 30000);
+    // new Notification(notifTitle, options);
+    navigator.serviceWorker.ready.then(function(registration) {
+        registration.showNotification(notifTitle, {
+            body: notifBody,
+            icon: notifImg,
+            vibrate: [200, 100, 200, 100, 200, 100, 200],
+            tag: 'my-tag'
+        });
+    });
+    // setTimeout(randomNotification, 30000);
 }
