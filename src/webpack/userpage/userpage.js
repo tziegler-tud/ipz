@@ -1,3 +1,5 @@
+import "../pushhandler";
+
 import {preloader} from "../preloader";
 import {Navigation} from "../app_navigation";
 import {Sidesheet} from "../app_sidesheet";
@@ -5,6 +7,7 @@ import {UserPage} from "./app_userPage";
 import {apiHandler} from "../apiHandlers/apiHandler"
 import {transformDateTimeString} from "../helpers";
 import "../handlebarsHelpers";
+
 const Handlebars = require("handlebars");
 var $ = require( "jquery" );
 
@@ -85,9 +88,10 @@ function randomNotification() {
         registration.showNotification(notifTitle, {
             body: notifBody,
             icon: notifImg,
-            vibrate: [200, 100, 200, 100, 200, 100, 200],
             tag: 'my-tag'
         });
     });
     // setTimeout(randomNotification, 30000);
 }
+
+

@@ -520,11 +520,38 @@ var ApiHandler = function() {
         });
     }
 
+    self.getRolesEnum = function(){
+        return new Promise(function(resolve, reject){
+            $.get({
+                url: "/api/v1/role",
+                type: 'GET',
+                contentType: "application/json; charset=UTF-8",
+            })
+                .then(function(roles){
+                    //create enum using role name as identifier
+                    let roleEnum = {};
+                    roles.forEach(function(role){
+                        roleEnum[role.name] = role;
+                    })
+                    resolve(roleEnum);
+                })
+        })
+    }
+
     self.getTasks = function(){
         return $.get({
             url: "/api/v1/task",
             type: 'GET',
             contentType: "application/json; charset=UTF-8",
+        });
+    }
+
+    self.sendNotification = function(userid, payload){
+        return $.ajax({
+            url: "/push/"+userid,
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
         });
     }
 }

@@ -63,7 +63,7 @@ UserPage.prototype.show = function(options){
 
 UserPage.prototype.buildHtml = function(url, context){
     let self = this;
-    self.enableEdit = false;
+    self.enableEdit = (window.user.role.name === "Teamleiter" || window.user.role.name === "Admin");
     let options = self.options;
     function getData() {
         return new Promise(function(resolve, reject){
@@ -143,9 +143,11 @@ UserPage.prototype.buildHtml = function(url, context){
                         });
 
                         $(".userkey-entry-edit").each(function(index){
+                            this.disabled = !self.enableEdit;
                             this.addEventListener('change', function(event){
                                 let key = this.dataset.key;
                                 let value = this.value;
+
                                 userModData[key] = value
                                 banner.open()
                             })

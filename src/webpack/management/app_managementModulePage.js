@@ -477,16 +477,49 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
     function buildDevices(buildArgs, self){
         let url = "/webpack/templates/management/devices.hbs";
         let context = {};
-        return new Promise(function(resolve, reject) {
-            $.get("/api/v1/devices/connected")
-                .done(function (devices) {
+        function getData() {
+            let data = {};
+            return new Promise(function(resolve, reject){
+                apiHandler.getRolesEnum()
+                    .then(function(roles) {
+                        data.roles = roles;
+                        ready(data)
+                    })
+                    .catch(err => reject(err));
+                $.get("/api/v1/devices/connected")
+                    .done(function(devices){
+                        data.devices = devices;
+                        ready(data)
+                    })
+                    .catch(err => reject(err))
+                function ready(data){
+                    if(data.devices && data.roles) resolve(data);
+                }
+            })
+        }
+        return new Promise(function(resolve, reject){
+            getData()
+                .then(function(data){
+                    context.roles = data.roles;
+                    let devices = {};
+                    //get tablet devices
+                    devices.tablets = data.devices.filter(userObj => userObj.user.role.id === data.roles["DRK-Tablet"].id);
+                    //throw out tablets
+                    devices.other = data.devices.filter(userObj => userObj.user.role.id !== data.roles["DRK-Tablet"].id)
+
                     context.devices = devices;
+
                     $.get(url, function (data) {
                         console.log("template found");
                         var template = Handlebars.compile(data);
                         let container = $(buildArgs.containerSelector);
                         container.empty();
                         container.append(template(context));
+
+                        $(".test-notify").on("click", function(event){
+                            let id = this.dataset.userid;
+                            apiHandler.sendNotification(id, "Hello there!");
+                        })
 
                         //setup tab navigation interface
                         if (options.tabs) {
@@ -499,7 +532,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                         resolve();
                     });
                 })
-                .fail(function(jqxhr, textstatus, error){
+                .catch(function(jqxhr, textstatus, error){
                     let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
                     let options = {
                         timeout: -1,

@@ -56,10 +56,29 @@ UserManagementPage.prototype.buildHtml = function(url, context, options){
     options = (options === undefined) ? {}: options;
     options = Object.assign(defaultOptions, options);
     let self = this;
+    function getData() {
+        return new Promise(function(resolve, reject){
+            apiHandler.getRolesEnum()
+                .then(function(roles) {
+                    context.roles = roles;
+                    ready(context)
+                });
+            apiHandler.getAllUser()
+                .done(function(users){
+                    context.users = users;
+                    ready(context)
+
+                })
+            function ready(context){
+                if(context.users && context.roles) resolve(context);
+            }
+        })
+    }
     return new Promise(function(resolve, reject){
-        apiHandler.getAllUser()
-            .then(function(user){
-                context.users = user;
+        getData()
+            .then(function(data){
+                context.users = data.users;
+                context.rolesEnum = data.roles;
                 $.get(url, function (templateData) {
                     console.log("user template found");
                     var template = Handlebars.compile(templateData);

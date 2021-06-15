@@ -19,6 +19,8 @@ router.post("/addTask/:id", addTask);
 router.post("/removeTask/:id", removeTask);
 router.post("/setRole/:id", setUserRole);
 
+router.post("/subscribe/:id", addPushSubscription)
+
 
 /**
  * add task entity
@@ -129,4 +131,28 @@ function setUserRole (req, res, next){
         .catch(err => next(err));
 }
 
+function addPushSubscription (req, res, next) {
+    let err = new Error("invalid arguments received")
+    if (req.body === undefined) {
+        next(err);
+    }
+    if(req.body.user === undefined){
+        next(err)
+    }
+    if(req.body.subscription === undefined){
+        next(err)
+    }
+
+    var token = req.body.subscription.token;
+    var isSafari = (req.headers['user-agent'].indexOf("Safari") > 0);
+    var auth = req.body.subscription.auth;
+    var endpoint = req.body.subscription.endpoint;
+
+    userService.getById(req.params.id)
+        .then(function(user){
+            userManager.registerPushSubscription(user, {token:token,auth:auth,isSafari:isSafari,endpoint:endpoint})
+                .then(result => res.json(result))
+                .catch(err => next(err));
+        })
+}
 module.exports = router;

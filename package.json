@@ -50,7 +50,9 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pug": "^3.0.2",
-    "sass": "^1.32.8"
+    "sass": "^1.32.8",
+    "socket.io": "^4.1.2",
+    "web-push": "^3.4.4"
   },
   "devDependencies": {
     "@material/drawer": "^11.0.0",

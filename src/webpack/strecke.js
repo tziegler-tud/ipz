@@ -1,4 +1,6 @@
 import {preloader} from "./preloader";
+import "./pushhandler";
+
 import {Navigation} from "./app_navigation";
 import {Sidesheet} from "./app_sidesheet";
 import {Bottom} from "./bottom/app_bottom";

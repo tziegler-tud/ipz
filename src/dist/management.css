@@ -22285,6 +22285,15 @@ input[type=number] {
   color: #555;
 }
 
+.no-entry-dummy {
+  font-style: italic;
+  font-weight: lighter;
+}
+
+.devices-subheader {
+  font-weight: bold !important;
+}
+
 .mdc-deprecated-list {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;

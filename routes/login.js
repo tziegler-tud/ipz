@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 
 const authenticationService = require("../services/authenticationService");
 const userService = require("../services/userService");
+const userManager = require("../services/userManager");
 
 var app = express();
 
@@ -35,6 +36,7 @@ router.post('/login', function(req, res, next) {
     passport.authenticate('local', {}, (err, user, info) => {
       if (!user) { return res.redirect("/login"); }
       req.login(user, (err) => {
+        userManager.connect(user)
         var redirectTo = req.session.redirectTo || "/management";
         req.session.save(() => {
           res.redirect(redirectTo);
@@ -58,6 +60,7 @@ router.post('/api/v1/login', function(req, res, next) {
 });
 
 router.all("/logout", function(req, res, next) {
+  userManager.disconnect(req.user, "logout");
   req.session.destroy(function (err) {
     res.redirect('/login'); //Inside a callback… bulletproof!
   });
@@ -108,5 +111,6 @@ router.post('/register', function(req, res, next) {
           })
   }
 });
+
 
 module.exports = router;

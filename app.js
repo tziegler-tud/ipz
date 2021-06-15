@@ -11,6 +11,7 @@ var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
 
 
+
 const passport = require('./config/passport');
 
 var schedule = require ('node-schedule');
@@ -30,6 +31,8 @@ var archiveHandler = require('./routes/api/archiveHandler');
 var statisticsHandler = require('./routes/api/statisticsHandler');
 var authenticationHandler = require('./routes/api/authenticationHandler');
 var roleHandler = require('./routes/api/roleHandler');
+
+var pushRouter = require("./routes/push");
 
 var archiveService = require('./services/archiveService');
 var errorHandler = require("./helpers/error-handler");
@@ -102,7 +105,7 @@ app.use(cookieParser());
 var settingsService = require('./services/settingsService');
 settingsService.initialize();
 
-
+app.use('/', pushRouter);
 app.use('/', loginRouter);
 
 app.use("/api", apiAuth);
@@ -124,8 +127,11 @@ app.use("/api", errorHandler.apiErrorHandler);
 
 app.use('/', webAuth);
 app.use('/', indexRouter);
+
+
 app.use('/user', userRouter);
 app.use('/strecke', trackRouter);
+
 // catch 404 and forward to error handler
 app.use("/*", function(req, res, next) {
   next(createError(404));

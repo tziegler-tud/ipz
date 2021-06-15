@@ -17,6 +17,14 @@ Handlebars.registerHelper('checklength', function (v1, v2, options) {
     return options.inverse(this);
 });
 
+Handlebars.registerHelper('greaterThan', function (v1, v2, options) {
+    'use strict';
+    if (v1>v2) {
+        return options.fn(this);
+    }
+    return options.inverse(this);
+});
+
 Handlebars.registerHelper('add', function (x, y) {
     return x+y;
 });
