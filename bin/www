@@ -24,8 +24,8 @@ app.set('port', port);
 
 console.log(process.cwd());
 const options = {
-  key: fs.readFileSync(path.resolve(__dirname, "./ipz.key")),
-  cert: fs.readFileSync(path.resolve(__dirname, 'ipz.crt'))
+  key: fs.readFileSync(path.resolve(__dirname, "./ipz2.key")),
+  cert: fs.readFileSync(path.resolve(__dirname, 'ipz2.crt'))
 };
 
 var httpServer = http.createServer(options, app);
