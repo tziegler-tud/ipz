@@ -5,6 +5,7 @@ const passport = require('passport');
 const bodyParser = require("body-parser");
 
 const UserService = require("../services/userService");
+const userManager = require("../services/userManager");
 
 
 /*
@@ -19,6 +20,7 @@ router.get("/:id", getUserPage);
 
 
 function getAllUserPage(req, res, next){
+    userManager.connect(req.user, "Nutzerverwaltung")
     res.render('pages/user',
         {
             user: req.user,
@@ -27,6 +29,7 @@ function getAllUserPage(req, res, next){
 }
 
 function getCurrentUserPage(req, res, next){
+    userManager.connect(req.user, "Nutzerverwaltung")
     res.render('pages/userpage',
         {
             user: req.user,
@@ -38,10 +41,13 @@ function getCurrentUserPage(req, res, next){
 
 function getUserPage(req, res, next){
     //get user
+    userManager.connect(req.user, "Nutzerverwaltung")
+        .then(function(user) {
+        })
     if (req.params.id === req.user.id) res.redirect("/user/current");
     else {
         UserService.getById(req.params.id)
-            .then(function(exploredUser){
+            .then(function (exploredUser) {
                 res.render('pages/userpage',
                     {
                         user: req.user,

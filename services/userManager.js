@@ -5,109 +5,196 @@ const bcrypt = require('bcrypt');
 const db = require('../schemes/mongo');
 const Authenticator = db.authenticator;
 
+const webpush = require('web-push');
+
+/**
+ * @typedef User
+ * @property {String} username username used for login and identification
+ * @property {String} name displayed name. this can be different from username
+ * @property {String} id user id
+ * @property {Task[]} allowedTasks array of allowed tasks
+ */
+
 class UserManager {
     constructor() {
         let self = this;
-        this.defaultDecay =  300000; //in ms
+        this.defaultDecay =  180000; //in ms
         console.log("initializing user runtime service...\n");
         //might wanna do smt here later
         this.activeUsers = [];
         this.registeredUsers = [];
-        let offlineTask = {name: "offline"};
+        self.undefinedTask = {name: "Hat sich verirrt"};
+        self.offlineTask = {name: "offline"};
+        self.inactiveTask = {name: "inaktiv"};
         UserService.get()
             .then(users => {
                 users.forEach(function(user){
-                    self.registeredUsers.push({user: user, active: false, connect: false, decay: false, currentTask: offlineTask});
+                    self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask}); //active: 0 = offline, 1 = inactive, 2 = online
                 });
+                console.log("user runtime service initialized successfully.");
             })
         //load authentication information from database
-        console.log("user runtime service initialized succesfully.");
+
     }
 
-    connect(user, task){
-        if (task === undefined) task = {name: "nicht angegeben"}
-        let i = this.registeredUsers.findIndex(active => active.user.id === user.id);
-        if (i === -1) {
-            //user not found. something went wrong
-            let tag = (user.username === undefined) ? ((user.id=== undefined) ? "undefined" : user.id) : user.username;
-            console.error("Failed to connect user "+ tag + ": User not found");
-            return false;
-        }
-        else {
-            if (!this.registeredUsers[i].active){
-                this.registeredUsers[i] = {user: user, active: true, connect: Date.now(), decay: Date.now() + this.defaultDecay, currentTask: task};
-                console.log("user " + user.username + " connected");
-                setTimeout(this.decayUser, this.defaultDecay, this.registeredUsers[i], this);
-                return true;
-            }
-            else {
-                this.refreshIndex(i);
-                this.setActiveTask(this.registeredUsers[i], task)
-                return true;
-            }
-        }
+    update(){
+        let self = this;
+        return new Promise(function(resolve, reject){
+            UserService.get()
+                .then(users => {
+                    self.registeredUsers = []
+                    users.forEach(function(user){
+                        self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask});
+                    });
+                    resolve(self.registeredUsers)
+                })
+                .catch(function(err){
+                    console.error("Failed to update userManager: Could not get current user list from database.")
+                    console.log("UserManager: Aborting update, everything is left as it was before...")
+                    reject(err)
+                })
+        })
     }
+
+    /**
+     * sets the users to active state with the default decay applying. Use this method when the user starts a new session or has been disconnected.
+     *
+     * @param user {User}
+     * @param task {Task}
+     * @returns {Promise} resolved if connection was successful
+     */
+    connect(user, task) {
+        let self = this;
+        return new Promise(function (resolve, reject) {
+            let i = self.registeredUsers.findIndex(active => active.user.id === user.id);
+            if (i === -1) {
+                //user not found. something went wrong
+                let tag = (user.username === undefined) ? ((user.id === undefined) ? "undefined" : user.id) : user.username;
+                let message = "Failed to connect user " + tag + ": User not found"
+                console.error(message);
+                reject(message);
+            } else {
+                if (self.registeredUsers[i].active === 0) {
+                    // self.registeredUsers[i].user = user;
+                    self.registeredUsers[i].active = 2;
+                    self.registeredUsers[i].connect = Date.now();
+                    self.registeredUsers[i].decay = Date.now() + self.defaultDecay;
+                    console.log("user " + user.username + " connected");
+                    setTimeout(self.decayUser, self.defaultDecay + 1, self.registeredUsers[i], self);
+                } else {
+                    self.refreshIndex(i);
+                }
+                //finally, set task and resolve
+                self.setActiveTask(i, task);
+                resolve(user)
+            }
+        })
+    }
+
+    /**
+     * removes the active state from the user. PushSubscription is preserved during server runtime.
+     * @param user {User}
+     * @param reason {String} Message to log
+     * @returns {Promise} resolved if connection was successful
+     */
 
     disconnect(user, reason){
-        //TODO: set Timeout
-        let i = this.registeredUsers.findIndex(active => active.user.id === user.id);
-        if (i === -1) {
-            let tag = (user.username === undefined) ? ((user.id=== undefined) ? "undefined" : user.id) : user.username;
-            console.log("Failed to disconnect user " + tag + ": user not found");
-            return false;
-        }
-        else {
-            if (!this.registeredUsers[i].active){
-                console.log("Failed to disconnect user " + user.username + ": user is not connected.");
-                return false;
-            }
-            else {
-                this.registeredUsers[i].active = false;
-                let msg = "user " + user.username + " disconnected.";
-                if (typeof(reason) === "string"){
-                    msg = msg + " Reason: " + reason;
+        let self = this;
+        return new Promise(function (resolve, reject) {
+            //TODO: set Timeout
+            let i = this.registeredUsers.findIndex(active => active.user.id === user.id);
+            if (i === -1) {
+                let tag = (user.username === undefined) ? ((user.id === undefined) ? "undefined" : user.id) : user.username;
+                let message = "Failed to disconnect user " + tag + ": user not found"
+                console.log(message);
+                reject(message);
+            } else {
+                if (this.registeredUsers[i].active === 0) {
+                    let message = "Failed to disconnect user " + user.username + ": user is not connected.";
+                    console.log(message);
+                    reject(message);
+                } else {
+                    this.registeredUsers[i].active = 0;
+                    this.registeredUsers[i].currentTask = self.offlineTask;
+                    let msg = "user " + user.username + " disconnected.";
+                    if (typeof (reason) === "string") {
+                        msg = msg + " Reason: " + reason;
+                    }
+                    console.log(msg);
+                    resolve(user);
                 }
-                console.log(msg);
-                return true;
             }
-        }
+        })
     }
 
+    /**
+     * extends the users active state by the default decay. use this method to keep the user in an active state. setting a new task is optional, if left out user will keep current task assigned.
+     *
+     * @param user {User}
+     * @param task {Task}
+     * @returns {Promise} resolved if connection was successful
+     */
     refresh(user, task){
-
-        let i = this.registeredUsers.findIndex(active => active.user.id === user.id);
-        if (i === -1) {
-            let tag = (user.username === undefined) ? ((user.id=== undefined) ? "undefined" : user.id) : user.username;
-            console.log("Failed to refresh user " + tag + ": user not found.");
-            return false;
-        }
-        else {
-            if (this.registeredUsers[i].active) {
-                this.registeredUsers[i].decay = Date.now() + this.defaultDecay;
-                if (task !== undefined) this.setActiveTask(this.registeredUsers[i], task)
-                return true;
+        let self = this;
+        return new Promise(function (resolve, reject) {
+            let i = self.registeredUsers.findIndex(active => active.user.id === user.id);
+            if (i === -1) {
+                let tag = (user.username === undefined) ? ((user.id === undefined) ? "undefined" : user.id) : user.username;
+                let message = "Failed to refresh user " + tag + ": user not found."
+                console.log(message);
+                reject(message);
+            } else {
+                if (self.registeredUsers[i].active === 2) {
+                    self.registeredUsers[i].decay = Date.now() + self.defaultDecay;
+                    if (task !== undefined) self.setActiveTask(i, task);
+                    console.log("refreshing user " + user.username);
+                    resolve(user)
+                } else {
+                    if (self.registeredUsers[i].active === 1) {
+                        self.registeredUsers[i].active = 2;
+                        self.registeredUsers[i].decay = Date.now() + self.defaultDecay;
+                        if (task !== undefined) self.setActiveTask(i, task);
+                        console.log("reactivating user " + user.username);
+                        setTimeout(self.decayUser, self.defaultDecay + 1, self.registeredUsers[i], self);
+                        resolve(user);
+                    }
+                    return self.connect(user, task);
+                }
             }
-            else {
-                this.connect(user);
-                return true;
-            }
-        }
+        })
     }
 
     refreshIndex(index){
+        console.log("refreshing user " + this.registeredUsers[index].user.username);
         this.registeredUsers[index].decay = Date.now() + this.defaultDecay;
+        this.registeredUsers[index].active = 2;
         return true;
     }
 
     decayUser(userObj, self){
-        console.log(Date.now())
         if (Date.now() > userObj.decay){
             let reason = "decayed due to inactivity";
-            self.disconnect(userObj.user, reason);
+            let i = self.registeredUsers.findIndex(active => active.user.id === userObj.user.id);
+            // self.setActiveTask(i, self.inactiveTask);
+            self.registeredUsers[i].active = 1;
+            console.log("user " + userObj.user.username + " " + reason);
         }
         else {
             setTimeout(self.decayUser, self.defaultDecay, userObj, self)
         }
+
+        // function sendDecayWarning(){
+        //     //request activity state with push message
+        //     let payload = {
+        //         data: {
+        //             type: "request",
+        //             details: "activityreport",
+        //             payload: {},
+        //             user: userObj.user,
+        //         }
+        //     }
+        //     self.sendPushNotification(userObj, payload);
+        // }
     }
 
     getRegisteredUsers(){
@@ -141,9 +228,28 @@ class UserManager {
         return this.getById(id);
     }
 
-    setActiveTask(userObj, task) {
-        userObj.currentTask = task;
-        return userObj;
+    setActiveTask(index, task) {
+        let self = this;
+        if (task === undefined) task = self.undefinedTask;
+        if (self.registeredUsers[index] === undefined ) throw new Error("Failed to set Task: user index out of bounds.")
+        if (task.name !== undefined) {
+            self.registeredUsers[index].currentTask = task;
+        }
+        else {
+            if (typeof(task) === 'string') {
+                //get by name
+                TaskService.getByName(task).then(function(task){
+                    self.registeredUsers[index].currentTask = task
+                    return task;
+                })
+                    .catch(function(err){
+                        console.error("failed to find task. Falling back to undefined")
+                        self.registeredUsers[index].currentTask = self.undefinedTask;
+                        return self.undefinedTask;
+                    })
+            }
+        }
+        return self.registeredUsers[index];
     }
 
     registerPushSubscription(user, subscription) {
@@ -161,6 +267,22 @@ class UserManager {
                 })
                 .catch(err=>reject(err))
         })
+    }
+
+    sendPushNotification(userObj, payload) {
+        let sub = userObj.subscription;
+        if (sub === undefined) return false;
+        let pushSubscription = {
+            "endpoint":sub.endpoint,
+            "keys": {
+                "p256dh":sub.token,
+                "auth": sub.auth
+            } // end keys
+        }; // end pushSubscription
+
+        // MAGIC!
+        webpush.sendNotification(pushSubscription,JSON.stringify(payload));
+        console.log("server sent notification to user " + userObj.user.username);
     }
 }
 

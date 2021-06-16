@@ -39,7 +39,14 @@ function add (req, res, next){
         next(err)
     }
     userService.add(req.body)
-        .then(result => res.json(result))
+        .then(function(result){
+            //update userManager
+            userManager.update()
+                .then(function(){
+                    res.json(result)
+                })
+                .catch(err=> next(err))
+        })
         .catch(err => next(err));
 }
 

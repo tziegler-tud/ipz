@@ -15,7 +15,6 @@ app.use(bodyParser.json());
 
 
 const webpush = require('web-push');
-// webpush.setGCMAPIKey('AAAA3tXZMS4:APA91bEqo3vlNjNW2eKCAyhP-dpoQIn1pFE2T4icvNvqA5mdsXNS9ydS92WVM3mVk2tYfyq-fWCxFqtiwBMVCh4VuRJhw462eS9y2gYz87vHth5XcK2x5OqSkRmCgBnmO6PY5HEEWyjY');
 // VAPID keys should only be generated only once. we've run the vapid.js file to do this.
 var vapidPublicKey = "BM-VsybJ1S9bkhK-GLK_LoxozsJdr0PfQCS6dmqVcpe08oSZthKcGw3Pws4D_PI4ahyxoArS6TuWYSZwW1m1nQo";
 var vapidPrivateKey = "S4B8s1x437nt6Rbo2E0t4uXo1zyacvxAoexd9i1Dbfk"
@@ -50,8 +49,8 @@ router.post('/push/:id', function(req, res, next) {
                 privateKey: vapidPrivateKey
               }
     }
-  var message = "Shhht - Private Message!";
-
+  var message = "Shhht - Private Message from user " + req.user.name + "!";
+    let title = "Hello there!"
   // Find the active user
   UserManager.getActiveUserById(req.params.id)
       .then(function(userObj){
@@ -68,8 +67,22 @@ router.post('/push/:id', function(req, res, next) {
           } // end keys
         }; // end pushSubscription
 
+          let payload = {
+              message: {
+                  body: message,
+                  title: title,
+              },
+              data: {
+                  testData: {
+                      a: "string",
+                      b: 123,
+                      c: false,
+                  }
+              }
+          }
+
         // MAGIC!
-        webpush.sendNotification(pushSubscription,message);
+        webpush.sendNotification(pushSubscription,JSON.stringify(payload));
         console.log("notification sent to user " + userObj.user.username);
 
         res.end( "notification sent");

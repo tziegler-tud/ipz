@@ -149,3 +149,32 @@ input[type=number] {
 .devices-subheader {
   font-weight: bold !important;
 }
+
+.icon-online {
+
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #3ea700;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+
+.icon-inactive {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #c39a1d;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.icon-offline {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #c31d34;
+  display: inline-block;
+  margin-right: 10px;
+}

@@ -25,6 +25,12 @@ Handlebars.registerHelper('greaterThan', function (v1, v2, options) {
     return options.inverse(this);
 });
 
+Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
+    return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+});
+
+
+
 Handlebars.registerHelper('add', function (x, y) {
     return x+y;
 });

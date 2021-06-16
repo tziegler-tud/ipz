@@ -6,12 +6,12 @@
     <!--            </div>-->
     <!--        </div>-->
     <div class="tab-container">
-        <div id="tab--devices" class="app-page-content tab" data-tabid="1">
+        <div id="tab--devices" class="app-page-content full-width full-height tab" data-tabid="1">
             <div id="devices-container infocards-container">
                 <div class="infocards-inner ">
                     <div class="infocards-section infocards-card card-full">
                         <div class="infocards-section-inner">
-                            <div class="infocards-sectionheader"><span>Verbundene Geräte</span></div>
+                            <div class="infocards-sectionheader"><span>Bekannte Geräte</span></div>
                             <ul class="mdc-deprecated-list mdc-deprecated-list--two-line">
                                 <h3 class="mdc-list-group__subheader devices-subheader">DRK-Tablets</h3>
                                 {{#greaterThan devices.tablets.length 0}}
@@ -20,7 +20,7 @@
                                             <span class="mdc-deprecated-list-item__ripple"></span>
                                             <span class="mdc-deprecated-list-item__text">
                                                 <span class="mdc-deprecated-list-item__primary-text">{{this.user.name}}</span>
-                                                <span class="mdc-deprecated-list-item__secondary-text">{{this.user.role.name}}</span>
+                                                <span class="mdc-deprecated-list-item__secondary-text">{{#ifEquals this.active 2}}<span class="icon-online"></span>{{this.currentTask.name}}{{else}}{{#ifEquals this.active 1}}<span class="icon-inactive"></span>inaktiv{{else}}<span class="icon-offline"></span>{{this.currentTask.name}}{{/ifEquals}}{{/ifEquals}}</span>
                                             </span>
                                             <i class="test-notify mdc-deprecated-list-item__meta material-icons" aria-hidden="true" data-userid="{{this.user.id}}">send</i>
                                         </li>
@@ -45,7 +45,7 @@
                                             <span class="mdc-deprecated-list-item__ripple"></span>
                                             <span class="mdc-deprecated-list-item__text">
                                               <span class="mdc-deprecated-list-item__primary-text">{{this.user.name}}</span>
-                                              <span class="mdc-deprecated-list-item__secondary-text">{{this.user.currentTask}} / {{transformDateTimeString this.decay}}</span>
+                                                <span class="mdc-deprecated-list-item__secondary-text">{{#ifEquals this.active 2}}<span class="icon-online"></span>{{this.currentTask.name}}{{else}}{{#ifEquals this.active 1}}<span class="icon-inactive"></span>inaktiv{{else}}<span class="icon-offline"></span>{{this.currentTask.name}}{{/ifEquals}}{{/ifEquals}}</span>
                                             </span>
                                             <i class="test-notify mdc-deprecated-list-item__meta material-icons" aria-hidden="true" data-userid="{{this.user.id}}">send</i>
                                         </li>

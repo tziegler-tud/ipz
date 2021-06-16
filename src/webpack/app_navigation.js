@@ -239,6 +239,15 @@ let SubpageHandler = function(subpageContainer, navObject){
                     self.persistent = main;
                     self.current = main;
                     main.show();
+                    //hook action to logout button
+                    $("#logout-button").on("click", function(){
+                        if(window.user.pushInterface !== undefined){
+                            window.user.pushInterface.unsubscribe()
+                                .then(function(){
+                                    window.location = "/logout"
+                                });
+                        }
+                    })
                     resolve();
                 })
                 .catch(err => reject(err));

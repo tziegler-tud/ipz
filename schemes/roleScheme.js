@@ -8,6 +8,10 @@ var roleSchema = new Schema({
         type: String,
         required: true,
     },
+    isDefault: {
+        type: Boolean,
+        default: false,
+    }
 })
 
 roleSchema.set('toJSON', { virtuals: true, getters: true });

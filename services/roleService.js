@@ -6,6 +6,7 @@ module.exports = {
     get,
     getById,
     getByName,
+    getDefaultRole,
     add,
     remove,
     update,
@@ -24,6 +25,24 @@ async function getById(id) {
 
 async function getByName(name) {
     return Role.find({name: name});
+}
+
+async function getDefaultRole(){
+    //find default role in database.
+    let defRole = await Role.findOne({isDefault: true});
+    if (!defRole){
+        //default role not found in database, create a new one
+        console.warn("No default role present in database. Lets create a new one...");
+        let newDefaultRole = {
+            name: "Anderes",
+            isDefault: true,
+        }
+        let defaultRole = new Role(newDefaultRole);
+        defaultRole.save();
+        defRole = defaultRole;
+    }
+    //return default role
+    return defRole;
 }
 
 async function add(roleObject) {

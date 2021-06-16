@@ -60,10 +60,16 @@ router.post('/api/v1/login', function(req, res, next) {
 });
 
 router.all("/logout", function(req, res, next) {
-  userManager.disconnect(req.user, "logout");
-  req.session.destroy(function (err) {
-    res.redirect('/login'); //Inside a callback… bulletproof!
-  });
+  if(req.user === undefined) {
+    res.redirect("/lo" +
+        "gin")
+  }
+  else {
+    userManager.disconnect(req.user, "logout");
+    req.session.destroy(function (err) {
+      res.redirect('/login'); //Inside a callback… bulletproof!
+    });
+  }
 });
 
 router.all("/api/v1/logout", function(req, res, next) {

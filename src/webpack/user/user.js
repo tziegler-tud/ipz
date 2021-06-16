@@ -20,7 +20,6 @@ $(window).on('load',function() {
 
 let sidesheet;
 
-
 let nav = new Navigation(
     {
         pageData: {

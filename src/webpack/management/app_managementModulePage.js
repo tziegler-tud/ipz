@@ -486,7 +486,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                         ready(data)
                     })
                     .catch(err => reject(err));
-                $.get("/api/v1/devices/connected")
+                $.get("/api/v1/devices")
                     .done(function(devices){
                         data.devices = devices;
                         ready(data)
@@ -504,8 +504,14 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                     let devices = {};
                     //get tablet devices
                     devices.tablets = data.devices.filter(userObj => userObj.user.role.id === data.roles["DRK-Tablet"].id);
+                    devices.tablets.sort(function(a,b){
+                        return b.active - a.active;
+                    })
                     //throw out tablets
                     devices.other = data.devices.filter(userObj => userObj.user.role.id !== data.roles["DRK-Tablet"].id)
+                    devices.other.sort(function(a,b){
+                        return b.active - a.active;
+                    })
 
                     context.devices = devices;
 

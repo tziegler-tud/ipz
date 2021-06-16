@@ -11,6 +11,7 @@ const userManager = require('../../services/userManager');
 // routes
 router.get('/', get);
 router.get('/connected', getConnected);
+router.get('/connected', getConnected);
 router.post('/connect', connect);
 router.post('/disconnect', disconnect);
 router.post('/refresh', refresh);
@@ -35,21 +36,48 @@ function getById (req, res, next){
 }
 
 function connect(req, res, next){
-    userManager.connect(req.body.user)
-        .then(result => res.json(result))
-        .catch(err => next(err));
+    if(req.body === undefined || req.body.user === undefined) {
+        console.error("Failed to refresh user: Invalid arguments received.")
+    }
+    userManager.connect(req.body.user, req.body.task)
+        .then(function(user){
+            console.log("user " + req.body.user.username + " connected successfully.")
+            res.status(200).send();
+        })
+        .catch(function(error){
+            console.warn("failed to connect user " + req.body.user.username + ": " + error)
+            next(error);
+        });
 }
 
 function disconnect(req, res, next){
-    userManager.disconnect(req.body.user)
-        .then(result => res.json(result))
-        .catch(err => next(err));
+    if(req.body === undefined || req.body.user === undefined) {
+        console.error("Failed to refresh user: Invalid arguments received.")
+    }
+    userManager.disconnect(req.body.user, "apiDisconnectRequest")
+        .then(function(user){
+            console.log("user " + req.body.user.username + " disconnected successfully.")
+            res.status(200).send();
+        })
+        .catch(function(error){
+            console.warn("failed to disconnect user " + req.body.user.username + ": " + error)
+            next(error);
+        });
 }
 
 function refresh(req, res, next){
-    userManager.refresh(req.body.user)
-        .then(result => res.json(result))
-        .catch(err => next(err));
+    if(req.body.user === undefined) {
+        console.error("Failed to refresh user: Invalid arguments received.")
+    }
+    userManager.refresh(req.body.user, req.body.task)
+        .then(function(user){
+            console.log("user " + req.body.user.username + " refreshed successfully.")
+            res.json(user);
+        })
+        .catch(function(error){
+            console.warn("failed to refresh user " + req.body.user.username + ": " + error)
+        });
+
 }
 
 module.exports = router;

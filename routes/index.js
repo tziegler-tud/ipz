@@ -4,6 +4,8 @@ var uuid = require('uuid');
 const passport = require('passport');
 const bodyParser = require("body-parser");
 
+const userManager = require("../services/userManager")
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index',
@@ -45,6 +47,7 @@ router.get('/', function(req, res, next) {
 /* GET checkin page. */
 router.get('/checkin', function(req, res, next) {
     req.user._doc.currentTask = "checkin";
+    userManager.connect(req.user, "Checkin")
     res.render('pages/checkin',
         {
             user: req.user,
@@ -56,6 +59,9 @@ router.get('/checkin', function(req, res, next) {
 /* GET management page. */
 router.get('/management', function(req, res, next) {
     req.user._doc.currentTask = "management";
+    userManager.connect(req.user, "Teamleiter-Modul")
+        .then(function(user){
+        })
     res.render('pages/management/management',
         {
             user: req.user,
@@ -70,6 +76,7 @@ router.get('/management', function(req, res, next) {
 /* GET apotheke page. */
 router.get('/apotheke', function(req, res, next) {
     req.user._doc.currentTask = "apotheke";
+    userManager.connect(req.user, "Apotheke")
     res.render('pages/apotheke',
         {
             user: req.user,
@@ -88,6 +95,7 @@ router.get('/settings', function(req, res, next) {
 
 /* GET settings page. */
 router.get('/statistics', function(req, res, next) {
+    userManager.connect(req.user, "Statistik")
     res.render('pages/statistics',
         {
             user: req.user,
@@ -97,6 +105,7 @@ router.get('/statistics', function(req, res, next) {
 
 /* GET device page. */
 router.get('/device', function(req, res, next) {
+    userManager.connect(req.user, "Nutzerverwaltung")
     res.render('pages/device',
         {
             user: req.user,

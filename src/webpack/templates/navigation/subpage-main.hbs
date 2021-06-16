@@ -2,7 +2,7 @@
     <div class="mdc-drawer__header">
         <h3 class="mdc-drawer__title">{{user.name}}</h3>
         <h6 class="mdc-drawer__subtitle">{{user.role.name}}</h6>
-        <a href="/logout" class="mdc-button mdc-button--outlined">
+        <a id="logout-button" href="/logout" class="mdc-button mdc-button--outlined">
             <div class="mdc-button__ripple"></div>
             <div class="mdc-button__label">Abmelden</div>
         </a>
@@ -48,7 +48,7 @@
 
         </div>
 
-        {{#if (navEntryAllowed "Teamleiter - Übersicht" user.allowedTasks)}}
+        {{#if (navEntryAllowed "Teamleiter-Modul" user.allowedTasks)}}
         <div class="mdc-deprecated-list">
             <h3 class="mdc-deprecated-list-group__subheader">Leitung</h3>
                 <a id="app-link-management" class="navigation-element mdc-deprecated-list-item" href="/management" >
@@ -70,7 +70,7 @@
             {{#if (navEntryAllowed "Nutzerverwaltung" user.allowedTasks)}}
             <a id="app-link-usermanagement" class="navigation-element mdc-deprecated-list-item" href="/user" >
                 <span class="mdc-deprecated-list-item__ripple"></span>
-                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">announcement</i>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">people</i>
                 <span class="mdc-deprecated-list-item__text">Nutzer & Geräte</span>
             </a>
             {{/if}}

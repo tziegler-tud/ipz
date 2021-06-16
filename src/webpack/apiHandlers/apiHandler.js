@@ -554,6 +554,25 @@ var ApiHandler = function() {
             dataType: 'json',
         });
     }
+
+    self.reconnectUser = function(user, task){
+        let body = {
+            user: {
+                username: user.username,
+                id: user.id,
+                role: user.role,
+            },
+        }
+        if (task !== undefined) body.task = task;
+        let json = JSON.stringify(body)
+        return $.ajax({
+            url: "/api/v1/devices/refresh",
+            type: 'POST',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(body),
+        });
+    }
 }
 
 export let apiHandler = new ApiHandler();

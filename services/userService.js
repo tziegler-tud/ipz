@@ -4,6 +4,7 @@ const User = db.user;
 const Task = db.task;
 const Role = db.role;
 const settingsService = require('./settingsService');
+const roleService = require('./roleService');
 
 module.exports = {
     get,
@@ -52,6 +53,12 @@ async function add(userObject) {
         throw new Error("Invalid arguments received: username is undefined");
     }
 
+    if(userObject.role === undefined) {
+        //assign default role
+        let defaultRole = await roleService.getDefaultRole();
+        userObject.role = defaultRole;
+    }
+
     //create new object
 
     let userDbObject = new User(userObject);
@@ -59,6 +66,7 @@ async function add(userObject) {
         const salt = await bcrypt.genSalt(10);
         userDbObject.hash = await bcrypt.hash(userObject.password, salt);
     }
+
     await userDbObject.save();
     return userDbObject;
 }

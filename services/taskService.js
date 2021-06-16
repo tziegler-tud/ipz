@@ -26,7 +26,7 @@ async function getById(id) {
 }
 
 async function getByName(name) {
-    return Task.find({name: name}).select("-hash");
+    return Task.findOne({name: name}).select("-hash");
 }
 
 async function getByIdWithHash(id) {
@@ -34,7 +34,7 @@ async function getByIdWithHash(id) {
 }
 
 async function getByNameWithHash(name) {
-    return Task.find({name: name});
+    return Task.findOne({name: name});
 }
 
 async function add(taskObject) {

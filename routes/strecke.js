@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const trackService = require('../services/trackService');
-
+const userManager = require("../services/userManager");
 
 //hooked at /strecke
 router.get('/', getIndexPage);
@@ -17,6 +17,7 @@ function getTrackPage (req, res, next) {
     //find track
     trackService.getById(trackId)
         .then(function(track){
+            userManager.connect(req.user, "Impfstrecke " + track.name)
             res.render('pages/strecke/strecke',
                 {
                     user: req.user,
