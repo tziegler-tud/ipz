@@ -46,6 +46,7 @@ class UserManager {
                     users.forEach(function(user){
                         self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask});
                     });
+                    console.log("userManager updated.")
                     resolve(self.registeredUsers)
                 })
                 .catch(function(err){
@@ -81,12 +82,16 @@ class UserManager {
                     self.registeredUsers[i].decay = Date.now() + self.defaultDecay;
                     console.log("user " + user.username + " connected");
                     setTimeout(self.decayUser, self.defaultDecay + 1, self.registeredUsers[i], self);
+                    //finally, set task and resolve
+                    self.setActiveTask(i, task);
+                    resolve(user)
                 } else {
-                    self.refreshIndex(i);
+                    //user is inactive, reactivate
+                    self.refresh(user, task)
+                        .then(function(result){
+                            resolve(user);
+                        })
                 }
-                //finally, set task and resolve
-                self.setActiveTask(i, task);
-                resolve(user)
             }
         })
     }
@@ -102,20 +107,20 @@ class UserManager {
         let self = this;
         return new Promise(function (resolve, reject) {
             //TODO: set Timeout
-            let i = this.registeredUsers.findIndex(active => active.user.id === user.id);
+            let i = self.registeredUsers.findIndex(active => active.user.id === user.id);
             if (i === -1) {
                 let tag = (user.username === undefined) ? ((user.id === undefined) ? "undefined" : user.id) : user.username;
                 let message = "Failed to disconnect user " + tag + ": user not found"
                 console.log(message);
                 reject(message);
             } else {
-                if (this.registeredUsers[i].active === 0) {
+                if (self.registeredUsers[i].active === 0) {
                     let message = "Failed to disconnect user " + user.username + ": user is not connected.";
                     console.log(message);
                     reject(message);
                 } else {
-                    this.registeredUsers[i].active = 0;
-                    this.registeredUsers[i].currentTask = self.offlineTask;
+                    self.registeredUsers[i].active = 0;
+                    self.registeredUsers[i].currentTask = self.offlineTask;
                     let msg = "user " + user.username + " disconnected.";
                     if (typeof (reason) === "string") {
                         msg = msg + " Reason: " + reason;
@@ -158,7 +163,24 @@ class UserManager {
                         setTimeout(self.decayUser, self.defaultDecay + 1, self.registeredUsers[i], self);
                         resolve(user);
                     }
-                    return self.connect(user, task);
+                    else {
+                        if(self.registeredUsers[i].active === 0){
+                            self.connect(user, task)
+                                .then(function(result){
+                                    resolve(user)
+                                })
+                        }
+                        else {
+                            let message = "Failed to refresh user: activity state unclear. Disconnecting user...";
+                            console.warn(message);
+                            self.disconnect(user, message)
+                                .then(function(result){
+                                    reject(user);
+                                })
+                        }
+
+                    }
+
                 }
             }
         })

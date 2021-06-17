@@ -68,6 +68,17 @@ async function add(userObject) {
     }
 
     await userDbObject.save();
+
+    //update userManager
+    const userManager = require("./userManager");
+    userManager.update()
+        .then(function(result){
+            console.log("UserService: Successfully updated userManager.")
+        })
+        .catch(function(err){
+            console.warn("UserService: Failed to update userManager.")
+        })
+
     return userDbObject;
 }
 

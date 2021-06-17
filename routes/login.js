@@ -61,8 +61,7 @@ router.post('/api/v1/login', function(req, res, next) {
 
 router.all("/logout", function(req, res, next) {
   if(req.user === undefined) {
-    res.redirect("/lo" +
-        "gin")
+    res.redirect("/login")
   }
   else {
     userManager.disconnect(req.user, "logout");
@@ -86,7 +85,7 @@ router.get('/register', function(req, res, next) {
   if(req.isAuthenticated()) {
     res.redirect('/')
   } else {
-    res.render('register', { title: 'ImpFlow Dresden - Gerät einrichten' });
+    res.render('register', { title: 'ImpfApp Dresden - Gerät einrichten' });
   }
 });
 
@@ -94,7 +93,7 @@ router.get('/register', function(req, res, next) {
 /* POST user login */
 router.post('/register', function(req, res, next) {
   if(req.isAuthenticated()) {
-    res.redirect('/management')
+    res.redirect('/')
   } else {
       //check authentication
       authenticationService.authenticate(req.body.authentication, "Teamleiter")
