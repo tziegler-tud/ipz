@@ -54,3 +54,7 @@ Handlebars.registerHelper("navEntryAllowed", function(taskName, allowedTasks){
     let index = allowedTasks.findIndex(task => task.name === taskName);
     return (index > -1)
 })
+
+Handlebars.registerHelper("batteryPercentage", function(level){
+    return Math.floor(level * 100) + "%";
+})

@@ -47,25 +47,28 @@ router.get('/', function(req, res, next) {
 /* GET checkin page. */
 router.get('/checkin', function(req, res, next) {
     req.user._doc.currentTask = "checkin";
-    userManager.connect(req.user, "Checkin")
+    let task = "Checkin";
+    userManager.connect(req.user, task);
     res.render('pages/checkin',
         {
             user: req.user,
             title: "CheckIn - ImpfApp Dresden",
+            task: task,
         });
 });
 
 
 /* GET management page. */
 router.get('/management', function(req, res, next) {
-    req.user._doc.currentTask = "management";
-    userManager.connect(req.user, "Teamleiter-Modul")
+    let task = "Teamleiter-Modul";
+    userManager.connect(req.user, task)
         .then(function(user){
         })
     res.render('pages/management/management',
         {
             user: req.user,
             title: "Teamleiter - ImpfApp Dresden",
+            task: task,
         });
 });
 
@@ -76,11 +79,13 @@ router.get('/management', function(req, res, next) {
 /* GET apotheke page. */
 router.get('/apotheke', function(req, res, next) {
     req.user._doc.currentTask = "apotheke";
-    userManager.connect(req.user, "Apotheke")
+    let task = "Apotheke"
+    userManager.connect(req.user, task)
     res.render('pages/apotheke',
         {
             user: req.user,
             title: "Apotheke - ImpfApp Dresden",
+            task: task,
         });
 });
 
@@ -95,21 +100,25 @@ router.get('/settings', function(req, res, next) {
 
 /* GET settings page. */
 router.get('/statistics', function(req, res, next) {
-    userManager.connect(req.user, "Statistik")
+    let task = "Statistik"
+    userManager.connect(req.user, task)
     res.render('pages/statistics',
         {
             user: req.user,
             title: "Statistik - ImpfApp Dresden",
+            task: task,
         });
 });
 
 /* GET device page. */
 router.get('/device', function(req, res, next) {
-    userManager.connect(req.user, "Nutzerverwaltung")
+    let task = "Nutzerverwaltung";
+    userManager.connect(req.user, task)
     res.render('pages/device',
         {
             user: req.user,
             title: "Mein Gerät - ImpfApp Dresden",
+            task: task,
         });
 });
 

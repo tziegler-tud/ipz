@@ -504,6 +504,16 @@ var ApiHandler = function() {
         });
     }
 
+    self.removeUser = function(userid){
+        return $.ajax({
+            url: "/api/v1/user/remove/"+userid,
+            type: 'DELETE',
+            contentType: "application/json; charset=UTF-8",
+            dataType: 'json',
+
+        });
+    }
+
     self.getUser = function(userid){
         return $.get({
             url: "/api/v1/user/"+userid,
@@ -555,7 +565,7 @@ var ApiHandler = function() {
         });
     }
 
-    self.reconnectUser = function(user, task){
+    self.reconnectUser = function(user, data){
         let body = {
             user: {
                 username: user.username,
@@ -563,7 +573,10 @@ var ApiHandler = function() {
                 role: user.role,
             },
         }
+        let task = data.task;
+        let battery = data.battery;
         if (task !== undefined) body.task = task;
+        if (battery !== undefined) body.battery = battery;
         let json = JSON.stringify(body)
         return $.ajax({
             url: "/api/v1/devices/refresh",

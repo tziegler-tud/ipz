@@ -69,7 +69,8 @@ function refresh(req, res, next){
     if(req.body.user === undefined) {
         console.error("Failed to refresh user: Invalid arguments received.")
     }
-    userManager.refresh(req.body.user, req.body.task)
+
+    userManager.refresh(req.body.user, req.body.task, req.body.battery)
         .then(function(user){
             console.log("user " + req.body.user.username + " refreshed successfully.")
             res.json(user);

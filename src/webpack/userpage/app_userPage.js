@@ -13,6 +13,7 @@ var $ = require( "jquery" );
 import {MDCRipple} from "@material/ripple";
 import {MDCSwitch} from '@material/switch';
 import {UserManagementPage} from "../user/app_userManagementPage";
+import {MDCDialog} from "@material/dialog";
 
 
 var phone = window.matchMedia("only screen and (max-width: 50em)");
@@ -64,6 +65,7 @@ UserPage.prototype.show = function(options){
 UserPage.prototype.buildHtml = function(url, context){
     let self = this;
     self.enableEdit = (window.user.role.name === "Teamleiter" || window.user.role.name === "Admin");
+    context.enableEdit = self.enableEdit;
     let options = self.options;
     function getData() {
         return new Promise(function(resolve, reject){
@@ -102,8 +104,7 @@ UserPage.prototype.buildHtml = function(url, context){
                             console.log(event.detail);
                         })
 
-                        banner.foundation.handlePrimaryActionClick = function(){
-                            //save changes
+                        $("#banner-save").on("click", function(){
                             apiHandler.updateUser(self.exploredUser.id, userModData)
                                 .done(function(result){
                                     self.showSnackbar("Änderungen gespeichert.");
@@ -121,8 +122,7 @@ UserPage.prototype.buildHtml = function(url, context){
                                     }
                                     self.showSnackbar(message, options);
                                 });
-
-                        }
+                        })
 
                         banner.foundation.handleSecondaryActionClick = function(){
                             //reset page
@@ -153,7 +153,23 @@ UserPage.prototype.buildHtml = function(url, context){
                             })
                         })
 
+                        if(self.enableEdit){
+                            const deleteDialog = new MDCDialog(document.querySelector('#delete-dialog'));
 
+                            $("#user-delete-button").on("click", function() {
+                                self.dialogChoice = {};
+                                deleteDialog.open();
+                            });
+                            deleteDialog.listen("MDCDialog:closed", function(event){
+                                let detail = event.detail;
+                                if(detail.action==="delete") {
+                                    apiHandler.removeUser(self.exploredUser.id)
+                                        .done(function(result){
+                                            window.location.replace("/user");
+                                        })
+                                }
+                            })
+                        }
                         self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
                         if(options.snackbar.show) {
                             self.showSnackbar(options.snackbar.message);

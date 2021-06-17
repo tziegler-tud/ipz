@@ -15,6 +15,13 @@ const webpush = require('web-push');
  * @property {Task[]} allowedTasks array of allowed tasks
  */
 
+/**
+ * @typedef Battery
+ * @property {Boolean} charging true if charger is connected
+ * @property {Number} level charging level as relative fracture (e.g. 0.7). Multiply by 100 to get percentage.
+ *
+ */
+
 class UserManager {
     constructor() {
         let self = this;
@@ -29,7 +36,7 @@ class UserManager {
         UserService.get()
             .then(users => {
                 users.forEach(function(user){
-                    self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask}); //active: 0 = offline, 1 = inactive, 2 = online
+                    self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask, battery: {}}); //active: 0 = offline, 1 = inactive, 2 = online
                 });
                 console.log("user runtime service initialized successfully.");
             })
@@ -44,7 +51,7 @@ class UserManager {
                 .then(users => {
                     self.registeredUsers = []
                     users.forEach(function(user){
-                        self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask});
+                        self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask, battery: {}});
                     });
                     console.log("userManager updated.")
                     resolve(self.registeredUsers)
@@ -62,10 +69,12 @@ class UserManager {
      *
      * @param user {User}
      * @param task {Task}
+     * @param battery {Battery}
      * @returns {Promise} resolved if connection was successful
      */
-    connect(user, task) {
+    connect(user, task, battery) {
         let self = this;
+        if(battery === undefined) battery = {};
         return new Promise(function (resolve, reject) {
             let i = self.registeredUsers.findIndex(active => active.user.id === user.id);
             if (i === -1) {
@@ -80,6 +89,7 @@ class UserManager {
                     self.registeredUsers[i].active = 2;
                     self.registeredUsers[i].connect = Date.now();
                     self.registeredUsers[i].decay = Date.now() + self.defaultDecay;
+                    self.registeredUsers[i].battery = battery;
                     console.log("user " + user.username + " connected");
                     setTimeout(self.decayUser, self.defaultDecay + 1, self.registeredUsers[i], self);
                     //finally, set task and resolve
@@ -87,7 +97,7 @@ class UserManager {
                     resolve(user)
                 } else {
                     //user is inactive, reactivate
-                    self.refresh(user, task)
+                    self.refresh(user, task, battery)
                         .then(function(result){
                             resolve(user);
                         })
@@ -137,9 +147,10 @@ class UserManager {
      *
      * @param user {User}
      * @param task {Task}
+     * @param battery {Battery}
      * @returns {Promise} resolved if connection was successful
      */
-    refresh(user, task){
+    refresh(user, task, battery){
         let self = this;
         return new Promise(function (resolve, reject) {
             let i = self.registeredUsers.findIndex(active => active.user.id === user.id);
@@ -152,6 +163,7 @@ class UserManager {
                 if (self.registeredUsers[i].active === 2) {
                     self.registeredUsers[i].decay = Date.now() + self.defaultDecay;
                     if (task !== undefined) self.setActiveTask(i, task);
+                    if (battery !== undefined) self.registeredUsers[i].battery = battery;
                     console.log("refreshing user " + user.username);
                     resolve(user)
                 } else {
@@ -159,13 +171,14 @@ class UserManager {
                         self.registeredUsers[i].active = 2;
                         self.registeredUsers[i].decay = Date.now() + self.defaultDecay;
                         if (task !== undefined) self.setActiveTask(i, task);
+                        if (battery !== undefined) self.registeredUsers[i].battery = battery;
                         console.log("reactivating user " + user.username);
                         setTimeout(self.decayUser, self.defaultDecay + 1, self.registeredUsers[i], self);
                         resolve(user);
                     }
                     else {
                         if(self.registeredUsers[i].active === 0){
-                            self.connect(user, task)
+                            self.connect(user, task, battery)
                                 .then(function(result){
                                     resolve(user)
                                 })

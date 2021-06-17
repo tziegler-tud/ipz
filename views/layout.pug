@@ -8,6 +8,9 @@ html
     if (user !== undefined)
       script.
         window.user = !{JSON.stringify(user)}
+    if (task !== undefined)
+      script.
+        window.task = !{JSON.stringify(task)}
 
     block page_includes
 

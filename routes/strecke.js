@@ -17,7 +17,8 @@ function getTrackPage (req, res, next) {
     //find track
     trackService.getById(trackId)
         .then(function(track){
-            userManager.connect(req.user, "Impfstrecke " + track.name)
+            let task = "Impfstrecke " + track.name;
+            userManager.connect(req.user, task)
             res.render('pages/strecke/strecke',
                 {
                     user: req.user,
@@ -26,6 +27,7 @@ function getTrackPage (req, res, next) {
                     trackId: track.trackId,
                     trackTitle: titleString + track.name,
                     trackName: track.name,
+                    task: task,
                 });
         })
         .catch(err => next(err));
