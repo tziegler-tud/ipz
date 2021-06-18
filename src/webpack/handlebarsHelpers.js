@@ -58,3 +58,14 @@ Handlebars.registerHelper("navEntryAllowed", function(taskName, allowedTasks){
 Handlebars.registerHelper("batteryPercentage", function(level){
     return Math.floor(level * 100) + "%";
 })
+
+Handlebars.registerHelper("batteryStatus", function(battery){
+    if (battery === undefined || battery.level === undefined || battery.charging === undefined) return "";
+    let htmlString = "";
+    let chargingIcon = '<i class="battery-icon mdc-deprecated-list-item__meta material-icons" aria-hidden="true">power</i>'
+    let dischargingIcon = '<i class="battery-icon mdc-deprecated-list-item__meta material-icons" aria-hidden="true">power_off</i>'
+    let chargingLevel = Math.floor(battery.level * 100) + "%";
+    //set battery chargin icon
+    htmlString = " / ";
+    return "<span>" + htmlString + (battery.charging ? chargingIcon: dischargingIcon) + chargingLevel + "</span>";
+})

@@ -1,5 +1,5 @@
 .idea/
 node_modules/
-bin/sessions/*
+sessions/*
 src/**/build/
 access.log

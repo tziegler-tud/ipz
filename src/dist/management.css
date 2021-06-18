@@ -22321,6 +22321,10 @@ input[type=number] {
   margin-right: 10px;
 }
 
+.battery-icon {
+  font-size: 130% !important;
+}
+
 .mdc-deprecated-list {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;

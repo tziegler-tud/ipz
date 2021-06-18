@@ -22,7 +22,7 @@
                                                 <span class="mdc-deprecated-list-item__primary-text">{{this.user.name}}</span>
                                                 <span class="mdc-deprecated-list-item__secondary-text">
                                                     {{#ifEquals this.active 2}}
-                                                        <span class="icon-online"></span>{{this.currentTask.name}}/ {{#if this.battery.charging}}<i class="mdc-deprecated-list-item__meta material-icons" aria-hidden="true">power</i>{{else}}<i class="mdc-deprecated-list-item__meta material-icons" aria-hidden="true">power_off</i>{{/if}} {{batteryPercentage this.battery.level}}
+                                                        <span class="icon-online"></span>{{this.currentTask.name}} {{{batteryStatus this.battery}}}
                                                     {{else}}{{#ifEquals this.active 1}}<span class="icon-inactive"></span>inaktiv{{else}}<span class="icon-offline"></span>{{this.currentTask.name}}{{/ifEquals}}{{/ifEquals}}
                                                 </span>
                                             </span>
@@ -53,7 +53,7 @@
                                               <span class="mdc-deprecated-list-item__primary-text">{{this.user.name}}</span>
                                                 <span class="mdc-deprecated-list-item__secondary-text">
                                                     {{#ifEquals this.active 2}}
-                                                        <span class="icon-online"></span>{{this.currentTask.name}}/ {{#if this.battery.charging}}<i class="mdc-deprecated-list-item__meta material-icons" aria-hidden="true">power</i>{{else}}<i class="mdc-deprecated-list-item__meta material-icons" aria-hidden="true">power_off</i>{{/if}} {{batteryPercentage this.battery.level}}
+                                                        <span class="icon-online"></span>{{this.currentTask.name}} {{{batteryStatus this.battery}}}
                                                     {{else}}{{#ifEquals this.active 1}}<span class="icon-inactive"></span>inaktiv{{else}}<span class="icon-offline"></span>{{this.currentTask.name}}{{/ifEquals}}{{/ifEquals}}
                                                 </span>
                                             </span>
