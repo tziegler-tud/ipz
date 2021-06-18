@@ -210,9 +210,22 @@ class UserManager {
         if (Date.now() > userObj.decay){
             let reason = "decayed due to inactivity";
             let i = self.registeredUsers.findIndex(active => active.user.id === userObj.user.id);
+            if(i < 0) {
+                return false;
+            }//user not found;
+            else {
+                //detect if user has disconnected in the meantime
+                if (self.registeredUsers[i].active === 0) {
+                    //user has disconnected, nothing to do here
+                    return true;
+                }
+                else {
+                    self.registeredUsers[i].active = 1;
+                    console.log("user " + userObj.user.username + " " + reason);
+                    return true;
+                }
+            }
             // self.setActiveTask(i, self.inactiveTask);
-            self.registeredUsers[i].active = 1;
-            console.log("user " + userObj.user.username + " " + reason);
         }
         else {
             setTimeout(self.decayUser, self.defaultDecay, userObj, self)

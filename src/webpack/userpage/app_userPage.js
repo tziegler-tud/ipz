@@ -64,7 +64,7 @@ UserPage.prototype.show = function(options){
 
 UserPage.prototype.buildHtml = function(url, context){
     let self = this;
-    self.enableEdit = (window.user.role.name === "Teamleiter" || window.user.role.name === "Admin");
+    self.enableEdit = (window.user.role.name === "Teamleiter" || window.user.role.name === "Admin" || window.user.role.name === "Leitung");
     context.enableEdit = self.enableEdit;
     let options = self.options;
     function getData() {
