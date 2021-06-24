@@ -68,6 +68,17 @@ async function add(userObject) {
     }
 
     await userDbObject.save();
+
+    //update userManager
+    const userManager = require("./userManager");
+    userManager.update()
+        .then(function(result){
+            console.log("UserService: Successfully updated userManager.")
+        })
+        .catch(function(err){
+            console.warn("UserService: Failed to update userManager.")
+        })
+
     return userDbObject;
 }
 
@@ -80,7 +91,23 @@ async function remove(id) {
     if(id === undefined) {
         throw new Error("Invalid arguments received: id is empty.");
     }
-    return User.findByIdAndRemove(id);
+    return new Promise(function(resolve, reject){
+        User.findByIdAndRemove(id)
+            .then(function(result){
+                //update userManager
+                const userManager = require("./userManager");
+                userManager.update()
+                    .then(function(result){
+                        console.log("UserService: Successfully updated userManager.")
+                        resolve(result)
+                    })
+                    .catch(function(err){
+                        console.warn("UserService: Failed to update userManager.")
+                        resolve(result);
+                    })
+            })
+            .catch(err => reject(err))
+    });
 }
 
 

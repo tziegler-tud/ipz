@@ -5,6 +5,13 @@
 @use "../../../node_modules/@material/switch";
 @use "../../../node_modules/@material/banner/styles";
 @use "../../../node_modules/@material/snackbar/mdc-snackbar";
+@use "../../../node_modules/@material/floating-label/mdc-floating-label";
+@use "../../../node_modules/@material/line-ripple/mdc-line-ripple";
+@use "../../../node_modules/@material/notched-outline/mdc-notched-outline";
+@use "../../../node_modules/@material/textfield";
+@use "../../../node_modules/@material/textfield/icon";
+@use "../../../node_modules/@material/fab";
+@use "../../../node_modules/@material/dialog";
 
 @import "../app_pages";
 
@@ -14,6 +21,10 @@
 @include checkbox.core-styles;
 @include icon-button.core-styles;
 @include switch.core-styles;
+@include textfield.core-styles;
+@include icon.icon-core-styles;
+@include fab.core-styles;
+@include dialog.core-styles;
 
 @import "~material-icons-font/material-icons-font.css";
 
@@ -135,4 +146,8 @@
       }
     }
   }
+}
+
+.delete-button {
+  @include button.container-fill-color(#8d2626);
 }

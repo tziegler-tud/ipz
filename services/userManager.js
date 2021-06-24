@@ -15,6 +15,13 @@ const webpush = require('web-push');
  * @property {Task[]} allowedTasks array of allowed tasks
  */
 
+/**
+ * @typedef Battery
+ * @property {Boolean} charging true if charger is connected
+ * @property {Number} level charging level as relative fracture (e.g. 0.7). Multiply by 100 to get percentage.
+ *
+ */
+
 class UserManager {
     constructor() {
         let self = this;
@@ -29,7 +36,7 @@ class UserManager {
         UserService.get()
             .then(users => {
                 users.forEach(function(user){
-                    self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask}); //active: 0 = offline, 1 = inactive, 2 = online
+                    self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask, battery: {}}); //active: 0 = offline, 1 = inactive, 2 = online
                 });
                 console.log("user runtime service initialized successfully.");
             })
@@ -44,8 +51,9 @@ class UserManager {
                 .then(users => {
                     self.registeredUsers = []
                     users.forEach(function(user){
-                        self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask});
+                        self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask, battery: {}});
                     });
+                    console.log("userManager updated.")
                     resolve(self.registeredUsers)
                 })
                 .catch(function(err){
@@ -61,10 +69,12 @@ class UserManager {
      *
      * @param user {User}
      * @param task {Task}
+     * @param battery {Battery}
      * @returns {Promise} resolved if connection was successful
      */
-    connect(user, task) {
+    connect(user, task, battery) {
         let self = this;
+        if(battery === undefined) battery = {};
         return new Promise(function (resolve, reject) {
             let i = self.registeredUsers.findIndex(active => active.user.id === user.id);
             if (i === -1) {
@@ -79,14 +89,19 @@ class UserManager {
                     self.registeredUsers[i].active = 2;
                     self.registeredUsers[i].connect = Date.now();
                     self.registeredUsers[i].decay = Date.now() + self.defaultDecay;
+                    self.registeredUsers[i].battery = battery;
                     console.log("user " + user.username + " connected");
                     setTimeout(self.decayUser, self.defaultDecay + 1, self.registeredUsers[i], self);
+                    //finally, set task and resolve
+                    self.setActiveTask(i, task);
+                    resolve(user)
                 } else {
-                    self.refreshIndex(i);
+                    //user is inactive, reactivate
+                    self.refresh(user, task, battery)
+                        .then(function(result){
+                            resolve(user);
+                        })
                 }
-                //finally, set task and resolve
-                self.setActiveTask(i, task);
-                resolve(user)
             }
         })
     }
@@ -102,20 +117,20 @@ class UserManager {
         let self = this;
         return new Promise(function (resolve, reject) {
             //TODO: set Timeout
-            let i = this.registeredUsers.findIndex(active => active.user.id === user.id);
+            let i = self.registeredUsers.findIndex(active => active.user.id === user.id);
             if (i === -1) {
                 let tag = (user.username === undefined) ? ((user.id === undefined) ? "undefined" : user.id) : user.username;
                 let message = "Failed to disconnect user " + tag + ": user not found"
                 console.log(message);
                 reject(message);
             } else {
-                if (this.registeredUsers[i].active === 0) {
+                if (self.registeredUsers[i].active === 0) {
                     let message = "Failed to disconnect user " + user.username + ": user is not connected.";
                     console.log(message);
                     reject(message);
                 } else {
-                    this.registeredUsers[i].active = 0;
-                    this.registeredUsers[i].currentTask = self.offlineTask;
+                    self.registeredUsers[i].active = 0;
+                    self.registeredUsers[i].currentTask = self.offlineTask;
                     let msg = "user " + user.username + " disconnected.";
                     if (typeof (reason) === "string") {
                         msg = msg + " Reason: " + reason;
@@ -132,9 +147,10 @@ class UserManager {
      *
      * @param user {User}
      * @param task {Task}
+     * @param battery {Battery}
      * @returns {Promise} resolved if connection was successful
      */
-    refresh(user, task){
+    refresh(user, task, battery){
         let self = this;
         return new Promise(function (resolve, reject) {
             let i = self.registeredUsers.findIndex(active => active.user.id === user.id);
@@ -147,6 +163,7 @@ class UserManager {
                 if (self.registeredUsers[i].active === 2) {
                     self.registeredUsers[i].decay = Date.now() + self.defaultDecay;
                     if (task !== undefined) self.setActiveTask(i, task);
+                    if (battery !== undefined) self.registeredUsers[i].battery = battery;
                     console.log("refreshing user " + user.username);
                     resolve(user)
                 } else {
@@ -154,11 +171,29 @@ class UserManager {
                         self.registeredUsers[i].active = 2;
                         self.registeredUsers[i].decay = Date.now() + self.defaultDecay;
                         if (task !== undefined) self.setActiveTask(i, task);
+                        if (battery !== undefined) self.registeredUsers[i].battery = battery;
                         console.log("reactivating user " + user.username);
                         setTimeout(self.decayUser, self.defaultDecay + 1, self.registeredUsers[i], self);
                         resolve(user);
                     }
-                    return self.connect(user, task);
+                    else {
+                        if(self.registeredUsers[i].active === 0){
+                            self.connect(user, task, battery)
+                                .then(function(result){
+                                    resolve(user)
+                                })
+                        }
+                        else {
+                            let message = "Failed to refresh user: activity state unclear. Disconnecting user...";
+                            console.warn(message);
+                            self.disconnect(user, message)
+                                .then(function(result){
+                                    reject(user);
+                                })
+                        }
+
+                    }
+
                 }
             }
         })
@@ -175,9 +210,22 @@ class UserManager {
         if (Date.now() > userObj.decay){
             let reason = "decayed due to inactivity";
             let i = self.registeredUsers.findIndex(active => active.user.id === userObj.user.id);
+            if(i < 0) {
+                return false;
+            }//user not found;
+            else {
+                //detect if user has disconnected in the meantime
+                if (self.registeredUsers[i].active === 0) {
+                    //user has disconnected, nothing to do here
+                    return true;
+                }
+                else {
+                    self.registeredUsers[i].active = 1;
+                    console.log("user " + userObj.user.username + " " + reason);
+                    return true;
+                }
+            }
             // self.setActiveTask(i, self.inactiveTask);
-            self.registeredUsers[i].active = 1;
-            console.log("user " + userObj.user.username + " " + reason);
         }
         else {
             setTimeout(self.decayUser, self.defaultDecay, userObj, self)

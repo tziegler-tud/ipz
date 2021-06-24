@@ -21,6 +21,9 @@ if (!user) {
 }
 else setupInterface();
 
+//initialize battery information on window.battery
+batteryMonitor();
+
 function setupInterface(){
     window.user.pushInterface = {
         unsubscribe: function () {
@@ -54,7 +57,12 @@ function setupInterface(){
 }
 
 function reconnect () {
-    apiHandler.reconnectUser(window.user)
+    let batteryInformation = window.battery;
+    let data = {
+        task: window.task,
+        battery: batteryInformation,
+    }
+    apiHandler.reconnectUser(window.user, data)
         .done(function(response){
             console.log("refreshed connection to server");
         })
@@ -63,6 +71,53 @@ function reconnect () {
         })
 }
 
+function batteryMonitor(){
+    window.battery = {};
+//
+// //testing battery api
+if(!window.navigator.getBattery) {
+    return false;
+}
+window.navigator.getBattery().then(function(battery) {
+    function updateAllBatteryInfo(){
+        updateChargeInfo();
+        updateLevelInfo();
+        updateChargingInfo();
+        updateDischargingInfo();
+    }
+    updateAllBatteryInfo();
+    reconnect();
+    battery.addEventListener('chargingchange', function(){
+        updateChargeInfo();
+    });
+    function updateChargeInfo(){
+        window.battery.charging = battery.charging;
+    }
+
+    battery.addEventListener('levelchange', function(){
+        updateLevelInfo();
+    });
+    function updateLevelInfo(){
+        window.battery.level = battery.level;
+    }
+
+    battery.addEventListener('chargingtimechange', function(){
+        updateChargingInfo();
+    });
+    function updateChargingInfo(){
+        // console.log("Battery charging time: "
+        //     + battery.chargingTime + " seconds");
+    }
+
+    battery.addEventListener('dischargingtimechange', function(){
+        updateDischargingInfo();
+    });
+    function updateDischargingInfo(){
+        // console.log("Battery discharging time: "
+        //     + battery.dischargingTime + " seconds");
+    }
+});
+}
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
@@ -190,13 +245,13 @@ function showPermissionDialog(){
         "       aria-live=\"assertive\">\n" +
         "    <div class=\"mdc-banner__graphic-text-wrapper\">\n" +
         "      <div class=\"mdc-banner__text\">\n" +
-        "        There was a problem processing a transaction on your credit card.\n" +
+        "        Bitte Benachrichtigungen aktivieren, um alle Funktion der App nutzen zu können." +
         "      </div>\n" +
         "    </div>\n" +
         "    <div class=\"mdc-banner__actions\">\n" +
         "      <button type=\"button\" class=\"mdc-button mdc-banner__primary-action\">\n" +
         "        <div class=\"mdc-button__ripple\"></div>\n" +
-        "        <div class=\"mdc-button__label\">Fix it</div>\n" +
+        "        <div class=\"mdc-button__label\">Aktivieren</div>\n" +
         "      </button>\n" +
         "    </div>\n" +
         "  </div>"

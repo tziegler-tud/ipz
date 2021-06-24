@@ -20,9 +20,15 @@
                                             <span class="mdc-deprecated-list-item__ripple"></span>
                                             <span class="mdc-deprecated-list-item__text">
                                                 <span class="mdc-deprecated-list-item__primary-text">{{this.user.name}}</span>
-                                                <span class="mdc-deprecated-list-item__secondary-text">{{#ifEquals this.active 2}}<span class="icon-online"></span>{{this.currentTask.name}}{{else}}{{#ifEquals this.active 1}}<span class="icon-inactive"></span>inaktiv{{else}}<span class="icon-offline"></span>{{this.currentTask.name}}{{/ifEquals}}{{/ifEquals}}</span>
+                                                <span class="mdc-deprecated-list-item__secondary-text">
+                                                    {{#ifEquals this.active 2}}
+                                                        <span class="icon-online"></span>{{this.currentTask.name}} {{{batteryStatus this.battery}}}
+                                                    {{else}}{{#ifEquals this.active 1}}<span class="icon-inactive"></span>inaktiv{{else}}<span class="icon-offline"></span>{{this.currentTask.name}}{{/ifEquals}}{{/ifEquals}}
+                                                </span>
                                             </span>
-                                            <i class="test-notify mdc-deprecated-list-item__meta material-icons" aria-hidden="true" data-userid="{{this.user.id}}">send</i>
+                                            {{#if (userHasRole ../user ../roles.Admin)}}
+                                                <i class="test-notify mdc-deprecated-list-item__meta material-icons" aria-hidden="true" data-userid="{{this.user.id}}">send</i>
+                                            {{/if}}
                                         </li>
                                     {{/each}}
                                 {{else}}
@@ -45,9 +51,16 @@
                                             <span class="mdc-deprecated-list-item__ripple"></span>
                                             <span class="mdc-deprecated-list-item__text">
                                               <span class="mdc-deprecated-list-item__primary-text">{{this.user.name}}</span>
-                                                <span class="mdc-deprecated-list-item__secondary-text">{{#ifEquals this.active 2}}<span class="icon-online"></span>{{this.currentTask.name}}{{else}}{{#ifEquals this.active 1}}<span class="icon-inactive"></span>inaktiv{{else}}<span class="icon-offline"></span>{{this.currentTask.name}}{{/ifEquals}}{{/ifEquals}}</span>
+                                                <span class="mdc-deprecated-list-item__secondary-text">
+                                                    {{#ifEquals this.active 2}}
+                                                        <span class="icon-online"></span>{{this.currentTask.name}} {{{batteryStatus this.battery}}}
+                                                    {{else}}{{#ifEquals this.active 1}}<span class="icon-inactive"></span>inaktiv{{else}}<span class="icon-offline"></span>{{this.currentTask.name}}{{/ifEquals}}{{/ifEquals}}
+                                                </span>
                                             </span>
-                                            <i class="test-notify mdc-deprecated-list-item__meta material-icons" aria-hidden="true" data-userid="{{this.user.id}}">send</i>
+
+                                            {{#if (userHasRole ../user ../roles.Admin)}}
+                                                    <i class="test-notify mdc-deprecated-list-item__meta material-icons" aria-hidden="true" data-userid="{{this.user.id}}">send</i>
+                                            {{/if}}
                                         </li>
                                     {{/each}}
 

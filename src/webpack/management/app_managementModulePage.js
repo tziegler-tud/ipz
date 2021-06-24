@@ -500,6 +500,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
         return new Promise(function(resolve, reject){
             getData()
                 .then(function(data){
+                    context.user = window.user;
                     context.roles = data.roles;
                     let devices = {};
                     //get tablet devices

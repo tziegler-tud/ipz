@@ -11,7 +11,7 @@
                         </div>
                     </div>
                     <div class="mdc-banner__actions">
-                        <button type="button" class="save-button mdc-button mdc-button--outlined mdc-banner__primary-action">
+                        <button id="banner-save" type="button" class="save-button mdc-button mdc-button--outlined mdc-banner__primary-action">
                             <div class="mdc-button__ripple"></div>
                             <div class="mdc-button__label">Speichern</div>
                         </button>
@@ -97,6 +97,28 @@
                     </div>
                 </div>
             </div>
+            {{#if enableEdit}}
+            <div class="userinfo-section userinfo-card card-full userwidget-description">
+                <div class="userinfo-section-inner">
+                    <div class="userinfo-sectionheader"><span>Passwort ändern</span></div>
+                    <div>
+                        <span>In Arbeit...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="userinfo-section userinfo-card card-full userwidget-description">
+                <div class="userinfo-section-inner">
+                    <div class="userinfo-sectionheader"><span>Nutzer löschen</span></div>
+                    <div>
+                        <button id="user-delete-button" class="delete-button mdc-fab mdc-fab--extended">
+                            <div class="mdc-fab__ripple"></div>
+                            <span class="material-icons mdc-fab__icon">delete</span>
+                            <span class="mdc-fab__label">Nutzer löschen</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
         </div>
     </div>
     <div class="mdc-snackbar">
@@ -112,5 +134,29 @@
             </div>
 
         </div>
+    </div>
+    <div id="delete-dialog" class="mdc-dialog">
+        <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface"
+                 role="alertdialog"
+                 aria-modal="true"
+                 aria-labelledby="my-dialog-title"
+                 aria-describedby="my-dialog-content">
+                <div class="mdc-dialog__content" id="my-dialog-content">
+                    Nutzer {{exploredUser.username}} löschen?
+                </div>
+                <div class="mdc-dialog__actions">
+                    <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="cancel">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Abbrechen</span>
+                    </button>
+                    <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="delete">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Löschen</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
     </div>
 </div>
