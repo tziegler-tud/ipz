@@ -122,7 +122,7 @@ nav.initialize
                             page.hide();
                         }
                     })
-                    managementDevicesPage.show({tabs: true, refresh: false})
+                    managementDevicesPage.show({tabs: true, refresh: true})
                         .then(function(){
                         });
                 })

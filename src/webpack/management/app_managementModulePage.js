@@ -93,9 +93,16 @@ ManagementModulePage.prototype.enableRefresh = function(){
 
 ManagementModulePage.prototype.update = function(options){
     let self = this;
-    //rebuild dashboard
+    // if (options === undefined) options = self.options;
+    // rebuild dashboard
     // self.dashboard = new Dashboard("management", self, {containerId: "dashboard-container"});
-    if(options.tabs) self.refreshActiveTab();
+    if(options.tabs) {
+        self.refreshActiveTab();
+    }
+    else {
+        // return this.buildModule(self.type, options);
+    }
+
 
 
 }
@@ -133,7 +140,7 @@ ManagementModulePage.prototype.buildHtml = function(url, context, options){
             self.tabs = self.initTabs();
             //activate first tab
             if(self.tabs[0] !== undefined) {
-                self.tabs[0].activate();
+                self.tabs[0].activate(false);
             }
         }
 
@@ -171,6 +178,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
             break;
     }
 
+    self.module = module;
     return module.buildModule(buildArgs)
 
 
@@ -231,14 +239,14 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
             //setup tab navigation interface
             if (options.tabs) {
                 self.tabs = self.initTabs();
+                self.tabs[0].dashboard = self.figures;
+                self.tabs[1].dashboard = self.switches;
                 //activate first tab
                 if (self.tabs[0] !== undefined) {
-                    self.tabs[0].activate();
+                    self.tabs[0].activate(false);
                 }
             }
             let bottomTabs =  new Bottom("management", self, {}, {});
-            self.tabs[0].dashboard = self.figures;
-            self.tabs[1].dashboard = self.switches;
         });
     }
 
@@ -272,7 +280,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                         self.tabs = self.initTabs();
                         //activate first tab
                         if (self.tabs[0] !== undefined) {
-                            self.tabs[0].activate();
+                            self.tabs[0].activate(false);
                         }
                     }
                     let bottomTabs =  new Bottom("management-tracks", self, {}, context);
@@ -533,7 +541,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                             self.tabs = self.initTabs();
                             //activate first tab
                             if (self.tabs[0] !== undefined) {
-                                self.tabs[0].activate();
+                                self.tabs[0].activate(false);
                             }
                         }
                         resolve();
@@ -636,8 +644,15 @@ ManagementModulePage.prototype.getTabNavigationInterface = function(){
 ManagementModulePage.prototype.refreshActiveTab = function(){
     let self = this;
     self.tabs.forEach(function(tab){
-        if (tab.active && tab.dashboard) {
-            tab.dashboard.refresh();
+        if (tab.active) {
+            if (tab.dashboard) {
+                tab.dashboard.refresh();
+            }
+            else {
+                //tab has no dashboards - how to refresh?
+                tab.refresh();
+
+            }
         }
     })
 }
@@ -651,17 +666,49 @@ ManagementModulePage.prototype.refreshDashboard = function(){
     });
 }
 
-ManagementModulePage.prototype.activateTab = function(tab){
+/**
+ *
+ * @param tab
+ * @param [refresh] {Boolean} Default: true. Refresh the tab on activation.
+ * @returns {boolean}
+ */
+ManagementModulePage.prototype.activateTab = function(tab, refresh){
     let self = this;
-    //remove active class from all tabs
-    self.tabs.forEach(function(tab){
-        tab.deactivate();
-    })
-    //add active class to current element
-    tab.element.classList.add("tab--active");
+    refresh = (refresh === undefined) ? true : refresh;
+
     //find associated dashboard
-    tab.active = true;
-    if(tab.dashboard) tab.dashboard.refresh();
+    if(tab.dashboard) {
+        //remove active class from all tabs
+        self.tabs.forEach(function(tab){
+            tab.deactivate();
+        })
+        //add active class to current element
+        tab.element.classList.add("tab--active");
+        tab.active = true;
+        if (refresh) tab.dashboard.refresh();
+    }
+    else {
+        //refresh module if enabled
+        if (refresh){
+            self.module.refresh()
+                .then(function(result){
+                    self.tabs.forEach(function(tab){
+                        tab.deactivate();
+                    })
+                    //add active class to current element
+                    tab.element.classList.add("tab--active");
+                    tab.active = true;
+                })
+        }
+        else {
+            self.tabs.forEach(function(tab){
+                tab.deactivate();
+            })
+            //add active class to current element
+            tab.element.classList.add("tab--active");
+            tab.active = true;
+        }
+    }
     return true;
 }
 
@@ -670,6 +717,19 @@ ManagementModulePage.prototype.deactivateTab = function(tab){
     //remove active class from tab
     tab.element.classList.remove("tab--active");
     tab.active = false;
+    return true;
+}
+
+ManagementModulePage.prototype.refreshTab = function(tab){
+    let self = this;
+    //
+    if(tab.dashboard) {
+        tab.dashboard.refresh();
+    }
+    else {
+        self.module.refresh()
+            .then(result => tab.activate(tab, false))
+    }
     return true;
 }
 
@@ -685,11 +745,14 @@ ManagementModulePage.prototype.initTabs = function() {
     tabs.forEach(function(el){
         tabArray.push({
             element: el,
-            activate: function(){
-                self.activateTab(this)
+            activate: function(refresh){
+                self.activateTab(this, refresh)
             },
             deactivate: function(){
                 self.deactivateTab(this)
+            },
+            refresh: function(){
+                self.refreshTab(this);
             },
             active: false,
             dashboard: false,
