@@ -25,7 +25,7 @@ module.exports = {
  * Gets all users
  */
 async function get() {
-    return User.find().populate("role").select("-hash");
+    return User.find().populate("role").select("-hash").sort("role");
 }
 
 async function getById(id) {
