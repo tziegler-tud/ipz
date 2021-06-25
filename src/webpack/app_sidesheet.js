@@ -67,9 +67,9 @@ Sidesheet.prototype.setContent = function(type, activePage, options){
             url = "/webpack/templates/sidesheet/sidesheet-checkin.hbs";
             self.createCheckinPage(activePage, options);
             break;
-        case "wb1":
-            url = "/webpack/templates/sidesheet/sidesheet-wb1.hbs";
-            self.createWb1Page(activePage, options);
+        case "management":
+            url = "/webpack/templates/sidesheet/sidesheet-management.hbs";
+            self.createManagementPage(activePage, options);
             break;
         case "strecke":
             url = "/webpack/templates/sidesheet/sidesheet-track.hbs";
@@ -120,34 +120,25 @@ Sidesheet.prototype.createCheckinPage = function(activePage, options){
  * @param activePage
  * @param options
  */
-Sidesheet.prototype.createWb1Page = function(activePage, options){
+Sidesheet.prototype.createManagementPage = function(activePage, options){
     let self = this;
-    let url = "/webpack/templates/sidesheet/sidesheet-wb1.hbs";
-    let context = {};
+    let url = "/webpack/templates/sidesheet/sidesheet-management.hbs";
+    let context = {
+        title: "Einstellungen - Teamleiter-Modul"
+    };
     $.get(url, function (data) {
         var template = Handlebars.compile(data);
         self.container.innerHTML = template(context);
-        const switchControl = new MDCSwitch(document.querySelector('.mdc-switch'));
-        //setup sorting select element
-        let sort = document.getElementById("wb1-select-sort");
-        apiHandler.getCheckoutSorting()
-            .done(function(result){
-                //find corresponding option
-                sort.value=result.property;
-
-            })
+        let reloadButton = document.getElementById("button-reload");
+        reloadButton.addEventListener("click", function(){
+            //reload page
+            location.reload();
+        })
         let cancelBtn = document.getElementById("sidesheet-cancel-button-element")
         cancelBtn.addEventListener("click", function(){
             self.hide();
         })
-        $(sort).on("change", function(){
-            let val = sort.value;
-            //request new data
-            apiHandler.setCheckoutSorting({sort: val, direction: 1})
-                .done(function(){
-                    //update page
-                })
-        })
+
         if(!options.show) self.hide();
     });
 }

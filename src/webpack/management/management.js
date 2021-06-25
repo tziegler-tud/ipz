@@ -52,14 +52,14 @@ pages.push(managementDevicesPage);
 
 managementTotalPage.show({tabs: true, refresh: true})
     .done(function(){
-        // sidesheet = new Sidesheet("checkin", managementPage, {});
+        sidesheet = new Sidesheet("management", managementTotalPage, {});
         // bottomTabs =  new Bottom("management", managementTotalPage, {})
     });
 
 nav.initialize
     .then(function(){
         nav.setAction("mdc-top-app-bar-action1", function(e, args){
-            // sidesheet.toggle();
+            sidesheet.toggle();
         })
         let subpage = nav.addSubpage("management", {user: window.user}, true, "app-link-management", true);
         subpage.init
@@ -85,7 +85,7 @@ nav.initialize
                     })
                     managementTotalPage.show({tabs: true, refresh: true})
                         .done(function(){
-                            // sidesheet = new Sidesheet("checkin", managementPage, {});
+                            sidesheet = new Sidesheet("management", managementTotalPage, {});
                         });
                 });
                 nav.setAction("nav-management-subpage--tracks", function(e, args) {
@@ -97,7 +97,7 @@ nav.initialize
                     })
                     managementTracksPage.show({tabs: true})
                         .then(function(){
-                            // sidesheet = new Sidesheet("checkin", managementPage, {});
+                            sidesheet = new Sidesheet("management", managementTracksPage, {});
                             //bottoms are initialized inside Page.show
                             // bottomTabs =  new Bottom("management-tracks", managementTracksPage, {})
                         });
@@ -111,7 +111,7 @@ nav.initialize
                     })
                     managementStatisticsPage.show({tabs: true})
                         .then(function(){
-                            // sidesheet = new Sidesheet("checkin", managementPage, {});
+                            sidesheet = new Sidesheet("management", managementStatisticsPage, {});
                             // bottomTabs =  new Bottom("management", managementStatisticsPage, {})
                         });
                 })
@@ -124,6 +124,7 @@ nav.initialize
                     })
                     managementDevicesPage.show({tabs: true, refresh: false})
                         .then(function(){
+                            sidesheet = new Sidesheet("management", managementDevicesPage, {});
                         });
                 })
             })
