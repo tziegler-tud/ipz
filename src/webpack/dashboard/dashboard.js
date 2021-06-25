@@ -83,6 +83,12 @@ var DashboardComponent = function(componentType, dashboard, index, args, buildFu
             this.dataType = "switches";
             this.args = args;
             break;
+        case "switches-view":
+            this.url = "/webpack/templates/dashboard/modules/switches-view.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/switches-view.hbs";
+            this.dataType = "switches";
+            this.args = args;
+            break;
         case "figures-management":
             this.url = "/webpack/templates/dashboard/modules/figures-management.hbs";
             this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/figures-management.hbs";

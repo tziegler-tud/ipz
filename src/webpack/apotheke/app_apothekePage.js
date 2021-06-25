@@ -8,6 +8,7 @@ var $ = require( "jquery" );
 import {MDCRipple} from '@material/ripple';
 import {MDCSnackbar} from '@material/snackbar';
 import {Dashboard} from "../dashboard/dashboard";
+import {Bottom} from "../bottom/app_bottom";
 
 var phone = window.matchMedia("only screen and (max-width: 50em)");
 
@@ -98,7 +99,23 @@ ApothekePage.prototype.buildHtml = function(url, context, options){
         self.figures = new Dashboard("modules", self, {containerId: "dashboard-container"});
         self.figures.addComponent("figures-apotheke");
 
+        self.switches = new Dashboard("modules", self, {containerId: "switched-container"});
+        self.switches.addComponent("switches-view", {});
+
         self.dashboards.push(self.figures);
+        self.dashboards.push(self.switches);
+
+        //setup tab navigation interface
+        if (options.tabs) {
+            self.tabs = self.initTabs();
+            //activate first tab
+            if (self.tabs[0] !== undefined) {
+                self.tabs[0].activate();
+            }
+        }
+        let bottomTabs =  new Bottom("management", self, {}, {});
+        self.tabs[0].dashboard = self.figures;
+        self.tabs[1].dashboard = self.switches;
     });
 }
 
