@@ -15031,6 +15031,23 @@ modules
   color: #af1616;
 }
 
+/*
+mobile view
+ */
+.dashboard .dashboard-inner .dashboard-component-container.mobile {
+  font-size: 90%;
+}
+.dashboard .dashboard-inner .dashboard-component-container.mobile .dashboard-component-figures .dashboard-subcomponent-container {
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: 1fr;
+  grid-row-gap: 10px;
+  grid-template-areas: unset;
+}
+.dashboard .dashboard-inner .dashboard-component-container.mobile .dashboard-component-figures .dashboard-subcomponent-container .figures-main {
+  grid-area: unset;
+}
+
 .mdc-deprecated-list {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;

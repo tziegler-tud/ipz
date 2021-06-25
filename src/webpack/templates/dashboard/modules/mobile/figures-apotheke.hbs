@@ -1,0 +1,147 @@
+<div class="dashboard dashboard-module dashboard-module-figures">
+    <div class="dashboard-inner dashobard-module-inner">
+        <div class="dashboard-header">
+<!--            <span class="dashboard-header__text">{{header}}</span>-->
+        </div>
+        <div class="dashboard-component-container">
+            <div class="dashboard-component dashboard-component--fullwidth dashboard-component-figures">
+                <div class="dashboard-component-header">
+                    Impfstoffbedarf (Eingang Patient erfolgt)
+                </div>
+                <div class="dashboard-subcomponent-container">
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-main">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.checkin.total.all}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Gesamt</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--biontech">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.checkin.total.biontech}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">BionTech</span>
+                        </div>
+
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--moderna">
+
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.checkin.total.moderna}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Moderna</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--astra">
+
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.checkin.total.astra}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Astrazenecca</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--vials figures--biontech">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.checkin.vials.biontech}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Vials</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--vials figures--moderna">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.checkin.vials.moderna}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Vials</span>
+                        </div>
+
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--vials figures--astra">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.checkin.vials.astra}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Vials</span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="dashboard-component dashboard-component--fullwidth dashboard-component-figures">
+                <div class="dashboard-component-header">
+                    Durchgeführte Impfungen
+                </div>
+                <div class="dashboard-subcomponent-container">
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-main">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.track.total.all}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Gesamt</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--biontech">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.track.total.biontech}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">BionTech</span>
+                        </div>
+
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--moderna">
+
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.track.total.moderna}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Moderna</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--astra">
+
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.track.total.astra}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Astrazeneca</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--vials figures--biontech">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.track.vials.biontech}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Vials</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--vials figures--moderna">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.track.vials.moderna}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Vials</span>
+                        </div>
+
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--vials figures--astra">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.track.vials.astra}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Vials</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -79,26 +79,31 @@ var DashboardComponent = function(componentType, dashboard, index, args, buildFu
     switch(componentType){
         case "switches":
             this.url = "/webpack/templates/dashboard/modules/switches.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/switches.hbs";
             this.dataType = "switches";
             this.args = args;
             break;
         case "figures-management":
             this.url = "/webpack/templates/dashboard/modules/figures-management.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/figures-management.hbs";
             this.dataType = "figures-management";
             this.args = args;
             break;
         case "figures-apotheke":
             this.url = "/webpack/templates/dashboard/modules/figures-apotheke.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/figures-apotheke.hbs";
             this.dataType = "figures-apotheke";
             this.args = args;
             break;
         case "figures-track":
             this.url = "/webpack/templates/dashboard/modules/figures-track.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/figures-track.hbs";
             this.dataType = "figures-track";
             this.args = args;
             break;
         case "switches-track":
             this.url = "/webpack/templates/dashboard/modules/switches.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/switches.hbs";
             this.dataType = "switches-track";
             this.args = args;
             break;
@@ -124,7 +129,9 @@ var DashboardComponent = function(componentType, dashboard, index, args, buildFu
 
 DashboardComponent.prototype.buildComponentHtml = function(dashboard, context, updateExisting, args){
     let self = this;
-    return $.get(this.url, function (data) {
+    let url = this.url;
+    if (phone.matches) url = this.mobileUrl;
+    return $.get(url, function (data) {
         let c = {
             data: context,
         }
@@ -362,20 +369,25 @@ Dashboard.prototype.initialize = function(type, activePage, options){
     options = (options === undefined) ? {}: options;
     options = Object.assign(defaultOptions, options);
     let url;
+    let mobileUrl;
     switch(type){
         case "management":
+            mobileUrl = "/webpack/templates/dashboard/mobile/dashboard-management.hbs";
             url = "/webpack/templates/dashboard/dashboard-management.hbs";
             return self.createManagementDashboard(activePage, url, options);
             break;
         case "strecke":
+            mobileUrl = "/webpack/templates/dashboard/mobile/dashboard-track.hbs";
             url = "/webpack/templates/dashboard/dashboard-track.hbs";
             return self.createTrackDashboard(activePage, url, options);
             break;
         case "apotheke":
+            mobileUrl = "/webpack/templates/dashboard/mobile/dashboard-apotheke.hbs";
             url = "/webpack/templates/dashboard/dashboard-apotheke.hbs";
             return self.createApothekeDashboard(activePage, url, options);
             break;
         case "modules":
+            mobileUrl = "/webpack/templates/dashboard/dashboard-container.hbs";
             url = "/webpack/templates/dashboard/dashboard-container.hbs";
             return self.createModularDashboard(activePage, url, options);
             break;
