@@ -50,7 +50,7 @@ pages.push(managementTracksPage);
 pages.push(managementStatisticsPage);
 pages.push(managementDevicesPage);
 
-managementTotalPage.show({tabs: true, refresh: false})
+managementTotalPage.show({tabs: true, refresh: true})
     .done(function(){
         // sidesheet = new Sidesheet("checkin", managementPage, {});
         // bottomTabs =  new Bottom("management", managementTotalPage, {})
@@ -83,7 +83,7 @@ nav.initialize
                             page.hide();
                         }
                     })
-                    managementTotalPage.show({tabs: true, refresh: false})
+                    managementTotalPage.show({tabs: true, refresh: true})
                         .done(function(){
                             // sidesheet = new Sidesheet("checkin", managementPage, {});
                         });
