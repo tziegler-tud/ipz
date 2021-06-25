@@ -15,10 +15,10 @@ module.exports = {
 };
 
 /**
- * Gets all users
+ * Gets all tasks
  */
 async function get() {
-    return Task.find();
+    return Task.find().sort("name");
 }
 
 async function getById(id) {

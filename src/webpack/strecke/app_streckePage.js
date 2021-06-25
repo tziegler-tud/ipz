@@ -337,6 +337,7 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 console.log("closed");
                 let detail = event.detail;
                 if(detail.action==="accept") {
+                    if(listRemove.selectedIndex === -1) listRemove.selectedIndex = 0;
                     let second = (listRemove.listElements[listRemove.selectedIndex].dataset.second === "true");
                     /**
                      * @type {Object} c
