@@ -175,7 +175,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
 
 
     function buildDashboard(buildArgs, self) {
-        let url = "/webpack/templates/management/total.hbs";
+        let url = "/webpack/templates/management/dashboard.hbs";
         let context = {};
         return $.get(url, function (data) {
             console.log("template found");
@@ -187,6 +187,11 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
             self.page = document.getElementById("management-page");
             self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
 
+            self.dash = new Dashboard("modules", self, {containerId: "dashboard-container"});
+            self.dash.addComponent("management-dash")
+
+            self.dashboards.push(self.figures);
+
             //setup tab navigation interface
             if (options.tabs) {
                 self.tabs = self.initTabs();
@@ -195,7 +200,8 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                     self.tabs[0].activate();
                 }
             }
-            let bottomTabs =  new Bottom("management", self, {}, {});
+            // let bottomTabs =  new Bottom("management", self, {}, {});
+            self.tabs[0].dashboard = self.figures;
         });
     }
 

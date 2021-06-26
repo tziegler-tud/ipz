@@ -50,9 +50,9 @@ pages.push(managementTracksPage);
 pages.push(managementStatisticsPage);
 pages.push(managementDevicesPage);
 
-managementTotalPage.show({tabs: true, refresh: true})
+managementDashboardPage.show({tabs: true, refresh: true})
     .done(function(){
-        sidesheet = new Sidesheet("management", managementTotalPage, {});
+        sidesheet = new Sidesheet("management", managementDashboardPage, {});
         // bottomTabs =  new Bottom("management", managementTotalPage, {})
     });
 
@@ -64,18 +64,18 @@ nav.initialize
         let subpage = nav.addSubpage("management", {user: window.user}, true, "app-link-management", true);
         subpage.init
             .then(function(){
-                // nav.setAction("nav-management-subpage--dashboard", function(e, args) {
-                //     nav.setActiveElement("nav-management-subpage--dashboard");
-                //     pages.forEach(function(page){
-                //         if (page.active){
-                //             page.hide();
-                //         }
-                //     })
-                //     managementDashboardPage.show({tabs: true})
-                //         .done(function(){
-                //             // sidesheet = new Sidesheet("checkin", managementPage, {});
-                //         });
-                // });
+                nav.setAction("nav-management-subpage--dashboard", function(e, args) {
+                    nav.setActiveElement("nav-management-subpage--dashboard");
+                    pages.forEach(function(page){
+                        if (page.active){
+                            page.hide();
+                        }
+                    })
+                    managementDashboardPage.show({tabs: true})
+                        .done(function(){
+                            sidesheet = new Sidesheet("checkin", managementDashboardPage, {});
+                        });
+                });
                 nav.setAction("nav-management-subpage--total", function(e, args) {
                     nav.setActiveElement("nav-management-subpage--total");
                     pages.forEach(function(page){

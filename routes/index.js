@@ -8,38 +8,8 @@ const userManager = require("../services/userManager")
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index',
-      {
-          title: "ImpfApp Dresden - Startseite",
-          user: req.user,
-          items: [
-              {
-                  name: "CheckIn - Wartebereich II",
-                  url: "/checkin",
-                  auth: false,
-                  class: "checkin",
-              },
-              {
-                  name: "Impfstrecke",
-                  url: "/tracks",
-                  auth: false,
-                  class: "track"
-              },
-              {
-                  name: "Apotheke",
-                  url: "/apotheke",
-                  auth: false,
-                  class: "apotheke"
-              },
-              {
-                  name: "Teamleiter",
-                  url: "/management",
-                  auth: true,
-                  class: "management"
-              }
-            ]
-      });
-  //   res.redirect('/management');
+
+    res.redirect('/user/current');
 });
 
 

@@ -14,6 +14,7 @@ module.exports = {
     getByDate,
     getById,
     getOverview,
+    getDayStats,
 };
 
 /**
@@ -189,6 +190,37 @@ async function getOverview() {
     return entries;
 }
 
+async function getDayStats() {
+    //get today
+    let trackData, checkinData;
+    const trackDataPromise = trackDataService.getAll();
+    const checkinDataPromise = checkinDataService.getAll();
+
+    const data = await Promise.all([trackDataPromise, checkinDataPromise]);
+    trackData = data[0];
+    checkinData = data[1];
+
+    //calculate averages
+    let totalAverage = averagePerHour(trackData);
+
+
+    let jsonData = {
+        raw: {
+            tracks: trackData,
+            checkin: checkinData,
+        },
+        stats: {
+            average: {
+                total: totalAverage,
+            }
+        }
+
+    }
+    return jsonData;
+
+
+}
+
 function parseToMilliseconds(dateRepresentation) {
     //date can be either milliseconds, ISOString or Date object
     switch(typeof(dateRepresentation)){
@@ -201,4 +233,14 @@ function parseToMilliseconds(dateRepresentation) {
         case "object":
             return dateRepresentation.getTime();
     }
+}
+
+function averagePerHour(trackData){
+    //get distance between data points
+    let first = trackData[0];
+    let last = trackData[trackData.length-1];
+    let timeDiff = last.timestamp - first.timestamp; // in ms
+    let timeDiffHours = timeDiff / 360000; //in Hours
+    let valDiff = trackData.length;
+    return (valDiff / timeDiffHours); //entries per hour
 }

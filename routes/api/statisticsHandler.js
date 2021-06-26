@@ -12,6 +12,7 @@ const settingsService = require('../../services/settingsService');
 // routes
 router.get('/', get);
 router.get('/overview', getOverview);
+router.get('/current', getDayStats);
 
 router.post('/', getSpecific);
 
@@ -46,6 +47,12 @@ function getSpecific (req, res, next){
 
 function getOverview (req, res, next){
     statisticService.getOverview()
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
+function getDayStats (req, res, next){
+    statisticService.getDayStats()
         .then(result => res.json(result))
         .catch(err => next(err));
 }

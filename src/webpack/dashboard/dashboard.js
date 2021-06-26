@@ -113,6 +113,38 @@ var DashboardComponent = function(componentType, dashboard, index, args, buildFu
             this.dataType = "switches-track";
             this.args = args;
             break;
+
+        /**
+         * management dashboard
+         */
+
+        //combines all the latter
+        case "management-dash":
+            this.url = "/webpack/templates/dashboard/modules/dash/dash.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/dash.hbs";
+            this.dataType = "management-dash";
+            this.args = args;
+            break;
+
+        //seperate modules
+        case "management-day":
+            this.url = "/webpack/templates/dashboard/modules/dash/day.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/day.hbs";
+            this.dataType = "management-day";
+            this.args = args;
+            break;
+        case "management-stats":
+            this.url = "/webpack/templates/dashboard/modules/dash/stats.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/day.hbs";
+            this.dataType = "management-stats";
+            this.args = args;
+            break;
+        case "management-graphs":
+            this.url = "/webpack/templates/dashboard/modules/dash/graphs.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/day.hbs";
+            this.dataType = "management-graphs";
+            this.args = args;
+            break;
         default:
             break;
     }
@@ -347,6 +379,15 @@ DashboardComponent.prototype.getData = function(args){
                     resolve(data);
                 })
             });
+            break;
+
+        case "management-dash":
+            dataUrl = "/api/v1/statistics/current";
+            return new Promise(function(resolve, reject){
+                $.get(dataUrl, function (stats) {
+                    resolve(stats);
+                });
+            })
             break;
 
         default:

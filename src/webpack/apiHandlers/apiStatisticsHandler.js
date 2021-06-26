@@ -50,6 +50,15 @@ var ApiStatisticsHandler = function() {
         });
     }
 
+    self.getDayStats = function(){
+        return $.ajax({
+            url: "/api/v1/statistics/current",
+            // make put for safety reasons :-)
+            type: 'GET',
+            contentType: "application/json; charset=UTF-8",
+        });
+    }
+
 
 }
 
