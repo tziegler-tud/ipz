@@ -11,6 +11,7 @@ import {MDCDialog} from '@material/dialog';
 import {apiHandler} from "../apiHandlers/apiHandler";
 
 const Handlebars = require("handlebars");
+import "../handlebarsHelpers";
 import {transformDateTimeString} from "../helpers";
 var $ = require( "jquery" );
 
@@ -135,13 +136,19 @@ var DashboardComponent = function(componentType, dashboard, index, args, buildFu
             break;
         case "management-stats":
             this.url = "/webpack/templates/dashboard/modules/dash/stats.hbs";
-            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/day.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/stats.hbs";
             this.dataType = "management-stats";
             this.args = args;
             break;
         case "management-graphs":
             this.url = "/webpack/templates/dashboard/modules/dash/graphs.hbs";
-            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/day.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/graphs.hbs";
+            this.dataType = "management-graphs";
+            this.args = args;
+            break;
+        case "management-devices":
+            this.url = "/webpack/templates/dashboard/modules/dash/devices.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/devices.hbs";
             this.dataType = "management-graphs";
             this.args = args;
             break;
@@ -171,7 +178,7 @@ DashboardComponent.prototype.buildComponentHtml = function(dashboard, context, u
     if (phone.matches) url = this.mobileUrl;
     return $.get(url, function (data) {
         let c = {
-            data: context,
+            componentData: context,
         }
         var template = Handlebars.compile(data);
 
@@ -385,7 +392,60 @@ DashboardComponent.prototype.getData = function(args){
             dataUrl = "/api/v1/statistics/current";
             return new Promise(function(resolve, reject){
                 $.get(dataUrl, function (stats) {
-                    resolve(stats);
+                    let data = {
+                        date: Date.now(),
+                        day: stats,
+                    }
+                    resolve(data);
+                });
+            })
+            break;
+
+        case "management-day":
+            dataUrl = "/api/v1/statistics/current";
+            return new Promise(function(resolve, reject){
+                $.get(dataUrl, function (stats) {
+                    let data = {
+                        date: Date.now(),
+                        day: stats,
+                    }
+                    resolve(data);
+                });
+            })
+            break;
+        case "management-stats":
+            dataUrl = "/api/v1/statistics/current";
+            return new Promise(function(resolve, reject){
+                $.get(dataUrl, function (stats) {
+                    let data = {
+                        date: Date.now(),
+                        day: stats,
+                    }
+                    resolve(data);
+                });
+            })
+            break;
+        case "management-devices":
+            dataUrl = "/api/v1/statistics/current";
+            return new Promise(function(resolve, reject){
+                $.get(dataUrl, function (stats) {
+                    let data = {
+                        date: Date.now(),
+                        day: stats,
+                    }
+                    resolve(data);
+                });
+            })
+            break;
+        case "management-graphs":
+            dataUrl = "/api/v1/statistics/current";
+            return new Promise(function(resolve, reject){
+                $.get(dataUrl, function (stats) {
+                    let data = {
+                        date: Date.now(),
+                        day: stats,
+                    }
+                    resolve(data);
                 });
             })
             break;

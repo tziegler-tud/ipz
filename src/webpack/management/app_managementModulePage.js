@@ -188,9 +188,9 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
             self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
 
             self.dash = new Dashboard("modules", self, {containerId: "dashboard-container"});
-            self.dash.addComponent("management-dash")
+            self.dash.addComponent("management-dash");
 
-            self.dashboards.push(self.figures);
+            self.dashboards.push(self.dash);
 
             //setup tab navigation interface
             if (options.tabs) {

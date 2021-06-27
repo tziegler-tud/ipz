@@ -1,10 +1,30 @@
-<div class="dashboard dashboard-module dashboard-module-figures">
-    <div class="dashboard-inner dashobard-module-inner">
+<div class="dashboard dashboard-module dashboard-module-dash management-dash">
+    <div class="dashboard-inner dashboard-module-inner">
         <div class="dashboard-header">
-<!--            <span class="dashboard-header__text">{{header}}</span>-->
+            <!--            <span class="dashboard-header__text">{{header}}</span>-->
+        </div>
+        <div class="dash-header">
+            <span class="dash-header--date">{{transformDateStringExtended componentData.date}}</span>
         </div>
         <div class="dashboard-component-container">
-            Test: {{data.stats.average.total}}
+            <div class="dashboard-component dashboard-component--fullwidth dashboard-component-dash management-dash">
+                <div class="dash-elements-container">
+                    <div class="dash-element dash-element--figures">
+                        <div class="totals">
+                            <div class="totals-amount">
+                                <span>{{componentData.day.stats.total.all}}</span>
+                            </div>
+                            <div class="totals-label">
+                                <span>Durchgeführte Impfungen</span>
+                            </div>
+                        </div>
+                        <div class="tracks">
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>

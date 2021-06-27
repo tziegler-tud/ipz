@@ -15086,6 +15086,39 @@ mobile view
   grid-area: unset;
 }
 
+/*
+management dash
+ */
+.management-dash .dash-header {
+  font-size: 150%;
+  color: #333;
+}
+.management-dash .dash-elements-container {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+}
+.management-dash .dash-elements-container .dash-element {
+  flex: 1 1 auto;
+}
+.management-dash .dash-elements-container .dash-element.full {
+  flex: 0 0 100%;
+}
+.management-dash .dash-elements-container .dash-element.half {
+  flex: 0 0 50%;
+}
+.management-dash .dash-elements-container .dash-element--figures .totals {
+  display: flex;
+  flex-flow: column nowrap;
+}
+.management-dash .dash-elements-container .dash-element--figures .totals .totals-amount {
+  font-size: 130%;
+  width: 100%;
+}
+.management-dash .dash-elements-container .dash-element--figures .totals .totals-label {
+  color: #333;
+}
+
 /**
  * @license
  * Copyright 2018 Google Inc.

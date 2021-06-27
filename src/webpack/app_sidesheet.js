@@ -129,11 +129,27 @@ Sidesheet.prototype.createManagementPage = function(activePage, options){
     $.get(url, function (data) {
         var template = Handlebars.compile(data);
         self.container.innerHTML = template(context);
+        const switches = [].map.call(document.querySelectorAll(".mdc-switch"), function(el) {
+            let s = new MDCSwitch(el);
+        });
+
         let reloadButton = document.getElementById("button-reload");
         reloadButton.addEventListener("click", function(){
             //reload page
             location.reload();
         })
+
+        let refreshSwitch = document.getElementById("refresh-switch");
+        refreshSwitch.addEventListener("change", function(e){
+            if(this.checked) {
+                //enable sound
+                activePage.enableRefresh();
+            }
+            else {
+                activePage.disableRefresh();
+            }
+        })
+
         let cancelBtn = document.getElementById("sidesheet-cancel-button-element")
         cancelBtn.addEventListener("click", function(){
             self.hide();

@@ -200,6 +200,8 @@ async function getDayStats() {
     trackData = data[0];
     checkinData = data[1];
 
+    //get data
+    let totals = await trackDataService.getCounts();
     //calculate averages
     let totalAverage = averagePerHour(trackData);
 
@@ -210,6 +212,13 @@ async function getDayStats() {
             checkin: checkinData,
         },
         stats: {
+            total: {
+                test: "test",
+                all: totals.total,
+                b: totals.counters.b,
+                m: totals.counters.m,
+                a: totals.counters.a,
+            },
             average: {
                 total: totalAverage,
             }

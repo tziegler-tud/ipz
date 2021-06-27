@@ -9,6 +9,14 @@ Handlebars.registerHelper('transformTimeString', function(dateString, format) {
     return new Handlebars.SafeString(transformDateTimeString(dateString, format).time("hh:mm"));
 });
 
+Handlebars.registerHelper('transformDateTimeStringExtended', function(dateString, format) {
+    return new Handlebars.SafeString(transformDateTimeString(dateString, format).dateTimeExtended);
+});
+
+Handlebars.registerHelper('transformDateStringExtended', function(dateString, format) {
+    return new Handlebars.SafeString(transformDateTimeString(dateString, format).dateExtended);
+});
+
 Handlebars.registerHelper('checklength', function (v1, v2, options) {
     'use strict';
     if (v1.length>v2) {

@@ -225,3 +225,48 @@ mobile view
   }
 }
 
+
+
+/*
+management dash
+ */
+.management-dash {
+  .dash-header {
+    font-size: 150%;
+    color: #333;
+  }
+  .dash-elements-container {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+
+
+    .dash-element {
+      flex: 1 1 auto;
+      &.auto {
+
+      }
+      &.full {
+        flex: 0 0 100%;
+      }
+      &.half {
+        flex: 0 0 50%;
+      }
+    }
+
+    .dash-element--figures {
+      .totals {
+        display: flex;
+        flex-flow: column nowrap;
+
+        .totals-amount {
+          font-size: 130%;
+          width: 100%;
+        }
+        .totals-label {
+          color: #333;
+        }
+      }
+    }
+  }
+}
