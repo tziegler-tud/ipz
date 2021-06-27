@@ -205,6 +205,7 @@ async function getDayStats() {
     //calculate averages
     let totalAverage = averagePerHour(trackData);
 
+    let perHour = averagesByHours(trackData)
 
     let jsonData = {
         raw: {
@@ -249,7 +250,48 @@ function averagePerHour(trackData){
     let first = trackData[0];
     let last = trackData[trackData.length-1];
     let timeDiff = last.timestamp - first.timestamp; // in ms
-    let timeDiffHours = timeDiff / 360000; //in Hours
+    let timeDiffHours = timeDiff / 3600000; //in Hours
     let valDiff = trackData.length;
-    return (valDiff / timeDiffHours); //entries per hour
+    return Math.floor(valDiff / timeDiffHours); //entries per hour
+}
+
+function averagesByHours(trackData) {
+    //averages per hour
+    //group data by hours. Always start at 00 min
+
+    //lets look at the first entry.
+    let firstEntry = trackData[0];
+    let firstTimestamp = firstEntry.timestamp;
+    //transform to date Object
+    let firstDate = new Date(firstTimestamp);
+    let firstHour = firstDate.getHours();
+    let firstMinute = firstDate.getMinutes();
+    //if less than 5 minutes to the next full hour, go for it
+    if(firstMinute >= 55) {
+        firstHour = firstHour + 1;
+    }
+    firstMinute = 0;
+    firstDate.setHours(firstHour);
+    firstDate.setMinutes(firstMinute);
+    firstDate.setSeconds(0);
+    firstDate.setMilliseconds(0);
+
+    //now, find all entry in the current hour
+    findCurrentHour(trackData, firstDate)
+
+    function findCurrentHour(trackData, firstDate){
+        //get max timestamp in ms
+        let maxDate = firstDate;
+        maxDate.setHours(firstDate.getHours() + 1);
+        let maxDateMs = maxDate.getTime();
+
+        //now, get all entries up to that timestamp
+        let hourArray = trackData.filter(function(entry){
+            return entry.timestamp < maxDateMs;
+        })
+        return hourArray;
+
+    }
+
+
 }
