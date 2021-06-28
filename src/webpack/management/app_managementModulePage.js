@@ -200,6 +200,59 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                     self.tabs[0].activate();
                 }
             }
+
+            const averageGraphData = {
+                datasets: [{
+                    label: 'Checkin - WBII',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: result.checkinData,
+                    // parsing: false,
+                },
+                    {
+                        label: 'Durchgeführte Impfungen',
+                        backgroundColor: 'rgb(10,81,220)',
+                        borderColor: 'rgb(10,81,220)',
+                        data: result.trackData,
+                        // parsing: false,
+                    }]
+            };
+
+            const config = {
+                type: 'line',
+                data,
+                options: {
+                    parsing: false,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                displayFormats: {
+                                    millisecond: 'hh:mm'
+                                },
+
+                            },
+                            // ticks: {
+                            //     callback: function(value) {
+                            //         return new Date(value).toLocaleDateString('de-DE', {month:'short', year:'numeric'});
+                            //     },
+                            // },
+                        }
+
+                        //     // adapters: {
+                        //     //     date: {
+                        //     //         locale: de
+                        //     //     }
+                        //     // }
+                    }
+                }
+            };
+
+            self.chart = new Chart(
+                document.getElementById('myChart'),
+                config
+            );
+
             // let bottomTabs =  new Bottom("management", self, {}, {});
             self.tabs[0].dashboard = self.figures;
         });

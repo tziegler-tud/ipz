@@ -230,43 +230,81 @@ mobile view
 /*
 management dash
  */
+
 .management-dash {
   .dash-header {
-    font-size: 150%;
+
     color: #333;
+    padding: 3em 10px 1em 45px;
+    margin: 0 0 1em 0;
+    background-color: #fff;
+    border-bottom: 1px solid #AAA;
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
+
+    .dash-header--title {
+      font-weight: bold;
+      font-size: 110%;
+      margin: 15px 0;
+    }
+    .dash-header--sub {
+      font-size: 90%;
+
+    }
   }
-  .dash-elements-container {
-    width: 100%;
+  .dash-component-container {
+    padding: 10px 30px;
     display: flex;
     flex-flow: row wrap;
 
-
-    .dash-element {
+    .dash-component {
       flex: 1 1 auto;
-      &.auto {
 
-      }
-      &.full {
+      &.dash-component--fullwidth {
         flex: 0 0 100%;
       }
-      &.half {
+      &.dash-component--half {
         flex: 0 0 50%;
       }
-    }
-
-    .dash-element--figures {
-      .totals {
+      .dash-component-inner {
+        padding: 10px;
+        margin: 15px 15px;
+        box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
+        background-color: #fff;
+      }
+      .dash-elements-container {
+        width: 100%;
         display: flex;
-        flex-flow: column nowrap;
+        flex-flow: row wrap;
 
-        .totals-amount {
-          font-size: 130%;
-          width: 100%;
+        .dash-element {
+          flex: 1 1 auto;
+          &.auto {
+
+          }
+          &.full {
+            flex: 0 0 100%;
+          }
+          &.half {
+            flex: 0 0 50%;
+          }
         }
-        .totals-label {
-          color: #333;
+
+        .dash-element--figures {
+          .totals {
+            display: flex;
+            flex-flow: column nowrap;
+
+            .totals-amount {
+              font-size: 160%;
+              width: 100%;
+            }
+            .totals-label {
+              color: #333;
+            }
+          }
         }
       }
     }
   }
+
 }

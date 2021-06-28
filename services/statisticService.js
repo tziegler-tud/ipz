@@ -222,6 +222,7 @@ async function getDayStats() {
             },
             average: {
                 total: totalAverage,
+                perHour: perHour,
             }
         }
 
@@ -255,6 +256,12 @@ function averagePerHour(trackData){
     return Math.floor(valDiff / timeDiffHours); //entries per hour
 }
 
+function averageOneHour(trackData){
+    //get distance between data points
+    let valDiff = trackData.length;
+    return Math.floor(valDiff); //entries per hour
+}
+
 function averagesByHours(trackData) {
     //averages per hour
     //group data by hours. Always start at 00 min
@@ -276,12 +283,37 @@ function averagesByHours(trackData) {
     firstDate.setSeconds(0);
     firstDate.setMilliseconds(0);
 
+    //lets look at the last entry.
+    let lastEntry = trackData[trackData.length-1];
+    let lastTimestamp = lastEntry.timestamp;
+    //transform to date Object
+    let lastDate = new Date(lastTimestamp);
+    let lastHour = lastDate.getHours() + 1;
+    let lastMinute = 0;
+
+    lastDate.setHours(lastHour);
+    lastDate.setMinutes(lastMinute);
+    lastDate.setSeconds(0);
+    lastDate.setMilliseconds(0);
+
     //now, find all entry in the current hour
-    findCurrentHour(trackData, firstDate)
+    let averagePerHourArray = [];
+    var currentDate = new Date(firstDate.getTime());
+    //increase hour by 1 and check if less or equal last date
+    while (currentDate.getTime() <= lastDate.getTime()){
+        let currentEndDate = new Date(currentDate.getTime() + 3600000); //add 1 hour = 3600000ms
+        let currentHourData = findCurrentHour(trackData, firstDate);
+        //calculate average
+        let currentHourAverage = averageOneHour(currentHourData);
+        averagePerHourArray.push({time: currentDate.getTime(), end: currentEndDate.getTime(), value: currentHourAverage});
+        currentDate.setHours(currentDate.getHours()+1);
+    }
+
+    return averagePerHourArray;
 
     function findCurrentHour(trackData, firstDate){
         //get max timestamp in ms
-        let maxDate = firstDate;
+        let maxDate = new Date(firstDate.getTime());
         maxDate.setHours(firstDate.getHours() + 1);
         let maxDateMs = maxDate.getTime();
 
@@ -290,7 +322,6 @@ function averagesByHours(trackData) {
             return entry.timestamp < maxDateMs;
         })
         return hourArray;
-
     }
 
 

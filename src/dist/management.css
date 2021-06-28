@@ -15125,32 +15125,64 @@ mobile view
 management dash
  */
 .management-dash .dash-header {
-  font-size: 150%;
   color: #333;
+  padding: 3em 10px 1em 45px;
+  margin: 0 0 1em 0;
+  background-color: #fff;
+  border-bottom: 1px solid #AAA;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
 }
-.management-dash .dash-elements-container {
+.management-dash .dash-header .dash-header--title {
+  font-weight: bold;
+  font-size: 110%;
+  margin: 15px 0;
+}
+.management-dash .dash-header .dash-header--sub {
+  font-size: 90%;
+}
+.management-dash .dash-component-container {
+  padding: 10px 30px;
+  display: flex;
+  flex-flow: row wrap;
+}
+.management-dash .dash-component-container .dash-component {
+  flex: 1 1 auto;
+}
+.management-dash .dash-component-container .dash-component.dash-component--fullwidth {
+  flex: 0 0 100%;
+}
+.management-dash .dash-component-container .dash-component.dash-component--half {
+  flex: 0 0 50%;
+}
+.management-dash .dash-component-container .dash-component .dash-component-inner {
+  padding: 10px;
+  margin: 15px 15px;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+.management-dash .dash-component-container .dash-component .dash-elements-container {
   width: 100%;
   display: flex;
   flex-flow: row wrap;
 }
-.management-dash .dash-elements-container .dash-element {
+.management-dash .dash-component-container .dash-component .dash-elements-container .dash-element {
   flex: 1 1 auto;
 }
-.management-dash .dash-elements-container .dash-element.full {
+.management-dash .dash-component-container .dash-component .dash-elements-container .dash-element.full {
   flex: 0 0 100%;
 }
-.management-dash .dash-elements-container .dash-element.half {
+.management-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half {
   flex: 0 0 50%;
 }
-.management-dash .dash-elements-container .dash-element--figures .totals {
+.management-dash .dash-component-container .dash-component .dash-elements-container .dash-element--figures .totals {
   display: flex;
   flex-flow: column nowrap;
 }
-.management-dash .dash-elements-container .dash-element--figures .totals .totals-amount {
-  font-size: 130%;
+.management-dash .dash-component-container .dash-component .dash-elements-container .dash-element--figures .totals .totals-amount {
+  font-size: 160%;
   width: 100%;
 }
-.management-dash .dash-elements-container .dash-element--figures .totals .totals-label {
+.management-dash .dash-component-container .dash-component .dash-elements-container .dash-element--figures .totals .totals-label {
   color: #333;
 }
 
