@@ -169,11 +169,20 @@ async function restoreDay(dateString) {
     await trackDataService.clearAll();
     await checkinDataService.clearAll();
 
+    let current = new Date();
     trackData.forEach(function(trackDataEntry){
+        let date = new Date(trackDataEntry.timestamp);
+        date.setDate(current.getDate());
+        date.setMonth(current.getMonth());
+        date.setFullYear(current.getFullYear());
         let dbObj = new TrackData(trackDataEntry);
         return dbObj.save();
     })
-    trackData.forEach(function(trackDataEntry){
+    checkinData.forEach(function(trackDataEntry){
+        let date = new Date(trackDataEntry.timestamp);
+        date.setDate(current.getDate());
+        date.setMonth(current.getMonth());
+        date.setFullYear(current.getFullYear());
         let dbObj = new CheckinData(trackDataEntry);
         return dbObj.save();
     })

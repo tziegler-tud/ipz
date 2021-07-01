@@ -24,6 +24,7 @@ import { formatDistance, subDays } from 'date-fns'
 import {Bottom} from "../bottom/app_bottom";
 import {MDCDialog} from "@material/dialog";
 import {MDCMenu} from "@material/menu";
+import {transformDateTimeString} from "../helpers";
 
 var phone = window.matchMedia("only screen and (max-width: 50em)");
 
@@ -188,10 +189,117 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
             self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
 
             self.dash = new Dashboard("modules", self, {containerId: "dashboard-container"});
-            self.dash.addComponent("management-dash");
+            self.dash.addComponent("management-dash", {}, buildGraphs);
 
             self.dashboards.push(self.dash);
 
+
+            function buildGraphs(dashboard, page, data) {
+
+                let avgDataset = data.day.stats.average.perHour;
+                let totalData = data.day.stats.total;
+                let totalDataset = [totalData.b.first, totalData.b.second, totalData.m.first, totalData.m.second, totalData.a.first, totalData.a.second];
+
+                const averageGraphData = {
+                    datasets: [{
+                        label: 'Impfungen pro Stunde',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: avgDataset,
+                        tension: 0.4,
+                        // parsing: false,
+                    }]
+                };
+
+                const averageConfig = {
+                    type: 'line',
+                    data: averageGraphData,
+                    options: {
+                        responsive: true,
+                        // stepped: true,
+                        pointRadius: 2,
+                        parsing: false,
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    displayFormats: {
+                                        millisecond: 'hh:mm'
+                                    },
+
+                                },
+                                ticks: {
+                                    source: "data",
+                                },
+                            }
+
+                            //     // adapters: {
+                            //     //     date: {
+                            //     //         locale: de
+                            //     //     }
+                            //     // }
+                        }
+                    }
+                };
+
+                self.averageChart = new Chart(
+                    document.getElementById('averageChart'),
+                    averageConfig
+                );
+
+
+
+                /*
+                total
+                 */
+
+                const totalGraphData = {
+                    labels: [
+                        'Biontech Erst',
+                        'Biontech Zweit',
+                        'Moderna Erst',
+                        'Moderna Zweit',
+                        'Astra Erst',
+                        'Astra Zweit',
+                    ],
+                    datasets: [{
+                        label: 'My First Dataset',
+                        data: totalDataset,
+                        backgroundColor: [
+                            'rgb(123,255,86)',
+                            'rgb(80,187,49)',
+                            'rgb(255, 99, 132)',
+                            'rgb(238,66,102)',
+                            'rgb(54, 162, 235)',
+                            'rgb(39,125,184)',
+
+                        ],
+                        hoverOffset: 4
+                    }]
+                };
+
+                const totalConfig = {
+                    type: 'doughnut',
+                    data: totalGraphData,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Impfungen ' + transformDateTimeString(Date.now()).date,
+                            }
+                        }
+                    },
+                };
+
+                self.averageChart = new Chart(
+                    document.getElementById('totalChart'),
+                    totalConfig
+                );
+            }
             //setup tab navigation interface
             if (options.tabs) {
                 self.tabs = self.initTabs();
@@ -201,57 +309,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                 }
             }
 
-            const averageGraphData = {
-                datasets: [{
-                    label: 'Checkin - WBII',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: result.checkinData,
-                    // parsing: false,
-                },
-                    {
-                        label: 'Durchgeführte Impfungen',
-                        backgroundColor: 'rgb(10,81,220)',
-                        borderColor: 'rgb(10,81,220)',
-                        data: result.trackData,
-                        // parsing: false,
-                    }]
-            };
 
-            const config = {
-                type: 'line',
-                data,
-                options: {
-                    parsing: false,
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                displayFormats: {
-                                    millisecond: 'hh:mm'
-                                },
-
-                            },
-                            // ticks: {
-                            //     callback: function(value) {
-                            //         return new Date(value).toLocaleDateString('de-DE', {month:'short', year:'numeric'});
-                            //     },
-                            // },
-                        }
-
-                        //     // adapters: {
-                        //     //     date: {
-                        //     //         locale: de
-                        //     //     }
-                        //     // }
-                    }
-                }
-            };
-
-            self.chart = new Chart(
-                document.getElementById('myChart'),
-                config
-            );
 
             // let bottomTabs =  new Bottom("management", self, {}, {});
             self.tabs[0].dashboard = self.figures;
@@ -482,6 +540,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                             backgroundColor: 'rgb(255, 99, 132)',
                             borderColor: 'rgb(255, 99, 132)',
                             data: result.checkinData,
+                            tension: 0.4,
                             // parsing: false,
                         },
                             {
@@ -489,6 +548,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                                 backgroundColor: 'rgb(10,81,220)',
                                 borderColor: 'rgb(10,81,220)',
                                 data: result.trackData,
+                                tension: 0.4,
                                 // parsing: false,
                             }]
                     };
@@ -497,6 +557,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                         type: 'line',
                         data,
                         options: {
+                            pointRadius: 0,
                             parsing: false,
                             scales: {
                                 x: {

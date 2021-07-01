@@ -5252,6 +5252,7 @@ tabs
 }
 .tabs .tab-container .tab {
   display: none;
+  height: 100%;
 }
 .tabs .tab-container .tab--active {
   display: block !important;

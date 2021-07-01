@@ -17,6 +17,38 @@ module.exports = {
     getDayStats,
 };
 
+
+var DayStatsManager = function(){
+    let self = this;
+    this.generatedTimestamp = Date.now();
+    this.stats = generateDayStats();
+    this.isValid = function(){
+        return (this.generatedTimestamp < (Date.now()-300000)); //not older than 5 minutes
+    }
+    this.getStats = function(){
+        if(this.stats === null  || this.stats === undefined) {
+            return false;
+        }
+        else {
+            return this.stats;
+        }
+    }
+
+    this.updateStats = function(){
+        return new Promise(function(resolve, reject){
+            generateDayStats()
+                .then(function(jsonData){
+                    self.stats = jsonData.stats;
+                    self.generatedTimestamp = Date.now();
+                    resolve(jsonData.stats)
+                })
+        })
+    }
+    return this;
+};
+
+let dayStatsManager = new DayStatsManager();
+
 /**
  * Gets all archive documents
  */
@@ -33,29 +65,31 @@ async function getById(id) {
         code for mongo >3.2
          */
 
-        // const trackDataPromise = trackDataService.getAll({sort: {"timestamp": 1}});
-        // const checkinDataPromise = checkinDataService.getAll({sort: {"timestamp":1}});
+        const trackDataPromise = trackDataService.getAll({sort: {"timestamp": 1}});
+        const checkinDataPromise = checkinDataService.getAll({sort: {"timestamp":1}});
 
         /*
         code for mongo 2.6
        */
         // TODO: Update mongo on pi to >3.2 and re-enable query sorting.
 
-        const trackDataPromise = trackDataService.getAll();
-        const checkinDataPromise = checkinDataService.getAll();
+        // const trackDataPromise = trackDataService.getAll();
+        // const checkinDataPromise = checkinDataService.getAll();
+
+
+        //sort track and checkin data by timestamp
+        // trackData.sort(function(first, second){
+        //     return first.timestamp - second.timestamp;
+        // })
+        //
+        // checkinData.sort(function(first, second){
+        //     return first.timestamp - second.timestamp;
+        // })
+
 
         const data = await Promise.all([trackDataPromise, checkinDataPromise]);
         trackData = data[0];
         checkinData = data[1];
-
-        //sort track and checkin data by timestamp
-        trackData.sort(function(first, second){
-            return first.timestamp - second.timestamp;
-        })
-
-        checkinData.sort(function(first, second){
-            return first.timestamp - second.timestamp;
-        })
         date = dateTransformer.transformDateTimeString(Date.now()).date;
 
     }
@@ -190,7 +224,49 @@ async function getOverview() {
     return entries;
 }
 
-async function getDayStats() {
+async function getDayStats(){
+    //always update total count and current average
+    const trackData = await trackDataService.getAll();
+    let currentAverage = getCurrentAverage(trackData);
+    let totals = await trackData.getCounts();
+    let jsonStats = undefined;
+    //update todays stats if not present or older than 5 Minutes
+    if (dayStatsManager.isValid()){
+        jsonStats = dayStatsManager.getStats();
+    }
+    else {
+        //update stats
+        dayStatsManager.updateStats()
+            .then(function(stats){
+                jsonStats = stats;
+            })
+    }
+    let jsonData = {
+        raw: {
+            tracks: trackData,
+            checkin: checkinData,
+        },
+        stats: {
+            total: {
+                test: "test",
+                all: totals.total,
+                b: totals.counters.b,
+                m: totals.counters.m,
+                a: totals.counters.a,
+            },
+            average: {
+                total: totalAverage,
+                perHour: perHour,
+                current: currentAverage,
+            }
+        }
+
+    }
+    return jsonData;
+
+}
+
+async function generateDayStats() {
     //get today
     let trackData, checkinData;
     const trackDataPromise = trackDataService.getAll();
@@ -203,9 +279,11 @@ async function getDayStats() {
     //get data
     let totals = await trackDataService.getCounts();
     //calculate averages
-    let totalAverage = averagePerHour(trackData);
+    let totalAverage = getTotalAverage(trackData);
 
     let perHour = averagesByHours(trackData)
+
+    let currentAverage = getCurrentAverage(trackData);
 
     let jsonData = {
         raw: {
@@ -223,6 +301,7 @@ async function getDayStats() {
             average: {
                 total: totalAverage,
                 perHour: perHour,
+                current: currentAverage,
             }
         }
 
@@ -246,7 +325,7 @@ function parseToMilliseconds(dateRepresentation) {
     }
 }
 
-function averagePerHour(trackData){
+function getTotalAverage(trackData){
     //get distance between data points
     let first = trackData[0];
     let last = trackData[trackData.length-1];
@@ -256,10 +335,24 @@ function averagePerHour(trackData){
     return Math.floor(valDiff / timeDiffHours); //entries per hour
 }
 
+function getCurrentAverage(trackData) {
+    let timediff = 900000; //15min back
+    let currentDate = new Date();
+    let minDate = new Date(currentDate.getTime() - timediff);
+    let currentData = findMinMax(trackData, minDate, currentDate);
+    return averageMs(currentData, timediff)
+}
+
 function averageOneHour(trackData){
     //get distance between data points
     let valDiff = trackData.length;
     return Math.floor(valDiff); //entries per hour
+}
+
+function averageMs(trackData, timeDiff) {
+    let timeDiffHours = timeDiff / 3600000; //in Hours
+    let valDiff = trackData.length;
+    return Math.floor(valDiff / timeDiffHours); //entries per hour
 }
 
 function averagesByHours(trackData) {
@@ -274,9 +367,9 @@ function averagesByHours(trackData) {
     let firstHour = firstDate.getHours();
     let firstMinute = firstDate.getMinutes();
     //if less than 5 minutes to the next full hour, go for it
-    if(firstMinute >= 55) {
-        firstHour = firstHour + 1;
-    }
+    // if(firstMinute >= 55) {
+    //     firstHour = firstHour + 1;
+    // }
     firstMinute = 0;
     firstDate.setHours(firstHour);
     firstDate.setMinutes(firstMinute);
@@ -299,14 +392,18 @@ function averagesByHours(trackData) {
     //now, find all entry in the current hour
     let averagePerHourArray = [];
     var currentDate = new Date(firstDate.getTime());
+
+    let timeOffsetMs = 1800000; // 15min = 900000
     //increase hour by 1 and check if less or equal last date
     while (currentDate.getTime() <= lastDate.getTime()){
-        let currentEndDate = new Date(currentDate.getTime() + 3600000); //add 1 hour = 3600000ms
-        let currentHourData = findCurrentHour(trackData, firstDate);
+        // let currentEndDate = new Date(currentDate.getTime() + 3600000); //add 1 hour = 3600000ms
+        let currentEndDate = new Date(currentDate.getTime() + timeOffsetMs); //add 15 min = 900000ms
+        // let currentHourData = findCurrentHour(trackData, currentDate);
+        let currentHourData = findMinMax(trackData, currentDate, currentEndDate);
         //calculate average
-        let currentHourAverage = averageOneHour(currentHourData);
-        averagePerHourArray.push({time: currentDate.getTime(), end: currentEndDate.getTime(), value: currentHourAverage});
-        currentDate.setHours(currentDate.getHours()+1);
+        let currentHourAverage = averageMs(currentHourData, timeOffsetMs);
+        averagePerHourArray.push({x: currentEndDate.getTime(), y: currentHourAverage});
+        currentDate.setTime(currentDate.getTime()+timeOffsetMs);
     }
 
     return averagePerHourArray;
@@ -316,13 +413,25 @@ function averagesByHours(trackData) {
         let maxDate = new Date(firstDate.getTime());
         maxDate.setHours(firstDate.getHours() + 1);
         let maxDateMs = maxDate.getTime();
+        let minDateMs = firstDate.getTime();
 
         //now, get all entries up to that timestamp
         let hourArray = trackData.filter(function(entry){
-            return entry.timestamp < maxDateMs;
+            return entry.timestamp < maxDateMs && entry.timestamp >= minDateMs;
         })
         return hourArray;
     }
-
-
 }
+
+function findMinMax(trackData, minDate, maxDate){
+    //get max timestamp in ms
+    let maxDateMs = maxDate.getTime();
+    let minDateMs = minDate.getTime();
+
+    //now, get all entries up to that timestamp
+    let hourArray = trackData.filter(function(entry){
+        return entry.timestamp < maxDateMs && entry.timestamp >= minDateMs;
+    })
+    return hourArray;
+}
+

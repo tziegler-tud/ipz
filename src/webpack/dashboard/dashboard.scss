@@ -21,8 +21,9 @@
 @import "../variables";
 @import "../color-variables";
 
-@import "~material-icons-font/material-icons-font.css";
 
+@import "~material-icons-font/material-icons-font.css";
+@import "~@fontsource/open-sans/index.css";
 
 @include list.deprecated-core-styles;
 @include checkbox.core-styles;
@@ -180,8 +181,11 @@ modules
 .dashboard-module-container {
   display: flex;
   flex-flow: row wrap;
+
+
   .dashboard-module-wrapper {
     flex: 0 0 100%;
+    max-width: 100%;
   }
 }
 
@@ -235,7 +239,7 @@ management dash
   .dash-header {
 
     color: #333;
-    padding: 3em 10px 1em 45px;
+    padding: 1em 10px 1em 45px;
     margin: 0 0 1em 0;
     background-color: #fff;
     border-bottom: 1px solid #AAA;
@@ -256,20 +260,37 @@ management dash
     display: flex;
     flex-flow: row wrap;
 
+    @media #{$phone} {
+      padding: 5px 0;
+      flex-flow: column nowrap;
+    }
+
     .dash-component {
       flex: 1 1 auto;
+      max-width: 100%;
 
       &.dash-component--fullwidth {
         flex: 0 0 100%;
       }
       &.dash-component--half {
-        flex: 0 0 50%;
+        flex: 1 1 50%;
       }
       .dash-component-inner {
         padding: 10px;
         margin: 15px 15px;
         box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
         background-color: #fff;
+
+        height: calc(100% - 25px);
+      }
+
+      .dash-component-header {
+        display: block;
+        width: 100%;
+        font-size: 120%;
+        font-family: "Open Sans", sans-serif;
+        font-weight: 300;
+        margin-bottom: 10px;
       }
       .dash-elements-container {
         width: 100%;
@@ -287,12 +308,20 @@ management dash
           &.half {
             flex: 0 0 50%;
           }
+          &.half-auto {
+            flex: 1 1 50%;
+          }
         }
 
         .dash-element--figures {
+          display: flex;
+          flex-flow: row wrap;
+
           .totals {
+            flex: 1 1 auto;
             display: flex;
             flex-flow: column nowrap;
+            padding: 10px 0;
 
             .totals-amount {
               font-size: 160%;
@@ -303,8 +332,30 @@ management dash
             }
           }
         }
+        .dash-element--graph {
+          .chart-container {
+            position: relative;
+            width: 100%;
+          }
+        }
       }
     }
   }
 
+}
+
+.small {
+  font-size: 80%;
+  color:#666;
+}
+
+#averageChart-container {
+
+}
+
+#totalChart-container {
+  max-width: 500px;
+  @media #{$phone} {
+    max-width: 400px;
+  }
 }
