@@ -390,13 +390,21 @@ DashboardComponent.prototype.getData = function(args){
 
         case "management-dash":
             dataUrl = "/api/v1/statistics/current";
+            let dataUrl2 = "/api/v1/statistics/week";
+            let dataUrl3 = "/api/v1/statistics/month";
             return new Promise(function(resolve, reject){
                 $.get(dataUrl, function (stats) {
                     let data = {
                         date: Date.now(),
                         day: stats,
                     }
-                    resolve(data);
+                    $.get(dataUrl2, function(week) {
+                        data.week = week;
+                        $.get(dataUrl3, function(month) {
+                            data.month = month;
+                            resolve(data);
+                        });
+                    });
                 });
             })
             break;

@@ -13,6 +13,8 @@ const settingsService = require('../../services/settingsService');
 router.get('/', get);
 router.get('/overview', getOverview);
 router.get('/current', getDayStats);
+router.get('/week', getWeekStats);
+router.get('/month', getMonthStats);
 
 router.post('/', getSpecific);
 
@@ -53,6 +55,17 @@ function getOverview (req, res, next){
 
 function getDayStats (req, res, next){
     statisticService.getDayStats()
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
+function getWeekStats (req, res, next){
+    statisticService.getWeekStats()
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+function getMonthStats (req, res, next){
+    statisticService.getMonthStats()
         .then(result => res.json(result))
         .catch(err => next(err));
 }

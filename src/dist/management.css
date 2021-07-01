@@ -15226,6 +15226,13 @@ management dash
 }
 .management-dash .dash-component-container .dash-component.dash-component--half {
   flex: 1 1 50%;
+  max-width: 50%;
+}
+@media only screen and (max-width: 600px) {
+  .management-dash .dash-component-container .dash-component.dash-component--half {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 .management-dash .dash-component-container .dash-component .dash-component-inner {
   padding: 10px;
@@ -15247,17 +15254,34 @@ management dash
   display: flex;
   flex-flow: row wrap;
 }
+.management-dash .dash-component-container .dash-component .dash-elements-container.col {
+  flex-flow: column wrap;
+}
 .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element {
   flex: 1 1 auto;
+  max-width: 100%;
 }
 .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element.full {
   flex: 0 0 100%;
 }
 .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half {
   flex: 0 0 50%;
+  max-width: 50%;
+}
+@media only screen and (max-width: 600px) {
+  .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half-auto {
   flex: 1 1 50%;
+}
+@media only screen and (max-width: 600px) {
+  .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half-auto {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element--figures {
   display: flex;
@@ -15276,6 +15300,14 @@ management dash
 .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element--figures .totals .totals-label {
   color: #333;
 }
+.management-dash .dash-component-container .dash-component .dash-elements-container .dash-element--graph .center {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+.management-dash .dash-component-container .dash-component .dash-elements-container .dash-element--graph .bar-chart-container, .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element--graph .line-chart-container {
+  min-height: 300px;
+}
 .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element--graph .chart-container {
   position: relative;
   width: 100%;
@@ -15287,7 +15319,7 @@ management dash
 }
 
 #totalChart-container {
-  max-width: 500px;
+  max-width: 400px;
 }
 @media only screen and (max-width: 600px) {
   #totalChart-container {

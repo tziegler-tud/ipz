@@ -2,6 +2,7 @@ import {preloader} from "./preloader";
 import {Navigation} from "./app_navigation";
 import {Sidesheet} from "./app_sidesheet";
 import {StatisticsPage} from "./statistics/app_statisticsPage";
+import {ManagementModulePage} from "./management/app_managementModulePage";
 import {transformDateTimeString} from "./helpers";
 import "./handlebarsHelpers";
 const Handlebars = require("handlebars");
@@ -31,24 +32,53 @@ let nav = new Navigation(
         clock: ".navigation-clock",
         sidesheet: true,
         activeElement: "app-link-statistics",
-        open: false,
+        open: true,
         topbar: true,
     },
 );
-
 let statisticsPage = new StatisticsPage();
-statisticsPage.show()
-    .then(function(){
-    // sidesheet = new Sidesheet("checkin", managementPage, {});
+let managementDashboardPage = new ManagementModulePage("dashboard");
+var pages = [statisticsPage, managementDashboardPage];
 
-});
+managementDashboardPage.show({tabs: true, refresh: true})
+    .done(function(){
+        sidesheet = new Sidesheet("management", managementDashboardPage, {});
+        // bottomTabs =  new Bottom("management", managementTotalPage, {})
+    });
 
 nav.initialize
     .then(function(){
         nav.setAction("mdc-top-app-bar-action1", function(e, args){
-            sidesheet.toggle();
+            // sidesheet.toggle();
         });
-        nav.addSubpage("statistics", {}, true, "app-link-statistics", true);
+        let subpage = nav.addSubpage("statistics", {}, true, "app-link-statistics", true);
+        subpage.init
+            .then(function(){
+                nav.setAction("nav-statistics-subpage--dashboard", function(e, args) {
+                    nav.setActiveElement("nav-statistics-subpage--dashboard");
+                    pages.forEach(function(page){
+                        if (page.active){
+                            page.hide();
+                        }
+                    })
+                    managementDashboardPage.show({tabs: true})
+                        .done(function(){
+                            sidesheet = new Sidesheet("management", managementDashboardPage, {});
+                        });
+                });
+                nav.setAction("nav-statistics-subpage--total", function(e, args) {
+                    nav.setActiveElement("nav-statistics-subpage--total");
+                    pages.forEach(function(page){
+                        if (page.active){
+                            page.hide();
+                        }
+                    })
+                    statisticsPage.show({tabs: true, refresh: true})
+                        .done(function(){
+                            // sidesheet = new Sidesheet("management", managementTotalPage, {});
+                        });
+                });
+            })
 
     });
 

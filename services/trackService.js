@@ -15,7 +15,7 @@ module.exports = {
  * Gets all users
  */
 async function get() {
-    return Track.find();
+    return Track.find().sort("name");
 }
 
 async function getById(id) {

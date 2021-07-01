@@ -274,6 +274,11 @@ management dash
       }
       &.dash-component--half {
         flex: 1 1 50%;
+        max-width: 50%;
+        @media #{$phone} {
+          flex:  0 0 100%;
+          max-width: 100%;
+        }
       }
       .dash-component-inner {
         padding: 10px;
@@ -297,19 +302,35 @@ management dash
         display: flex;
         flex-flow: row wrap;
 
+        &.col {
+          flex-flow: column wrap;
+        }
+
         .dash-element {
           flex: 1 1 auto;
+          max-width: 100%;
           &.auto {
 
           }
           &.full {
             flex: 0 0 100%;
+
           }
           &.half {
             flex: 0 0 50%;
+            max-width: 50%;
+            @media #{$phone} {
+              flex:  0 0 100%;
+              max-width: 100%;
+            }
+
           }
           &.half-auto {
             flex: 1 1 50%;
+            @media #{$phone} {
+              flex:  0 0 100%;
+              max-width: 100%;
+            }
           }
         }
 
@@ -333,6 +354,15 @@ management dash
           }
         }
         .dash-element--graph {
+
+          .center {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: center;
+          }
+          .bar-chart-container, .line-chart-container {
+            min-height: 300px;
+          }
           .chart-container {
             position: relative;
             width: 100%;
@@ -354,8 +384,13 @@ management dash
 }
 
 #totalChart-container {
-  max-width: 500px;
+  max-width: 400px;
   @media #{$phone} {
     max-width: 400px;
   }
+}
+
+#weekChart-container {
+
+
 }

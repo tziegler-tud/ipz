@@ -15,22 +15,27 @@ module.exports = {
     getById,
     getOverview,
     getDayStats,
+    getWeekStats,
+    getMonthStats,
+    getArchiveStats,
 };
 
 
 var DayStatsManager = function(){
     let self = this;
     this.generatedTimestamp = Date.now();
-    this.stats = generateDayStats();
+    this.stats = null;
     this.isValid = function(){
-        return (this.generatedTimestamp < (Date.now()-300000)); //not older than 5 minutes
+        return (this.generatedTimestamp > (Date.now()-300000)); //not older than 5 minutes
     }
     this.getStats = function(){
-        if(this.stats === null  || this.stats === undefined) {
-            return false;
+        if(this.stats === null  || this.stats === undefined || !this.isValid()) {
+            return this.updateStats()
         }
         else {
-            return this.stats;
+            return new Promise(function(resolve, reject){
+                resolve(self.stats)
+            });
         }
     }
 
@@ -40,7 +45,40 @@ var DayStatsManager = function(){
                 .then(function(jsonData){
                     self.stats = jsonData.stats;
                     self.generatedTimestamp = Date.now();
+                    console.log("Statistic data updated.")
                     resolve(jsonData.stats)
+                })
+        })
+    }
+    return this;
+};
+var ArchiveDataManager = function(daysFromNow){
+    let self = this;
+    this.daysFromNow = daysFromNow;
+    this.generatedTimestamp = Date.now();
+    this.data = null;
+    this.isValid = function(){
+        return (new Date(this.generatedTimestamp).getDate() === new Date().getDate()); //update if day changed
+    }
+    this.getData = function(){
+        if(this.data === null  || this.data === undefined || !this.isValid()) {
+            return this.updateData()
+        }
+        else {
+            return new Promise(function(resolve, reject){
+                resolve(self.data)
+            });
+        }
+    }
+
+    this.updateData = function(){
+        return new Promise(function(resolve, reject){
+            getArchiveStats(self.daysFromNow)
+                .then(function(data){
+                    self.data = data;
+                    self.generatedTimestamp = Date.now();
+                    console.log("Archive data updated.")
+                    resolve(data);
                 })
         })
     }
@@ -48,6 +86,8 @@ var DayStatsManager = function(){
 };
 
 let dayStatsManager = new DayStatsManager();
+let weekDataManager = new ArchiveDataManager(6);
+let monthDataManager = new ArchiveDataManager(30);
 
 /**
  * Gets all archive documents
@@ -227,20 +267,11 @@ async function getOverview() {
 async function getDayStats(){
     //always update total count and current average
     const trackData = await trackDataService.getAll();
+    const checkinData = await checkinDataService.getAll();
     let currentAverage = getCurrentAverage(trackData);
-    let totals = await trackData.getCounts();
+    let totals = await trackDataService.getCounts();
     let jsonStats = undefined;
-    //update todays stats if not present or older than 5 Minutes
-    if (dayStatsManager.isValid()){
-        jsonStats = dayStatsManager.getStats();
-    }
-    else {
-        //update stats
-        dayStatsManager.updateStats()
-            .then(function(stats){
-                jsonStats = stats;
-            })
-    }
+
     let jsonData = {
         raw: {
             tracks: trackData,
@@ -254,16 +285,13 @@ async function getDayStats(){
                 m: totals.counters.m,
                 a: totals.counters.a,
             },
-            average: {
-                total: totalAverage,
-                perHour: perHour,
-                current: currentAverage,
-            }
         }
 
     }
+    //update todays stats if not present or older than 5 Minutes
+    jsonStats = await dayStatsManager.getStats();
+    jsonData.stats.average = jsonStats.average;
     return jsonData;
-
 }
 
 async function generateDayStats() {
@@ -281,9 +309,27 @@ async function generateDayStats() {
     //calculate averages
     let totalAverage = getTotalAverage(trackData);
 
-    let perHour = averagesByHours(trackData)
+    let perHour = averagesByHours(trackData);
 
     let currentAverage = getCurrentAverage(trackData);
+
+
+    // average by tracks
+    let tracks = await trackService.get();
+    let byTracks = [];
+
+    await Promise.all(tracks.map(async (track) => {
+        let data = await trackDataService.getByTrack(track)
+        let perHour = averagesByHours(data);
+        byTracks.push({track: track, data: data, averages: perHour});
+    }));
+
+    byTracks.sort(function(a,b){
+        return (a.track.name < b.track.name) ? -1 : 1;
+    })
+
+
+
 
     let jsonData = {
         raw: {
@@ -302,6 +348,7 @@ async function generateDayStats() {
                 total: totalAverage,
                 perHour: perHour,
                 current: currentAverage,
+                byTracks: byTracks
             }
         }
 
@@ -359,6 +406,7 @@ function averagesByHours(trackData) {
     //averages per hour
     //group data by hours. Always start at 00 min
 
+    if(trackData === undefined || trackData.length === 0) return [0]
     //lets look at the first entry.
     let firstEntry = trackData[0];
     let firstTimestamp = firstEntry.timestamp;
@@ -435,3 +483,115 @@ function findMinMax(trackData, minDate, maxDate){
     return hourArray;
 }
 
+async function getWeekStats(){
+    return weekDataManager.getData();
+}
+
+async function getMonthStats(){
+    return monthDataManager.getData();
+}
+
+
+
+async function getArchiveStats(daysFromToday){
+    //get today
+    let todayPromise = trackDataService.getCounts();
+    let archiveDataPromise = Archive.find({}).sort("-timestamp");
+    //wait for promises to resolve
+    const data = await Promise.all([todayPromise, archiveDataPromise]);
+    let today = data[0];
+    let archiveData = data[1];
+
+    //return dates and totals
+    let entries = [];
+    let labels = [];
+    entries.push({
+        date: dateTransformer.transformDateTimeString(new Date()).date,
+        counts: today,
+        current: true,
+    })
+    labels.push(dateTransformer.transformDateTimeString(new Date()).date)
+
+    let weekData = archiveData.slice(0,daysFromToday);
+    weekData.forEach(function(archiveElement){
+        //calc counts
+        let [counters, total] = count(archiveElement.data.trackDatas);
+        entries.push({
+            date: archiveElement.date,
+            counts: {total: total, counters: counters},
+            current: false,
+        })
+        labels.push(archiveElement.date)
+    })
+
+    //reverse to preserve chronological order
+    entries.reverse();
+    labels.reverse();
+
+    //aggregate by type and first/second
+    let datasets = aggregateByType(entries, labels);
+
+    return {
+        labels: labels,
+        datasets: datasets,
+    };
+
+}
+
+function count(data){
+    //count them
+    let counters = {
+        b: {first: 0, second: 0},
+        m: {first: 0, second: 0},
+        a: {first: 0, second: 0},
+    }
+    counters.b.first = data.reduce(function(n, element) {
+        return n + (element.type === 1 && element.second === false);
+    }, 0);
+    counters.b.second = data.reduce(function(n, element) {
+        return n + (element.type === 1 && element.second === true);
+    }, 0);
+    counters.m.first = data.reduce(function(n, element) {
+        return n + (element.type === 2  && element.second === false);
+    }, 0);
+    counters.m.second = data.reduce(function(n, element) {
+        return n + (element.type === 2  && element.second === true);
+    }, 0);
+    counters.a.first = data.reduce(function(n, element) {
+        return n + (element.type === 3  && element.second === false);
+    }, 0);
+    counters.a.first = data.reduce(function(n, element) {
+        return n + (element.type === 3  && element.second === true);
+    }, 0);
+
+    let total = counters.b.first + counters.b.second + counters.m.first + counters.m.second + counters.a.first + counters.a.second;
+
+    return [counters, total];
+}
+
+function aggregateByType(entries, labels){
+    let data = {
+        b: {
+            first: [],
+            second: []
+        },
+        m: {
+            first: [],
+            second: []
+        },
+        a: {
+            first: [],
+            second: []
+        }
+    }
+    entries.forEach(function(entry){
+        data.b.first.push(entry.counts.counters.b.first)
+        data.b.second.push(entry.counts.counters.b.second)
+        data.m.first.push(entry.counts.counters.m.first)
+        data.m.second.push(entry.counts.counters.m.second)
+        data.a.first.push(entry.counts.counters.a.first)
+        data.a.second.push(entry.counts.counters.a.second)
+    })
+
+    return data;
+}

@@ -200,9 +200,15 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                 let totalData = data.day.stats.total;
                 let totalDataset = [totalData.b.first, totalData.b.second, totalData.m.first, totalData.m.second, totalData.a.first, totalData.a.second];
 
+                let weekDatasets = data.week.datasets; //datasets are build per type
+                let weekLabels = data.week.labels; //labels are the dates properties
+
+                let monthDatasets = data.month.datasets; //datasets are build per type
+                let monthLabels = data.month.labels; //labels are the dates properties
+
                 const averageGraphData = {
                     datasets: [{
-                        label: 'Impfungen pro Stunde',
+                        label: 'Gesamt',
                         backgroundColor: 'rgb(255, 99, 132)',
                         borderColor: 'rgb(255, 99, 132)',
                         data: avgDataset,
@@ -211,11 +217,28 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                     }]
                 };
 
+                let colors = ["#99DCE2FF", "#99BCE2FF", "#AF99E2FF", "#E299D0FF"]
+                data.day.stats.average.byTracks.forEach(function(trackAverages, index){
+                    let label = trackAverages.track.name;
+                    let data = trackAverages.averages;
+                    averageGraphData.datasets.push(
+                        {
+                        label: 'Impfstrecke ' + label,
+                        backgroundColor: colors[index],
+                        borderColor: colors[index],
+                        data: data,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        // parsing: false,
+                    })
+                })
+
                 const averageConfig = {
                     type: 'line',
                     data: averageGraphData,
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         // stepped: true,
                         pointRadius: 2,
                         parsing: false,
@@ -252,7 +275,6 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                 /*
                 total
                  */
-
                 const totalGraphData = {
                     labels: [
                         'Biontech Erst',
@@ -266,39 +288,159 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                         label: 'My First Dataset',
                         data: totalDataset,
                         backgroundColor: [
-                            'rgb(123,255,86)',
-                            'rgb(80,187,49)',
-                            'rgb(255, 99, 132)',
-                            'rgb(238,66,102)',
-                            'rgb(54, 162, 235)',
-                            'rgb(39,125,184)',
-
+                            '#7BFF56FF',
+                            '#50BB31FF',
+                            '#FF6384FF',
+                            '#EE4266FF',
+                            '#36A2EBFF',
+                            '#277DB8FF',
                         ],
                         hoverOffset: 4
                     }]
                 };
-
                 const totalConfig = {
                     type: 'doughnut',
                     data: totalGraphData,
                     options: {
+                        maintainAspectRatio: false,
                         responsive: true,
                         plugins: {
                             legend: {
-                                position: 'top',
+                                position: legendPosition(),
+                                onHover: handleHover,
+                                onLeave: handleLeave
                             },
                             title: {
-                                display: true,
+                                display: false,
                                 text: 'Impfungen ' + transformDateTimeString(Date.now()).date,
                             }
                         }
                     },
                 };
 
-                self.averageChart = new Chart(
+                function legendPosition(){
+                    return (phone.matches) ? "top" : "right";
+                }
+
+                self.totalChart = new Chart(
                     document.getElementById('totalChart'),
                     totalConfig
                 );
+
+
+                /*
+                week
+                 */
+                const weekData = {
+                    labels: weekLabels,
+                    datasets: datasetsFromTypes(weekDatasets)
+                };
+                const weekConfig = {
+                    type: 'bar',
+                    data: weekData,
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: "Impfungen " + weekLabels[0] + " - " + weekLabels[weekLabels.length-1],
+                            },
+                        },
+                        responsive: true,
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true
+                            }
+                        }
+                    }
+                };
+                self.weekChart = new Chart(
+                    document.getElementById('weekChart'),
+                    weekConfig
+                );
+
+                /*
+                week
+                 */
+                const monthData = {
+                    labels: monthLabels,
+                    datasets: datasetsFromTypes(monthDatasets)
+                };
+                const monthConfig = {
+                    type: 'bar',
+                    data: monthData,
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: "Impfungen " + monthLabels[0] + " - " + monthLabels[monthLabels.length-1],
+                            },
+                        },
+                        responsive: true,
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true
+                            }
+                        }
+                    }
+                };
+                self.monthChart = new Chart(
+                    document.getElementById('monthChart'),
+                    monthConfig
+                );
+
+                self.charts = [self.averageChart, self.totalChart, self.weekChart, self.monthChart];
+
+                $(window).on("resize", function(){
+                    self.charts.forEach(function(chart){
+                        chart.update();
+                    })
+                })
+
+
+                function datasetsFromTypes(data){
+                    return [
+                        {
+                            label: 'BionTech Erst',
+                            data: data.b.first,
+                            backgroundColor: '#7BFF56FF',
+                        },
+                        {
+                            label: 'BionTech Zweit',
+                            data: data.b.second,
+                            backgroundColor: '#50BB31FF',
+                        },
+                        {
+                            label: 'Moderna Erst',
+                            data: data.m.first,
+                            backgroundColor: '#FF6384FF',
+                        },
+                        {
+                            label: 'Moderna Zweit',
+                            data: data.m.second,
+                            backgroundColor: '#EE4266FF',
+                        },
+                        {
+                            label: 'Astra Erst',
+                            data: data.a.first,
+                            backgroundColor: '#36A2EBFF',
+                        },
+                        {
+                            label: 'Astra Zweit',
+                            data: data.a.second,
+                            backgroundColor: '#277DB8FF',
+                        },
+                    ]
+                }
+
+
             }
             //setup tab navigation interface
             if (options.tabs) {
@@ -912,6 +1054,24 @@ function buildSwitch(component, activePage){
         })
 
     })
+}
+
+
+
+// Append '4d' to the colors (alpha channel), except for the hovered index
+function handleHover(evt, item, legend) {
+    legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+        colors[index] = index === item.index || color.length === 9 ? color : color + '4D';
+    });
+    legend.chart.update();
+}
+
+// Removes the alpha channel from background colors
+function handleLeave(evt, item, legend) {
+    legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+        colors[index] = color.length === 9 ? color.slice(0, -2) : color;
+    });
+    legend.chart.update();
 }
 
 
