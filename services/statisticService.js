@@ -560,7 +560,7 @@ function count(data){
     counters.a.first = data.reduce(function(n, element) {
         return n + (element.type === 3  && element.second === false);
     }, 0);
-    counters.a.first = data.reduce(function(n, element) {
+    counters.a.second = data.reduce(function(n, element) {
         return n + (element.type === 3  && element.second === true);
     }, 0);
 
