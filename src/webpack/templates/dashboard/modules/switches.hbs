@@ -11,7 +11,7 @@
                 <div class="dashboard-subcomponent-container">
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.switch.total.all}}</span>
+                            <span class="dashboard-component-value__text">{{componentData.switch.total.all}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Gesamt</span>
@@ -31,7 +31,7 @@
                                     </tr>
                                     </thead>
                                     <tbody class="mdc-data-table__content">
-                                    {{#each data.switch.table}}
+                                    {{#each componentData.switch.table}}
                                         <tr class="mdc-data-table__row">
                                             <th class="mdc-data-table__cell" scope="row">{{this.switch.originalTypeName}}</th>
                                             <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{this.switch.newTypeName}}</td>

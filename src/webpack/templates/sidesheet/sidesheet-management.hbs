@@ -1,0 +1,35 @@
+<div id="sidesheet" class="sidesheet">
+    <div class="sidesheet-wrapper">
+        <div class="sidesheet-cancel-button">
+            <i id="sidesheet-cancel-button-element" class="sidesheet-cancel-button-element material-icons mdc-button__icon" aria-hidden="true">clear</i>
+        </div>
+        <div class="sidesheet__header">
+            <h3 class="sidesheet__title">{{this.title}}</h3>
+        </div>
+        <div class="sidesheet__body">
+            <ul class="settings-list">
+                <li class="settings-list-item">
+                    <div class="settings-list-item__label">Automatische Aktualisierung</div>
+                    <div class="settings-list-item__action">
+                        <div class="mdc-switch mdc-switch--checked">
+                            <div class="mdc-switch__track"></div>
+                            <div class="mdc-switch__thumb-underlay">
+                                <div class="mdc-switch__thumb"></div>
+                                <input type="checkbox" id="refresh-switch" class="mdc-switch__native-control" role="switch" aria-checked="true" checked>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li role="separator" class="settings-list-separator"></li>
+                <li class="settings-list-item">
+                    <button id ="button-reload" class="mdc-button mdc-button--outlined">
+                        <span class="mdc-button__ripple"></span>
+                        <i class="material-icons mdc-button__icon" aria-hidden="true">refresh</i>
+                        <span class="mdc-button__label">Seite neu laden</span>
+                    </button>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>

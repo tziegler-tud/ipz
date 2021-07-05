@@ -1,6 +1,8 @@
 const db = require('../schemes/mongo');
 
 const Archive = db.archive;
+const TrackData = db.trackData;
+const CheckinData = db.checkinData;
 const settingsService = require('./settingsService');
 const trackService = require('./trackService');
 const trackDataService = require('./trackDataService');
@@ -16,6 +18,7 @@ module.exports = {
     update,
     archiveCurrentDay,
     resetCurrentDay,
+    restoreDay,
 };
 
 /**
@@ -148,4 +151,40 @@ async function resetCurrentDay() {
     // copy ArchiveObject properties to user
     trackDataService.clearAll();
     checkinDataService.clearAll();
+}
+
+async function restoreDay(dateString) {
+    let archive, trackData, checkinData;
+    if(dateString === undefined || dateString === "current") {
+        return false;
+    }
+    else {
+        //get by date
+        archive = await Archive.findOne({"date": dateString});
+        trackData = archive.data.trackDatas;
+        checkinData = archive.data.checkindatas;
+    }
+
+    //drop current trackdatas and checkindatas
+    await trackDataService.clearAll();
+    await checkinDataService.clearAll();
+
+    let current = new Date();
+    trackData.forEach(function(trackDataEntry){
+        let date = new Date(trackDataEntry.timestamp);
+        date.setDate(current.getDate());
+        date.setMonth(current.getMonth());
+        date.setFullYear(current.getFullYear());
+        let dbObj = new TrackData(trackDataEntry);
+        return dbObj.save();
+    })
+    checkinData.forEach(function(trackDataEntry){
+        let date = new Date(trackDataEntry.timestamp);
+        date.setDate(current.getDate());
+        date.setMonth(current.getMonth());
+        date.setFullYear(current.getFullYear());
+        let dbObj = new CheckinData(trackDataEntry);
+        return dbObj.save();
+    })
+
 }

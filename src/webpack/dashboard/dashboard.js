@@ -11,7 +11,9 @@ import {MDCDialog} from '@material/dialog';
 import {apiHandler} from "../apiHandlers/apiHandler";
 
 const Handlebars = require("handlebars");
+import "../handlebarsHelpers";
 import {transformDateTimeString} from "../helpers";
+import {preloader} from "../preloader";
 var $ = require( "jquery" );
 
 var phone = window.matchMedia("only screen and (max-device-width: 400px)");
@@ -79,27 +81,76 @@ var DashboardComponent = function(componentType, dashboard, index, args, buildFu
     switch(componentType){
         case "switches":
             this.url = "/webpack/templates/dashboard/modules/switches.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/switches.hbs";
+            this.dataType = "switches";
+            this.args = args;
+            break;
+        case "switches-view":
+            this.url = "/webpack/templates/dashboard/modules/switches-view.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/switches-view.hbs";
             this.dataType = "switches";
             this.args = args;
             break;
         case "figures-management":
             this.url = "/webpack/templates/dashboard/modules/figures-management.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/figures-management.hbs";
             this.dataType = "figures-management";
             this.args = args;
             break;
         case "figures-apotheke":
             this.url = "/webpack/templates/dashboard/modules/figures-apotheke.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/figures-apotheke.hbs";
             this.dataType = "figures-apotheke";
             this.args = args;
             break;
         case "figures-track":
             this.url = "/webpack/templates/dashboard/modules/figures-track.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/figures-track.hbs";
             this.dataType = "figures-track";
             this.args = args;
             break;
         case "switches-track":
             this.url = "/webpack/templates/dashboard/modules/switches.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/mobile/switches.hbs";
             this.dataType = "switches-track";
+            this.args = args;
+            break;
+
+        /**
+         * management dashboard
+         */
+
+        //combines all the latter
+        case "management-dash":
+            this.url = "/webpack/templates/dashboard/modules/dash/dash.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/dash.hbs";
+            this.dataType = "management-dash";
+            this.args = args;
+            break;
+
+        //seperate modules
+        case "management-day":
+            this.url = "/webpack/templates/dashboard/modules/dash/day.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/day.hbs";
+            this.dataType = "management-day";
+            this.args = args;
+            break;
+        case "management-stats":
+            this.url = "/webpack/templates/dashboard/modules/dash/stats.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/stats.hbs";
+            this.dataType = "management-stats";
+            this.args = args;
+            break;
+        case "management-graphs":
+            this.url = "/webpack/templates/dashboard/modules/dash/graphs.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/graphs.hbs";
+            this.dataType = "management-graphs";
+            this.args = args;
+            break;
+        case "management-devices":
+            this.url = "/webpack/templates/dashboard/modules/dash/devices.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash/devices.hbs";
+            this.dataType = "management-graphs";
             this.args = args;
             break;
         default:
@@ -113,7 +164,7 @@ var DashboardComponent = function(componentType, dashboard, index, args, buildFu
                 //add module html
                 self.buildComponentHtml(dashboard, data, false, args)
                     .done(function(){
-                        if(buildFunc !== undefined) buildFunc(self, dashboard.activePage);
+                        if(buildFunc !== undefined) buildFunc(self, dashboard.activePage, data);
                         resolve();
                     })
             })
@@ -124,9 +175,11 @@ var DashboardComponent = function(componentType, dashboard, index, args, buildFu
 
 DashboardComponent.prototype.buildComponentHtml = function(dashboard, context, updateExisting, args){
     let self = this;
-    return $.get(this.url, function (data) {
+    let url = this.url;
+    if (phone.matches) url = this.mobileUrl;
+    return $.get(url, function (data) {
         let c = {
-            data: context,
+            componentData: context,
         }
         var template = Handlebars.compile(data);
 
@@ -336,6 +389,76 @@ DashboardComponent.prototype.getData = function(args){
             });
             break;
 
+        case "management-dash":
+            dataUrl = "/api/v1/statistics/current";
+            let dataUrl2 = "/api/v1/statistics/week";
+            let dataUrl3 = "/api/v1/statistics/month";
+            return new Promise(function(resolve, reject){
+                $.get(dataUrl, function (stats) {
+                    let data = {
+                        date: Date.now(),
+                        day: stats,
+                    }
+                    $.get(dataUrl2, function(week) {
+                        data.week = week;
+                        $.get(dataUrl3, function(month) {
+                            data.month = month;
+                            resolve(data);
+                        });
+                    });
+                });
+            })
+            break;
+
+        case "management-day":
+            dataUrl = "/api/v1/statistics/current";
+            return new Promise(function(resolve, reject){
+                $.get(dataUrl, function (stats) {
+                    let data = {
+                        date: Date.now(),
+                        day: stats,
+                    }
+                    resolve(data);
+                });
+            })
+            break;
+        case "management-stats":
+            dataUrl = "/api/v1/statistics/current";
+            return new Promise(function(resolve, reject){
+                $.get(dataUrl, function (stats) {
+                    let data = {
+                        date: Date.now(),
+                        day: stats,
+                    }
+                    resolve(data);
+                });
+            })
+            break;
+        case "management-devices":
+            dataUrl = "/api/v1/statistics/current";
+            return new Promise(function(resolve, reject){
+                $.get(dataUrl, function (stats) {
+                    let data = {
+                        date: Date.now(),
+                        day: stats,
+                    }
+                    resolve(data);
+                });
+            })
+            break;
+        case "management-graphs":
+            dataUrl = "/api/v1/statistics/current";
+            return new Promise(function(resolve, reject){
+                $.get(dataUrl, function (stats) {
+                    let data = {
+                        date: Date.now(),
+                        day: stats,
+                    }
+                    resolve(data);
+                });
+            })
+            break;
+
         default:
             return new Promise(function(resolve, reject){
                 let data = {}
@@ -362,20 +485,25 @@ Dashboard.prototype.initialize = function(type, activePage, options){
     options = (options === undefined) ? {}: options;
     options = Object.assign(defaultOptions, options);
     let url;
+    let mobileUrl;
     switch(type){
         case "management":
+            mobileUrl = "/webpack/templates/dashboard/mobile/dashboard-management.hbs";
             url = "/webpack/templates/dashboard/dashboard-management.hbs";
             return self.createManagementDashboard(activePage, url, options);
             break;
         case "strecke":
+            mobileUrl = "/webpack/templates/dashboard/mobile/dashboard-track.hbs";
             url = "/webpack/templates/dashboard/dashboard-track.hbs";
             return self.createTrackDashboard(activePage, url, options);
             break;
         case "apotheke":
+            mobileUrl = "/webpack/templates/dashboard/mobile/dashboard-apotheke.hbs";
             url = "/webpack/templates/dashboard/dashboard-apotheke.hbs";
             return self.createApothekeDashboard(activePage, url, options);
             break;
         case "modules":
+            mobileUrl = "/webpack/templates/dashboard/dashboard-container.hbs";
             url = "/webpack/templates/dashboard/dashboard-container.hbs";
             return self.createModularDashboard(activePage, url, options);
             break;
@@ -394,13 +522,20 @@ Dashboard.prototype.addComponent = function(componentType, args, buildFunc) {
     let index = self.moduleCounter;
     self.moduleCounter++;
     return new Promise(function(resolve, reject) {
+        let plr = new preloader();
+        plr.show();
         self.init
             .then(function () {
                 let component = new DashboardComponent(componentType, self, index, args, buildFunc);
                 component.init.then(function(){
                     self.modules.push(component);
+                    setTimeout(plr.hide,0);
                     resolve(component);
                 });
+            })
+            .catch(function(err){
+                console.error(err);
+                setTimeout(plr.hide,0);
             })
     });
 }

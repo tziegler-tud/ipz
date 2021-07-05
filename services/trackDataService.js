@@ -63,6 +63,11 @@ async function getByTrack(track, filter) {
 
 }
 
+/**
+ *
+ * @param [Track] get counts for specific track. if undefined, data from all tracks are returned
+ * @returns {Promise<{total: Integer, counters: {a: {first: Integer, second: Integer}, b: {first: Integer, second: Integer}, m: {first: Integer, second: Integer}}, trackId: ObjectId}>}
+ */
 async function getCounts(track) {
     // let data;
     // if(track === undefined) {

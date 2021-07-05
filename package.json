@@ -6,7 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "@fontsource/open-sans": "^4.2.2",
+    "@fontsource/open-sans": "^4.4.5",
     "@material-icons/font": "^1.0.9",
     "@material/banner": "^11.0.0",
     "@material/button": "^11.0.0",
@@ -28,7 +28,7 @@
     "autoprefixer": "^10.2.5",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
-    "chart.js": "^3.2.1",
+    "chart.js": "^3.4.0",
     "chartjs-adapter-date-fns": "^1.1.0-beta.1",
     "cookie-parser": "~1.4.4",
     "date-fns": "^2.21.3",

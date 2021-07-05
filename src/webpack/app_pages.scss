@@ -89,6 +89,7 @@ tabs
     overflow: scroll;
     .tab {
       display: none;
+      height: 100%;
     }
 
     .tab--active {

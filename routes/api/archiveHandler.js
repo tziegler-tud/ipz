@@ -6,7 +6,7 @@ const settingsService = require('../../services/settingsService');
 
 
 
-//hooked at /api/v1/data/archive
+//hooked at /api/v1/archive
 
 // routes
 router.get('/', get);
@@ -16,6 +16,7 @@ router.delete('/remove/:id', remove);
 
 router.post('/archiveCurrentDay', archiveCurrentDay);
 router.delete('/resetCurrentDay', resetCurrentDay);
+router.post("/restoreDay", restoreDay)
 
 router.get('/:id', getById);
 
@@ -92,5 +93,11 @@ function resetCurrentDay (req, res, next) {
     archiveService.resetCurrentDay()
         .then(result => res.json(result))
         .catch(err => next(err));
+}
+
+function restoreDay (req, res, next) {
+    archiveService.restoreDay(req.body.date)
+        .then(result => res.json(result))
+        .catch(err => next(err))
 }
 module.exports = router;

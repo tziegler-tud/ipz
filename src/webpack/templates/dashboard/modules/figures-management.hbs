@@ -11,7 +11,7 @@
                 <div class="dashboard-subcomponent-container">
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-main">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.checkin.total.all}}</span>
+                            <span class="dashboard-component-value__text">{{componentData.checkin.total.all}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Gesamt</span>
@@ -19,7 +19,7 @@
                     </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--biontech">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.checkin.total.biontech}}</span>
+                            <span class="dashboard-component-value__text">{{componentData.checkin.total.biontech}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">BionTech</span>
@@ -29,7 +29,7 @@
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--moderna">
 
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.checkin.total.moderna}}</span>
+                            <span class="dashboard-component-value__text">{{componentData.checkin.total.moderna}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Moderna</span>
@@ -38,7 +38,7 @@
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--astra">
 
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.checkin.total.astra}}</span>
+                            <span class="dashboard-component-value__text">{{componentData.checkin.total.astra}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Astrazeneca</span>
@@ -55,31 +55,32 @@
                 <div class="dashboard-subcomponent-container">
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-main">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.track.total.all}}</span>
+                            <span class="dashboard-component-value__text">{{componentData.track.total.all}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Gesamt</span>
                         </div>
                     </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--biontech">
+
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">BionTech</span>
+                            <span class="dashboard-component-value__text">{{add componentData.track.total.biontech.first componentData.track.total.biontech.second}}&nbsp;BionTech</span>
                         </div>
                     </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--moderna">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">Moderna</span>
+                            <span class="dashboard-component-value__text">{{add componentData.track.total.moderna.first componentData.track.total.moderna.second}}&nbsp;Moderna</span>
                         </div>
 
                     </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--astra">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">AstraZeneca</span>
+                            <span class="dashboard-component-value__text">{{add componentData.track.total.astra.first componentData.track.total.astra.second}}&nbsp;AstraZeneca</span>
                         </div>
                     </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--biontech">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.track.total.biontech.first}}</span>
+                            <span class="dashboard-component-value__text">{{componentData.track.total.biontech.first}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Erstimpfung</span>
@@ -88,7 +89,7 @@
                     </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--moderna">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.track.total.moderna.first}}</span>
+                            <span class="dashboard-component-value__text">{{componentData.track.total.moderna.first}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Erstimpfung</span>
@@ -98,7 +99,7 @@
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--astra">
 
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.track.total.astra.first}}</span>
+                            <span class="dashboard-component-value__text">{{componentData.track.total.astra.first}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Erstimpfung</span>
@@ -106,7 +107,7 @@
                     </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--biontech">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.track.total.biontech.second}}</span>
+                            <span class="dashboard-component-value__text">{{componentData.track.total.biontech.second}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Zweitimpfung</span>
@@ -115,7 +116,7 @@
                     </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--moderna">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.track.total.moderna.second}}</span>
+                            <span class="dashboard-component-value__text">{{componentData.track.total.moderna.second}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Zweitimpfung</span>
@@ -125,7 +126,7 @@
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--astra">
 
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{data.track.total.astra.second}}</span>
+                            <span class="dashboard-component-value__text">{{componentData.track.total.astra.second}}</span>
                         </div>
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Zweitimpfung</span>

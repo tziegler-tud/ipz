@@ -574,7 +574,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _mat
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"preloader\", function() { return preloader; });\n\nvar preloader = function(){\n    var plr = {};\n    var self = document.getElementById(\"preloader\");\n\n    plr.hide = function(){\n        self.classList.remove(\"preloader-active\");\n        self.classList.add(\"preloader-hidden\");\n    };\n    return plr;\n};\n\n\n\n//# sourceURL=webpack:///./src/webpack/preloader.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"preloader\", function() { return preloader; });\n\nvar preloader = function(){\n    var plr = {};\n    var self = document.getElementById(\"preloader\");\n\n\n    plr.show = function(){\n        self.classList.add(\"preloader-active\");\n        self.classList.remove(\"preloader-hidden\");\n    }\n    plr.hide = function(){\n        self.classList.remove(\"preloader-active\");\n        self.classList.add(\"preloader-hidden\");\n    };\n    plr.show();\n    return plr;\n};\n\n\n\n//# sourceURL=webpack:///./src/webpack/preloader.js?");
 
 /***/ })
 
