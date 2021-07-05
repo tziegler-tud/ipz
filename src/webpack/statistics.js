@@ -41,7 +41,7 @@ let managementDashboardPage = new ManagementModulePage("dashboard");
 var pages = [statisticsPage, managementDashboardPage];
 
 managementDashboardPage.show({tabs: true, refresh: true})
-    .done(function(){
+    .then(function(){
         sidesheet = new Sidesheet("management", managementDashboardPage, {});
         // bottomTabs =  new Bottom("management", managementTotalPage, {})
     });
@@ -62,7 +62,7 @@ nav.initialize
                         }
                     })
                     managementDashboardPage.show({tabs: true})
-                        .done(function(){
+                        .then(function(){
                             sidesheet = new Sidesheet("management", managementDashboardPage, {});
                         });
                 });
@@ -74,7 +74,7 @@ nav.initialize
                         }
                     })
                     statisticsPage.show({tabs: true, refresh: true})
-                        .done(function(){
+                        .then(function(){
                             // sidesheet = new Sidesheet("management", managementTotalPage, {});
                         });
                 });

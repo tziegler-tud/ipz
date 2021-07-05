@@ -178,284 +178,288 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
     function buildDashboard(buildArgs, self) {
         let url = "/webpack/templates/management/dashboard.hbs";
         let context = {};
-        return $.get(url, function (data) {
-            console.log("template found");
-            var template = Handlebars.compile(data);
-            //reset page content
-            let container = $(buildArgs.containerSelector);
-            container.empty();
-            container.append(template(context));
-            self.page = document.getElementById("management-page");
-            self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
+        return new Promise(function(resolve, reject){
+            $.get(url, function (data) {
+                console.log("template found");
+                var template = Handlebars.compile(data);
+                //reset page content
+                let container = $(buildArgs.containerSelector);
+                container.empty();
+                container.append(template(context));
+                self.page = document.getElementById("management-page");
+                self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
 
-            self.dash = new Dashboard("modules", self, {containerId: "dashboard-container"});
-            self.dash.addComponent("management-dash", {}, buildGraphs);
+                self.dash = new Dashboard("modules", self, {containerId: "dashboard-container"});
+                self.dash.addComponent("management-dash", {}, buildGraphs);
 
-            self.dashboards.push(self.dash);
+                self.dashboards.push(self.dash);
 
 
-            function buildGraphs(dashboard, page, data) {
+                function buildGraphs(dashboard, page, data) {
 
-                let avgDataset = data.day.stats.average.perHour;
-                let totalData = data.day.stats.total;
-                let totalDataset = [totalData.b.first, totalData.b.second, totalData.m.first, totalData.m.second, totalData.a.first, totalData.a.second];
+                    let avgDataset = data.day.stats.average.perHour;
+                    let totalData = data.day.stats.total;
+                    let totalDataset = [totalData.b.first, totalData.b.second, totalData.m.first, totalData.m.second, totalData.a.first, totalData.a.second];
 
-                let weekDatasets = data.week.datasets; //datasets are build per type
-                let weekLabels = data.week.labels; //labels are the dates properties
+                    let weekDatasets = data.week.datasets; //datasets are build per type
+                    let weekLabels = data.week.labels; //labels are the dates properties
 
-                let monthDatasets = data.month.datasets; //datasets are build per type
-                let monthLabels = data.month.labels; //labels are the dates properties
+                    let monthDatasets = data.month.datasets; //datasets are build per type
+                    let monthLabels = data.month.labels; //labels are the dates properties
 
-                const averageGraphData = {
-                    datasets: [{
-                        label: 'Gesamt',
-                        backgroundColor: 'rgb(255, 99, 132)',
-                        borderColor: 'rgb(255, 99, 132)',
-                        data: avgDataset,
-                        tension: 0.4,
-                        // parsing: false,
-                    }]
-                };
+                    const averageGraphData = {
+                        datasets: [{
+                            label: 'Gesamt',
+                            backgroundColor: 'rgb(255, 99, 132)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            data: avgDataset,
+                            tension: 0.4,
+                            // parsing: false,
+                        }]
+                    };
 
-                let colors = ["#99DCE2FF", "#99BCE2FF", "#AF99E2FF", "#E299D0FF"]
-                data.day.stats.average.byTracks.forEach(function(trackAverages, index){
-                    let label = trackAverages.track.name;
-                    let data = trackAverages.averages;
-                    averageGraphData.datasets.push(
-                        {
-                        label: 'Impfstrecke ' + label,
-                        backgroundColor: colors[index],
-                        borderColor: colors[index],
-                        data: data,
-                        tension: 0.4,
-                        pointRadius: 0,
-                        // parsing: false,
+                    let colors = ["#b19338", "#99BCE2FF", "#AF99E2FF", "#E299D0FF"]
+                    data.day.stats.average.byTracks.forEach(function(trackAverages, index){
+                        let label = trackAverages.track.name;
+                        let data = trackAverages.averages;
+                        averageGraphData.datasets.push(
+                            {
+                                label: 'Impfstrecke ' + label,
+                                backgroundColor: colors[index],
+                                borderColor: colors[index],
+                                data: data,
+                                tension: 0.4,
+                                pointRadius: 0,
+                                // parsing: false,
+                            })
                     })
-                })
 
-                const averageConfig = {
-                    type: 'line',
-                    data: averageGraphData,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        // stepped: true,
-                        pointRadius: 2,
-                        parsing: false,
-                        scales: {
-                            x: {
-                                type: 'time',
-                                time: {
-                                    displayFormats: {
-                                        millisecond: 'hh:mm'
+                    const averageConfig = {
+                        type: 'line',
+                        data: averageGraphData,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            // stepped: true,
+                            pointRadius: 2,
+                            parsing: false,
+                            scales: {
+                                x: {
+                                    type: 'time',
+                                    time: {
+                                        displayFormats: {
+                                            millisecond: 'hh:mm'
+                                        },
+
                                     },
+                                    ticks: {
+                                        source: "data",
+                                    },
+                                }
 
-                                },
-                                ticks: {
-                                    source: "data",
-                                },
+                                //     // adapters: {
+                                //     //     date: {
+                                //     //         locale: de
+                                //     //     }
+                                //     // }
                             }
-
-                            //     // adapters: {
-                            //     //     date: {
-                            //     //         locale: de
-                            //     //     }
-                            //     // }
                         }
-                    }
-                };
+                    };
 
-                self.averageChart = new Chart(
-                    document.getElementById('averageChart'),
-                    averageConfig
-                );
-
+                    self.averageChart = new Chart(
+                        document.getElementById('averageChart'),
+                        averageConfig
+                    );
 
 
-                /*
-                total
-                 */
-                const totalGraphData = {
-                    labels: [
-                        'Biontech Erst',
-                        'Biontech Zweit',
-                        'Moderna Erst',
-                        'Moderna Zweit',
-                        'Astra Erst',
-                        'Astra Zweit',
-                    ],
-                    datasets: [{
-                        label: 'My First Dataset',
-                        data: totalDataset,
-                        backgroundColor: [
-                            '#7BFF56FF',
-                            '#50BB31FF',
-                            '#FF6384FF',
-                            '#EE4266FF',
-                            '#36A2EBFF',
-                            '#277DB8FF',
+
+                    /*
+                    total
+                     */
+                    const totalGraphData = {
+                        labels: [
+                            'Biontech Erst',
+                            'Biontech Zweit',
+                            'Moderna Erst',
+                            'Moderna Zweit',
+                            'Astra Erst',
+                            'Astra Zweit',
                         ],
-                        hoverOffset: 4
-                    }]
-                };
-                const totalConfig = {
-                    type: 'doughnut',
-                    data: totalGraphData,
-                    options: {
-                        maintainAspectRatio: false,
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: legendPosition(),
-                                onHover: handleHover,
-                                onLeave: handleLeave
-                            },
-                            title: {
-                                display: false,
-                                text: 'Impfungen ' + transformDateTimeString(Date.now()).date,
+                        datasets: [{
+                            label: 'My First Dataset',
+                            data: totalDataset,
+                            backgroundColor: [
+                                '#7BFF56FF',
+                                '#50BB31FF',
+                                '#FF6384FF',
+                                '#EE4266FF',
+                                '#36A2EBFF',
+                                '#277DB8FF',
+                            ],
+                            hoverOffset: 4
+                        }]
+                    };
+                    const totalConfig = {
+                        type: 'doughnut',
+                        data: totalGraphData,
+                        options: {
+                            maintainAspectRatio: false,
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: legendPosition(),
+                                    onHover: handleHover,
+                                    onLeave: handleLeave
+                                },
+                                title: {
+                                    display: false,
+                                    text: 'Impfungen ' + transformDateTimeString(Date.now()).date,
+                                }
                             }
-                        }
-                    },
-                };
-
-                function legendPosition(){
-                    return (phone.matches) ? "top" : "right";
-                }
-
-                self.totalChart = new Chart(
-                    document.getElementById('totalChart'),
-                    totalConfig
-                );
-
-
-                /*
-                week
-                 */
-                const weekData = {
-                    labels: weekLabels,
-                    datasets: datasetsFromTypes(weekDatasets)
-                };
-                const weekConfig = {
-                    type: 'bar',
-                    data: weekData,
-                    options: {
-                        maintainAspectRatio: false,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: "Impfungen " + weekLabels[0] + " - " + weekLabels[weekLabels.length-1],
-                            },
                         },
-                        responsive: true,
-                        scales: {
-                            x: {
-                                stacked: true,
+                    };
+
+                    function legendPosition(){
+                        return (phone.matches) ? "top" : "right";
+                    }
+
+                    self.totalChart = new Chart(
+                        document.getElementById('totalChart'),
+                        totalConfig
+                    );
+
+
+                    /*
+                    week
+                     */
+                    const weekData = {
+                        labels: weekLabels,
+                        datasets: datasetsFromTypes(weekDatasets)
+                    };
+                    const weekConfig = {
+                        type: 'bar',
+                        data: weekData,
+                        options: {
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: "Impfungen " + weekLabels[0] + " - " + weekLabels[weekLabels.length-1],
+                                },
                             },
-                            y: {
-                                stacked: true
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true
+                                }
                             }
                         }
-                    }
-                };
-                self.weekChart = new Chart(
-                    document.getElementById('weekChart'),
-                    weekConfig
-                );
+                    };
+                    self.weekChart = new Chart(
+                        document.getElementById('weekChart'),
+                        weekConfig
+                    );
 
-                /*
-                week
-                 */
-                const monthData = {
-                    labels: monthLabels,
-                    datasets: datasetsFromTypes(monthDatasets)
-                };
-                const monthConfig = {
-                    type: 'bar',
-                    data: monthData,
-                    options: {
-                        maintainAspectRatio: false,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: "Impfungen " + monthLabels[0] + " - " + monthLabels[monthLabels.length-1],
+                    /*
+                    week
+                     */
+                    const monthData = {
+                        labels: monthLabels,
+                        datasets: datasetsFromTypes(monthDatasets)
+                    };
+                    const monthConfig = {
+                        type: 'bar',
+                        data: monthData,
+                        options: {
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: "Impfungen " + monthLabels[0] + " - " + monthLabels[monthLabels.length-1],
+                                },
                             },
-                        },
-                        responsive: true,
-                        scales: {
-                            x: {
-                                stacked: true,
-                            },
-                            y: {
-                                stacked: true
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true
+                                }
                             }
                         }
-                    }
-                };
-                self.monthChart = new Chart(
-                    document.getElementById('monthChart'),
-                    monthConfig
-                );
+                    };
+                    self.monthChart = new Chart(
+                        document.getElementById('monthChart'),
+                        monthConfig
+                    );
 
-                self.charts = [self.averageChart, self.totalChart, self.weekChart, self.monthChart];
+                    self.charts = [self.averageChart, self.totalChart, self.weekChart, self.monthChart];
 
-                $(window).on("resize", function(){
-                    self.charts.forEach(function(chart){
-                        chart.update();
+                    $(window).on("resize", function(){
+                        self.charts.forEach(function(chart){
+                            chart.update();
+                        })
                     })
-                })
 
 
-                function datasetsFromTypes(data){
-                    return [
-                        {
-                            label: 'BionTech Erst',
-                            data: data.b.first,
-                            backgroundColor: '#7BFF56FF',
-                        },
-                        {
-                            label: 'BionTech Zweit',
-                            data: data.b.second,
-                            backgroundColor: '#50BB31FF',
-                        },
-                        {
-                            label: 'Moderna Erst',
-                            data: data.m.first,
-                            backgroundColor: '#FF6384FF',
-                        },
-                        {
-                            label: 'Moderna Zweit',
-                            data: data.m.second,
-                            backgroundColor: '#EE4266FF',
-                        },
-                        {
-                            label: 'Astra Erst',
-                            data: data.a.first,
-                            backgroundColor: '#36A2EBFF',
-                        },
-                        {
-                            label: 'Astra Zweit',
-                            data: data.a.second,
-                            backgroundColor: '#277DB8FF',
-                        },
-                    ]
+                    function datasetsFromTypes(data){
+                        return [
+                            {
+                                label: 'BionTech Erst',
+                                data: data.b.first,
+                                backgroundColor: '#7BFF56FF',
+                            },
+                            {
+                                label: 'BionTech Zweit',
+                                data: data.b.second,
+                                backgroundColor: '#50BB31FF',
+                            },
+                            {
+                                label: 'Moderna Erst',
+                                data: data.m.first,
+                                backgroundColor: '#FF6384FF',
+                            },
+                            {
+                                label: 'Moderna Zweit',
+                                data: data.m.second,
+                                backgroundColor: '#EE4266FF',
+                            },
+                            {
+                                label: 'Astra Erst',
+                                data: data.a.first,
+                                backgroundColor: '#36A2EBFF',
+                            },
+                            {
+                                label: 'Astra Zweit',
+                                data: data.a.second,
+                                backgroundColor: '#277DB8FF',
+                            },
+                        ]
+                    }
+
+
+                }
+                //setup tab navigation interface
+                if (options.tabs) {
+                    self.tabs = self.initTabs();
+                    //activate first tab
+                    if (self.tabs[0] !== undefined) {
+                        self.tabs[0].activate();
+                    }
                 }
 
 
-            }
-            //setup tab navigation interface
-            if (options.tabs) {
-                self.tabs = self.initTabs();
-                //activate first tab
-                if (self.tabs[0] !== undefined) {
-                    self.tabs[0].activate();
-                }
-            }
 
+                // let bottomTabs =  new Bottom("management", self, {}, {});
+                self.tabs[0].dashboard = self.figures;
 
-
-            // let bottomTabs =  new Bottom("management", self, {}, {});
-            self.tabs[0].dashboard = self.figures;
-        });
+                resolve();
+            });
+        })
     }
 
     /**
@@ -467,38 +471,42 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
     function buildTotal(buildArgs, self){
         let url = "/webpack/templates/management/total.hbs";
         let context = {};
-        return $.get(url, function (data) {
-            console.log("template found");
-            var template = Handlebars.compile(data);
-            //reset page content
-            let container = $(buildArgs.containerSelector);
-            container.empty();
-            container.append(template(context));
-            self.page = document.getElementById("management-page");
-            self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
+        return new Promise(function(resolve, reject) {
+            $.get(url, function (data) {
+                console.log("template found");
+                var template = Handlebars.compile(data);
+                //reset page content
+                let container = $(buildArgs.containerSelector);
+                container.empty();
+                container.append(template(context));
+                self.page = document.getElementById("management-page");
+                self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
 
-            self.figures = new Dashboard("modules", self, {containerId: "dashboard-container"});
-            self.figures.addComponent("figures-management");
+                self.figures = new Dashboard("modules", self, {containerId: "dashboard-container"});
+                self.figures.addComponent("figures-management");
 
-            self.switches = new Dashboard("modules", self, {containerId: "switched-container"});
-            self.switches.addComponent("switches", {}, buildSwitch);
+                self.switches = new Dashboard("modules", self, {containerId: "switched-container"});
+                self.switches.addComponent("switches", {}, buildSwitch);
 
-            self.dashboards.push(self.figures);
-            self.dashboards.push(self.switches);
+                self.dashboards.push(self.figures);
+                self.dashboards.push(self.switches);
 
 
-            //setup tab navigation interface
-            if (options.tabs) {
-                self.tabs = self.initTabs();
-                //activate first tab
-                if (self.tabs[0] !== undefined) {
-                    self.tabs[0].activate();
+                //setup tab navigation interface
+                if (options.tabs) {
+                    self.tabs = self.initTabs();
+                    //activate first tab
+                    if (self.tabs[0] !== undefined) {
+                        self.tabs[0].activate();
+                    }
                 }
-            }
-            let bottomTabs =  new Bottom("management", self, {}, {});
-            self.tabs[0].dashboard = self.figures;
-            self.tabs[1].dashboard = self.switches;
-        });
+                let bottomTabs = new Bottom("management", self, {}, {});
+                self.tabs[0].dashboard = self.figures;
+                self.tabs[1].dashboard = self.switches;
+
+                resolve();
+            });
+        })
     }
 
     /**
@@ -657,82 +665,83 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
     function buildStatistics(buildArgs, self){
         let url = "/webpack/templates/management/statistics.hbs";
         let context = {};
-        return $.get(url, function (data) {
-            console.log("template found");
-            var template = Handlebars.compile(data);
-            let container = $(buildArgs.containerSelector);
-            container.empty();
-            container.append(template(context));
+        return new Promise(function(resolve, reject){
+            $.get(url, function (data) {
+                console.log("template found");
+                var template = Handlebars.compile(data);
+                let container = $(buildArgs.containerSelector);
+                container.empty();
+                container.append(template(context));
 
-            //setup tab navigation interface
-            if (options.tabs) {
-                self.tabs = self.initTabs();
-                //activate first tab
-                if (self.tabs[0] !== undefined) {
-                    self.tabs[0].activate();
+                //setup tab navigation interface
+                if (options.tabs) {
+                    self.tabs = self.initTabs();
+                    //activate first tab
+                    if (self.tabs[0] !== undefined) {
+                        self.tabs[0].activate();
+                    }
                 }
-            }
 
-            apiStatisticsHandler.getStatistics("current")
-                .done(function(result){
+                apiStatisticsHandler.getStatistics("current")
+                    .done(function(result){
 
-                    const data = {
-                        datasets: [{
-                            label: 'Checkin - WBII',
-                            backgroundColor: 'rgb(255, 99, 132)',
-                            borderColor: 'rgb(255, 99, 132)',
-                            data: result.checkinData,
-                            tension: 0.4,
-                            // parsing: false,
-                        },
-                            {
-                                label: 'Durchgeführte Impfungen',
-                                backgroundColor: 'rgb(10,81,220)',
-                                borderColor: 'rgb(10,81,220)',
-                                data: result.trackData,
+                        const data = {
+                            datasets: [{
+                                label: 'Checkin - WBII',
+                                backgroundColor: 'rgb(255, 99, 132)',
+                                borderColor: 'rgb(255, 99, 132)',
+                                data: result.checkinData,
                                 tension: 0.4,
                                 // parsing: false,
-                            }]
-                    };
+                            },
+                                {
+                                    label: 'Durchgeführte Impfungen',
+                                    backgroundColor: 'rgb(10,81,220)',
+                                    borderColor: 'rgb(10,81,220)',
+                                    data: result.trackData,
+                                    tension: 0.4,
+                                    // parsing: false,
+                                }]
+                        };
 
-                    const config = {
-                        type: 'line',
-                        data,
-                        options: {
-                            pointRadius: 0,
-                            parsing: false,
-                            scales: {
-                                x: {
-                                    type: 'time',
-                                    time: {
-                                        displayFormats: {
-                                            millisecond: 'hh:mm'
+                        const config = {
+                            type: 'line',
+                            data,
+                            options: {
+                                pointRadius: 0,
+                                parsing: false,
+                                scales: {
+                                    x: {
+                                        type: 'time',
+                                        time: {
+                                            displayFormats: {
+                                                millisecond: 'hh:mm'
+                                            },
+
                                         },
+                                        // ticks: {
+                                        //     callback: function(value) {
+                                        //         return new Date(value).toLocaleDateString('de-DE', {month:'short', year:'numeric'});
+                                        //     },
+                                        // },
+                                    }
 
-                                    },
-                                    // ticks: {
-                                    //     callback: function(value) {
-                                    //         return new Date(value).toLocaleDateString('de-DE', {month:'short', year:'numeric'});
-                                    //     },
-                                    // },
+                                    //     // adapters: {
+                                    //     //     date: {
+                                    //     //         locale: de
+                                    //     //     }
+                                    //     // }
                                 }
-
-                                //     // adapters: {
-                                //     //     date: {
-                                //     //         locale: de
-                                //     //     }
-                                //     // }
                             }
-                        }
-                    };
+                        };
 
-                    self.chart = new Chart(
-                        document.getElementById('myChart'),
-                        config
-                    );
-                    console.log("test");
-                })
-
+                        self.chart = new Chart(
+                            document.getElementById('myChart'),
+                            config
+                        );
+                        resolve();
+                    })
+            });
         });
     }
 

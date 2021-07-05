@@ -13,6 +13,7 @@ import {apiHandler} from "../apiHandlers/apiHandler";
 const Handlebars = require("handlebars");
 import "../handlebarsHelpers";
 import {transformDateTimeString} from "../helpers";
+import {preloader} from "../preloader";
 var $ = require( "jquery" );
 
 var phone = window.matchMedia("only screen and (max-device-width: 400px)");
@@ -521,13 +522,20 @@ Dashboard.prototype.addComponent = function(componentType, args, buildFunc) {
     let index = self.moduleCounter;
     self.moduleCounter++;
     return new Promise(function(resolve, reject) {
+        let plr = new preloader();
+        plr.show();
         self.init
             .then(function () {
                 let component = new DashboardComponent(componentType, self, index, args, buildFunc);
                 component.init.then(function(){
                     self.modules.push(component);
+                    setTimeout(plr.hide,0);
                     resolve(component);
                 });
+            })
+            .catch(function(err){
+                console.error(err);
+                setTimeout(plr.hide,0);
             })
     });
 }

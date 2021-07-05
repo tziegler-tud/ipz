@@ -15,7 +15,7 @@ var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 $(window).on('load',function() {
     console.log("finished loading, hiding preloader");
     let plr = new preloader();
-    setTimeout(plr.hide,0);
+
 
 
 let sidesheet, bottomTabs;
@@ -51,9 +51,10 @@ pages.push(managementStatisticsPage);
 pages.push(managementDevicesPage);
 
 managementDashboardPage.show({tabs: true, refresh: true})
-    .done(function(){
+    .then(function(){
         sidesheet = new Sidesheet("management", managementDashboardPage, {});
         // bottomTabs =  new Bottom("management", managementTotalPage, {})
+
     });
 
 nav.initialize
@@ -72,7 +73,7 @@ nav.initialize
                         }
                     })
                     managementDashboardPage.show({tabs: true})
-                        .done(function(){
+                        .then(function(){
                             sidesheet = new Sidesheet("checkin", managementDashboardPage, {});
                         });
                 });
@@ -84,7 +85,7 @@ nav.initialize
                         }
                     })
                     managementTotalPage.show({tabs: true, refresh: true})
-                        .done(function(){
+                        .then(function(){
                             sidesheet = new Sidesheet("management", managementTotalPage, {});
                         });
                 });
