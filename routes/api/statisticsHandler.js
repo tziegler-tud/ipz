@@ -15,6 +15,8 @@ router.get('/overview', getOverview);
 router.get('/current', getDayStats);
 router.get('/week', getWeekStats);
 router.get('/month', getMonthStats);
+router.post("/getDayStats", getDayStatsFromArchive);
+router.post("/getStats", getStatsFromArchive);
 
 router.post('/', getSpecific);
 
@@ -69,6 +71,19 @@ function getMonthStats (req, res, next){
         .then(result => res.json(result))
         .catch(err => next(err));
 }
+
+function getDayStatsFromArchive (req, res, next){
+    statisticService.getDayStatsFromArchive(req.body.date)
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
+function getStatsFromArchive (req, res, next){
+    statisticService.getArchiveStats(req.body.daysBack, req.body.daysAhead, req.body.startDate)
+        .then(result => res.json(result))
+        .catch(err => next(err));
+}
+
 
 
 module.exports = router;

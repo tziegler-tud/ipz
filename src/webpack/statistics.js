@@ -3,6 +3,7 @@ import {Navigation} from "./app_navigation";
 import {Sidesheet} from "./app_sidesheet";
 import {StatisticsPage} from "./statistics/app_statisticsPage";
 import {ManagementModulePage} from "./management/app_managementModulePage";
+import {StatisticModulePage} from "./statistics/app_statisticModulePage";
 import {transformDateTimeString} from "./helpers";
 import "./handlebarsHelpers";
 const Handlebars = require("handlebars");
@@ -37,7 +38,7 @@ let nav = new Navigation(
     },
 );
 let statisticsPage = new StatisticsPage();
-let managementDashboardPage = new ManagementModulePage("dashboard");
+let managementDashboardPage = new StatisticModulePage("dashboard");
 var pages = [statisticsPage, managementDashboardPage];
 
 managementDashboardPage.show({tabs: true, refresh: true})

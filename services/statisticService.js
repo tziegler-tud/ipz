@@ -18,6 +18,7 @@ module.exports = {
     getWeekStats,
     getMonthStats,
     getArchiveStats,
+    getDayStatsFromArchive,
 };
 
 
@@ -332,6 +333,7 @@ async function generateDayStats() {
 
 
     let jsonData = {
+        date: new Date(),
         raw: {
             tracks: trackData,
             checkin: checkinData,
@@ -358,6 +360,109 @@ async function generateDayStats() {
 
 }
 
+async function getDayStatsFromArchive(dateString) {
+    //get today
+    let archive, trackData, checkinData;
+    if(dateString === undefined || dateString === "current") {
+        return generateDayStats();
+    }
+    else {
+        //get by date
+        archive = await Archive.findOne({"date": dateString});
+        trackData = archive.data.trackDatas.sort(function(a,b){
+            return a.timestamp - b.timestamp;
+        });
+        checkinData = archive.data.checkindatas.sort(function(a,b){
+            if(a.timestamp === undefined){
+                return a.currentStatus.timestamp - b.currentStatus.timestamp;
+            }
+            else {
+                return a.timestamp - b.timestamp;
+            }
+
+        });
+    }
+
+    let archiveData = {
+        date: dateString,
+        trackData: trackData,
+        checkinData: checkinData,
+        tracks: archive.data.tracks,
+    }
+
+
+    //get data
+    let totals = count(trackData);
+    //calculate averages
+    let totalAverage = getTotalAverage(trackData);
+
+    let perHour = averagesByHours(trackData);
+
+    let currentAverage = getCurrentAverage(trackData);
+
+
+    // average by tracks
+    let tracks = archiveData.tracks;
+    let byTracks = [];
+
+    if(tracks === undefined || tracks.length === 0) {
+        //re-generate tracks from data
+        tracks = [];
+        trackData.forEach(function(trackDataEntry){
+            let i = tracks.findIndex(function(trackElement){
+                return trackDataEntry.track.id.equals(trackElement.id);
+            });
+
+            if (i === -1) {
+                //add track
+                tracks.push(trackDataEntry.track);
+            }
+        })
+
+    }
+
+    tracks.forEach(function(track){
+        let data = trackData.filter(function(trackDataElement){
+            return (trackDataElement.track.id.equals(track.id))
+        });
+        let perHour = averagesByHours(data);
+        byTracks.push({track: track, data: data, averages: perHour});
+    })
+
+    byTracks.sort(function(a,b){
+        return (a.track.name < b.track.name) ? -1 : 1;
+    })
+
+
+
+
+    let jsonData = {
+        date: archiveData.date,
+        raw: {
+            tracks: trackData,
+            checkin: checkinData,
+        },
+        stats: {
+            total: {
+                test: "test",
+                all: totals.total,
+                b: totals.counters.b,
+                m: totals.counters.m,
+                a: totals.counters.a,
+            },
+            average: {
+                total: totalAverage,
+                perHour: perHour,
+                current: currentAverage,
+                byTracks: byTracks
+            }
+        }
+
+    }
+    return jsonData;
+}
+
+
 function parseToMilliseconds(dateRepresentation) {
     //date can be either milliseconds, ISOString or Date object
     switch(typeof(dateRepresentation)){
@@ -373,6 +478,7 @@ function parseToMilliseconds(dateRepresentation) {
 }
 
 function getTotalAverage(trackData){
+    if(trackData === undefined || trackData.length === 0) return 0;
     //get distance between data points
     let first = trackData[0];
     let last = trackData[trackData.length-1];
@@ -493,32 +599,43 @@ async function getMonthStats(){
 
 
 
-async function getArchiveStats(daysFromToday){
-    //get today
-    let todayPromise = trackDataService.getCounts();
-    let archiveDataPromise = Archive.find({}).sort("-timestamp");
-    //wait for promises to resolve
-    const data = await Promise.all([todayPromise, archiveDataPromise]);
-    let today = data[0];
-    let archiveData = data[1];
+async function getArchiveStats(daysFromToday, daysAhead, startDateString){
+    let today, archiveData, currentDate;
+    if(daysAhead === undefined) daysAhead = 0;
+    if (startDateString === undefined || startDateString === "current") {
+        //get today
+        let todayPromise = trackDataService.getCounts();
+        let archiveDataPromise = Archive.find({}).sort("-timestamp");
+        //wait for promises to resolve
+        const data = await Promise.all([todayPromise, archiveDataPromise]);
+        today = data[0];
+        archiveData = data[1];
+        currentDate = dateTransformer.transformDateTimeString(new Date()).date;
+    }
+    else {
+        //find start Date in archive
+        let startDateArchive = await Archive.findOne({"date": startDateString});
+        today = count(startDateArchive.data.trackDatas);
+        archiveData = await Archive.find({timestamp: { $lt : new Date(startDateArchive.timestamp)}}).sort("-timestamp");
+        currentDate = startDateArchive.date;
+    }
 
     //return dates and totals
     let entries = [];
     let labels = [];
     entries.push({
-        date: dateTransformer.transformDateTimeString(new Date()).date,
+        date: currentDate,
         counts: today,
         current: true,
     })
-    labels.push(dateTransformer.transformDateTimeString(new Date()).date)
-
+    labels.push(currentDate)
     let weekData = archiveData.slice(0,daysFromToday);
     weekData.forEach(function(archiveElement){
         //calc counts
-        let [counters, total] = count(archiveElement.data.trackDatas);
+        let counts = count(archiveElement.data.trackDatas);
         entries.push({
             date: archiveElement.date,
-            counts: {total: total, counters: counters},
+            counts: counts,
             current: false,
         })
         labels.push(archiveElement.date)
@@ -546,19 +663,19 @@ function count(data){
         a: {first: 0, second: 0},
     }
     counters.b.first = data.reduce(function(n, element) {
-        return n + (element.type === 1 && element.second === false);
+        return n + (element.type === 1 && (element.second === false || element.second === undefined));
     }, 0);
     counters.b.second = data.reduce(function(n, element) {
         return n + (element.type === 1 && element.second === true);
     }, 0);
     counters.m.first = data.reduce(function(n, element) {
-        return n + (element.type === 2  && element.second === false);
+        return n + (element.type === 2  && (element.second === false || element.second === undefined));
     }, 0);
     counters.m.second = data.reduce(function(n, element) {
         return n + (element.type === 2  && element.second === true);
     }, 0);
     counters.a.first = data.reduce(function(n, element) {
-        return n + (element.type === 3  && element.second === false);
+        return n + (element.type === 3  && (element.second === false || element.second === undefined));
     }, 0);
     counters.a.second = data.reduce(function(n, element) {
         return n + (element.type === 3  && element.second === true);
@@ -566,7 +683,7 @@ function count(data){
 
     let total = counters.b.first + counters.b.second + counters.m.first + counters.m.second + counters.a.first + counters.a.second;
 
-    return [counters, total];
+    return {counters: counters, total: total};
 }
 
 function aggregateByType(entries, labels){

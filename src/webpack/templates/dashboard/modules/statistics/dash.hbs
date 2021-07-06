@@ -1,0 +1,112 @@
+<div class="dashboard-module dashboard-module-dash management-dash">
+    <div class="dashboard-inner dashboard-module-inner">
+        <div class="dash-header">
+            <span class="dash-header--date dash-header--title">{{transformDateStringExtended componentData.date}}</span>
+        </div>
+        <div class="dash-component-container">
+            <div class="dash-component dash-component--half dashboard-component-dash management-dash">
+                <div class="dash-component-inner">
+                    <div class="dash-component-header">
+                        <span>
+                            Gesamtzahlen
+                        </span>
+                    </div>
+                    <div class="dash-elements-container col">
+                        <div class="dash-element half dash-element--figures">
+                            <div class="totals">
+                                <div class="totals-amount">
+                                    <span>{{componentData.day.stats.total.all}}</span>
+                                </div>
+                                <div class="totals-label">
+                                    <span>Durchgeführte Impfungen</span>
+                                </div>
+                            </div>
+                            <div class="tracks">
+
+                            </div>
+                        </div>
+                        <div class="dash-element half-auto dash-element--graph">
+                            <div class="total-graph-content center">
+                                <div id="totalChart-container" class="chart-container">
+                                    <canvas id="totalChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dash-component dash-component--half dashboard-component-dash management-dash">
+                <div class="dash-component-inner">
+                    <div class="dash-component-header">
+                        <span>
+                            Impfungen pro Stunde
+                        </span>
+                    </div>
+                    <div class="dash-elements-container col">
+                        <div class="dash-element half-auto dash-element--figures">
+                            <div class="totals">
+                                <div class="totals-amount">
+                                    <span>&empty;{{componentData.day.stats.average.total}}</span>
+                                </div>
+                                <div class="totals-label">
+                                    <span>Gesamt</span>
+                                </div>
+                            </div>
+                            <div class="totals">
+                                <div class="totals-amount">
+                                    <span>&empty;{{componentData.day.stats.average.current}}</span>
+                                </div>
+                                <div class="totals-label">
+                                    <span>Aktuell<span class="small">(letzte 15min)</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dash-element full dash-element--graph">
+                            <div class="average-graph-content">
+                                <div id="averageChart-container" class="chart-container line-chart-container">
+                                    <canvas id="averageChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dash-component dash-component--full dashboard-component-dash management-dash">
+                <div class="dash-component-inner">
+                    <div class="dash-component-header">
+                        <span>
+                            Wochenübersicht
+                        </span>
+                    </div>
+                    <div class="dash-elements-container col">
+                        <div class="dash-element full dash-element--graph">
+                            <div class="week-graph-content center">
+                                <div id="weekChart-container" class="chart-container bar-chart-container">
+                                    <canvas id="weekChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dash-component dash-component--full dashboard-component-dash management-dash">
+                <div class="dash-component-inner">
+                    <div class="dash-component-header">
+                        <span>
+                            Letzter Monat
+                        </span>
+                    </div>
+                    <div class="dash-elements-container col">
+                        <div class="dash-element full dash-element--graph">
+                            <div class="month-graph-content center">
+                                <div id="monthChart-container" class="chart-container bar-chart-container">
+                                    <canvas id="monthChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

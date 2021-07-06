@@ -19,8 +19,10 @@ var archiveSchema = new Schema({
         }],
         checkindatas: [{
 
-        }]
+        }],
+        tracks: [{
 
+        }]
     }
 })
 

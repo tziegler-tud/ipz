@@ -26530,7 +26530,8 @@ preloader
 
 .preloader-content {
   margin: 20vh auto;
-  width: 150px;
+  text-align: center;
+  width: 450px;
 }
 
 .preloader-content span {

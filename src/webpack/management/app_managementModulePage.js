@@ -207,6 +207,15 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                     let monthDatasets = data.month.datasets; //datasets are build per type
                     let monthLabels = data.month.labels; //labels are the dates properties
 
+                    const footer = (tooltipItems) => {
+                        let sum = 0;
+
+                        tooltipItems.forEach(function(tooltipItem) {
+                            sum += tooltipItem.parsed.y;
+                        });
+                        return 'Gesamt: ' + sum;
+                    };
+
                     const averageGraphData = {
                         datasets: [{
                             label: 'Gesamt',
@@ -346,6 +355,11 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                                     display: true,
                                     text: "Impfungen " + weekLabels[0] + " - " + weekLabels[weekLabels.length-1],
                                 },
+                                tooltip: {
+                                    callbacks: {
+                                        footer: footer,
+                                    }
+                                }
                             },
                             responsive: true,
                             scales: {
@@ -380,6 +394,11 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                                     display: true,
                                     text: "Impfungen " + monthLabels[0] + " - " + monthLabels[monthLabels.length-1],
                                 },
+                                tooltip: {
+                                    callbacks: {
+                                        footer: footer,
+                                    }
+                                }
                             },
                             responsive: true,
                             scales: {
