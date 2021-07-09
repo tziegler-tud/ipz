@@ -285,6 +285,7 @@ async function getDayStats(){
                 b: totals.counters.b,
                 m: totals.counters.m,
                 a: totals.counters.a,
+                j: totals.counters.j,
             },
         }
 
@@ -345,6 +346,7 @@ async function generateDayStats() {
                 b: totals.counters.b,
                 m: totals.counters.m,
                 a: totals.counters.a,
+                j: totals.counters.j,
             },
             average: {
                 total: totalAverage,
@@ -661,6 +663,7 @@ function count(data){
         b: {first: 0, second: 0},
         m: {first: 0, second: 0},
         a: {first: 0, second: 0},
+        j: {first: 0, second: 0},
     }
     counters.b.first = data.reduce(function(n, element) {
         return n + (element.type === 1 && (element.second === false || element.second === undefined));
@@ -680,8 +683,11 @@ function count(data){
     counters.a.second = data.reduce(function(n, element) {
         return n + (element.type === 3  && element.second === true);
     }, 0);
+    counters.j.first = data.reduce(function(n, element) {
+        return n + (element.type === 4);
+    }, 0);
 
-    let total = counters.b.first + counters.b.second + counters.m.first + counters.m.second + counters.a.first + counters.a.second;
+    let total = counters.b.first + counters.b.second + counters.m.first + counters.m.second + counters.a.first + counters.a.second + counters.j.first;
 
     return {counters: counters, total: total};
 }
@@ -699,6 +705,9 @@ function aggregateByType(entries, labels){
         a: {
             first: [],
             second: []
+        },
+        j: {
+            first: [],
         }
     }
     entries.forEach(function(entry){
@@ -708,6 +717,7 @@ function aggregateByType(entries, labels){
         data.m.second.push(entry.counts.counters.m.second)
         data.a.first.push(entry.counts.counters.a.first)
         data.a.second.push(entry.counts.counters.a.second)
+        data.j.first.push(entry.counts.counters.j.first)
     })
 
     return data;

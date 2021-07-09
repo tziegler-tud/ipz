@@ -159,11 +159,17 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
                         name: "Astra",
                         el: document.getElementById("astra-counter"),
                         counter: new Counter({start: result.counters.a, min: 0, step: 1}),
+                    },
+                    j: {
+                        name: "Johnson",
+                        el: document.getElementById("johnson-counter"),
+                        counter: new Counter({start: result.counters.j, min: 0, step: 1}),
                     }
                 };
                 self.counters.b.el.innerHTML = self.counters.b.counter.get();
                 self.counters.m.el.innerHTML = self.counters.m.counter.get();
                 self.counters.a.el.innerHTML = self.counters.a.counter.get();
+                self.counters.j.el.innerHTML = self.counters.j.counter.get();
             })
 
         //update timers
@@ -181,6 +187,11 @@ CheckinPage.prototype.buildHtml = function(url, context, options){
             a: {
                 name: "Astra",
                 el: document.getElementById("astra-timer"),
+                timeString: "",
+            },
+            j: {
+                name: "Johnson",
+                el: document.getElementById("johnson-timer"),
                 timeString: "",
             }
         };
@@ -314,6 +325,9 @@ function getCounter (type, self) {
         case 3:
             counter = self.counters.a;
             break;
+        case 4:
+            counter = self.counters.j;
+            break;
     }
     return counter;
 
@@ -334,6 +348,9 @@ function getChoosingTimer(type, self){
             break;
         case 3:
             timer = self.timers.a;
+            break;
+        case 4:
+            timer = self.timers.j;
             break;
     }
     return timer;
@@ -369,10 +386,17 @@ CheckinPage.prototype.updateTimer = function (type){
             else {
                 self.timers.a.timeString = transformDateTimeString(result.a.timestamp, "hh:mm").time("hh:mm");
             }
+            if(result.j === null) {
+                self.timers.j.timeString = "";
+            }
+            else {
+                self.timers.j.timeString = transformDateTimeString(result.j.timestamp, "hh:mm").time("hh:mm");
+            }
 
             self.timers.b.el.innerHTML = self.timers.b.timeString;
             self.timers.m.el.innerHTML = self.timers.m.timeString;
             self.timers.a.el.innerHTML = self.timers.a.timeString;
+            self.timers.j.el.innerHTML = self.timers.j.timeString;
         })
 }
 export {CheckinPage};

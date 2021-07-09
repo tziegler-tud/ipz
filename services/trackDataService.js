@@ -109,6 +109,7 @@ async function getCounts(track) {
     let dataM2;
     let dataA1;
     let dataA2;
+    let dataJ1;
 
     if(track === undefined) {
             //find all tracks
@@ -119,6 +120,7 @@ async function getCounts(track) {
             dataM2 = TrackData.count({"type": 2, "second": true});
             dataA1 = TrackData.count({"type": 3, "second": false});
             dataA2 = TrackData.count({"type": 3, "second": true});
+            dataJ1 = TrackData.count({"type": 4});
         }
         else {
             dataB1 = TrackData.count({"track.id": track.id, "type": 1, "second": false});
@@ -127,19 +129,21 @@ async function getCounts(track) {
             dataM2 = TrackData.count({"track.id": track.id, "type": 2, "second": true});
             dataA1 = TrackData.count({"track.id": track.id, "type": 3, "second": false});
             dataA2 = TrackData.count({"track.id": track.id, "type": 3, "second": true});
+            dataJ1 = TrackData.count({"track.id": track.id, "type": 4});
         }
 
 
     //wait for query to finish
-    const data = await Promise.all([dataB1, dataB2, dataM1, dataM2, dataA1, dataA2]);
+    const data = await Promise.all([dataB1, dataB2, dataM1, dataM2, dataA1, dataA2, dataJ1]);
     //count them
 
     let counters = {
         b: {first: data[0], second: data[1]},
         m: {first: data[2], second: data[3]},
         a: {first: data[4], second: data[5]},
+        j: {first: data[6], second: 0},
     }
-    let total = data[0] + data[1] + data[2] + data[3] + data[4] + data[5];
+    let total = data[0] + data[1] + data[2] + data[3] + data[4] + data[5] + data[6];
 
     let returnObject = {
         track: track.id,
@@ -183,19 +187,7 @@ async function add(object) {
 
     //get checkout version
     let label = "track"+object.track.id;
-    let version = await Version.findOne({label: label});
-    if(!version){
-        console.log("no version file found. Generating new version history...")
-       version = new Version({
-            label: label,
-            version: 1,
-            timestamp: Date.now(),
-        });
-    }
-    else {
-        version.version++;
-    }
-    version.save();
+
     //create new object
     let trackDataObject = {
         type: object.type,
@@ -314,13 +306,14 @@ async function updateVersion(track, number) {
 }
 
 async function getLastOfAllTypes(track, filter) {
-    let b, m, a;
+    let b, m, a, j;
 
 
     if (filter===undefined || filter.filter === undefined || filter.value === undefined) {
         b = await TrackData.findOne({"track.id": track.id, "type": 1}).sort('-timestamp');
         m = await TrackData.findOne({"track.id": track.id, "type": 2}).sort('-timestamp');
         a = await TrackData.findOne({"track.id": track.id, "type": 3}).sort('-timestamp');
+        j = await TrackData.findOne({"track.id": track.id, "type": 4}).sort('-timestamp');
     }
     else {
         let filter1 = {
@@ -335,16 +328,22 @@ async function getLastOfAllTypes(track, filter) {
             "type": 3,
             "track.id": track.id,
         };
+        let filter4 = {
+            "type": 4,
+            "track.id": track.id,
+        };
         filter1[filter.filter] = filter.value;
         filter2[filter.filter] = filter.value;
         filter3[filter.filter] = filter.value;
+        filter4[filter.filter] = filter.value;
         // return TrackData.find({isSwitched: true});
         b = await TrackData.findOne(filter1).sort('-timestamp');
-        m = await TrackData.findOne(filter1).sort('-timestamp');
-        a = await TrackData.findOne(filter1).sort('-timestamp');
+        m = await TrackData.findOne(filter2).sort('-timestamp');
+        a = await TrackData.findOne(filter3).sort('-timestamp');
+        j = await TrackData.findOne(filter4).sort('-timestamp');
     }
 
-    return {b: b,m: m, a: a};
+    return {b: b,m: m, a: a, j: j};
 
 }
 

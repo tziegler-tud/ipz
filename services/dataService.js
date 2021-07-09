@@ -9,7 +9,6 @@ module.exports = {
     getAll,
     getCheckoutData,
     getCheckoutEntry,
-    getCheckoutDataVersion,
     getCounts,
     add,
     remove,
@@ -64,17 +63,19 @@ async function getCounts(args) {
     let data1 = CheckinData.count({"type": 1});
     let data2 = CheckinData.count({"type": 2});
     let data3 = CheckinData.count({"type": 3});
+    let data4 = CheckinData.count({"type": 4});
 
     //wait for query to finish
-    const data = await Promise.all([data1, data2, data3]);
+    const data = await Promise.all([data1, data2, data3, data4]);
     //count them
 
     let counters = {
         b: data[0],
         m: data[1],
-        a: data[2]
+        a: data[2],
+        j: data[3],
     }
-    let total = data[0] + data[1] + data[2];
+    let total = data[0] + data[1] + data[2] + data[3];
 
     let returnObject = {
         status: options.status,
@@ -87,10 +88,6 @@ async function getCounts(args) {
 
 async function getCheckoutEntry(id) {
     return CheckinData.findById(id);
-}
-
-async function getCheckoutDataVersion() {
-    return Version.findOne({label: "wb2"});
 }
 
 
@@ -220,13 +217,14 @@ async function clearAll() {
 
 
 async function getLastOfAllTypes(filter) {
-    let b, m, a;
+    let b, m, a, j;
 
 
     if (filter===undefined || filter.filter === undefined || filter.value === undefined) {
         b = await CheckinData.findOne({"type": 1}).sort({'timestamp': -1});
         m = await CheckinData.findOne({"type": 2}).sort({'timestamp': -1});
         a = await CheckinData.findOne({"type": 3}).sort({'timestamp': -1});
+        j = await CheckinData.findOne({"type": 4}).sort({'timestamp': -1});
     }
     else {
         let filter1 = {
@@ -238,15 +236,20 @@ async function getLastOfAllTypes(filter) {
         let filter3 = {
             "type": 3,
         };
+        let filter4 = {
+            "type": 4,
+        };
         filter1[filter.filter] = filter.value;
         filter2[filter.filter] = filter.value;
         filter3[filter.filter] = filter.value;
+        filter4[filter.filter] = filter.value;
         // return TrackData.find({isSwitched: true});
         b = await CheckinData.findOne(filter1).sort({'timestamp': -1});
         m = await CheckinData.findOne(filter2).sort({'timestamp': -1});
         a = await CheckinData.findOne(filter3).sort({'timestamp': -1});
+        j = await CheckinData.findOne(filter4).sort({'timestamp': -1});
     }
 
-    return {b: b,m: m, a: a};
+    return {b: b,m: m, a: a,j: j};
 
 }

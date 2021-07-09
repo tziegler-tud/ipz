@@ -70,6 +70,9 @@ trackDataSchema.virtual("switch.originalTypeName").get(function(){
         case 3:
             typeString ="Astrazeneca";
             break;
+        case 4:
+            typeString ="Johnson & Johnson";
+            break;
         default:
             typeString = "nicht angegeben";
             break;
@@ -88,6 +91,9 @@ trackDataSchema.virtual("switch.newTypeName").get(function(){
             break;
         case 3:
             typeString ="Astrazeneca";
+            break;
+        case 4:
+            typeString ="Johnson & Johnson";
             break;
         default:
             typeString = "nicht angegeben";

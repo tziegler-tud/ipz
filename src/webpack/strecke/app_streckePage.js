@@ -224,6 +224,14 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                             el: document.getElementById("astra-counter--second"),
                             counter: new Counter({start: result.counters.a.second, min: 0, step: 1}),
                         },
+                    },
+                    j: {
+                        name: "Johnson",
+                        first: {
+                            el: document.getElementById("johnson-counter--first"),
+                            counter: new Counter({start: result.counters.j.first, min: 0, step: 1}),
+                        },
+
                     }
                 };
                 self.counters.b.first.el.innerHTML = self.counters.b.first.counter.get();
@@ -232,6 +240,9 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 self.counters.m.second.el.innerHTML = self.counters.m.second.counter.get();
                 self.counters.a.first.el.innerHTML = self.counters.a.first.counter.get();
                 self.counters.a.second.el.innerHTML = self.counters.a.second.counter.get();
+                self.counters.j.first.el.innerHTML = self.counters.j.first.counter.get();
+
+
             })
 
         //update timers
@@ -250,6 +261,11 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 name: "Astra",
                 el: document.getElementById("astra-timer"),
                 timeString: "",
+            },
+            j: {
+                name: "Johnson",
+                el: document.getElementById("johnson-timer"),
+                timeString: "",
             }
         };
         self.updateTimer();
@@ -263,6 +279,13 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             let secondString = this.dataset.second;
             let second = (secondString === "true");
             let secondNumber = (second) ? 2 : 1;
+
+            //j2 is disabled
+            if (type === 4 && second) {
+                self.mutex = false;
+                return false;
+            }
+
             let counter = getCounter(type, self, second);
             counter.el.classList.add("processing");
 
@@ -589,6 +612,9 @@ function getCounter (type, self, second) {
         case 3:
             counter =  (second) ? self.counters.a.second : self.counters.a.first;
             break;
+        case 4:
+            counter =  (second) ? self.counters.j.second : self.counters.j.first;
+            break;
     }
     return counter;
 
@@ -608,6 +634,9 @@ function getChoosingTimer(type, self){
             break;
         case 3:
             timer = self.timers.a;
+            break;
+        case 4:
+            timer = self.timers.j;
             break;
     }
     return timer;
@@ -643,10 +672,17 @@ StreckePage.prototype.updateTimer = function (type){
             else {
                 self.timers.a.timeString = transformDateTimeString(result.a.timestamp, "hh:mm").time("hh:mm");
             }
+            if(result.j === null) {
+                self.timers.j.timeString = "";
+            }
+            else {
+                self.timers.j.timeString = transformDateTimeString(result.j.timestamp, "hh:mm").time("hh:mm");
+            }
 
             self.timers.b.el.innerHTML = self.timers.b.timeString;
             self.timers.m.el.innerHTML = self.timers.m.timeString;
             self.timers.a.el.innerHTML = self.timers.a.timeString;
+            self.timers.j.el.innerHTML = self.timers.j.timeString;
         })
 }
 export {StreckePage};

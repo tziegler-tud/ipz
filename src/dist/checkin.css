@@ -12118,7 +12118,7 @@ a.mdc-list-item {
   flex-flow: row nowrap;
 }
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item {
-  flex: 1 1 33%;
+  flex: 1 1 25%;
   padding: 10px;
 }
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item.biontech .choosing-item-media {
@@ -12129,6 +12129,9 @@ a.mdc-list-item {
 }
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item.astra .choosing-item-media {
   background-color: rgba(0, 19, 189, 0.2);
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item.johnson .choosing-item-media {
+  background-color: #f1dec1;
 }
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .choosing-card__action-section .choosing-card-counter {
   top: unset;

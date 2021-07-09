@@ -76,7 +76,7 @@
             flex-flow: row wrap;
           }
           .choosing-item {
-            flex: 1 1 33%;
+            flex: 1 1 25%;
             padding: 10px;
 
             @media #{$phone} {
@@ -102,6 +102,12 @@
               }
 
             }
+            &.johnson {
+              .choosing-item-media {
+                background-color: $johnson-background-color;
+              }
+
+            }
 
             .choosing-card {
 
@@ -109,13 +115,15 @@
                 display: grid;
                 grid-template-rows: auto;
                 grid-template-columns: 50% 50%;
+                &.single-item {
+                  grid-template-rows: auto;
+                  grid-template-columns: 1fr;
+                }
 
                 .choosing-card-counter-part {
                   &.first {
                     border-right: 1px solid #333;
                   }
-
-
                 }
               }
               .timestamp {
