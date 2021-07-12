@@ -199,7 +199,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
 
                     let avgDataset = data.day.stats.average.perHour;
                     let totalData = data.day.stats.total;
-                    let totalDataset = [totalData.b.first, totalData.b.second, totalData.m.first, totalData.m.second, totalData.a.first, totalData.a.second];
+                    let totalDataset = [totalData.b.first, totalData.b.second, totalData.m.first, totalData.m.second, totalData.a.first, totalData.a.second, totalData.j.first];
 
                     let weekDatasets = data.week.datasets; //datasets are build per type
                     let weekLabels = data.week.labels; //labels are the dates properties
@@ -293,6 +293,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                             'Moderna Zweit',
                             'Astra Erst',
                             'Astra Zweit',
+                            "Johnson Erst",
                         ],
                         datasets: [{
                             label: 'My First Dataset',
@@ -304,6 +305,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                                 '#EE4266FF',
                                 '#36A2EBFF',
                                 '#277DB8FF',
+                                '#f3b771',
                             ],
                             hoverOffset: 4
                         }]
@@ -456,6 +458,11 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                                 label: 'Astra Zweit',
                                 data: data.a.second,
                                 backgroundColor: '#277DB8FF',
+                            },
+                            {
+                                label: 'Johnson Erst',
+                                data: data.j.first,
+                                backgroundColor: '#f3b771',
                             },
                         ]
                     }
@@ -617,6 +624,39 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
 
                                 }
                             })
+
+                            editDialog.listen("MDCDialog:opening", function (event) {
+                                apiHandler.getTrackEntry(self.editMenuId)
+                                    .done(function(entry){
+                                        if(entry.isSwitched) {
+                                            list1.selectedIndex = entry.switch.originalType - 1;
+                                            list2.selectedIndex = entry.switch.newType - 1;
+                                            list3.selectedIndex = entry.second ? 1 : 0;
+                                        }
+
+                                    })
+
+                            });
+                            list1.listen("MDCList:action", function(event){
+                                let index = event.detail.index;
+                                list1.listElements.forEach(function(element, index){
+                                    list2.setEnabled(index, true);
+                                })
+                                list2.setEnabled(index, false);
+
+                            })
+
+                            list2.listen("MDCList:action", function(event){
+                                let index = event.detail.index;
+                                let newType = parseInt(list2.listElements[index].dataset.type);
+                                if(newType === 4) {
+                                    list3.setEnabled(1, false);
+                                }
+                                else {
+                                    list3.setEnabled(1, true);
+                                }
+                            })
+
                             editDialog.listen("MDCDialog:closed", function (event) {
                                 self.enableRefresh();
                                 let detail = event.detail;
@@ -1028,6 +1068,42 @@ function buildSwitch(component, activePage){
             self.editMenuId = null;
 
 
+        }
+    })
+
+    editDialog.listen("MDCDialog:opening", function (event) {
+        apiHandler.getTrackEntry(self.editMenuId)
+            .done(function(entry){
+                if(entry.isSwitched) {
+                    list1.selectedIndex = entry.switch.originalType - 1;
+                    list2.selectedIndex = entry.switch.newType - 1;
+                    if(entry.switch.newType === 4) {
+                        list3.selectedIndex = 0;
+                        list3.setEnabled(1, false);
+                    }
+                    else list3.selectedIndex = entry.second ? 1 : 0;
+                }
+
+            })
+
+    });
+    list1.listen("MDCList:action", function(event){
+        let index = event.detail.index;
+        list1.listElements.forEach(function(element, index){
+            list2.setEnabled(index, true);
+        })
+        list2.setEnabled(index, false);
+
+    })
+
+    list2.listen("MDCList:action", function(event){
+        let index = event.detail.index;
+        let newType = parseInt(list2.listElements[index].dataset.type);
+        if(newType === 4) {
+            list3.setEnabled(1, false);
+        }
+        else {
+            list3.setEnabled(1, true);
         }
     })
     editDialog.listen("MDCDialog:closed", function (event) {

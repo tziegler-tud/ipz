@@ -51,6 +51,9 @@ trackDataSchema.virtual("name").get(function(){
         case 3:
             typeString ="Astrazeneca";
             break;
+        case 4:
+            typeString ="Johnson & Johnson";
+            break;
         default:
             typeString = "nicht angegeben";
             break;

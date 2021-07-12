@@ -353,7 +353,9 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             self.mutex = true;
             let type = parseInt($(this).closest(".choosing-item").data("type"));
 
-
+            if (type === 4) {
+                listRemove.setEnabled(1, false);
+            }
             dialogRemove.open();
 
             let removeFunc = function(event){
@@ -362,6 +364,7 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 if(detail.action==="accept") {
                     if(listRemove.selectedIndex === -1) listRemove.selectedIndex = 0;
                     let second = (listRemove.listElements[listRemove.selectedIndex].dataset.second === "true");
+                    listRemove.setEnabled(1, true);
                     /**
                      * @type {Object} c
                      * @property {HTMLElement} el
@@ -425,10 +428,12 @@ StreckePage.prototype.buildHtml = function(url, context, options){
         dialog2.listen("MDCDialog:closed", function(event){
             let detail = event.detail;
             list2.setEnabled(self.dialogChoice.selectedIndex, true);
-            console.log(detail.action);
             if(detail.action==="accept") {
                 self.dialogChoice.selectedIndex2 = list2.selectedIndex;
                 self.dialogChoice.newType = parseInt(list2.listElements[list2.selectedIndex].dataset.type);
+                if (self.dialogChoice.newType === 4){
+                    list3.setEnabled(1, false);
+                }
                 dialog3.open();
             }
         })
@@ -439,6 +444,7 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 let secondString = list3.listElements[list3.selectedIndex].dataset.second;
                 let second = (secondString === "true");
                 console.log(detail.action);
+                list3.setEnabled(1, true);
                 let counter = getCounter(self.dialogChoice.newType, self, second);
                 apiHandler.addSwitchedTrackEntry(self.dialogChoice.originalType, self.dialogChoice.newType, self.track, second)
                     .done(function(result){
@@ -613,7 +619,7 @@ function getCounter (type, self, second) {
             counter =  (second) ? self.counters.a.second : self.counters.a.first;
             break;
         case 4:
-            counter =  (second) ? self.counters.j.second : self.counters.j.first;
+            counter =  (second) ? self.counters.j.first : self.counters.j.first;
             break;
     }
     return counter;

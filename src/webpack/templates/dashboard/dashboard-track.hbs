@@ -33,6 +33,11 @@
                             <span class="dashboard-component-value__text">AstraZeneca</span>
                         </div>
                     </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--johnson">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">J&J</span>
+                        </div>
+                    </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--biontech">
                         <div class="dashboard-component-value">
                             <span class="dashboard-component-value__text">{{data.total.biontech.first}}</span>
@@ -40,7 +45,6 @@
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Erstimpfung</span>
                         </div>
-
                     </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--moderna">
                         <div class="dashboard-component-value">
@@ -60,6 +64,15 @@
                             <span class="dashboard-component-label__text">Erstimpfung</span>
                         </div>
                     </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--johnson">
+
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{data.total.johnson.first}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Erstimpfung</span>
+                        </div>
+                    </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--biontech">
                         <div class="dashboard-component-value">
                             <span class="dashboard-component-value__text">{{data.total.biontech.second}}</span>
@@ -67,7 +80,6 @@
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Zweitimpfung</span>
                         </div>
-
                     </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--moderna">
                         <div class="dashboard-component-value">
@@ -87,6 +99,7 @@
                             <span class="dashboard-component-label__text">Zweitimpfung</span>
                         </div>
                     </div>
+                    <div></div>
                 </div>
 
             </div>
@@ -198,6 +211,10 @@
                                 <span class="mdc-list-item__ripple"></span>
                                 <span class="mdc-deprecated-list-item__text">Astrazenecca</span>
                             </li>
+                            <li class="mdc-deprecated-list-item" role="option" data-type="4">
+                                <span class="mdc-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">Johnson & Johnson</span>
+                            </li>
                             <li class="mdc-deprecated-list-divider" role="separator"></li>
                         </ul>
                         <h3 class="mdc-list-group__subheader">Gewechselt auf:</h3>
@@ -213,6 +230,10 @@
                             <li class="mdc-deprecated-list-item" role="option" data-type="3">
                                 <span class="mdc-list-item__ripple"></span>
                                 <span class="mdc-deprecated-list-item__text">Astrazenecca</span>
+                            </li>
+                            <li class="mdc-deprecated-list-item" role="option" data-type="4">
+                                <span class="mdc-list-item__ripple"></span>
+                                <span class="mdc-deprecated-list-item__text">Johnson & Johnson</span>
                             </li>
                             <li class="mdc-deprecated-list-divider" role="separator"></li>
                         </ul>

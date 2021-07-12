@@ -346,6 +346,15 @@ var ApiHandler = function() {
         });
     };
 
+    self.getTrackEntry = function(id){
+        return $.ajax({
+            url: "/api/v1/data/track/getEntry/"+id,
+            // make put for safety reasons :-)
+            type: 'GET',
+            contentType: "application/json; charset=UTF-8",
+        });
+    }
+
     self.updateSwitchedEntry = function(id, originalType, newType, second) {
         let jsonData = {
             id: id,

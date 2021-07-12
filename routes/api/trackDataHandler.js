@@ -16,6 +16,7 @@ function wait(req,res,next){
 
 // routes
 router.get('/', get);
+router.get('/getEntry/:id', getById);
 router.post('/add', addData);
 router.post('/update', update);
 router.get('/counts', getAllCounts);
@@ -65,6 +66,14 @@ function get (req, res, next){
             .then(result => res.json(result))
             .catch(err => next(err));
     }
+}
+
+function getById (req, res, next){
+    //validate data
+    let id = req.params.id;
+    trackDataService.getById(id)
+        .then(result => res.json(result))
+        .catch(err => next(err));
 }
 
 function update (req, res, next) {

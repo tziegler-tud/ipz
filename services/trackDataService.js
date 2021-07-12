@@ -7,6 +7,7 @@ const settingsService = require('./settingsService');
 
 module.exports = {
     getAll,
+    getById,
     getByTrack,
     getTrackDataVersion,
     getCounts,
@@ -20,7 +21,7 @@ module.exports = {
 };
 
 /**
- * Gets all users
+ * Gets all trackData Entries
  */
 async function getAll(args) {
     let defaults = {
@@ -46,6 +47,10 @@ async function getAll(args) {
     else {
         return query.sort(sort);
     }
+}
+
+async function getById(id) {
+    return TrackData.findById(id);
 }
 
 async function getByTrack(track, filter) {
@@ -179,6 +184,8 @@ async function add(object) {
         throw new Error("Invalid arguments received: Track is undefined");
     }
 
+    if(object.type === 4) object.second = false; //Johnson cannot be second
+
     let isSwitched = object.isSwitched;
     let switchObj = {};
     if(isSwitched) {
@@ -213,6 +220,7 @@ async function update(id, object) {
 
     //find entry
     let entry = await TrackData.findById(id);
+    if(object.type === 4) object.second = false; //Johnson cannot be second
 
     //create new object
     let trackDataObject = object;

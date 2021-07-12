@@ -214,7 +214,8 @@ DashboardComponent.prototype.refresh = function(){
             .then(function(data){
                 self.buildComponentHtml(self.dashboard, data, true)
                     .done(function(){
-                        if(self.buildFunc !== undefined) self.buildFunc(self)
+                        let activePage = self.dashboard.activePage;
+                        if(self.buildFunc !== undefined) self.buildFunc(self, activePage)
                         resolve();
                     })
             })
@@ -250,6 +251,7 @@ DashboardComponent.prototype.getData = function(args){
                                     biontech: checkinCounts.counters.b,
                                     moderna: checkinCounts.counters.m,
                                     astra: checkinCounts.counters.a,
+                                    johnson: checkinCounts.counters.j,
                                 }
                             },
                             track: {
@@ -258,6 +260,7 @@ DashboardComponent.prototype.getData = function(args){
                                     biontech: trackCounts.counters.b,
                                     moderna: trackCounts.counters.m,
                                     astra: trackCounts.counters.a,
+                                    johnson: trackCounts.counters.j,
                                 },
 
                             }
@@ -277,18 +280,22 @@ DashboardComponent.prototype.getData = function(args){
                                 biontech: 6,
                                 moderna: 10,
                                 astra: 10,
+                                johnson: 10,
                             }
                             let biontechSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 1);
                             let modernaSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 2);
                             let astraSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 3);
+                            let johnsonSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 4);
 
                             let wasBiontech = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 1);
                             let wasModerna = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 2);
                             let wasAstra = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 3);
+                            let wasJohnson = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 4);
 
                             let adjustedBiontech = checkinCounts.counters.b + biontechSwitched.length - wasBiontech.length;
                             let adjustedModerna = checkinCounts.counters.m + modernaSwitched.length - wasModerna.length;
                             let adjustedAstra = checkinCounts.counters.a + astraSwitched.length - wasAstra.length;
+                            let adjustedJohnson = checkinCounts.counters.j + johnsonSwitched.length - wasJohnson.length;
 
                             let data = {
                                 checkin: {
@@ -297,11 +304,13 @@ DashboardComponent.prototype.getData = function(args){
                                         biontech: adjustedBiontech,
                                         moderna: adjustedModerna,
                                         astra: adjustedAstra,
+                                        johnson: adjustedJohnson,
                                     },
                                     vials: {
                                         biontech: Math.ceil((adjustedBiontech) / vialSize.biontech),
                                         moderna: Math.ceil((adjustedModerna) / vialSize.moderna),
                                         astra: Math.ceil((adjustedAstra) / vialSize.astra),
+                                        johnson: Math.ceil((adjustedAstra) / vialSize.johnson),
                                     },
                                 },
                                 track: {
@@ -310,11 +319,13 @@ DashboardComponent.prototype.getData = function(args){
                                         biontech: trackCounts.counters.b.first + trackCounts.counters.b.second,
                                         moderna: trackCounts.counters.m.first + trackCounts.counters.m.second,
                                         astra: trackCounts.counters.a.first + trackCounts.counters.a.second,
+                                        johnson: trackCounts.counters.j.first + trackCounts.counters.j.second,
                                     },
                                     vials: {
                                         biontech: Math.ceil((trackCounts.counters.b.first + trackCounts.counters.b.second) / vialSize.biontech),
                                         moderna: Math.ceil((trackCounts.counters.m.first + trackCounts.counters.m.second) / vialSize.moderna),
                                         astra: Math.ceil((trackCounts.counters.a.first + trackCounts.counters.a.second) / vialSize.astra),
+                                        johnson: Math.ceil((trackCounts.counters.j.first + trackCounts.counters.j.second) / vialSize.johnson),
                                     },
                                     switch: {
                                         total: {
@@ -322,6 +333,7 @@ DashboardComponent.prototype.getData = function(args){
                                             biontech: biontechSwitched.length,
                                             moderna: modernaSwitched.length,
                                             astra: astraSwitched.length,
+                                            johnson: johnsonSwitched.length,
                                         },
                                         table: switched,
                                     }
@@ -346,6 +358,7 @@ DashboardComponent.prototype.getData = function(args){
                         let biontechSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 1);
                         let modernaSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 2);
                         let astraSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 3);
+                        let johnsonSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 4);
                         let data = {
                             track: {
                                 total: {
@@ -353,6 +366,7 @@ DashboardComponent.prototype.getData = function(args){
                                     biontech: trackCounts.counters.b,
                                     moderna: trackCounts.counters.m,
                                     astra: trackCounts.counters.a,
+                                    johnson: trackCounts.counters.j,
                                 }
                             },
                             switch: {
@@ -361,6 +375,7 @@ DashboardComponent.prototype.getData = function(args){
                                     biontech: biontechSwitched.length,
                                     moderna: modernaSwitched.length,
                                     astra: astraSwitched.length,
+                                    johnson: johnsonSwitched.length,
                                 },
                                 table: switched,
                             }
@@ -381,6 +396,7 @@ DashboardComponent.prototype.getData = function(args){
                     let biontechSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 1);
                     let modernaSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 2);
                     let astraSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 3);
+                    let johnsonSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 4);
                     let data = {
                         switch: {
                             total: {
@@ -388,6 +404,7 @@ DashboardComponent.prototype.getData = function(args){
                                 biontech: biontechSwitched.length,
                                 moderna: modernaSwitched.length,
                                 astra: astraSwitched.length,
+                                johnson: johnsonSwitched.length,
                             },
                             table: switched,
                         }
@@ -668,6 +685,7 @@ Dashboard.prototype.createManagementDashboard = function(activePage, url, option
                                         biontech: checkinCounts.counters.b,
                                         moderna: checkinCounts.counters.m,
                                         astra: checkinCounts.counters.a,
+                                        johnson: checkinCounts.counters.j,
                                     }
                                 },
                                 track: {
@@ -676,6 +694,7 @@ Dashboard.prototype.createManagementDashboard = function(activePage, url, option
                                         biontech: trackCounts.counters.b,
                                         moderna: trackCounts.counters.m,
                                         astra: trackCounts.counters.a,
+                                        johnson: trackCounts.counters.j,
                                     },
                                     switch: {
                                         total: switched.length,
@@ -724,6 +743,37 @@ Dashboard.prototype.createManagementDashboard = function(activePage, url, option
                                 self.editMenuId = null;
 
 
+                            }
+                        })
+                        editDialog.listen("MDCDialog:opening", function (event) {
+                            apiHandler.getTrackEntry(self.editMenuId)
+                                .done(function(entry){
+                                    if(entry.isSwitched) {
+                                        list1.selectedIndex = entry.switch.originalType - 1;
+                                        list2.selectedIndex = entry.switch.newType - 1;
+                                        list3.selectedIndex = entry.second ? 1 : 0;
+                                    }
+
+                                })
+
+                        });
+                        list1.listen("MDCList:action", function(event){
+                            let index = event.detail.index;
+                            list1.listElements.forEach(function(element, index){
+                                list2.setEnabled(index, true);
+                            })
+                            list2.setEnabled(index, false);
+
+                        })
+
+                        list2.listen("MDCList:action", function(event){
+                            let index = event.detail.index;
+                            let newType = parseInt(list2.listElements[index].dataset.type);
+                            if(newType === 4) {
+                                list3.setEnabled(1, false);
+                            }
+                            else {
+                                list3.setEnabled(1, true);
                             }
                         })
                         editDialog.listen("MDCDialog:closed", function (event) {
@@ -796,10 +846,12 @@ Dashboard.prototype.createApothekeDashboard = function(activePage, url, options)
                         let biontechSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 1);
                         let modernaSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 2);
                         let astraSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 3);
+                        let johnsonSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 4);
 
                         let wasBiontech = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 1);
                         let wasModerna = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 2);
                         let wasAstra = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 3);
+                        let wasJohnson = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 4);
 
                         let context = {
                             header: "Übersicht - Apotheke ",
@@ -810,6 +862,7 @@ Dashboard.prototype.createApothekeDashboard = function(activePage, url, options)
                                         biontech: checkinCounts.counters.b + biontechSwitched.length - wasBiontech.length,
                                         moderna: checkinCounts.counters.m + modernaSwitched.length - wasModerna.length,
                                         astra: checkinCounts.counters.a + astraSwitched.length - wasAstra.length,
+                                        johnson: checkinCounts.counters.j + johnsonSwitched.length - wasJohnson.length,
                                     }
                                 },
                                 track: {
@@ -818,6 +871,7 @@ Dashboard.prototype.createApothekeDashboard = function(activePage, url, options)
                                         biontech: trackCounts.counters.b.first + trackCounts.counters.b.second,
                                         moderna: trackCounts.counters.m.first + trackCounts.counters.m.second,
                                         astra: trackCounts.counters.a.first + trackCounts.counters.a.second,
+                                        johnson: trackCounts.counters.j.first + trackCounts.counters.j.second,
                                     },
                                     switch: {
                                         total: {
@@ -825,6 +879,7 @@ Dashboard.prototype.createApothekeDashboard = function(activePage, url, options)
                                             biontech: biontechSwitched.length,
                                             moderna: modernaSwitched.length,
                                             astra: astraSwitched.length,
+                                            johnson: johnsonSwitched.length,
                                         },
                                         table: switched,
                                     }
@@ -859,6 +914,7 @@ Dashboard.prototype.createTrackDashboard = function(activePage, url, options) {
                                 biontech: counts.counters.b,
                                 moderna: counts.counters.m,
                                 astra: counts.counters.a,
+                                johnson: counts.counters.j,
                             },
                             switch: {
                                 total: switched.length,
@@ -897,6 +953,38 @@ Dashboard.prototype.createTrackDashboard = function(activePage, url, options) {
 
                         }
                     })
+
+                    editDialog.listen("MDCDialog:opening", function (event) {
+                        apiHandler.getTrackEntry(self.editMenuId)
+                            .done(function(entry){
+                                if(entry.isSwitched) {
+                                    list1.selectedIndex = entry.switch.originalType - 1;
+                                    list2.selectedIndex = entry.switch.newType - 1;
+                                    list3.selectedIndex = entry.second ? 1 : 0;
+                                }
+
+                            })
+
+                    });
+                    list1.listen("MDCList:action", function(event){
+                        let index = event.detail.index;
+                        list1.listElements.forEach(function(element, index){
+                            list2.setEnabled(index, true);
+                        })
+                        list2.setEnabled(index, false);
+
+                    })
+
+                    list2.listen("MDCList:action", function(event){
+                        let index = event.detail.index;
+                        let newType = parseInt(list2.listElements[index].dataset.type);
+                        if(newType === 4) {
+                            list3.setEnabled(1, false);
+                        }
+                        else {
+                            list3.setEnabled(1, true);
+                        }
+                    })
                     editDialog.listen("MDCDialog:closed", function (event) {
                         let detail = event.detail;
                         let originalType = parseInt(list1.listElements[list1.selectedIndex].dataset.type);
@@ -905,6 +993,7 @@ Dashboard.prototype.createTrackDashboard = function(activePage, url, options) {
                         let second = (secondString === "true");
                         if (detail.action === "accept") {
                             //update switch entry
+                            list3.setEnabled(1, true);
                             apiHandler.updateSwitchedEntry(self.editMenuId, originalType, newType, second)
                                 .done(function (result) {
                                     self.activePage.refreshDashboard();
@@ -913,6 +1002,8 @@ Dashboard.prototype.createTrackDashboard = function(activePage, url, options) {
 
                         }
                     })
+
+
 
                     //switched entry modification dialog
                     let selector = ".switch-entry-menu";
