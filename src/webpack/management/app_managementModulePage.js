@@ -199,7 +199,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
 
                     let avgDataset = data.day.stats.average.perHour;
                     let totalData = data.day.stats.total;
-                    let totalDataset = [totalData.b.first, totalData.b.second, totalData.m.first, totalData.m.second, totalData.a.first, totalData.a.second, totalData.j.first];
+                    let totalDataset = [totalData.b.first, totalData.b.second, totalData.m.first, totalData.m.second, totalData.a.first, totalData.a.second, totalData.j.first, totalData.j.second];
 
                     let weekDatasets = data.week.datasets; //datasets are build per type
                     let weekLabels = data.week.labels; //labels are the dates properties
@@ -294,6 +294,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                             'Astra Erst',
                             'Astra Zweit',
                             "Johnson Erst",
+                            "Johnson Zweit",
                         ],
                         datasets: [{
                             label: 'My First Dataset',
@@ -306,6 +307,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                                 '#36A2EBFF',
                                 '#277DB8FF',
                                 '#f3b771',
+                                '#c9924e',
                             ],
                             hoverOffset: 4
                         }]
@@ -463,6 +465,11 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                                 label: 'Johnson Erst',
                                 data: data.j.first,
                                 backgroundColor: '#f3b771',
+                            },
+                            {
+                                label: 'Johnson Zweit',
+                                data: data.j.second,
+                                backgroundColor: '#c9924e',
                             },
                         ]
                     }
@@ -649,12 +656,6 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                             list2.listen("MDCList:action", function(event){
                                 let index = event.detail.index;
                                 let newType = parseInt(list2.listElements[index].dataset.type);
-                                if(newType === 4) {
-                                    list3.setEnabled(1, false);
-                                }
-                                else {
-                                    list3.setEnabled(1, true);
-                                }
                             })
 
                             editDialog.listen("MDCDialog:closed", function (event) {
@@ -1077,11 +1078,7 @@ function buildSwitch(component, activePage){
                 if(entry.isSwitched) {
                     list1.selectedIndex = entry.switch.originalType - 1;
                     list2.selectedIndex = entry.switch.newType - 1;
-                    if(entry.switch.newType === 4) {
-                        list3.selectedIndex = 0;
-                        list3.setEnabled(1, false);
-                    }
-                    else list3.selectedIndex = entry.second ? 1 : 0;
+                    list3.selectedIndex = entry.second ? 1 : 0;
                 }
 
             })
@@ -1099,12 +1096,6 @@ function buildSwitch(component, activePage){
     list2.listen("MDCList:action", function(event){
         let index = event.detail.index;
         let newType = parseInt(list2.listElements[index].dataset.type);
-        if(newType === 4) {
-            list3.setEnabled(1, false);
-        }
-        else {
-            list3.setEnabled(1, true);
-        }
     })
     editDialog.listen("MDCDialog:closed", function (event) {
         self.enableRefresh();

@@ -115,6 +115,7 @@ async function getCounts(track) {
     let dataA1;
     let dataA2;
     let dataJ1;
+    let dataJ2;
 
     if(track === undefined) {
             //find all tracks
@@ -125,7 +126,8 @@ async function getCounts(track) {
             dataM2 = TrackData.count({"type": 2, "second": true});
             dataA1 = TrackData.count({"type": 3, "second": false});
             dataA2 = TrackData.count({"type": 3, "second": true});
-            dataJ1 = TrackData.count({"type": 4});
+            dataJ1 = TrackData.count({"type": 4, "second": false});
+            dataJ2 = TrackData.count({"type": 4, "second": true});
         }
         else {
             dataB1 = TrackData.count({"track.id": track.id, "type": 1, "second": false});
@@ -134,21 +136,22 @@ async function getCounts(track) {
             dataM2 = TrackData.count({"track.id": track.id, "type": 2, "second": true});
             dataA1 = TrackData.count({"track.id": track.id, "type": 3, "second": false});
             dataA2 = TrackData.count({"track.id": track.id, "type": 3, "second": true});
-            dataJ1 = TrackData.count({"track.id": track.id, "type": 4});
+            dataJ1 = TrackData.count({"track.id": track.id, "type": 4, "second": false});
+            dataJ2 = TrackData.count({"track.id": track.id, "type": 4, "second": true});
         }
 
 
     //wait for query to finish
-    const data = await Promise.all([dataB1, dataB2, dataM1, dataM2, dataA1, dataA2, dataJ1]);
+    const data = await Promise.all([dataB1, dataB2, dataM1, dataM2, dataA1, dataA2, dataJ1, dataJ2]);
     //count them
 
     let counters = {
         b: {first: data[0], second: data[1]},
         m: {first: data[2], second: data[3]},
         a: {first: data[4], second: data[5]},
-        j: {first: data[6], second: 0},
+        j: {first: data[6], second: data[7]},
     }
-    let total = data[0] + data[1] + data[2] + data[3] + data[4] + data[5] + data[6];
+    let total = data[0] + data[1] + data[2] + data[3] + data[4] + data[5] + data[6] + data[7];
 
     let returnObject = {
         track: track.id,
@@ -184,8 +187,6 @@ async function add(object) {
         throw new Error("Invalid arguments received: Track is undefined");
     }
 
-    if(object.type === 4) object.second = false; //Johnson cannot be second
-
     let isSwitched = object.isSwitched;
     let switchObj = {};
     if(isSwitched) {
@@ -220,7 +221,6 @@ async function update(id, object) {
 
     //find entry
     let entry = await TrackData.findById(id);
-    if(object.type === 4) object.second = false; //Johnson cannot be second
 
     //create new object
     let trackDataObject = object;

@@ -164,7 +164,7 @@ StatisticModulePage.prototype.buildModule = function(moduleType, options){
 
 
     function buildDashboard(buildArgs, self) {
-        let url = "/webpack/templates/statistics/dashboard.hbs";
+        let url = "/webpack/templates/management/dashboard.hbs";
         let context = {};
         return new Promise(function(resolve, reject){
             $.get(url, function (data) {
@@ -178,15 +178,16 @@ StatisticModulePage.prototype.buildModule = function(moduleType, options){
                 self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
 
                 self.dash = new Dashboard("modules", self, {containerId: "dashboard-container"});
-                self.dash.addComponent("statistics-dash", {}, buildGraphs);
+                self.dash.addComponent("management-dash", {}, buildGraphs);
 
                 self.dashboards.push(self.dash);
+
 
                 function buildGraphs(dashboard, page, data) {
 
                     let avgDataset = data.day.stats.average.perHour;
                     let totalData = data.day.stats.total;
-                    let totalDataset = [totalData.b.first, totalData.b.second, totalData.m.first, totalData.m.second, totalData.a.first, totalData.a.second];
+                    let totalDataset = [totalData.b.first, totalData.b.second, totalData.m.first, totalData.m.second, totalData.a.first, totalData.a.second, totalData.j.first, totalData.j.second];
 
                     let weekDatasets = data.week.datasets; //datasets are build per type
                     let weekLabels = data.week.labels; //labels are the dates properties
@@ -280,6 +281,8 @@ StatisticModulePage.prototype.buildModule = function(moduleType, options){
                             'Moderna Zweit',
                             'Astra Erst',
                             'Astra Zweit',
+                            "Johnson Erst",
+                            "Johnson Zweit",
                         ],
                         datasets: [{
                             label: 'My First Dataset',
@@ -291,6 +294,8 @@ StatisticModulePage.prototype.buildModule = function(moduleType, options){
                                 '#EE4266FF',
                                 '#36A2EBFF',
                                 '#277DB8FF',
+                                '#f3b771',
+                                '#c9924e',
                             ],
                             hoverOffset: 4
                         }]
@@ -443,6 +448,16 @@ StatisticModulePage.prototype.buildModule = function(moduleType, options){
                                 label: 'Astra Zweit',
                                 data: data.a.second,
                                 backgroundColor: '#277DB8FF',
+                            },
+                            {
+                                label: 'Johnson Erst',
+                                data: data.j.first,
+                                backgroundColor: '#f3b771',
+                            },
+                            {
+                                label: 'Johnson Zweit',
+                                data: data.j.second,
+                                backgroundColor: '#c9924e',
                             },
                         ]
                     }

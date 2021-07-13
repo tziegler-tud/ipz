@@ -769,12 +769,6 @@ Dashboard.prototype.createManagementDashboard = function(activePage, url, option
                         list2.listen("MDCList:action", function(event){
                             let index = event.detail.index;
                             let newType = parseInt(list2.listElements[index].dataset.type);
-                            if(newType === 4) {
-                                list3.setEnabled(1, false);
-                            }
-                            else {
-                                list3.setEnabled(1, true);
-                            }
                         })
                         editDialog.listen("MDCDialog:closed", function (event) {
                             self.activePage.enableRefresh();
@@ -978,12 +972,6 @@ Dashboard.prototype.createTrackDashboard = function(activePage, url, options) {
                     list2.listen("MDCList:action", function(event){
                         let index = event.detail.index;
                         let newType = parseInt(list2.listElements[index].dataset.type);
-                        if(newType === 4) {
-                            list3.setEnabled(1, false);
-                        }
-                        else {
-                            list3.setEnabled(1, true);
-                        }
                     })
                     editDialog.listen("MDCDialog:closed", function (event) {
                         let detail = event.detail;
@@ -993,7 +981,6 @@ Dashboard.prototype.createTrackDashboard = function(activePage, url, options) {
                         let second = (secondString === "true");
                         if (detail.action === "accept") {
                             //update switch entry
-                            list3.setEnabled(1, true);
                             apiHandler.updateSwitchedEntry(self.editMenuId, originalType, newType, second)
                                 .done(function (result) {
                                     self.activePage.refreshDashboard();

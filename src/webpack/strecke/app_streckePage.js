@@ -231,6 +231,10 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                             el: document.getElementById("johnson-counter--first"),
                             counter: new Counter({start: result.counters.j.first, min: 0, step: 1}),
                         },
+                        second: {
+                            el: document.getElementById("johnson-counter--second"),
+                            counter: new Counter({start: result.counters.j.second, min: 0, step: 1}),
+                        },
 
                     }
                 };
@@ -241,6 +245,7 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 self.counters.a.first.el.innerHTML = self.counters.a.first.counter.get();
                 self.counters.a.second.el.innerHTML = self.counters.a.second.counter.get();
                 self.counters.j.first.el.innerHTML = self.counters.j.first.counter.get();
+                self.counters.j.second.el.innerHTML = self.counters.j.second.counter.get();
 
 
             })
@@ -279,13 +284,11 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             let secondString = this.dataset.second;
             let second = (secondString === "true");
             let secondNumber = (second) ? 2 : 1;
-
-            //j2 is disabled
-            if (type === 4 && second) {
-                self.mutex = false;
-                return false;
-            }
-
+            // //j2 is disabled
+            // if (type === 4 && second) {
+            //     self.mutex = false;
+            //     return false;
+            // }
             let counter = getCounter(type, self, second);
             counter.el.classList.add("processing");
 
@@ -352,10 +355,6 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             if(self.mutex) return false;
             self.mutex = true;
             let type = parseInt($(this).closest(".choosing-item").data("type"));
-
-            if (type === 4) {
-                listRemove.setEnabled(1, false);
-            }
             dialogRemove.open();
 
             let removeFunc = function(event){
@@ -364,7 +363,6 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 if(detail.action==="accept") {
                     if(listRemove.selectedIndex === -1) listRemove.selectedIndex = 0;
                     let second = (listRemove.listElements[listRemove.selectedIndex].dataset.second === "true");
-                    listRemove.setEnabled(1, true);
                     /**
                      * @type {Object} c
                      * @property {HTMLElement} el
@@ -431,9 +429,6 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             if(detail.action==="accept") {
                 self.dialogChoice.selectedIndex2 = list2.selectedIndex;
                 self.dialogChoice.newType = parseInt(list2.listElements[list2.selectedIndex].dataset.type);
-                if (self.dialogChoice.newType === 4){
-                    list3.setEnabled(1, false);
-                }
                 dialog3.open();
             }
         })
@@ -444,7 +439,6 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 let secondString = list3.listElements[list3.selectedIndex].dataset.second;
                 let second = (secondString === "true");
                 console.log(detail.action);
-                list3.setEnabled(1, true);
                 let counter = getCounter(self.dialogChoice.newType, self, second);
                 apiHandler.addSwitchedTrackEntry(self.dialogChoice.originalType, self.dialogChoice.newType, self.track, second)
                     .done(function(result){
@@ -528,6 +522,8 @@ StreckePage.prototype.refreshCounters = function(){
             self.counters.m.second.counter.set(result.counters.m.second);
             self.counters.a.first.counter.set(result.counters.a.first);
             self.counters.a.second.counter.set(result.counters.a.second);
+            self.counters.j.first.counter.set(result.counters.j.first);
+            self.counters.j.second.counter.set(result.counters.j.second);
 
             self.counters.b.first.el.innerHTML = self.counters.b.first.counter.get();
             self.counters.b.second.el.innerHTML = self.counters.b.second.counter.get();
@@ -535,6 +531,8 @@ StreckePage.prototype.refreshCounters = function(){
             self.counters.m.second.el.innerHTML = self.counters.m.second.counter.get();
             self.counters.a.first.el.innerHTML = self.counters.a.first.counter.get();
             self.counters.a.second.el.innerHTML = self.counters.a.second.counter.get();
+            self.counters.j.first.el.innerHTML = self.counters.j.first.counter.get();
+            self.counters.j.second.el.innerHTML = self.counters.j.second.counter.get();
         })
         .fail(function(jqxhr, textstatus, error){
             let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
@@ -619,7 +617,7 @@ function getCounter (type, self, second) {
             counter =  (second) ? self.counters.a.second : self.counters.a.first;
             break;
         case 4:
-            counter =  (second) ? self.counters.j.first : self.counters.j.first;
+            counter =  (second) ? self.counters.j.second : self.counters.j.first;
             break;
     }
     return counter;
