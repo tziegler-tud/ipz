@@ -703,6 +703,34 @@ infocards
   }
 }
 
+.color--biontech {
+  color: #3ea700;
+}
+.color--biontech.force-color {
+  color: #3ea700 !important;
+}
+
+.color--moderna {
+  color: #a70000;
+}
+.color--moderna.force-color {
+  color: #a70000 !important;
+}
+
+.color--astra {
+  color: #0013bd;
+}
+.color--astra.force-color {
+  color: #0013bd !important;
+}
+
+.color--johnson {
+  color: #b48d55;
+}
+.color--johnson.force-color {
+  color: #b48d55 !important;
+}
+
 .mdc-touch-target-wrapper {
   display: inline;
 }
@@ -15316,6 +15344,145 @@ management dash
   width: 100%;
 }
 
+/*
+apotheke dash
+ */
+.apotheke-dash .dash-header {
+  color: #333;
+  padding: 1em 10px 1em 45px;
+  margin: 0 0 1em 0;
+  background-color: #fff;
+  border-bottom: 1px solid #AAA;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+}
+.apotheke-dash .dash-header .dash-header--title {
+  font-weight: bold;
+  font-size: 110%;
+  margin: 15px 0;
+}
+.apotheke-dash .dash-header .dash-header--sub {
+  font-size: 90%;
+}
+.apotheke-dash .dash-component-container {
+  padding: 10px 30px;
+  display: flex;
+  flex-flow: row wrap;
+}
+@media only screen and (max-width: 600px) {
+  .apotheke-dash .dash-component-container {
+    padding: 5px 0;
+    flex-flow: column nowrap;
+  }
+}
+.apotheke-dash .dash-component-container .dash-component {
+  flex: 1 1 auto;
+  max-width: 100%;
+}
+.apotheke-dash .dash-component-container .dash-component.dash-component--fullwidth {
+  flex: 0 0 100%;
+}
+.apotheke-dash .dash-component-container .dash-component.dash-component--half {
+  flex: 1 1 50%;
+  max-width: 50%;
+}
+@media only screen and (max-width: 600px) {
+  .apotheke-dash .dash-component-container .dash-component.dash-component--half {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+.apotheke-dash .dash-component-container .dash-component .dash-component-inner {
+  padding: 10px;
+  margin: 15px 15px;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  height: calc(100% - 25px);
+}
+.apotheke-dash .dash-component-container .dash-component .dash-component-header {
+  display: block;
+  width: 100%;
+  font-size: 120%;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 300;
+  margin-bottom: 10px;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container.col {
+  flex-flow: column wrap;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element {
+  flex: 1 1 auto;
+  max-width: 100%;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element.full {
+  flex: 0 0 100%;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+@media only screen and (max-width: 600px) {
+  .apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half-auto {
+  flex: 1 1 50%;
+}
+@media only screen and (max-width: 600px) {
+  .apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half-auto {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element--figures {
+  display: flex;
+  flex-flow: row wrap;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element--figures .totals {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 10px 0;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element--figures .totals .totals-amount {
+  font-size: 160%;
+  width: 100%;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element--figures .totals .totals-label {
+  color: #333;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element--figures .totals-details {
+  flex: 1 1 100%;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element--figures .totals-details .totals-table {
+  width: 100%;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element--figures .totals-details .totals-table .totals-cell {
+  font-size: 150%;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element--graph .center {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element--graph .bar-chart-container, .apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element--graph .line-chart-container {
+  min-height: 300px;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element--graph .chart-container {
+  position: relative;
+  width: 100%;
+}
+.apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element--graph #averageChart-container {
+  min-height: auto;
+  height: 250px;
+}
+
 .small {
   font-size: 80%;
   color: #666;
@@ -26535,6 +26702,7 @@ preloader
   margin: 20vh auto;
   text-align: center;
   width: 450px;
+  max-width: 100%;
 }
 
 .preloader-content span {

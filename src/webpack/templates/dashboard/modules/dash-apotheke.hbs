@@ -1,0 +1,103 @@
+<div class="dashboard-module dashboard-module-dash apotheke-dash">
+    <div class="dashboard-inner dashboard-module-inner">
+        <div class="dash-header">
+            <span class="dash-header--date dash-header--title">{{transformDateStringExtended componentData.date}}</span>
+        </div>
+        <div class="dash-component-container">
+            <div class="dash-component dash-component--half dashboard-component-dash management-dash">
+                <div class="dash-component-inner">
+                    <div class="dash-component-header">
+                        <span>
+                            Gesamtzahlen
+                        </span>
+                    </div>
+                    <div class="dash-elements-container">
+                        <div class="dash-element dash-element--figures">
+                            <div class="totals">
+                                <div class="totals-amount">
+                                    <span>{{componentData.day.stats.total.all}}</span>
+                                </div>
+                                <div class="totals-label">
+                                    <span>Durchgeführte Impfungen</span>
+                                </div>
+                            </div>
+                            <div class="totals-details">
+                                <div id ="mdc-data-table" class="mdc-data-table totals-table">
+                                    <div class="mdc-data-table__table-container">
+                                        <table class="mdc-data-table__table" aria-label="Dessert calories">
+                                            <thead>
+                                            <tr class="mdc-data-table__header-row">
+                                                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Impfstoff</th>
+                                                <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Durchgeführt</th>
+                                                <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">CheckIn</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="mdc-data-table__content">
+                                                <tr class="mdc-data-table__row color--biontech">
+                                                    <th class="mdc-data-table__cell " scope="row">BionTech</th>
+                                                    <td class="mdc-data-table__cell mdc-data-table__cell--numeric totals-cell color--biontech force-color">{{add componentData.day.stats.total.b.first componentData.day.stats.total.b.second}}</td>
+                                                    <td class="mdc-data-table__cell mdc-data-table__cell--numeric totals-cell color--biontech force-color">{{componentData.checkin.total.biontech}}</td>
+                                                </tr>
+                                                <tr class="mdc-data-table__row">
+                                                    <th class="mdc-data-table__cell" scope="row">Moderna</th>
+                                                    <td class="mdc-data-table__cell mdc-data-table__cell--numeric totals-cell color--moderna force-color">{{add componentData.day.stats.total.m.first componentData.day.stats.total.m.second}}</td>
+                                                    <td class="mdc-data-table__cell mdc-data-table__cell--numeric totals-cell color--moderna force-color">{{componentData.checkin.total.moderna}}</td>
+                                                </tr>
+                                                <tr class="mdc-data-table__row">
+                                                    <th class="mdc-data-table__cell " scope="row">Astrazeneca</th>
+                                                    <td class="mdc-data-table__cell mdc-data-table__cell--numeric totals-cell color--astra force-color">{{add componentData.day.stats.total.a.first componentData.day.stats.total.a.second}}</td>
+                                                    <td class="mdc-data-table__cell mdc-data-table__cell--numeric totals-cell color--astra force-color">{{componentData.checkin.total.astra}}</td>
+                                                </tr>
+                                                <tr class="mdc-data-table__row">
+                                                    <th class="mdc-data-table__cell" scope="row">J&J</th>
+                                                    <td class="mdc-data-table__cell mdc-data-table__cell--numeric totals-cell color--johnson force-color">{{add componentData.day.stats.total.j.first componentData.day.stats.total.j.second}}</td>
+                                                    <td class="mdc-data-table__cell mdc-data-table__cell--numeric totals-cell color--johnson force-color">{{componentData.checkin.total.johnson}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dash-component dash-component--half dashboard-component-dash management-dash">
+                <div class="dash-component-inner">
+                    <div class="dash-component-header">
+                        <span>
+                            Impfungen pro Stunde
+                        </span>
+                    </div>
+                    <div class="dash-elements-container col">
+                        <div class="dash-element half-auto dash-element--figures">
+                            <div class="totals">
+                                <div class="totals-amount">
+                                    <span>&empty;{{componentData.day.stats.average.total}}</span>
+                                </div>
+                                <div class="totals-label">
+                                    <span>Gesamt</span>
+                                </div>
+                            </div>
+                            <div class="totals">
+                                <div class="totals-amount">
+                                    <span>&empty;{{componentData.day.stats.average.current}}</span>
+                                </div>
+                                <div class="totals-label">
+                                    <span>Aktuell<span class="small"> (letzte 15min)</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dash-element full dash-element--graph">
+                            <div class="average-graph-content">
+                                <div id="averageChart-container" class="chart-container line-chart-container">
+                                    <canvas id="averageChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

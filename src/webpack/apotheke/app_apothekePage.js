@@ -9,6 +9,9 @@ import {MDCRipple} from '@material/ripple';
 import {MDCSnackbar} from '@material/snackbar';
 import {Dashboard} from "../dashboard/dashboard";
 import {Bottom} from "../bottom/app_bottom";
+import Chart from "chart.js/auto";
+import {transformDateTimeString} from "../helpers";
+import {ManagementModulePage} from "../management/app_managementModulePage";
 
 var phone = window.matchMedia("only screen and (max-width: 50em)");
 
@@ -21,6 +24,7 @@ var ApothekePage = function(args){
     self.page = undefined;
     self.dataVersion = 0;
     self.refreshInterval = undefined;
+    self.refreshEnabled = true;
     self.dashboards = [];
     //get current entries
     //render html
@@ -39,9 +43,17 @@ ApothekePage.prototype.show = function(options){
         self.refresh(self,options);
         return;
     }
+    let defaults = {
+        refresh: true,
+        tabs: true,
+    }
+    options = (options === undefined) ? {}: options;
+    options = Object.assign(defaults, options);
+    self.options = options
+
     //render html
     self.active = true;
-    self.refreshInterval = setInterval(self.refresh, 5000, self);
+    self.refreshInterval = setInterval(self.refresh, 10000, self, options);
     return this.buildHtml(self.url, context, options);
 
 
@@ -51,17 +63,25 @@ ApothekePage.prototype.refresh = function(self, options){
 
     console.log("refreshing page");
     //check if this page is active
-    if (!self.active){
+    if (!self.active || !self.refreshEnabled){
         return null;
     }
     self.update(options);
-
 }
+
+ApothekePage.prototype.disableRefresh = function(){
+    this.refreshEnabled = false;
+}
+
+ApothekePage.prototype.enableRefresh = function(){
+    this.refreshEnabled = true;
+}
+
 
 ApothekePage.prototype.update = function(options){
     let self = this;
     //rebuild dashboard
-    self.refreshDashboard();
+    if(options.tabs) self.refreshActiveTab();
 
 
 }
@@ -96,13 +116,17 @@ ApothekePage.prototype.buildHtml = function(url, context, options){
 
         //build dashboard
         // self.dashboard = new Dashboard("apotheke", self, {containerId: "dashboard-container"});
-        self.figures = new Dashboard("modules", self, {containerId: "dashboard-container"});
+        self.dash = new Dashboard("modules", self, {containerId: "dashboard-container"});
+        self.dash.addComponent("apotheke-dash", {}, buildDashboard);
+
+        self.figures = new Dashboard("modules", self, {containerId: "figures-container"});
         self.figures.addComponent("figures-apotheke");
 
         self.switches = new Dashboard("modules", self, {containerId: "switched-container"});
         self.switches.addComponent("switches-view", {});
 
         self.dashboards.push(self.figures);
+        self.dashboards.push(self.dash);
         self.dashboards.push(self.switches);
 
         //setup tab navigation interface
@@ -113,9 +137,76 @@ ApothekePage.prototype.buildHtml = function(url, context, options){
                 self.tabs[0].activate();
             }
         }
-        let bottomTabs =  new Bottom("management", self, {}, {});
+        let bottomTabs =  new Bottom("apotheke", self, {}, {});
         self.tabs[0].dashboard = self.figures;
-        self.tabs[1].dashboard = self.switches;
+        self.tabs[1].dashboard = self.dash;
+        self.tabs[2].dashboard = self.switches;
+
+        function buildDashboard(dashboard, page, data) {
+
+            let avgDataset = data.day.stats.average.perHour;
+
+            const averageGraphData = {
+                datasets: [{
+                    label: 'Gesamt',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: avgDataset,
+                    tension: 0.4,
+                    // parsing: false,
+                }]
+            };
+
+            let colors = ["#b19338", "#99BCE2FF", "#AF99E2FF", "#E299D0FF"]
+            data.day.stats.average.byTracks.forEach(function(trackAverages, index){
+                let label = trackAverages.track.name;
+                let data = trackAverages.averages;
+                if (data.length !== 0){
+                    averageGraphData.datasets.push(
+                        {
+                            label: 'Impfstrecke ' + label,
+                            backgroundColor: colors[index],
+                            borderColor: colors[index],
+                            data: data,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            // parsing: false,
+                        })
+                }
+            })
+
+            const averageConfig = {
+                type: 'line',
+                data: averageGraphData,
+                options: {
+                    animation: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    // stepped: true,
+                    pointRadius: 2,
+                    parsing: false,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                displayFormats: {
+                                    millisecond: 'hh:mm'
+                                },
+
+                            },
+                            ticks: {
+                                source: "data",
+                            },
+                        }
+                    }
+                }
+            };
+
+            self.averageChart = new Chart(
+                document.getElementById('averageChart'),
+                averageConfig
+            );
+        }
     });
 }
 
@@ -158,6 +249,7 @@ ApothekePage.prototype.showSnackbar = function(message, options) {
 }
 
 
+
 /**
  * @typedef Tab
  * @property {HTMLElement} element Dom Container of the tab. Class transitions are applied to this element.
@@ -194,30 +286,43 @@ ApothekePage.prototype.getTabNavigationInterface = function(){
 
 }
 
+
+
+ApothekePage.prototype.refreshActiveTab = function(){
+    let self = this;
+    self.tabs.forEach(function(tab){
+        if (tab.active && tab.dashboard) {
+            tab.dashboard.refresh();
+        }
+    })
+}
+
 ApothekePage.prototype.refreshDashboard = function(){
     let self = this;
-    //rebuild dashboard
     self.dashboards.forEach(function(dashboard) {
         dashboard.refresh();
     });
 }
 
-ApothekePage.prototype.activateTab = function(element){
+ApothekePage.prototype.activateTab = function(tab){
     let self = this;
     //remove active class from all tabs
     self.tabs.forEach(function(tab){
         tab.deactivate();
     })
     //add active class to current element
-    element.classList.add("tab--active");
-    self.refreshDashboard();
+    tab.element.classList.add("tab--active");
+    //find associated dashboard
+    tab.active = true;
+    if(tab.dashboard) tab.dashboard.refresh();
     return true;
 }
 
-ApothekePage.prototype.deactivateTab = function(element){
+ApothekePage.prototype.deactivateTab = function(tab){
     let self = this;
     //remove active class from tab
-    element.classList.remove("tab--active");
+    tab.element.classList.remove("tab--active");
+    tab.active = false;
     return true;
 }
 
@@ -234,11 +339,13 @@ ApothekePage.prototype.initTabs = function() {
         tabArray.push({
             element: el,
             activate: function(){
-                self.activateTab(el)
+                self.activateTab(this)
             },
             deactivate: function(){
-                self.deactivateTab(el)
-            }
+                self.deactivateTab(this)
+            },
+            active: false,
+            dashboard: false,
         })
     })
     return tabArray;

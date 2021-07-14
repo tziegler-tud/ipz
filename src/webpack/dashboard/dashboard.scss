@@ -379,6 +379,166 @@ management dash
 
 }
 
+
+/*
+apotheke dash
+ */
+
+.apotheke-dash {
+  .dash-header {
+
+    color: #333;
+    padding: 1em 10px 1em 45px;
+    margin: 0 0 1em 0;
+    background-color: #fff;
+    border-bottom: 1px solid #AAA;
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
+
+    .dash-header--title {
+      font-weight: bold;
+      font-size: 110%;
+      margin: 15px 0;
+    }
+    .dash-header--sub {
+      font-size: 90%;
+
+    }
+  }
+  .dash-component-container {
+    padding: 10px 30px;
+    display: flex;
+    flex-flow: row wrap;
+
+    @media #{$phone} {
+      padding: 5px 0;
+      flex-flow: column nowrap;
+    }
+
+    .dash-component {
+      flex: 1 1 auto;
+      max-width: 100%;
+
+      &.dash-component--fullwidth {
+        flex: 0 0 100%;
+      }
+      &.dash-component--half {
+        flex: 1 1 50%;
+        max-width: 50%;
+        @media #{$phone} {
+          flex:  0 0 100%;
+          max-width: 100%;
+        }
+      }
+      .dash-component-inner {
+        padding: 10px;
+        margin: 15px 15px;
+        box-shadow: 0 1px 5px 0 rgba(0,0,0,0.1);
+        background-color: #fff;
+
+        height: calc(100% - 25px);
+      }
+
+      .dash-component-header {
+        display: block;
+        width: 100%;
+        font-size: 120%;
+        font-family: "Open Sans", sans-serif;
+        font-weight: 300;
+        margin-bottom: 10px;
+      }
+      .dash-elements-container {
+        width: 100%;
+        display: flex;
+        flex-flow: row wrap;
+
+        &.col {
+          flex-flow: column wrap;
+        }
+
+        .dash-element {
+          flex: 1 1 auto;
+          max-width: 100%;
+          &.auto {
+
+          }
+          &.full {
+            flex: 0 0 100%;
+
+          }
+          &.half {
+            flex: 0 0 50%;
+            max-width: 50%;
+            @media #{$phone} {
+              flex:  0 0 100%;
+              max-width: 100%;
+            }
+
+          }
+          &.half-auto {
+            flex: 1 1 50%;
+            @media #{$phone} {
+              flex:  0 0 100%;
+              max-width: 100%;
+            }
+          }
+        }
+
+        .dash-element--figures {
+          display: flex;
+          flex-flow: row wrap;
+
+          .totals {
+            flex: 1 1 auto;
+            display: flex;
+            flex-flow: column nowrap;
+            padding: 10px 0;
+
+            .totals-amount {
+              font-size: 160%;
+              width: 100%;
+            }
+            .totals-label {
+              color: #333;
+            }
+          }
+
+          .totals-details {
+            flex: 1 1 100%;
+            .totals-table {
+              width: 100%;
+
+              .totals-cell {
+                font-size: 150%;
+              }
+            }
+          }
+        }
+        .dash-element--graph {
+
+          .center {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: center;
+          }
+          .bar-chart-container, .line-chart-container {
+            min-height: 300px;
+          }
+          .chart-container {
+            position: relative;
+            width: 100%;
+          }
+
+          #averageChart-container {
+            min-height: auto;
+            height: 250px;
+          }
+        }
+      }
+    }
+  }
+
+}
+
 .small {
   font-size: 80%;
   color:#666;

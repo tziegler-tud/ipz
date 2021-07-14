@@ -500,6 +500,34 @@ infocards
   }
 }
 
+.color--biontech {
+  color: #3ea700;
+}
+.color--biontech.force-color {
+  color: #3ea700 !important;
+}
+
+.color--moderna {
+  color: #a70000;
+}
+.color--moderna.force-color {
+  color: #a70000 !important;
+}
+
+.color--astra {
+  color: #0013bd;
+}
+.color--astra.force-color {
+  color: #0013bd !important;
+}
+
+.color--johnson {
+  color: #b48d55;
+}
+.color--johnson.force-color {
+  color: #b48d55 !important;
+}
+
 .mdc-touch-target-wrapper {
   display: inline;
 }

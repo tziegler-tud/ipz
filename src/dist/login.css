@@ -759,6 +759,7 @@ preloader
   margin: 20vh auto;
   text-align: center;
   width: 450px;
+  max-width: 100%;
 }
 
 .preloader-content span {

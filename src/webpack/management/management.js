@@ -50,9 +50,9 @@ pages.push(managementTracksPage);
 pages.push(managementStatisticsPage);
 pages.push(managementDevicesPage);
 
-managementDashboardPage.show({tabs: true, refresh: true})
+managementTotalPage.show({tabs: true, refresh: true})
     .then(function(){
-        sidesheet = new Sidesheet("management", managementDashboardPage, {});
+        sidesheet = new Sidesheet("management", managementTotalPage, {});
         // bottomTabs =  new Bottom("management", managementTotalPage, {})
 
     });
