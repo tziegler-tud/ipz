@@ -823,7 +823,7 @@ preloader
   font-size: 90%;
   font-family: "Open Sans", Sans;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   #sec1 {
     font-size: 100%;
   }
@@ -834,7 +834,7 @@ preloader
   font-size: 90%;
   text-align: center;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   #sec1 #content1 {
     margin: 0 25% 0 25%;
     width: 50%;
@@ -890,7 +890,7 @@ preloader
   padding: 0 0 10px 0;
   font-size: 110%;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   #error-container #error-container-inner .errorbox-body {
     font-size: 100%;
   }
@@ -898,7 +898,7 @@ preloader
 #error-container #error-container-inner .errorbox-body.large {
   font-size: 120%;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   #error-container #error-container-inner .errorbox-body.large {
     font-size: 110%;
   }
@@ -906,7 +906,7 @@ preloader
 #error-container #error-container-inner .errorbox-body.hudge {
   font-size: 150%;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   #error-container #error-container-inner .errorbox-body.hudge {
     font-size: 130%;
   }
@@ -2338,7 +2338,7 @@ preloader
 .centered {
   position: relative;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   .centered {
     position: absolute;
     top: 50%;
@@ -2371,7 +2371,7 @@ preloader
   flex-flow: column nowrap;
   justify-content: center;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   .login-page {
     display: block;
     font-size: 100%;
@@ -2385,7 +2385,7 @@ preloader
   justify-content: center;
   position: relative;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   .login-page .login-page-container {
     font-size: 100%;
     height: 100%;
@@ -2401,7 +2401,7 @@ preloader
   flex-flow: row wrap;
   justify-content: center;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   .login-page .login-page-container .login-additional-box {
     font-size: 100%;
     justify-content: center;
@@ -2411,7 +2411,7 @@ preloader
   padding: 1em;
   display: flex;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   .login-page .login-page-container .login-additional-box .additonal-content-container {
     display: block;
   }
@@ -2421,7 +2421,7 @@ preloader
   max-width: 250px;
   margin: 0 auto;
 }
-@media only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 800px) and (max-width: 1280px) {
   .login-page .login-page-container .login-additional-box .additonal-content-container .img-container {
     max-width: 400px;
   }
@@ -2444,7 +2444,7 @@ preloader
   display: flex;
   justify-content: center;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   .login-page .login-page-container .login-content {
     justify-content: flex-start;
   }

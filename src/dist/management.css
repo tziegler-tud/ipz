@@ -515,7 +515,7 @@ body {
     height: auto;
   }
 }
-@media only screen and (min-width: 600px) and (max-width: 1280px) and (orientation: landscape) {
+@media only screen and (min-width: 800px) and (max-width: 1280px) and (orientation: landscape) {
   .app-wrapper .app-content-container .sidesheet-container.sidesheet-active {
     flex: 0 0 400px;
     position: relative;
@@ -635,7 +635,7 @@ infocards
   display: flex;
   flex-flow: row wrap;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   .infocards-inner {
     padding: 1em;
   }
@@ -655,7 +655,7 @@ infocards
   background-color: #fefefe;
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   .infocards-inner .infocards-section.infocards-card .infocards-section-inner {
     margin: 20px;
   }
@@ -663,7 +663,7 @@ infocards
 .infocards-inner .infocards-section.infocards-card.card-full {
   flex: 0 0 100%;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   .infocards-inner .infocards-section.infocards-card.card-half {
     flex: 1 0 50%;
     min-width: 30em;
@@ -686,7 +686,7 @@ infocards
   display: block;
   margin-bottom: 0.5em;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   .infocards-inner .infocards-section .infocards-item span.infocards-item-label, .infocards-inner .infocards-section .infocards-item label.infocards-item-label {
     width: auto;
   }
@@ -697,7 +697,7 @@ infocards
   margin-bottom: 0;
   color: #555;
 }
-@media only screen and (min-width: 1280px), only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 1280px), only screen and (min-width: 800px) and (max-width: 1280px) {
   .infocards-inner .infocards-section .infocards-item span.infocards-item-label.infocards-attribute-name, .infocards-inner .infocards-section .infocards-item label.infocards-item-label.infocards-attribute-name {
     width: 8em;
   }
@@ -5099,7 +5099,7 @@ a.mdc-list-item {
   /* @noflip */
   margin-right: 300px;
 }
-@media only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 800px) and (max-width: 1280px) {
   .mdc-drawer {
     width: 350px;
   }
@@ -5969,7 +5969,7 @@ input[type=number] {
   margin: 2em auto 1em auto;
   width: 100%;
 }
-@media only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 800px) and (max-width: 1280px) {
   .app-page-wrapper .app-page-content {
     font-size: 120%;
   }
@@ -5981,7 +5981,7 @@ input[type=number] {
     margin: 0;
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   .app-page-wrapper .app-page-content {
     margin: 0.5em auto 0.5em auto;
   }
@@ -10062,7 +10062,7 @@ input[type=number] {
   margin: 2em auto 1em auto;
   width: 100%;
 }
-@media only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 800px) and (max-width: 1280px) {
   .app-page-wrapper .app-page-content {
     font-size: 120%;
   }
@@ -10074,7 +10074,7 @@ input[type=number] {
     margin: 0;
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   .app-page-wrapper .app-page-content {
     margin: 0.5em auto 0.5em auto;
   }
@@ -15242,7 +15242,7 @@ management dash
   display: flex;
   flex-flow: row wrap;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   .management-dash .dash-component-container {
     padding: 5px 0;
     flex-flow: column nowrap;
@@ -15259,7 +15259,7 @@ management dash
   flex: 1 1 50%;
   max-width: 50%;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   .management-dash .dash-component-container .dash-component.dash-component--half {
     flex: 0 0 100%;
     max-width: 100%;
@@ -15299,7 +15299,7 @@ management dash
   flex: 0 0 50%;
   max-width: 50%;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half {
     flex: 0 0 100%;
     max-width: 100%;
@@ -15308,7 +15308,7 @@ management dash
 .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half-auto {
   flex: 1 1 50%;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   .management-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half-auto {
     flex: 0 0 100%;
     max-width: 100%;
@@ -15368,7 +15368,7 @@ apotheke dash
   display: flex;
   flex-flow: row wrap;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   .apotheke-dash .dash-component-container {
     padding: 5px 0;
     flex-flow: column nowrap;
@@ -15385,7 +15385,7 @@ apotheke dash
   flex: 1 1 50%;
   max-width: 50%;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   .apotheke-dash .dash-component-container .dash-component.dash-component--half {
     flex: 0 0 100%;
     max-width: 100%;
@@ -15425,7 +15425,7 @@ apotheke dash
   flex: 0 0 50%;
   max-width: 50%;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   .apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half {
     flex: 0 0 100%;
     max-width: 100%;
@@ -15434,7 +15434,7 @@ apotheke dash
 .apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half-auto {
   flex: 1 1 50%;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   .apotheke-dash .dash-component-container .dash-component .dash-elements-container .dash-element.half-auto {
     flex: 0 0 100%;
     max-width: 100%;
@@ -15491,7 +15491,7 @@ apotheke dash
 #totalChart-container {
   max-width: 400px;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   #totalChart-container {
     max-width: 400px;
   }
@@ -22661,7 +22661,7 @@ input[type=number] {
   width: 95%;
   margin: auto;
 }
-@media only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 800px) and (max-width: 1280px) {
   .management-page .checkout-container .checkout-table .checkout-table-container .mdc-data-table__cell {
     font-size: 130%;
   }
@@ -26649,7 +26649,7 @@ a.mdc-list-item {
 .sidesheet .sidesheet-wrapper .sidesheet-cancel-button .sidesheet-cancel-button-element {
   cursor: pointer;
 }
-@media only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 800px) and (max-width: 1280px) {
   .sidesheet .sidesheet-wrapper .sidesheet__body {
     font-size: 120%;
   }
@@ -26672,7 +26672,7 @@ a.mdc-list-item {
   background-color: rgba(0, 0, 0, 0.12);
 }
 
-@media only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 800px) and (max-width: 1280px) {
   .select {
     font-size: 120%;
   }

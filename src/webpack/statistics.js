@@ -9,7 +9,7 @@ import "./handlebarsHelpers";
 const Handlebars = require("handlebars");
 var $ = require( "jquery" );
 
-var phone = window.matchMedia("only screen and (max-device-width: 400px)");
+var phone = window.matchMedia("only screen and (max-device-width: 800px)");
 var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 $(window).on('load',function() {

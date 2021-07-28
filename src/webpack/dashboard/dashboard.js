@@ -16,7 +16,7 @@ import {transformDateTimeString} from "../helpers";
 import {preloader} from "../preloader";
 var $ = require( "jquery" );
 
-var phone = window.matchMedia("only screen and (max-device-width: 400px)");
+var phone = window.matchMedia("only screen and (max-device-width: 800px)");
 var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 /**

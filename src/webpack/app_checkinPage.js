@@ -14,7 +14,8 @@ import {MDCBanner} from '@material/banner';
 import {MDCTextField} from '@material/textfield';
 import {MDCTextFieldIcon} from '@material/textfield/icon';
 
-var phone = window.matchMedia("only screen and (max-width: 50em)");
+var phone = window.matchMedia("only screen and (max-device-width: 800px)");
+var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 /**
  *

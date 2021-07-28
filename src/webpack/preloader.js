@@ -1,7 +1,7 @@
 
 var preloader = function(){
     var plr = {};
-    let labels = ["Impfstoff wird aufgezogen...", "Aufklärungsbögen werden kopiert...", "Tablets werden verteilt...", "Stühle werden ausgerichtet...", "Vials werden gezählt...", "Wasserspender wird nachgefüllt", "Desi-Spender wird aufgefüllt"]
+    let labels = ["Impfstoff wird aufgezogen...", "Aufklärungsbögen werden kopiert...", "Tablets werden verteilt...", "Stühle werden ausgerichtet...", "Vials werden gezählt...", "Wasserspender werden nachgefüllt...", "Desi-Spender werden aufgefüllt..", "Sputnik V wird umetikettiert...", "Büroklammern werden entknotet...", "Kaffeemaschine wird gereinigt...", "Kaffee wird gekocht...", "Unterschriften werden nachgeholt..."]
     var self = document.getElementById("preloader");
 
     plr.show = function(){

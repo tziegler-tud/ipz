@@ -8,7 +8,8 @@ import {ManagementModulePage} from "./management/app_managementModulePage";
 var $ = require( "jquery" );
 
 
-var phone = window.matchMedia("only screen and (max-width: 50em)");
+var phone = window.matchMedia("only screen and (max-device-width: 800px)");
+var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 /**
  *
