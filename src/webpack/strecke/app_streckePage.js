@@ -202,6 +202,10 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                             el: document.getElementById("biontech-counter--second"),
                             counter: new Counter({start: result.counters.b.second, min: 0, step: 1}),
                         },
+                        booster: {
+                            el: document.getElementById("biontech-counter--third"),
+                            counter: new Counter({start: result.counters.b.booster, min: 0, step: 1}),
+                        },
                     },
                     m: {
                         name: "Moderna",
@@ -212,6 +216,10 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                         second: {
                             el: document.getElementById("moderna-counter--second"),
                             counter: new Counter({start: result.counters.m.second, min: 0, step: 1}),
+                        },
+                        booster: {
+                            el: document.getElementById("moderna-counter--third"),
+                            counter: new Counter({start: result.counters.m.booster, min: 0, step: 1}),
                         },
                     },
                     a: {
@@ -240,8 +248,10 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 };
                 self.counters.b.first.el.innerHTML = self.counters.b.first.counter.get();
                 self.counters.b.second.el.innerHTML = self.counters.b.second.counter.get();
+                self.counters.b.booster.el.innerHTML = self.counters.b.booster.counter.get();
                 self.counters.m.first.el.innerHTML = self.counters.m.first.counter.get();
                 self.counters.m.second.el.innerHTML = self.counters.m.second.counter.get();
+                self.counters.m.booster.el.innerHTML = self.counters.m.booster.counter.get();
                 self.counters.a.first.el.innerHTML = self.counters.a.first.counter.get();
                 self.counters.a.second.el.innerHTML = self.counters.a.second.counter.get();
                 self.counters.j.first.el.innerHTML = self.counters.j.first.counter.get();
@@ -283,6 +293,8 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             let type = parseInt(this.dataset.type);
             let secondString = this.dataset.second;
             let second = (secondString === "true");
+            let boosterString = this.dataset.booster;
+            let booster = (secondString === "true");
             let secondNumber = (second) ? 2 : 1;
             // //j2 is disabled
             // if (type === 4 && second) {
@@ -293,9 +305,10 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             counter.el.classList.add("processing");
 
             // self.soundboard.play("click");
-            apiHandler.addTrackEntry(type, self.track, second)
+            apiHandler.addTrackEntry(type, self.track, second, booster)
                 .done(function(result){
-                    let message = "Eintrag hinzugefügt: " + result.name + "(" + secondNumber + ")";
+                    let typemsg = booster ? "Booster" : secondNumber;
+                    let message = "Eintrag hinzugefügt: " + result.name + "(" + typemsg + ")";
                     if(type !== 0) counter.el.innerHTML = counter.counter.increase();
                     counter.el.classList.remove("processing");
                     self.showSnackbar(message);
@@ -598,9 +611,12 @@ StreckePage.prototype.setSound = function(bool){
 }
 
 
-function getCounter (type, self, second) {
+function getCounter (type, self, second, booster) {
     if (second === undefined) {
         second = false;
+    }
+    if (booster === undefined) {
+        booster = false;
     }
     let counter;
     switch(type) {
@@ -608,10 +624,10 @@ function getCounter (type, self, second) {
             counter = undefined
             break;
         case 1:
-            counter = (second) ? self.counters.b.second : self.counters.b.first;
+            counter = booster ? self.counters.b.booster : (second ? self.counters.b.second : self.counters.b.first);
             break;
         case 2:
-            counter =  (second) ? self.counters.m.second : self.counters.m.first;
+            counter =  booster ? self.counters.b.booster : (second ? self.counters.m.second : self.counters.m.first);
             break;
         case 3:
             counter =  (second) ? self.counters.a.second : self.counters.a.first;

@@ -293,16 +293,18 @@ var ApiHandler = function() {
      * @param type {Integer} type 0=null, 1=B, 2=M, 3=A
      * @param track {Track}
      * @param second {Boolean} true if second
+     * @param booster {Boolean} true if booster (overrides second)
      *
      * @return {Object}
      */
-    self.addTrackEntry = function (type, track, second) {
+    self.addTrackEntry = function (type, track, second, booster) {
 
         let jsonData = {
             type: type,
             track: track,
             isSwitched: false,
             second: second,
+            booster: booster,
         }
         return $.ajax({
             url: "/api/v1/data/track/add",
@@ -320,15 +322,17 @@ var ApiHandler = function() {
      * @param newType {Integer} type 0=null, 1=B, 2=M, 3=A
      * @param track {Track}
      * @param second {Boolean} true if Zweitimpfung
+     * @param booster {Boolean} true if Boosterimpfung
      *
      *
      * @return {Object}
      */
-    self.addSwitchedTrackEntry = function (originalType, newType, track, second) {
+    self.addSwitchedTrackEntry = function (originalType, newType, track, second, booster) {
         let jsonData = {
             type: newType,
             track: track,
             second: second,
+            booster: booster,
             isSwitched: true,
             switch: {
                 originalType: originalType,
@@ -355,11 +359,12 @@ var ApiHandler = function() {
         });
     }
 
-    self.updateSwitchedEntry = function(id, originalType, newType, second) {
+    self.updateSwitchedEntry = function(id, originalType, newType, second, booster) {
         let jsonData = {
             id: id,
             type: newType,
             second: second,
+            booster: booster,
             isSwitched: true,
             switch: {
                 originalType: originalType,
@@ -391,11 +396,12 @@ var ApiHandler = function() {
         return ret;
     };
 
-    self.removeTrackEntry = function (type, track, second) {
+    self.removeTrackEntry = function (type, track, second, booster) {
         let jsonData = {
             type: type,
             trackId: track.id,
             second: second,
+            booster: booster,
         }
         let ret = $.ajax({
             url: "/api/v1/data/track/remove",

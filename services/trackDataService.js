@@ -201,6 +201,7 @@ async function add(object) {
         type: object.type,
         track: object.track,
         second: object.second,
+        booster: object.booster,
         isSwitched: isSwitched,
         switch: switchObj,
     }
@@ -260,6 +261,10 @@ async function remove(type, trackId, args) {
     let second = false;
     if(args.second) {
         second = args.second;
+    }
+    let booster = false;
+    if(args.booster) {
+        booster = args.booster;
     }
 
     //delete last entry

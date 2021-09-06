@@ -22154,6 +22154,193 @@ a.mdc-list-item {
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item.johnson .choosing-item-media {
   background-color: #f1dec1;
 }
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card-counter-container {
+  display: grid;
+  grid-template-rows: 100px 100px;
+  grid-template-columns: auto;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card-counter-container.triple-item {
+  grid-template-rows: 100px 100px 100px;
+  grid-template-columns: auto;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card-counter-container .choosing-card-counter-part.first, .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card-counter-container .choosing-card-counter-part.second {
+  border-bottom: 1px solid #333;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card__action-section .choosing-card-counter {
+  top: unset;
+  bottom: 20px;
+  right: 20px;
+  left: unset;
+  font-family: monospace, "sans";
+  font-size: 300%;
+}
+@media only screen and (max-width: 600px) {
+  .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card__action-section .choosing-card-counter {
+    font-size: 100%;
+  }
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card__action-section .choosing-card-counter.processing:before {
+  content: " ";
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #333;
+  border-color: #333 transparent #333 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card__action-section .choosing-card-counter .choosing-card-counter-loader {
+  font-size: 50%;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card__action-section .choosing-card-counter .lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card__action-section .choosing-card-counter .lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #333;
+  border-color: #333 transparent #333 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card__text-section {
+  padding: 15px 10px 0 10px;
+}
+@media only screen and (max-width: 600px) {
+  .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card__text-section {
+    padding: 5px 10px 0 10px;
+  }
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card__text-section .choosing-card-title {
+  font-weight: bold;
+  font-size: 110%;
+}
+@media only screen and (max-width: 600px) {
+  .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-card__text-section .choosing-card-title {
+    font-size: 90%;
+  }
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-item-media {
+  height: 100px;
+  padding: 10px;
+}
+@media only screen and (max-width: 600px) {
+  .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--vertical .choosing-item-media {
+    height: 50px;
+  }
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card-counter-container {
+  display: grid;
+  grid-template-rows: 66% 33%;
+  grid-template-columns: 50% 50%;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card-counter-container.triple-item {
+  grid-template-rows: auto auto;
+  grid-template-columns: 50% 50%;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card-counter-container .booster-section {
+  grid-column: 1/3;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card-counter-container .booster-section .choosing-item-media {
+  height: 150px;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card-counter-container .choosing-card-counter-part.first {
+  border-right: 1px solid #333;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card-counter-container .choosing-card-counter-part.first, .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card-counter-container .choosing-card-counter-part.second {
+  border-bottom: 1px solid #333;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card__action-section .choosing-card-counter {
+  top: unset;
+  bottom: 20px;
+  right: 20px;
+  left: unset;
+  font-family: monospace, "sans";
+  font-size: 300%;
+}
+@media only screen and (max-width: 600px) {
+  .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card__action-section .choosing-card-counter {
+    font-size: 100%;
+  }
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card__action-section .choosing-card-counter.processing:before {
+  content: " ";
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #333;
+  border-color: #333 transparent #333 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card__action-section .choosing-card-counter .choosing-card-counter-loader {
+  font-size: 50%;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card__action-section .choosing-card-counter .lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card__action-section .choosing-card-counter .lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #333;
+  border-color: #333 transparent #333 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card__text-section {
+  padding: 15px 10px 0 10px;
+}
+@media only screen and (max-width: 600px) {
+  .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card__text-section {
+    padding: 5px 10px 0 10px;
+  }
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card__text-section .choosing-card-title {
+  font-weight: bold;
+  font-size: 110%;
+}
+@media only screen and (max-width: 600px) {
+  .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-card__text-section .choosing-card-title {
+    font-size: 90%;
+  }
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-item-media {
+  height: 200px;
+  padding: 10px;
+}
+@media only screen and (max-width: 600px) {
+  .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card.choosing-card--booster .choosing-item-media {
+    height: 50px;
+  }
+}
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .choosing-card-counter-container {
   display: grid;
   grid-template-rows: auto;
@@ -22163,8 +22350,17 @@ a.mdc-list-item {
   grid-template-rows: auto;
   grid-template-columns: 1fr;
 }
-.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .choosing-card-counter-container .choosing-card-counter-part.first {
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .choosing-card-counter-container.triple-item {
+  grid-template-rows: auto;
+  grid-template-columns: 33% 33% 33%;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .choosing-card-counter-container .choosing-card-counter-part.first, .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .choosing-card-counter-container .choosing-card-counter-part.second {
   border-right: 1px solid #333;
+}
+.checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .content-label {
+  top: unset;
+  bottom: 0;
+  color: #333;
 }
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .timestamp {
   font-size: 70%;
@@ -22252,7 +22448,7 @@ a.mdc-list-item {
   }
 }
 .checkin-page .app-page-content .checkin-container .choosing-container .choosing-container-inner .choosing-item .choosing-card .choosing-item-media {
-  height: 200px;
+  height: 350px;
   padding: 10px;
 }
 @media only screen and (max-width: 600px) {
