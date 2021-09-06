@@ -122,11 +122,17 @@ async function getCounts(track) {
     if(track === undefined) {
             //find all tracks
             track = 0;
-            dataB1 = TrackData.count({"type": 1, "second": false, "booster": false});
-            dataB2 = TrackData.count({"type": 1, "second": true, "booster": false});
+
+            // dataB1 = TrackData.count({"type": 1, "second": false, "booster": false});
+            // dataB2 = TrackData.count({"type": 1, "second": true, "booster": false});
+            dataB1 = TrackData.count({"type": 1, "second": false});
+            dataB2 = TrackData.count({"type": 1, "second": true});
             dataB3 = TrackData.count({"type": 1, "booster": true});
-            dataM1 = TrackData.count({"type": 2, "second": false, "booster": false});
-            dataM2 = TrackData.count({"type": 2, "second": true, "booster": false});
+
+            dataM1 = TrackData.count({"type": 2, "second": false});
+            dataM2 = TrackData.count({"type": 2, "second": true});
+            // dataM1 = TrackData.count({"type": 2, "second": false, "booster": false});
+            // dataM2 = TrackData.count({"type": 2, "second": true, "booster": false});
             dataM3 = TrackData.count({"type": 2, "booster": true});
             dataA1 = TrackData.count({"type": 3, "second": false});
             dataA2 = TrackData.count({"type": 3, "second": true});
@@ -134,11 +140,15 @@ async function getCounts(track) {
             dataJ2 = TrackData.count({"type": 4, "second": true});
         }
         else {
-            dataB1 = TrackData.count({"track.id": track.id, "type": 1, "second": false, "booster": false});
-            dataB2 = TrackData.count({"track.id": track.id, "type": 1, "second": true, "booster": false});
+        dataB1 = TrackData.count({"track.id": track.id, "type": 1, "second": false, "booster": false});
+        dataB2 = TrackData.count({"track.id": track.id, "type": 1, "second": true, "booster": false});
+            // dataB1 = TrackData.count({"track.id": track.id, "type": 1, "second": false, "booster": false});
+            // dataB2 = TrackData.count({"track.id": track.id, "type": 1, "second": true, "booster": false});
             dataB3 = TrackData.count({"track.id": track.id, "type": 1, "booster": true});
-            dataM1 = TrackData.count({"track.id": track.id, "type": 2, "second": false, "booster": false});
-            dataM2 = TrackData.count({"track.id": track.id, "type": 2, "second": true, "booster": false});
+            dataM1 = TrackData.count({"track.id": track.id, "type": 2, "second": false});
+            dataM2 = TrackData.count({"track.id": track.id, "type": 2, "second": true});
+            // dataM1 = TrackData.count({"track.id": track.id, "type": 2, "second": false, "booster": false});
+            // dataM2 = TrackData.count({"track.id": track.id, "type": 2, "second": true, "booster": false});
             dataM3 = TrackData.count({"track.id": track.id, "type": 2, "booster": true});
             dataA1 = TrackData.count({"track.id": track.id, "type": 3, "second": false});
             dataA2 = TrackData.count({"track.id": track.id, "type": 3, "second": true});
