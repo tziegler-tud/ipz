@@ -17,7 +17,8 @@ import {MDCTextFieldIcon} from '@material/textfield/icon';
 import {MDCDialog} from '@material/dialog';
 
 
-var phone = window.matchMedia("only screen and (max-width: 50em)");
+var phone = window.matchMedia("only screen and (max-device-width: 800px)");
+var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 /**
  *
@@ -368,26 +369,36 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             if(self.mutex) return false;
             self.mutex = true;
             let type = parseInt($(this).closest(".choosing-item").data("type"));
+            // listRemove.setEnabled(2, true);
+            // do not show options to remove booster entry for astra and johnson
+            if(type === 3 || type === 4) {
+                listRemove.setEnabled(2, false);
+            }
             dialogRemove.open();
 
             let removeFunc = function(event){
+                listRemove.setEnabled(2, true);
                 console.log("closed");
                 let detail = event.detail;
                 if(detail.action==="accept") {
                     if(listRemove.selectedIndex === -1) listRemove.selectedIndex = 0;
                     let second = (listRemove.listElements[listRemove.selectedIndex].dataset.second === "true");
+                    let booster = (listRemove.listElements[listRemove.selectedIndex].dataset.booster === "true");
                     /**
                      * @type {Object} c
                      * @property {HTMLElement} el
                      * @property {Counter} counter
                      * @property {String} name
                      */
-                    let c = getCounter(type, self, second);
+                    let c = getCounter(type, self, second, booster);
                     if (c.counter.get() === 0) {
+                        let message = "Kein Eintrag zum Entfernen gefunden.";
+                        self.showSnackbar(message);
                         self.mutex = false;
+                        dialogRemove.unlisten("MDCDialog:closed", removeFunc);
                         return false;
                     }
-                    apiHandler.removeTrackEntry(type, self.track, second)
+                    apiHandler.removeTrackEntry(type, self.track, second, booster)
                         .done(function (result) {
                             let message = "Eintrag entfernt: " + result.name;
                             if (type !== 0) c.el.innerHTML = c.counter.decrease();
@@ -442,6 +453,13 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             if(detail.action==="accept") {
                 self.dialogChoice.selectedIndex2 = list2.selectedIndex;
                 self.dialogChoice.newType = parseInt(list2.listElements[list2.selectedIndex].dataset.type);
+                //disable booster option in dialog3 for astra and johnson
+                if (self.dialogChoice.newType === 3 || self.dialogChoice.newType === 4){
+                    list3.setEnabled(2, false);
+                }
+                else {
+                    list3.setEnabled(2, true);
+                }
                 dialog3.open();
             }
         })
@@ -450,10 +468,12 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             let detail = event.detail;
             if(detail.action==="accept") {
                 let secondString = list3.listElements[list3.selectedIndex].dataset.second;
+                let boosterString = list3.listElements[list3.selectedIndex].dataset.booster;
                 let second = (secondString === "true");
+                let booster = (boosterString === "true");
                 console.log(detail.action);
-                let counter = getCounter(self.dialogChoice.newType, self, second);
-                apiHandler.addSwitchedTrackEntry(self.dialogChoice.originalType, self.dialogChoice.newType, self.track, second)
+                let counter = getCounter(self.dialogChoice.newType, self, second, booster);
+                apiHandler.addSwitchedTrackEntry(self.dialogChoice.originalType, self.dialogChoice.newType, self.track, second, booster)
                     .done(function(result){
                         let message = "Eintrag hinzugefügt: " + result.name;
                         if(self.dialogChoice.newType !== 0) counter.el.innerHTML = counter.counter.increase();
@@ -531,8 +551,10 @@ StreckePage.prototype.refreshCounters = function(){
         .done(function(result){
             self.counters.b.first.counter.set(result.counters.b.first);
             self.counters.b.second.counter.set(result.counters.b.second);
+            self.counters.b.booster.counter.set(result.counters.b.booster);
             self.counters.m.first.counter.set(result.counters.m.first);
             self.counters.m.second.counter.set(result.counters.m.second);
+            self.counters.m.booster.counter.set(result.counters.m.booster);
             self.counters.a.first.counter.set(result.counters.a.first);
             self.counters.a.second.counter.set(result.counters.a.second);
             self.counters.j.first.counter.set(result.counters.j.first);
@@ -540,8 +562,10 @@ StreckePage.prototype.refreshCounters = function(){
 
             self.counters.b.first.el.innerHTML = self.counters.b.first.counter.get();
             self.counters.b.second.el.innerHTML = self.counters.b.second.counter.get();
+            self.counters.b.booster.el.innerHTML = self.counters.b.booster.counter.get();
             self.counters.m.first.el.innerHTML = self.counters.m.first.counter.get();
             self.counters.m.second.el.innerHTML = self.counters.m.second.counter.get();
+            self.counters.m.booster.el.innerHTML = self.counters.m.booster.counter.get();
             self.counters.a.first.el.innerHTML = self.counters.a.first.counter.get();
             self.counters.a.second.el.innerHTML = self.counters.a.second.counter.get();
             self.counters.j.first.el.innerHTML = self.counters.j.first.counter.get();

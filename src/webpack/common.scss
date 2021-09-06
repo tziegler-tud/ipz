@@ -322,3 +322,28 @@ infocards
     }
   }
 }
+
+.color--biontech {
+  color: $biontech-color;
+  &.force-color {
+    color: $biontech-color !important;
+  }
+}
+.color--moderna {
+  color: $moderna-color;
+  &.force-color {
+    color: $moderna-color !important;
+  }
+}
+.color--astra {
+    color: $astra-color;
+  &.force-color {
+    color: $astra-color !important;
+  }
+}
+.color--johnson {
+  color: $johnson-color;
+  &.force-color {
+    color: $johnson-color !important;
+  }
+}

@@ -19,12 +19,12 @@
                     </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--biontech">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{add componentData.track.total.biontech.first componentData.track.total.biontech.second}}&nbsp;BionTech</span>
+                            <span class="dashboard-component-value__text">{{add (add componentData.track.total.biontech.first componentData.track.total.biontech.second) componentData.track.total.biontech.booster}}&nbsp;BionTech</span>
                         </div>
                     </div>
                     <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--moderna">
                         <div class="dashboard-component-value">
-                            <span class="dashboard-component-value__text">{{add componentData.track.total.moderna.first componentData.track.total.moderna.second}}&nbsp;Moderna</span>
+                            <span class="dashboard-component-value__text">{{add (add componentData.track.total.moderna.first componentData.track.total.moderna.second) componentData.track.total.moderna.booster}}&nbsp;Moderna</span>
                         </div>
 
                     </div>
@@ -108,6 +108,24 @@
                         <div class="dashboard-component-label">
                             <span class="dashboard-component-label__text">Zweitimpfung</span>
                         </div>
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--biontech">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{componentData.track.total.biontech.booster}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Booster</span>
+                        </div>
+
+                    </div>
+                    <div class="dashboard-subcomponent dashboard-subcomponent-amount figures-part figures--moderna">
+                        <div class="dashboard-component-value">
+                            <span class="dashboard-component-value__text">{{componentData.track.total.moderna.booster}}</span>
+                        </div>
+                        <div class="dashboard-component-label">
+                            <span class="dashboard-component-label__text">Booster</span>
+                        </div>
+
                     </div>
                 </div>
 

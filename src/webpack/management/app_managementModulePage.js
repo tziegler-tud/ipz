@@ -199,7 +199,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
 
                     let avgDataset = data.day.stats.average.perHour;
                     let totalData = data.day.stats.total;
-                    let totalDataset = [totalData.b.first, totalData.b.second, totalData.m.first, totalData.m.second, totalData.a.first, totalData.a.second, totalData.j.first, totalData.j.second];
+                    let totalDataset = [totalData.b.first, totalData.b.second, totalData.b.booster, totalData.m.first, totalData.m.second, totalData.m.booster, totalData.a.first, totalData.a.second, totalData.j.first, totalData.j.second];
 
                     let weekDatasets = data.week.datasets; //datasets are build per type
                     let weekLabels = data.week.labels; //labels are the dates properties
@@ -289,8 +289,10 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                         labels: [
                             'Biontech Erst',
                             'Biontech Zweit',
+                            'Biontech Booster',
                             'Moderna Erst',
                             'Moderna Zweit',
+                            'Moderna Booster',
                             'Astra Erst',
                             'Astra Zweit',
                             "Johnson Erst",
@@ -302,12 +304,14 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                             backgroundColor: [
                                 '#7BFF56FF',
                                 '#50BB31FF',
+                                '#245f0dFF',
                                 '#FF6384FF',
                                 '#EE4266FF',
+                                '#93142fFF',
                                 '#36A2EBFF',
                                 '#277DB8FF',
-                                '#f3b771',
-                                '#c9924e',
+                                '#f3b771FF',
+                                '#c9924eFF',
                             ],
                             hoverOffset: 4
                         }]
@@ -442,6 +446,11 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                                 backgroundColor: '#50BB31FF',
                             },
                             {
+                                label: 'BionTech Booster',
+                                data: data.b.booster,
+                                backgroundColor: '#245f0dFF',
+                            },
+                            {
                                 label: 'Moderna Erst',
                                 data: data.m.first,
                                 backgroundColor: '#FF6384FF',
@@ -450,6 +459,11 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                                 label: 'Moderna Zweit',
                                 data: data.m.second,
                                 backgroundColor: '#EE4266FF',
+                            },
+                            {
+                                label: 'Moderna Booster',
+                                data: data.m.booster,
+                                backgroundColor: '#93142fFF',
                             },
                             {
                                 label: 'Astra Erst',

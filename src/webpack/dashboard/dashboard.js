@@ -16,7 +16,7 @@ import {transformDateTimeString} from "../helpers";
 import {preloader} from "../preloader";
 var $ = require( "jquery" );
 
-var phone = window.matchMedia("only screen and (max-device-width: 400px)");
+var phone = window.matchMedia("only screen and (max-device-width: 800px)");
 var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 /**
@@ -161,6 +161,13 @@ var DashboardComponent = function(componentType, dashboard, index, args, buildFu
             this.args = args;
             break;
 
+        case "apotheke-dash":
+            this.url = "/webpack/templates/dashboard/modules/dash-apotheke.hbs";
+            this.mobileUrl = "/webpack/templates/dashboard/modules/dash-apotheke.hbs";
+            this.dataType = "apotheke-dash";
+            this.args = args;
+            break;
+
         default:
             break;
     }
@@ -215,7 +222,7 @@ DashboardComponent.prototype.refresh = function(){
                 self.buildComponentHtml(self.dashboard, data, true)
                     .done(function(){
                         let activePage = self.dashboard.activePage;
-                        if(self.buildFunc !== undefined) self.buildFunc(self, activePage)
+                        if(self.buildFunc !== undefined) self.buildFunc(self, activePage, data)
                         resolve();
                     })
             })
@@ -542,6 +549,86 @@ DashboardComponent.prototype.getData = function(args){
                                         resolve(data);
                                 });
                             })
+                });
+            })
+            break;
+
+        case "apotheke-dash":
+            dataUrl = "/api/v1/statistics/current";
+            return new Promise(function(resolve, reject){
+                $.get(dataUrl, function (stats) {
+                    $.get("/api/v1/checkin/counts/", function (checkinCounts) {
+                        $.get("/api/v1/data/track/counts/", function (trackCounts) {
+                            $.get("/api/v1/data/track/getSwitched", function (switched) {
+
+                                let vialSize = {
+                                    biontech: 6,
+                                    moderna: 10,
+                                    astra: 10,
+                                    johnson: 10,
+                                }
+                                let biontechSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 1);
+                                let modernaSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 2);
+                                let astraSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 3);
+                                let johnsonSwitched = switched.filter(trackDataEntry => trackDataEntry.type === 4);
+
+                                let wasBiontech = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 1);
+                                let wasModerna = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 2);
+                                let wasAstra = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 3);
+                                let wasJohnson = switched.filter(trackDataEntry => trackDataEntry.switch.originalType === 4);
+
+                                let adjustedBiontech = checkinCounts.counters.b + biontechSwitched.length - wasBiontech.length;
+                                let adjustedModerna = checkinCounts.counters.m + modernaSwitched.length - wasModerna.length;
+                                let adjustedAstra = checkinCounts.counters.a + astraSwitched.length - wasAstra.length;
+                                let adjustedJohnson = checkinCounts.counters.j + johnsonSwitched.length - wasJohnson.length;
+
+                                let data = {
+                                    date: Date.now(),
+                                    day: stats,
+                                    checkin: {
+                                        total: {
+                                            all: checkinCounts.total,
+                                            biontech: adjustedBiontech,
+                                            moderna: adjustedModerna,
+                                            astra: adjustedAstra,
+                                            johnson: adjustedJohnson,
+                                        },
+                                        vials: {
+                                            biontech: Math.ceil((adjustedBiontech) / vialSize.biontech),
+                                            moderna: Math.ceil((adjustedModerna) / vialSize.moderna),
+                                            astra: Math.ceil((adjustedAstra) / vialSize.astra),
+                                            johnson: Math.ceil((adjustedAstra) / vialSize.johnson),
+                                        },
+                                    },
+                                    track: {
+                                        total: {
+                                            all: trackCounts.total,
+                                            biontech: trackCounts.counters.b.first + trackCounts.counters.b.second,
+                                            moderna: trackCounts.counters.m.first + trackCounts.counters.m.second,
+                                            astra: trackCounts.counters.a.first + trackCounts.counters.a.second,
+                                            johnson: trackCounts.counters.j.first + trackCounts.counters.j.second,
+                                        },
+                                        vials: {
+                                            biontech: Math.ceil((trackCounts.counters.b.first + trackCounts.counters.b.second) / vialSize.biontech),
+                                            moderna: Math.ceil((trackCounts.counters.m.first + trackCounts.counters.m.second) / vialSize.moderna),
+                                            astra: Math.ceil((trackCounts.counters.a.first + trackCounts.counters.a.second) / vialSize.astra),
+                                            johnson: Math.ceil((trackCounts.counters.j.first + trackCounts.counters.j.second) / vialSize.johnson),
+                                        },
+                                        switch: {
+                                            total: {
+                                                all: switched.length,
+                                                biontech: biontechSwitched.length,
+                                                moderna: modernaSwitched.length,
+                                                astra: astraSwitched.length,
+                                                johnson: johnsonSwitched.length,
+                                            },
+                                        }
+                                    },
+                                }
+                                resolve(data);
+                            });
+                        });
+                    });
                 });
             })
             break;

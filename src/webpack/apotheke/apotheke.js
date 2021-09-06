@@ -39,14 +39,14 @@ let nav = new Navigation(
 let apothekePage = new ApothekePage();
 apothekePage.show({tabs: true})
     .done(function(){
-    // sidesheet = new Sidesheet("checkin", managementPage, {});
+    sidesheet = new Sidesheet("apotheke", apothekePage, {});
     // bottomTabs =  new Bottom("management", apothekePage, {})
 });
 
 nav.initialize
     .then(function(){
         nav.setAction("mdc-top-app-bar-action1", function(e, args){
-            // sidesheet.toggle();
+            sidesheet.toggle();
         })
     });
 

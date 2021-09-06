@@ -10,7 +10,7 @@ router.get('/:trackId', getTrackPage);
 
 /* GET track page. */
 function getTrackPage (req, res, next) {
-    let titleString = "Imfpstrecke ";
+    let titleString = "Impfstrecke ";
 
     let trackId = req.params.trackId;
 

@@ -139,7 +139,13 @@ function remove (req, res, next){
     }
 
     trackDataService.remove(req.body.type, req.body.trackId, args)
-        .then(result => res.json(result))
+        .then(function(result){
+            if(result=== null){
+                let err = new Error("Could not find a valid entry to remove.")
+                next(err);
+            }
+            else res.json(result)
+        })
         .catch(err => next(err));
 }
 

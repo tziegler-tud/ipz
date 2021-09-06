@@ -10,7 +10,7 @@ const Handlebars = require("handlebars");
 import {transformDateTimeString} from "./helpers";
 var $ = require( "jquery" );
 
-var phone = window.matchMedia("only screen and (max-device-width: 400px)");
+var phone = window.matchMedia("only screen and (max-device-width: 800px)");
 var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 /**
@@ -71,6 +71,11 @@ Sidesheet.prototype.setContent = function(type, activePage, options){
             url = "/webpack/templates/sidesheet/sidesheet-management.hbs";
             self.createManagementPage(activePage, options);
             break;
+        case "apotheke":
+            url = "/webpack/templates/sidesheet/sidesheet-apotheke.hbs";
+            self.createApothekePage(activePage, options);
+            break;
+
         case "strecke":
             url = "/webpack/templates/sidesheet/sidesheet-track.hbs";
             self.createTrackPage(activePage, options);
@@ -125,6 +130,51 @@ Sidesheet.prototype.createManagementPage = function(activePage, options){
     let url = "/webpack/templates/sidesheet/sidesheet-management.hbs";
     let context = {
         title: "Einstellungen - Teamleiter-Modul"
+    };
+    $.get(url, function (data) {
+        var template = Handlebars.compile(data);
+        self.container.innerHTML = template(context);
+        const switches = [].map.call(document.querySelectorAll(".mdc-switch"), function(el) {
+            let s = new MDCSwitch(el);
+        });
+
+        let reloadButton = document.getElementById("button-reload");
+        reloadButton.addEventListener("click", function(){
+            //reload page
+            location.reload();
+        })
+
+        let refreshSwitch = document.getElementById("refresh-switch");
+        refreshSwitch.addEventListener("change", function(e){
+            if(this.checked) {
+                //enable sound
+                activePage.enableRefresh();
+            }
+            else {
+                activePage.disableRefresh();
+            }
+        })
+
+        let cancelBtn = document.getElementById("sidesheet-cancel-button-element")
+        cancelBtn.addEventListener("click", function(){
+            self.hide();
+        })
+
+        if(!options.show) self.hide();
+    });
+}
+
+
+/**
+ *
+ * @param activePage
+ * @param options
+ */
+Sidesheet.prototype.createApothekePage = function(activePage, options){
+    let self = this;
+    let url = "/webpack/templates/sidesheet/sidesheet-management.hbs";
+    let context = {
+        title: "Einstellungen - Apotheke"
     };
     $.get(url, function (data) {
         var template = Handlebars.compile(data);

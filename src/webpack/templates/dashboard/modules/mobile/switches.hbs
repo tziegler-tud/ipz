@@ -25,7 +25,7 @@
                                     <tr class="mdc-data-table__header-row">
                                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Geplant</th>
                                         <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Wechsel auf</th>
-                                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Erst-/Zweitimpfung</th>
+                                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">1/2/Booster</th>
                                         <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Uhrzeit</th>
                                         <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Impfstrecke</th>
                                     </tr>
@@ -35,7 +35,7 @@
                                         <tr class="mdc-data-table__row">
                                             <th class="mdc-data-table__cell" scope="row">{{this.switch.originalTypeName}}</th>
                                             <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{this.switch.newTypeName}}</td>
-                                            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{#if this.second}}2.{{else}}1.{{/if}}</td>
+                                            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{#if this.booster}}Booster{{else}}{{#if this.second}}2.{{else}}1.{{/if}}{{/if}}</td>
                                             <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{transformTimeString this.timestamp}}</td>
                                             <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{this.track.name}}</td>
                                             <td class="switch-entry-actions" data-index="{{@index}}" data-id="{{this.id}}"><button class="material-icons mdc-icon-button" aria-label="Options">more_vert</button></td>

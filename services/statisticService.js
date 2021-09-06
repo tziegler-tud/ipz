@@ -67,9 +67,24 @@ var ArchiveDataManager = function(daysFromNow){
         }
         else {
             return new Promise(function(resolve, reject){
-                resolve(self.data)
+                self.updateCurrentDay()
+                    .then(function(today){
+                        resolve(self.data)
+                    })
+
             });
         }
+    }
+
+    this.updateCurrentDay = function(){
+        let self = this;
+        return new Promise(function(resolve, reject){
+            updateTodayArchiveStats(self.data)
+                .then(function(data){
+                    self.generatedTimestamp = Date.now();
+                    resolve(data);
+                })
+        })
     }
 
     this.updateData = function(){
@@ -268,7 +283,6 @@ async function getOverview() {
 async function getDayStats(){
     //always update total count and current average
     const trackData = await trackDataService.getAll();
-    const checkinData = await checkinDataService.getAll();
     let currentAverage = getCurrentAverage(trackData);
     let totals = await trackDataService.getCounts();
     let jsonStats = undefined;
@@ -276,11 +290,10 @@ async function getDayStats(){
     let jsonData = {
         raw: {
             tracks: trackData,
-            checkin: checkinData,
+            // checkin: checkinData,
         },
         stats: {
             total: {
-                test: "test",
                 all: totals.total,
                 b: totals.counters.b,
                 m: totals.counters.m,
@@ -299,12 +312,12 @@ async function getDayStats(){
 async function generateDayStats() {
     //get today
     let trackData, checkinData;
-    const trackDataPromise = trackDataService.getAll();
-    const checkinDataPromise = checkinDataService.getAll();
+    const trackDataPromise = trackDataService.getAll({sort: "timestamp"});
 
-    const data = await Promise.all([trackDataPromise, checkinDataPromise]);
+    // const checkinDataPromise = checkinDataService.getAll();
+
+    const data = await Promise.all([trackDataPromise]);
     trackData = data[0];
-    checkinData = data[1];
 
     //get data
     let totals = await trackDataService.getCounts();
@@ -337,11 +350,10 @@ async function generateDayStats() {
         date: new Date(),
         raw: {
             tracks: trackData,
-            checkin: checkinData,
+            // checkin: checkinData,
         },
         stats: {
             total: {
-                test: "test",
                 all: totals.total,
                 b: totals.counters.b,
                 m: totals.counters.m,
@@ -424,11 +436,14 @@ async function getDayStatsFromArchive(dateString) {
     }
 
     tracks.forEach(function(track){
-        let data = trackData.filter(function(trackDataElement){
-            return (trackDataElement.track.id.equals(track.id))
-        });
-        let perHour = averagesByHours(data);
-        byTracks.push({track: track, data: data, averages: perHour});
+        // let data = trackData.filter(function(trackDataElement){
+        //     return (trackDataElement.track.id.equals(track.id))
+        // });
+        trackDataService.getByTrack(track)
+            .then(function(data){
+                let perHour = averagesByHours(data);
+                byTracks.push({track: track, data: data, averages: perHour});
+            })
     })
 
     byTracks.sort(function(a,b){
@@ -446,7 +461,6 @@ async function getDayStatsFromArchive(dateString) {
         },
         stats: {
             total: {
-                test: "test",
                 all: totals.total,
                 b: totals.counters.b,
                 m: totals.counters.m,
@@ -515,19 +529,20 @@ function averagesByHours(trackData) {
     //averages per hour
     //group data by hours. Always start at 00 min
 
+    let timeOffsetMs = 1800000; // 15min = 900000
+
     if(trackData === undefined || trackData.length === 0) return [0]
     //lets look at the first entry.
     let firstEntry = trackData[0];
     let firstTimestamp = firstEntry.timestamp;
     //transform to date Object
-    let firstDate = new Date(firstTimestamp);
+    let firstDate = new Date(firstTimestamp.getTime() - timeOffsetMs);
     let firstHour = firstDate.getHours();
-    let firstMinute = firstDate.getMinutes();
-    //if less than 5 minutes to the next full hour, go for it
-    // if(firstMinute >= 55) {
-    //     firstHour = firstHour + 1;
-    // }
-    firstMinute = 0;
+    let firstMinute = 0;
+    if (firstDate.getMinutes() < 30) {
+        firstHour = firstHour -1;
+        firstMinute = 30;
+    }
     firstDate.setHours(firstHour);
     firstDate.setMinutes(firstMinute);
     firstDate.setSeconds(0);
@@ -536,13 +551,15 @@ function averagesByHours(trackData) {
     //lets look at the last entry.
     let lastEntry = trackData[trackData.length-1];
     let lastTimestamp = lastEntry.timestamp;
-    //transform to date Object
-    let lastDate = new Date(lastTimestamp);
-    let lastHour = lastDate.getHours() + 1;
-    let lastMinute = 0;
 
-    lastDate.setHours(lastHour);
-    lastDate.setMinutes(lastMinute);
+    //transform to date Object
+    let lastDateTime = Math.min(new Date().getTime(), lastTimestamp.getTime() + timeOffsetMs);
+    let lastDate = new Date(lastDateTime);
+    // let lastHour = lastDate.getHours() + 1;
+    // let lastMinute = 0;
+    //
+    // lastDate.setHours(lastHour);
+    // lastDate.setMinutes(lastMinute);
     lastDate.setSeconds(0);
     lastDate.setMilliseconds(0);
 
@@ -550,11 +567,12 @@ function averagesByHours(trackData) {
     let averagePerHourArray = [];
     var currentDate = new Date(firstDate.getTime());
 
-    let timeOffsetMs = 1800000; // 15min = 900000
+
     //increase hour by 1 and check if less or equal last date
     while (currentDate.getTime() <= lastDate.getTime()){
         // let currentEndDate = new Date(currentDate.getTime() + 3600000); //add 1 hour = 3600000ms
         let currentEndDate = new Date(currentDate.getTime() + timeOffsetMs); //add 15 min = 900000ms
+        if(currentEndDate > new Date()) currentEndDate = new Date();
         // let currentHourData = findCurrentHour(trackData, currentDate);
         let currentHourData = findMinMax(trackData, currentDate, currentEndDate);
         //calculate average
@@ -602,6 +620,22 @@ async function getMonthStats(){
 
 
 
+async function updateTodayArchiveStats(data){
+    let today = await trackDataService.getCounts();
+    let labels = data.labels;
+
+    data.datasets.b.first[labels.length-1] = today.counters.b.first;
+    data.datasets.m.first[labels.length-1] = today.counters.m.first;
+    data.datasets.a.first[labels.length-1] = today.counters.a.first;
+    data.datasets.j.first[labels.length-1] = today.counters.j.first;
+    data.datasets.b.second[labels.length-1] = today.counters.b.second;
+    data.datasets.m.second[labels.length-1] = today.counters.m.second;
+    data.datasets.a.second[labels.length-1] = today.counters.a.second;
+    data.datasets.j.second[labels.length-1] = today.counters.j.second;
+
+    return data;
+
+}
 async function getArchiveStats(daysFromToday, daysAhead, startDateString){
     let today, archiveData, currentDate;
     if(daysAhead === undefined) daysAhead = 0;
@@ -661,22 +695,28 @@ async function getArchiveStats(daysFromToday, daysAhead, startDateString){
 function count(data){
     //count them
     let counters = {
-        b: {first: 0, second: 0},
-        m: {first: 0, second: 0},
+        b: {first: 0, second: 0, booster: 0},
+        m: {first: 0, second: 0, booster: 0},
         a: {first: 0, second: 0},
         j: {first: 0, second: 0},
     }
     counters.b.first = data.reduce(function(n, element) {
-        return n + (element.type === 1 && (element.second === false || element.second === undefined));
+        return n + (element.type === 1 && (element.second === false || element.second === undefined) && (element.booster === false || element.booster === undefined));
     }, 0);
     counters.b.second = data.reduce(function(n, element) {
-        return n + (element.type === 1 && element.second === true);
+        return n + (element.type === 1 && element.second === true && (element.booster === false || element.booster === undefined));
+    }, 0);
+    counters.b.booster = data.reduce(function(n, element) {
+        return n + (element.type === 1 && element.booster === true);
     }, 0);
     counters.m.first = data.reduce(function(n, element) {
-        return n + (element.type === 2  && (element.second === false || element.second === undefined));
+        return n + (element.type === 2  && (element.second === false || element.second === undefined) && (element.booster === false || element.booster === undefined));
     }, 0);
     counters.m.second = data.reduce(function(n, element) {
-        return n + (element.type === 2  && element.second === true);
+        return n + (element.type === 2  && element.second === true && (element.booster === false || element.booster === undefined));
+    }, 0);
+    counters.m.booster = data.reduce(function(n, element) {
+        return n + (element.type === 2  && element.booster === true);
     }, 0);
     counters.a.first = data.reduce(function(n, element) {
         return n + (element.type === 3  && (element.second === false || element.second === undefined));
@@ -700,11 +740,13 @@ function aggregateByType(entries, labels){
     let data = {
         b: {
             first: [],
-            second: []
+            second: [],
+            booster: [],
         },
         m: {
             first: [],
-            second: []
+            second: [],
+            booster: []
         },
         a: {
             first: [],
@@ -718,8 +760,10 @@ function aggregateByType(entries, labels){
     entries.forEach(function(entry){
         data.b.first.push(entry.counts.counters.b.first)
         data.b.second.push(entry.counts.counters.b.second)
+        data.b.booster.push(entry.counts.counters.b.booster)
         data.m.first.push(entry.counts.counters.m.first)
         data.m.second.push(entry.counts.counters.m.second)
+        data.m.booster.push(entry.counts.counters.m.booster)
         data.a.first.push(entry.counts.counters.a.first)
         data.a.second.push(entry.counts.counters.a.second)
         data.j.first.push(entry.counts.counters.j.first)

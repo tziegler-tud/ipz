@@ -9,7 +9,7 @@ import {Bottom} from "../bottom/app_bottom";
 const Handlebars = require("handlebars");
 var $ = require( "jquery" );
 
-var phone = window.matchMedia("only screen and (max-device-width: 400px)");
+var phone = window.matchMedia("only screen and (max-device-width: 800px)");
 var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 $(window).on('load',function() {
@@ -50,9 +50,9 @@ pages.push(managementTracksPage);
 pages.push(managementStatisticsPage);
 pages.push(managementDevicesPage);
 
-managementDashboardPage.show({tabs: true, refresh: true})
+managementTotalPage.show({tabs: true, refresh: true})
     .then(function(){
-        sidesheet = new Sidesheet("management", managementDashboardPage, {});
+        sidesheet = new Sidesheet("management", managementTotalPage, {});
         // bottomTabs =  new Bottom("management", managementTotalPage, {})
 
     });
