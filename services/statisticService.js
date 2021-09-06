@@ -632,6 +632,8 @@ async function updateTodayArchiveStats(data){
     data.datasets.m.second[labels.length-1] = today.counters.m.second;
     data.datasets.a.second[labels.length-1] = today.counters.a.second;
     data.datasets.j.second[labels.length-1] = today.counters.j.second;
+    data.datasets.b.booster[labels.length-1] = today.counters.b.booster;
+    data.datasets.m.booster[labels.length-1] = today.counters.m.booster;
 
     return data;
 
