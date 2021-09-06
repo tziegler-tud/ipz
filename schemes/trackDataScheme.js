@@ -12,6 +12,10 @@ var trackDataSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    booster: {
+        type: Boolean,
+        default: false,
+    },
     track: {
         id: {
             type: Schema.Types.ObjectId

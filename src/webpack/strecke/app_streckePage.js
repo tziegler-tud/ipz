@@ -294,14 +294,14 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             let secondString = this.dataset.second;
             let second = (secondString === "true");
             let boosterString = this.dataset.booster;
-            let booster = (secondString === "true");
+            let booster = (boosterString === "true");
             let secondNumber = (second) ? 2 : 1;
             // //j2 is disabled
             // if (type === 4 && second) {
             //     self.mutex = false;
             //     return false;
             // }
-            let counter = getCounter(type, self, second);
+            let counter = getCounter(type, self, second, booster);
             counter.el.classList.add("processing");
 
             // self.soundboard.play("click");
@@ -627,7 +627,7 @@ function getCounter (type, self, second, booster) {
             counter = booster ? self.counters.b.booster : (second ? self.counters.b.second : self.counters.b.first);
             break;
         case 2:
-            counter =  booster ? self.counters.b.booster : (second ? self.counters.m.second : self.counters.m.first);
+            counter =  booster ? self.counters.m.booster : (second ? self.counters.m.second : self.counters.m.first);
             break;
         case 3:
             counter =  (second) ? self.counters.a.second : self.counters.a.first;

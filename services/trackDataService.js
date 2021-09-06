@@ -110,8 +110,10 @@ async function getCounts(track) {
 
     let dataB1;
     let dataB2;
+    let dataB3;
     let dataM1;
     let dataM2;
+    let dataM3;
     let dataA1;
     let dataA2;
     let dataJ1;
@@ -122,8 +124,10 @@ async function getCounts(track) {
             track = 0;
             dataB1 = TrackData.count({"type": 1, "second": false});
             dataB2 = TrackData.count({"type": 1, "second": true});
+            dataB3 = TrackData.count({"type": 1, "booster": true});
             dataM1 = TrackData.count({"type": 2, "second": false});
             dataM2 = TrackData.count({"type": 2, "second": true});
+            dataM3 = TrackData.count({"type": 2, "booster": true});
             dataA1 = TrackData.count({"type": 3, "second": false});
             dataA2 = TrackData.count({"type": 3, "second": true});
             dataJ1 = TrackData.count({"type": 4, "second": false});
@@ -132,8 +136,10 @@ async function getCounts(track) {
         else {
             dataB1 = TrackData.count({"track.id": track.id, "type": 1, "second": false});
             dataB2 = TrackData.count({"track.id": track.id, "type": 1, "second": true});
+            dataB3 = TrackData.count({"track.id": track.id, "type": 1, "booster": true});
             dataM1 = TrackData.count({"track.id": track.id, "type": 2, "second": false});
             dataM2 = TrackData.count({"track.id": track.id, "type": 2, "second": true});
+            dataM3 = TrackData.count({"track.id": track.id, "type": 2, "booster": true});
             dataA1 = TrackData.count({"track.id": track.id, "type": 3, "second": false});
             dataA2 = TrackData.count({"track.id": track.id, "type": 3, "second": true});
             dataJ1 = TrackData.count({"track.id": track.id, "type": 4, "second": false});
@@ -142,16 +148,16 @@ async function getCounts(track) {
 
 
     //wait for query to finish
-    const data = await Promise.all([dataB1, dataB2, dataM1, dataM2, dataA1, dataA2, dataJ1, dataJ2]);
+    const data = await Promise.all([dataB1, dataB2, dataB3, dataM1, dataM2, dataM3, dataA1, dataA2, dataJ1, dataJ2]);
     //count them
 
     let counters = {
-        b: {first: data[0], second: data[1]},
-        m: {first: data[2], second: data[3]},
-        a: {first: data[4], second: data[5]},
-        j: {first: data[6], second: data[7]},
+        b: {first: data[0], second: data[1], booster: data[2]},
+        m: {first: data[3], second: data[4], booster: data[5]},
+        a: {first: data[6], second: data[7]},
+        j: {first: data[8], second: data[9]},
     }
-    let total = data[0] + data[1] + data[2] + data[3] + data[4] + data[5] + data[6] + data[7];
+    let total = data[0] + data[1] + data[2] + data[3] + data[4] + data[5] + data[6] + data[7] + data[8] + data[9];
 
     let returnObject = {
         track: track.id,
@@ -269,11 +275,11 @@ async function remove(type, trackId, args) {
 
     //delete last entry
     if (isSwitched) {
-        return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "second": second, "isSwitched": isSwitched, "switch.originalType": switchObj.originalType}).sort("-timestamp");
+        return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "second": second, "booster": booster, "isSwitched": isSwitched, "switch.originalType": switchObj.originalType}).sort("-timestamp");
     }
     else {
         // return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "isSwitched": isSwitched}).sort("-timestamp");
-        return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "second": second, "isSwitched": isSwitched}).sort("-timestamp");
+        return TrackData.findOneAndRemove({"type": type, "track.id": trackId, "second": second, "booster": booster, "isSwitched": isSwitched}).sort("-timestamp");
     }
 }
 
