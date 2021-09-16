@@ -323,14 +323,14 @@ DashboardComponent.prototype.getData = function(args){
                                 track: {
                                     total: {
                                         all: trackCounts.total,
-                                        biontech: trackCounts.counters.b.first + trackCounts.counters.b.second,
-                                        moderna: trackCounts.counters.m.first + trackCounts.counters.m.second,
+                                        biontech: trackCounts.counters.b.first + trackCounts.counters.b.second + trackCounts.counters.b.booster,
+                                        moderna: trackCounts.counters.m.first + trackCounts.counters.m.second + trackCounts.counters.m.booster,
                                         astra: trackCounts.counters.a.first + trackCounts.counters.a.second,
                                         johnson: trackCounts.counters.j.first + trackCounts.counters.j.second,
                                     },
                                     vials: {
-                                        biontech: Math.ceil((trackCounts.counters.b.first + trackCounts.counters.b.second) / vialSize.biontech),
-                                        moderna: Math.ceil((trackCounts.counters.m.first + trackCounts.counters.m.second) / vialSize.moderna),
+                                        biontech: Math.ceil((trackCounts.counters.b.first + trackCounts.counters.b.second + trackCounts.counters.b.booster) / vialSize.biontech),
+                                        moderna: Math.ceil((trackCounts.counters.m.first + trackCounts.counters.m.second + trackCounts.counters.m.booster) / vialSize.moderna),
                                         astra: Math.ceil((trackCounts.counters.a.first + trackCounts.counters.a.second) / vialSize.astra),
                                         johnson: Math.ceil((trackCounts.counters.j.first + trackCounts.counters.j.second) / vialSize.johnson),
                                     },
@@ -603,14 +603,14 @@ DashboardComponent.prototype.getData = function(args){
                                     track: {
                                         total: {
                                             all: trackCounts.total,
-                                            biontech: trackCounts.counters.b.first + trackCounts.counters.b.second,
-                                            moderna: trackCounts.counters.m.first + trackCounts.counters.m.second,
+                                            biontech: trackCounts.counters.b.first + trackCounts.counters.b.second  + trackCounts.counters.b.booster,
+                                            moderna: trackCounts.counters.m.first + trackCounts.counters.m.second  + trackCounts.counters.m.booster,
                                             astra: trackCounts.counters.a.first + trackCounts.counters.a.second,
                                             johnson: trackCounts.counters.j.first + trackCounts.counters.j.second,
                                         },
                                         vials: {
-                                            biontech: Math.ceil((trackCounts.counters.b.first + trackCounts.counters.b.second) / vialSize.biontech),
-                                            moderna: Math.ceil((trackCounts.counters.m.first + trackCounts.counters.m.second) / vialSize.moderna),
+                                            biontech: Math.ceil((trackCounts.counters.b.first + trackCounts.counters.b.second + trackCounts.counters.b.booster) / vialSize.biontech),
+                                            moderna: Math.ceil((trackCounts.counters.m.first + trackCounts.counters.m.second  + trackCounts.counters.m.booster) / vialSize.moderna),
                                             astra: Math.ceil((trackCounts.counters.a.first + trackCounts.counters.a.second) / vialSize.astra),
                                             johnson: Math.ceil((trackCounts.counters.j.first + trackCounts.counters.j.second) / vialSize.johnson),
                                         },
@@ -949,8 +949,8 @@ Dashboard.prototype.createApothekeDashboard = function(activePage, url, options)
                                 track: {
                                     total: {
                                         all: trackCounts.total,
-                                        biontech: trackCounts.counters.b.first + trackCounts.counters.b.second,
-                                        moderna: trackCounts.counters.m.first + trackCounts.counters.m.second,
+                                        biontech: trackCounts.counters.b.first + trackCounts.counters.b.second + trackCounts.counters.b.booster,
+                                        moderna: trackCounts.counters.m.first + trackCounts.counters.m.second + trackCounts.counters.m.booster,
                                         astra: trackCounts.counters.a.first + trackCounts.counters.a.second,
                                         johnson: trackCounts.counters.j.first + trackCounts.counters.j.second,
                                     },
