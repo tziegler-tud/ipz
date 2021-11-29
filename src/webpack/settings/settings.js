@@ -1,9 +1,9 @@
-import {preloader} from "./preloader";
-import {Navigation} from "./app_navigation";
-import {Sidesheet} from "./app_sidesheet";
-import {SettingsPage} from "./settings/app_settingsPage";
-import {transformDateTimeString} from "./helpers";
-import "./handlebarsHelpers";
+import {preloader} from "../preloader";
+import {Navigation} from "../app_navigation";
+import {Sidesheet} from "../app_sidesheet";
+import {SettingsPage} from "./app_settingsPage";
+import {transformDateTimeString} from "../helpers";
+import "../handlebarsHelpers";
 const Handlebars = require("handlebars");
 var $ = require( "jquery" );
 
@@ -21,8 +21,9 @@ let sidesheet;
 
 let nav = new Navigation(
     {
+        user: window.user,
         pageData: {
-            navTitle: "Einstellungen - ImpfApp Dresden",
+            navTitle: "Einstellungen",
             date: transformDateTimeString(Date.now()).date,
             time: transformDateTimeString(Date.now()).time("hh:mm:ss"),
         },
@@ -30,7 +31,7 @@ let nav = new Navigation(
     {
         clock: ".navigation-clock",
         sidesheet: true,
-        activeElement: "app-link-settings",
+        activeElement: "app-link-management",
     },
 );
 
@@ -40,10 +41,13 @@ settingsPage.show()
 //     sidesheet = new Sidesheet("checkin", managementPage, {});
 // });
 
+
 nav.initialize
-    .done(function(){
+    .then(function(){
         nav.setAction("mdc-top-app-bar-action1", function(e, args){
             sidesheet.toggle();
         })
+        let subpage = nav.addSubpage("settings",  {user: window.user}, true, "app-link-settings", true);
+        subpage.init
+            .then(function(){})
     });
-

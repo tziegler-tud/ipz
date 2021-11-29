@@ -5,13 +5,12 @@ const passport = require('passport');
 const bodyParser = require("body-parser");
 
 const userManager = require("../services/userManager")
+const taskManager = require("../services/taskService")
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
     res.redirect('/user/current');
 });
-
 
 
 /* GET checkin page. */
@@ -42,10 +41,6 @@ router.get('/management', function(req, res, next) {
         });
 });
 
-
-
-
-
 /* GET apotheke page. */
 router.get('/apotheke', function(req, res, next) {
     req.user._doc.currentTask = "apotheke";
@@ -56,15 +51,6 @@ router.get('/apotheke', function(req, res, next) {
             user: req.user,
             title: "Apotheke - ImpfApp Dresden",
             task: task,
-        });
-});
-
-/* GET settings page. */
-router.get('/settings', function(req, res, next) {
-    res.render('pages/settings',
-        {
-            user: req.user,
-            title: "Einstellungen - ImpfApp Dresden",
         });
 });
 
@@ -90,6 +76,24 @@ router.get('/device', function(req, res, next) {
             title: "Mein Gerät - ImpfApp Dresden",
             task: task,
         });
+});
+
+/* GET index page. */
+router.get('/start', function(req, res, next) {
+    let task = "Bereich wählen";
+    userManager.connect(req.user, task)
+        .then(function(user){
+        })
+
+        let tasks = req.user.allowedTasks;
+        res.render('index',
+            {
+                user: req.user,
+                title: "Start - ImpfApp Dresden",
+                task: task,
+                items: tasks,
+            });
+
 });
 
 

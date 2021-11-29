@@ -99,8 +99,8 @@ UserPage.prototype.buildHtml = function(url, context){
                         self.page = document.getElementById("device-page");
                         self.dataTableContainer = document.getElementById("device-container");
 
-                        const banner = new MDCBanner(document.querySelector('.mdc-banner'));
-                        banner.listen("MDCBanner:closed", function(event){
+                        const saveBanner = new MDCBanner(document.querySelector('.mdc-banner'));
+                        saveBanner.listen("MDCBanner:closed", function(event){
                             console.log(event.detail);
                         })
 
@@ -108,7 +108,7 @@ UserPage.prototype.buildHtml = function(url, context){
                             apiHandler.updateUser(self.exploredUser.id, userModData)
                                 .done(function(result){
                                     self.showSnackbar("Änderungen gespeichert.");
-                                    banner.close();
+                                    saveBanner.close();
                                 })
                                 .fail(function(jqxhr, textstatus, error){
                                     let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
@@ -124,7 +124,7 @@ UserPage.prototype.buildHtml = function(url, context){
                                 });
                         })
 
-                        banner.foundation.handleSecondaryActionClick = function(){
+                        saveBanner.foundation.handleSecondaryActionClick = function(){
                             //reset page
                             self.show();
                         }
@@ -138,7 +138,7 @@ UserPage.prototype.buildHtml = function(url, context){
                             s.disabled = !self.enableEdit;
                             s.listen('change', function(event){
                                 userModData.allowedTasks = ensureTask(userModData.allowedTasks, taskId, s.checked)
-                                banner.open()
+                                saveBanner.open()
                             })
                         });
 
@@ -149,7 +149,7 @@ UserPage.prototype.buildHtml = function(url, context){
                                 let value = this.value;
 
                                 userModData[key] = value
-                                banner.open()
+                                saveBanner.open()
                             })
                         })
 

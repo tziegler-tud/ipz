@@ -65,26 +65,6 @@ SettingsPage.prototype.buildHtml = function(url, context){
         self.dataTableContainer = document.getElementById("settings-container");
         self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
 
-        //hook archive button
-        $("#archive-button").on("click", function(){
-            apiArchiveHandler.archiveCurrentDay()
-                .done(function(result){
-                    let message = "Tag erfolgreich archiviert: " + result.date;
-                    self.showSnackbar(message);
-                })
-                .fail(function(jqxhr, textstatus, error){
-                    let message = "Error " + jqxhr.status +": " + jqxhr.responseText;
-                    let options = {
-                        timeout: -1,
-                        closeOnEscape: true,
-                        actionButton: {
-                            display: true,
-                            text: "Nagut",
-                        }
-                    }
-                    self.showSnackbar(message, options)
-                });
-        })
     });
 }
 

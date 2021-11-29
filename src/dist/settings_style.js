@@ -81,20 +81,20 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/webpack/settings.scss");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/webpack/settings/settings.scss");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/webpack/settings.scss":
-/*!***********************************!*\
-  !*** ./src/webpack/settings.scss ***!
-  \***********************************/
+/***/ "./src/webpack/settings/settings.scss":
+/*!********************************************!*\
+  !*** ./src/webpack/settings/settings.scss ***!
+  \********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = (__webpack_require__.p + \"settings.css\");\n\n//# sourceURL=webpack:///./src/webpack/settings.scss?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = (__webpack_require__.p + \"settings.css\");\n\n//# sourceURL=webpack:///./src/webpack/settings/settings.scss?");
 
 /***/ })
 

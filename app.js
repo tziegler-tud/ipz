@@ -20,6 +20,8 @@ var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var trackRouter = require('./routes/strecke');
 var userRouter = require('./routes/user');
+var settingsRouter = require('./routes/settings');
+
 var checkinDataRouter = require('./routes/api/checkinHandler');
 var checkoutDataRouter = require('./routes/api/checkoutHandler');
 var trackDataRouter = require('./routes/api/trackDataHandler');
@@ -108,6 +110,7 @@ settingsService.initialize();
 app.use('/', pushRouter);
 app.use('/', loginRouter);
 
+
 app.use("/api", apiAuth);
 app.use('/api/v1/checkin', checkinDataRouter);
 app.use('/api/v1/checkout', checkoutDataRouter);
@@ -131,6 +134,7 @@ app.use('/', indexRouter);
 
 app.use('/user', userRouter);
 app.use('/strecke', trackRouter);
+app.use('/settings', settingsRouter);
 
 // catch 404 and forward to error handler
 app.use("/*", function(req, res, next) {

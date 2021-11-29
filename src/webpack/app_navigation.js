@@ -353,6 +353,10 @@ let Subpage = function(id, type, context){
             subpageUrl = '/webpack/templates/navigation/subpage-management.hbs';
             this.title = "Teamleiter";
             break;
+        case "settings":
+            subpageUrl = '/webpack/templates/navigation/subpage-settings.hbs';
+            this.title = "Einstellung";
+            break;
         default:
             //main
             subpageUrl = '/webpack/templates/navigation/subpage-main.hbs'
