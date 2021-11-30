@@ -8,6 +8,10 @@ var versionSchema = new Schema({
         type: String,
         required: true,
     },
+    track: {
+        type: Schema.Types.ObjectId,
+        ref: "task"
+    },
     version: {
         type: Number,
         required: true,

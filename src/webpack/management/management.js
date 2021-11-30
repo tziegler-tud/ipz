@@ -14,7 +14,7 @@ var tablet = window.matchMedia("only screen and (max-device-width: 1280px)");
 
 $(window).on('load',function() {
     console.log("finished loading, hiding preloader");
-    let plr = new preloader();
+    // let plr = new preloader();
 
 
 
@@ -38,21 +38,21 @@ let nav = new Navigation(
 );
 
 let pages  = [];
-let managementDashboardPage = new ManagementModulePage("dashboard");
-let managementTotalPage = new ManagementModulePage("total");
-let managementTracksPage = new ManagementModulePage("tracks");
-let managementStatisticsPage = new ManagementModulePage("statistics");
+// let managementDashboardPage = new ManagementModulePage("dashboard");
+// let managementTotalPage = new ManagementModulePage("total");
+// let managementTracksPage = new ManagementModulePage("tracks");
+// let managementStatisticsPage = new ManagementModulePage("statistics");
 let managementDevicesPage = new ManagementModulePage("devices");
 
-pages.push(managementDashboardPage);
-pages.push(managementTotalPage);
-pages.push(managementTracksPage);
-pages.push(managementStatisticsPage);
+// pages.push(managementDashboardPage);
+// pages.push(managementTotalPage);
+// pages.push(managementTracksPage);
+// pages.push(managementStatisticsPage);
 pages.push(managementDevicesPage);
 
-managementTotalPage.show({tabs: true, refresh: true})
+managementDevicesPage.show({tabs: true, refresh: false})
     .then(function(){
-        sidesheet = new Sidesheet("management", managementTotalPage, {});
+        sidesheet = new Sidesheet("management", managementDevicesPage, {});
         // bottomTabs =  new Bottom("management", managementTotalPage, {})
 
     });
@@ -65,57 +65,57 @@ nav.initialize
         let subpage = nav.addSubpage("management", {user: window.user}, true, "app-link-management", true);
         subpage.init
             .then(function(){
-                nav.setAction("nav-management-subpage--dashboard", function(e, args) {
-                    nav.setActiveElement("nav-management-subpage--dashboard");
-                    pages.forEach(function(page){
-                        if (page.active){
-                            page.hide();
-                        }
-                    })
-                    managementDashboardPage.show({tabs: true})
-                        .then(function(){
-                            sidesheet = new Sidesheet("checkin", managementDashboardPage, {});
-                        });
-                });
-                nav.setAction("nav-management-subpage--total", function(e, args) {
-                    nav.setActiveElement("nav-management-subpage--total");
-                    pages.forEach(function(page){
-                        if (page.active){
-                            page.hide();
-                        }
-                    })
-                    managementTotalPage.show({tabs: true, refresh: true})
-                        .then(function(){
-                            sidesheet = new Sidesheet("management", managementTotalPage, {});
-                        });
-                });
-                nav.setAction("nav-management-subpage--tracks", function(e, args) {
-                    nav.setActiveElement("nav-management-subpage--tracks");
-                    pages.forEach(function(page){
-                        if (page.active){
-                            page.hide();
-                        }
-                    })
-                    managementTracksPage.show({tabs: true})
-                        .then(function(){
-                            sidesheet = new Sidesheet("management", managementTracksPage, {});
-                            //bottoms are initialized inside Page.show
-                            // bottomTabs =  new Bottom("management-tracks", managementTracksPage, {})
-                        });
-                })
-                nav.setAction("nav-management-subpage--statistics", function(e, args) {
-                    nav.setActiveElement("nav-management-subpage--statistics");
-                    pages.forEach(function(page){
-                        if (page.active){
-                            page.hide();
-                        }
-                    })
-                    managementStatisticsPage.show({tabs: true})
-                        .then(function(){
-                            sidesheet = new Sidesheet("management", managementStatisticsPage, {});
-                            // bottomTabs =  new Bottom("management", managementStatisticsPage, {})
-                        });
-                })
+                // nav.setAction("nav-management-subpage--dashboard", function(e, args) {
+                //     nav.setActiveElement("nav-management-subpage--dashboard");
+                //     pages.forEach(function(page){
+                //         if (page.active){
+                //             page.hide();
+                //         }
+                //     })
+                //     managementDashboardPage.show({tabs: true})
+                //         .then(function(){
+                //             sidesheet = new Sidesheet("checkin", managementDashboardPage, {});
+                //         });
+                // });
+                // nav.setAction("nav-management-subpage--total", function(e, args) {
+                //     nav.setActiveElement("nav-management-subpage--total");
+                //     pages.forEach(function(page){
+                //         if (page.active){
+                //             page.hide();
+                //         }
+                //     })
+                //     managementTotalPage.show({tabs: true, refresh: true})
+                //         .then(function(){
+                //             sidesheet = new Sidesheet("management", managementTotalPage, {});
+                //         });
+                // });
+                // nav.setAction("nav-management-subpage--tracks", function(e, args) {
+                //     nav.setActiveElement("nav-management-subpage--tracks");
+                //     pages.forEach(function(page){
+                //         if (page.active){
+                //             page.hide();
+                //         }
+                //     })
+                //     managementTracksPage.show({tabs: true})
+                //         .then(function(){
+                //             sidesheet = new Sidesheet("management", managementTracksPage, {});
+                //             //bottoms are initialized inside Page.show
+                //             // bottomTabs =  new Bottom("management-tracks", managementTracksPage, {})
+                //         });
+                // })
+                // nav.setAction("nav-management-subpage--statistics", function(e, args) {
+                //     nav.setActiveElement("nav-management-subpage--statistics");
+                //     pages.forEach(function(page){
+                //         if (page.active){
+                //             page.hide();
+                //         }
+                //     })
+                //     managementStatisticsPage.show({tabs: true})
+                //         .then(function(){
+                //             sidesheet = new Sidesheet("management", managementStatisticsPage, {});
+                //             // bottomTabs =  new Bottom("management", managementStatisticsPage, {})
+                //         });
+                // })
                 nav.setAction("nav-management-subpage--devices", function(e, args) {
                     nav.setActiveElement("nav-management-subpage--devices");
                     pages.forEach(function(page){

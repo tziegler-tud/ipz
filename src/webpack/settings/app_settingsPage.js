@@ -20,7 +20,7 @@ var phone = window.matchMedia("only screen and (max-width: 50em)");
 
 var SettingsPage = function(args) {
     let self = Page.apply(this, args);
-    self.url = "/webpack/templates/settings.hbs";
+    self.url = "/webpack/templates/settings/settings.hbs";
     self.entries = undefined;
     self.page = undefined;
     self.dataVersion = 0;
@@ -54,6 +54,16 @@ SettingsPage.prototype.show = function(options){
  */
 SettingsPage.prototype.buildHtml = function(url, context){
     let self = this;
+    if (window.sysinfo === undefined) {
+        window.sysinfo = {
+            version: "unset",
+            updated: null,
+            branch: "unset",
+        }
+    }
+    window.sysinfo.updated = parseInt(window.sysinfo.updated);
+    context.sysinfo = window.sysinfo;
+    context.sysinfo.uptime = format(window.sysinfo.uptime);
     return $.get(url, function (data) {
         console.log("settings template found");
         var template = Handlebars.compile(data);
@@ -105,3 +115,15 @@ SettingsPage.prototype.showSnackbar = function(message, options) {
     snackbar.open()
 }
 export {SettingsPage};
+
+
+function format(upSeconds){
+    function pad(s){
+        return (s < 10 ? '0' : '') + s;
+    }
+    var hours = Math.floor(upSeconds / (60*60));
+    var minutes = Math.floor(upSeconds % (60*60) / 60);
+    var seconds = Math.floor(upSeconds % 60);
+
+    return pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+}

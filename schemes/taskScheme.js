@@ -8,6 +8,13 @@ var taskSchema = new Schema({
         type: String,
         required: true,
     },
+    category: {
+        type: String,
+        default: "unset",
+    },
+    url: {
+        type: "String"
+    },
     isAllowed: {
         type: Boolean,
         default: true,
@@ -16,8 +23,10 @@ var taskSchema = new Schema({
         type: Boolean,
         default: false,
     },
-    hash: {
-        type: "String",
+    daily: {
+        type: Boolean,
+        required: true,
+        default: false,
     }
 })
 

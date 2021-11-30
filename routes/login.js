@@ -31,13 +31,13 @@ router.get('/login', function(req, res, next) {
 /* POST user login */
 router.post('/login', function(req, res, next) {
   if(req.isAuthenticated()) {
-    res.redirect('/management')
+    res.redirect('/user/current')
   } else {
     passport.authenticate('local', {}, (err, user, info) => {
       if (!user) { return res.redirect("/login"); }
       req.login(user, (err) => {
         userManager.connect(user)
-        var redirectTo = req.session.redirectTo || "/management";
+        var redirectTo = req.session.redirectTo || "/user/current";
         req.session.save(() => {
           res.redirect(redirectTo);
         });

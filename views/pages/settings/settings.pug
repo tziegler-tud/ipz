@@ -1,6 +1,8 @@
 extends ../../layout
 
 block page_includes
+  script.
+    window.sysinfo = !{JSON.stringify(sysinfo)}
   link(rel='stylesheet', href='dist/settings.css')
   script(src="dist/settings.js")
 

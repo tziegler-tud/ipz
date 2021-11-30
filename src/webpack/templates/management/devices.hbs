@@ -19,7 +19,7 @@
                                         <li class="mdc-deprecated-list-item userlist-entry" data-userid={{this.user._id}}>
                                             <span class="mdc-deprecated-list-item__ripple"></span>
                                             <span class="mdc-deprecated-list-item__text">
-                                                <span class="mdc-deprecated-list-item__primary-text">{{this.user.name}}</span>
+                                                <span class="mdc-deprecated-list-item__primary-text">{{this.user.name}} <span class="text-secondary">| {{this.dailyTask.name}}</span></span>
                                                 <span class="mdc-deprecated-list-item__secondary-text">
                                                     {{#ifEquals this.active 2}}
                                                         <span class="icon-online"></span>{{this.currentTask.name}} {{{batteryStatus this.battery}}}

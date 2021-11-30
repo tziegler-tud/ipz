@@ -1,0 +1,61 @@
+<div class="app-page-wrapper settings-page">
+    <div class="app-page-content">
+        <div id="settings-container" class="settings-container">
+            <div class="infocards-inner ">
+                <div class="infocards-section infocards-card card-full">
+                    <div class="infocards-section-inner">
+                        <div class="infocards-sectionheader"><span>App-Informationen</span></div>
+                        <div>
+                            <ul class="userlist itemlist itemlist-style-clean itemlist-noSelect userinfo-itemList">
+                                <li class="user-entry userkey-entry">
+                                    <a class="inner">
+                                        <div class="item-property userkey-entry-title"><span>App-Version</span></div>
+                                        <div class="item-property userkey-entry-value"><span class="userkey-entry">{{sysinfo.version}}</span></div>
+                                        <div class="clear"></div>
+                                    </a>
+                                </li>
+                                <li class="user-entry userkey-entry">
+                                    <a class="inner">
+                                        <div class="item-property userkey-entry-title"><span>letzte Aktualisierung:</span></div>
+                                        <div class="item-property userkey-entry-value"><span class="userkey-entry">{{transformDateTimeString sysinfo.updated}}</span></div>
+                                        <div class="clear"></div>
+                                    </a>
+                                </li>
+                                <li class="user-entry userkey-entry">
+                                    <a class="inner">
+                                        <div class="item-property userkey-entry-title"><span>branch:</span></div>
+                                        <div class="item-property userkey-entry-value"><span class="userkey-entry">{{sysinfo.branch}}</span></div>
+                                        <div class="clear"></div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="infocards-sectionheader"><span>Systeminformationen</span></div>
+                        <div>
+                            <ul class="userlist itemlist itemlist-style-clean itemlist-noSelect userinfo-itemList">
+                                <li class="user-entry userkey-entry">
+                                    <a class="inner">
+                                        <div class="item-property userkey-entry-title"><span>Online seit:</span></div>
+                                        <div class="item-property userkey-entry-value"><span class="userkey-entry">{{sysinfo.uptime}}</span></div>
+                                        <div class="clear"></div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="mdc-snackbar">
+            <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+                <div class="mdc-snackbar__actions" aria-atomic="true">
+                    <button type="button" class="mdc-button mdc-snackbar__action">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

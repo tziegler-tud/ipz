@@ -801,6 +801,10 @@ infocards
   color: #b48d55 !important;
 }
 
+.text-secondary {
+  color: #AAA;
+}
+
 .mdc-touch-target-wrapper {
   display: inline;
 }

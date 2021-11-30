@@ -1,0 +1,27 @@
+extends ../../layout
+
+block page_includes
+  script.
+    if (window.args === undefined) window.args = {};
+    window.args.track = {};
+    window.args.track.name = "!{trackName}";
+    window.args.track.id = "!{id}";
+    window.args.track.trackId = "!{trackId}";
+    window.args.title = "!{trackTitle}";
+
+  link(rel='stylesheet', href='/dist/flow.css')
+  script(src="/dist/trackFlow.js")
+
+  link(rel='stylesheet', href='/css/preloader.css')
+
+
+block content
+  #wrapper.unisams-app.app-wrapper.protocol-app
+    #app-container.app-content-container.mdc-drawer-app-content.mdc-top-app-bar--fixed-adjust
+      #page-container.flow-page-container.page-container.has-sidesheet
+      #sidesheet-container.sidesheet-container
+
+
+
+
+

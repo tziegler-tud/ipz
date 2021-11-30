@@ -33,10 +33,11 @@ class UserManager {
         self.undefinedTask = {name: "Hat sich verirrt"};
         self.offlineTask = {name: "offline"};
         self.inactiveTask = {name: "inaktiv"};
+        self.unsetTask = {name: "nicht zugewiesen"};
         UserService.get()
             .then(users => {
                 users.forEach(function(user){
-                    self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask, battery: {}}); //active: 0 = offline, 1 = inactive, 2 = online
+                    self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask, dailyTask: self.unsetTask, battery: {}}); //active: 0 = offline, 1 = inactive, 2 = online
                 });
                 console.log("user runtime service initialized successfully.");
             })
@@ -51,7 +52,7 @@ class UserManager {
                 .then(users => {
                     self.registeredUsers = []
                     users.forEach(function(user){
-                        self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask, battery: {}});
+                        self.registeredUsers.push({user: user, active: 0, connect: false, decay: false, currentTask: self.offlineTask, dailyTask: self.unsetTask, battery: {}});
                     });
                     console.log("userManager updated.")
                     resolve(self.registeredUsers)
@@ -300,6 +301,62 @@ class UserManager {
         return self.registeredUsers[index];
     }
 
+    setDailyTask(index, task) {
+        let self = this;
+        if (task === undefined) task = self.undefinedTask;
+        if (self.registeredUsers[index] === undefined ) throw new Error("Failed to set daily Task: user index out of bounds.")
+        if (task.name !== undefined) {
+            TaskService.getByName(task.name).then(function(task){
+                if(task.daily === false) {
+                    console.error("failed to assign daily task: Task is found, but not marked as daily. Falling back to unset task")
+                    self.registeredUsers[index].dailyTask = self.unsetTask;
+                    return self.unsetTask;
+                }
+                task.url = generateUserTaskUrl(user, task);
+                self.registeredUsers[index].dailyTask = task
+                return task;
+            })
+                .catch(function(err){
+                    console.error("failed to find task. Falling back to undefined")
+                    self.registeredUsers[index].dailyTask = self.undefinedTask;
+                    return self.undefinedTask;
+                })
+        }
+        else {
+            if (typeof(task) === 'string') {
+                //get by name
+                TaskService.getByName(task).then(function(task){
+                    self.registeredUsers[index].dailyTask = task
+                    return task;
+                })
+                    .catch(function(err){
+                        console.error("failed to find task. Falling back to undefined")
+                        self.registeredUsers[index].dailyTask = self.undefinedTask;
+                        return self.undefinedTask;
+                    })
+            }
+        }
+        return self.registeredUsers[index];
+    }
+
+    getDailyTask(userid){
+        let self = this;
+        return new Promise(function(resolve, reject){
+            self.getById(userid)
+                .then(function(user){
+                    if(user.dailyTask !== self.unsetTask) {
+                        resolve(user.dailyTask);
+                    }
+                    else {
+                        reject(user.dailyTask)
+                    }
+            })
+                .catch(function(err){
+                    reject(err)
+                })
+        });
+    }
+
     registerPushSubscription(user, subscription) {
         let self = this;
         return new Promise(function(resolve, reject) {
@@ -336,4 +393,7 @@ class UserManager {
 
 let userManager = new UserManager();
 
+function generateUserTaskUrl(user, task){
+    return task.url;
+}
 module.exports = userManager;

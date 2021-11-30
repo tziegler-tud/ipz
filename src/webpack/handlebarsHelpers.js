@@ -77,3 +77,16 @@ Handlebars.registerHelper("batteryStatus", function(battery){
     htmlString = " / ";
     return "<span>" + htmlString + (battery.charging ? chargingIcon: dischargingIcon) + chargingLevel + "</span>";
 })
+
+Handlebars.registerHelper('eachProperty', function(context, options) {
+    var ret = "";
+    for(var prop in context)
+    {
+        ret = ret + options.fn({property:prop,value:context[prop]});
+    }
+    return ret;
+});
+
+Handlebars.registerHelper('displayJson', function(context, options) {
+    return JSON.stringify(context, null, '\t');
+});

@@ -1,0 +1,39 @@
+<div class="app-page-wrapper settings-page">
+    <div class="app-page-content">
+        <div id="settings-container" class="settings-container">
+            <div class="infocards-inner ">
+                <div class="infocards-section infocards-card card-full">
+                    {{#each dbItems}}
+                    <div class="infocards-section-inner">
+                        <div class="infocards-sectionheader"><span>{{@index}}</span></div>
+                        <div>
+                            <pre>{{displayJson this}}</pre>
+                            <div class="db-item-buttons">
+                                <div class="button-container">
+                                    <button class="mdc-button mdc-button--raised dbItem-delete-button" data-id="{{this.id}}">
+                                        <span class="mdc-button__label">DELETE</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+
+        </div>
+        <div class="mdc-snackbar">
+            <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+                <div class="mdc-snackbar__label" aria-atomic="false">
+                    Hier könnte Ihre Meldung stehen.
+                </div>
+                <div class="mdc-snackbar__actions" aria-atomic="true">
+                    <button type="button" class="mdc-button mdc-snackbar__action">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

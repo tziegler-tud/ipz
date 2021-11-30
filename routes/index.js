@@ -9,7 +9,15 @@ const taskManager = require("../services/taskService")
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.redirect('/user/current');
+    userManager.getDailyTask(req.user.id)
+        .then(function(dailyTask){
+            //user has a daily task assigned. Forward to task url
+            res.redirect(task.url);
+        })
+        .catch(function(err){
+            res.redirect('/user/current');
+        })
+
 });
 
 

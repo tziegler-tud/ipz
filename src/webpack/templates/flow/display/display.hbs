@@ -1,0 +1,43 @@
+<div class="app-page-wrapper display-page">
+    <div class="app-page-content">
+        <div class="display-wrapper">
+            <div class="display-container">
+                {{#each tracks}}
+                    <div class="display-column display-body-column--{{this.css.class}} {{#unless @first}}column-border-left{{/unless}}">
+                        <div id="display-header--{{this.css.index}}" class="display-header">
+                            <div class="display-header-entry display-header-entry--{{this.css.class}}">
+                                <div class="display-header-entry--prelabel">Bereich</div>
+                                <div class="display-header-entry--label">{{this.label}}</div>
+                            </div>
+                            <div class="display-header-border display-header-border--{{this.css.class}}"></div>
+                        </div>
+                        <div class="display-entries">
+                            {{#each this.data}}
+                                {{#if @first}}
+                                    <div id="display-current--{{this.css.index}}" class="display-current">
+                                        <div class="display-current-entry display-current-entry--{{this.css.class}}">
+                                            <div class="display-header-entry--prelabel">Bitte eintreten:</div>
+                                            {{#each this.data}}
+                                                <div class="display-current-entry--number">{{this.number}}</div>
+                                            {{/each}}
+                                        </div>
+                                    </div>
+                                    <div class="display-body-spacer">
+                                        <div class="spacer-border"></div>
+                                        <div class="spacer-label">Nächste Nummern:</div>
+                                    </div>
+                                {{else}}
+                                    <div class="display-body-entry">
+                                        {{#each this.data}}
+                                            <div class="display-body-entry--number">{{this.number}}</div>
+                                        {{/each}}
+                                    </div>
+                                {{/if}}
+                            {{/each}}
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>

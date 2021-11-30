@@ -1,0 +1,28 @@
+<div class="mdc-banner checkout-banner mdc-banner--mobile-stacked" role="banner">
+    <div class="mdc-banner__fixed ">
+        <div class="mdc-banner__content banner-content" role="status" aria-live="assertive">
+            <div class="mdc-banner__graphic-text-wrapper banner-text">
+
+                <div class="mdc-banner__text ">
+                    <span class="checkout-banner-text">Nächste Nummer:</span>
+                    <span class="checkout-banner-number">
+                        {{#each data}}
+                            {{this.number}}{{#unless @last}},{{/unless}}
+                        {{/each}}
+                    </span>
+                    <span class="checkout-banner-text">{{transformTimeString this.currentStatus.timestamp}}</span>
+                </div>
+            </div>
+            <div class="mdc-banner__actions banner-actions">
+                <button type="button" class="mdc-button mdc-banner__secondary-action">
+                    <div class="mdc-button__ripple"></div>
+                    <div class="mdc-button__label">Zurückstellen</div>
+                </button>
+                <button type="button" class="mdc-button mdc-button--raised mdc-banner__primary-action banner-button-next">
+                    <div class="mdc-button__ripple"></div>
+                    <div class="mdc-button__label">Einchecken + Weiter</div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

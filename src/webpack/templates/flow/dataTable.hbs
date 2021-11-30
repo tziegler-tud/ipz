@@ -1,0 +1,36 @@
+<div class="mdc-data-table checkout-table">
+    <div class="mdc-data-table__table-container checkout-table-container">
+        <table class="mdc-data-table__table" aria-label="Dessert calories">
+            <thead>
+            <tr class="mdc-data-table__header-row">
+                <th></th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Nummer</th>
+                <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Status</th>
+                <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">QueueNumber</th>
+                <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Zeit</th>
+<!--                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Comments</th>-->
+            </tr>
+            </thead>
+            <tbody class="mdc-data-table__content">
+            {{#if isEmpty}}
+                <tr class="mdc-data-table__row checkout-table-row primary">
+                    <td class="mdc-data-table__cell checkout-table-noEntryLabel" colspan="4"><span >Keine Einträge gefunden</span></td>
+                </tr>
+            {{else}}
+                {{#each entries}}
+                    {{#each data}}
+                        <tr data-entryid="{{../this.id}}" class="mdc-data-table__row checkout-table-row {{#if @first}}primary{{else}}secondary{{/if}}">
+                            <td>{{#unless @first}}<span class="secondary-icon material-icons">add</span>{{/unless}}</td>
+                            <th class="mdc-data-table__cell checkout-cell-number" scope="row">{{this.number}}</th>
+                            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{../this.currentStatus.text}}</td>
+                            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{../this.queueNumber}}</td>
+                            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{transformTimeString ../this.currentStatus.timestamp}}</td>
+                            <!--                        <td class="mdc-data-table__cell">Super tasty</td>-->
+                        </tr>
+                    {{/each}}
+                {{/each}}
+            {{/if}}
+            </tbody>
+        </table>
+    </div>
+</div>

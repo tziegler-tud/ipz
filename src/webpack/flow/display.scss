@@ -1,0 +1,111 @@
+@use "../common";
+@use "../app_navigation";
+@use "../app_pages";
+@use "../app_sidesheet";
+//
+//@use "../../../node_modules/@material/button";
+//@use "../../../node_modules/@material/list";
+//@use "../../../node_modules/@material/checkbox"; // Required only for data table with row selection.
+//@use "../../../node_modules/@material/icon-button"; // Required only for data table with column sorting.
+//@use "../../../node_modules/@material/data-table/data-table";
+//@use "../../../node_modules/@material/banner/styles";
+//@use "../../../node_modules/@material/banner";
+//@use "../../../node_modules/@material/snackbar/mdc-snackbar";
+//@use "../../../node_modules/@material/floating-label/mdc-floating-label";
+//@use "../../../node_modules/@material/line-ripple/mdc-line-ripple";
+//@use "../../../node_modules/@material/notched-outline/mdc-notched-outline";
+//@use "../../../node_modules/@material/textfield";
+//@use "../../../node_modules/@material/textfield/icon";
+//@use "../../../node_modules/@material/fab";
+
+
+@import "../variables";
+@import "../color-variables";
+
+@import "~material-icons-font/material-icons-font.css";
+//
+//
+//@include list.deprecated-core-styles;
+//@include checkbox.core-styles;
+//@include icon-button.core-styles;
+//@include data-table.core-styles;
+//@include data-table.theme-baseline;
+//@include textfield.core-styles;
+//@include icon.icon-core-styles;
+//@include fab.core-styles;
+
+
+.display-page{
+  width: 100%;
+  .display-wrapper {
+    width: 100%;
+    .display-container {
+      width: 100%;
+      display: flex;
+      flex-flow: row nowrap;
+
+        .display-column {
+          //margin: 0 15px;
+          padding: 0 25px;
+          flex: 1 1 auto;
+          &.column-border-left {
+            border-left: 1px solid #AAA;
+          }
+
+          .display-header {
+            padding-bottom: 25px;
+            .display-header-entry {
+              .display-header-entry--prelabel {
+                font-size: 20px;
+              }
+              .display-header-entry--label {
+                font-size: 75px;
+                color: #333;
+              }
+            }
+            .display-header-border {
+              border-bottom: 10px solid #333;
+              &.display-header-border--A {
+                border-bottom-color: $track-color-A;
+              }
+              &.display-header-border--B {
+                border-bottom-color: $track-color-B;
+              }
+              &.display-header-border--C {
+                border-bottom-color: $track-color-C;
+              }
+              &.display-header-border--D {
+                border-bottom-color: $track-color-D;
+              }
+              &.display-header-border--E {
+                border-bottom-color: $track-color-E;
+              }
+            }
+          }
+          .display-current {
+            .display-current-entry {
+              .display-current-entry--prelabel {
+                font-size: 30px;
+              }
+              .display-current-entry--number {
+                font-size: 60px;
+              }
+            }
+          }
+          .display-body-spacer {
+            .spacer-border {
+              height: 30px;
+              border-bottom: 1px solid #AAA;
+            }
+            .spacer-label {
+              color: #444;
+              padding: 0 0 10px 0;
+            }
+          }
+          .display-body-entry {
+            font-size: 35px;
+        }
+      }
+    }
+  }
+}

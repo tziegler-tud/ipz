@@ -21,6 +21,7 @@ var loginRouter = require('./routes/login');
 var trackRouter = require('./routes/strecke');
 var userRouter = require('./routes/user');
 var settingsRouter = require('./routes/settings');
+var flowRouter = require('./routes/flow');
 
 var checkinDataRouter = require('./routes/api/checkinHandler');
 var checkoutDataRouter = require('./routes/api/checkoutHandler');
@@ -33,6 +34,8 @@ var archiveHandler = require('./routes/api/archiveHandler');
 var statisticsHandler = require('./routes/api/statisticsHandler');
 var authenticationHandler = require('./routes/api/authenticationHandler');
 var roleHandler = require('./routes/api/roleHandler');
+
+var flowHandler = require('./routes/api/v4/flow');
 
 var pushRouter = require("./routes/push");
 
@@ -123,6 +126,7 @@ app.use('/api/v1/archive', archiveHandler);
 app.use('/api/v1/statistics', statisticsHandler);
 app.use('/api/v1/authentication', authenticationHandler);
 app.use('/api/v1/role', roleHandler);
+app.use('/api/v4/flow', flowHandler);
 app.use("/api", function(req, res, next) {
   next(createError(404));
 });
@@ -135,6 +139,7 @@ app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/strecke', trackRouter);
 app.use('/settings', settingsRouter);
+app.use('/flow', flowRouter);
 
 // catch 404 and forward to error handler
 app.use("/*", function(req, res, next) {

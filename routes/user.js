@@ -9,7 +9,7 @@ const userManager = require("../services/userManager");
 
 
 /*
-hooked at /user
+hooked at /settings/user
  */
 
 router.get("/", getAllUserPage);

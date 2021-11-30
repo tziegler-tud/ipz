@@ -5,6 +5,7 @@ const settingsService = require('./settingsService');
 
 module.exports = {
     get,
+    getFiltered,
     getById,
     add,
     remove,
@@ -20,6 +21,20 @@ async function get() {
 
 async function getById(id) {
     return Track.findById(id);
+}
+
+async function getFiltered(id, filter) {
+    if (filter===undefined || filter.filter === undefined || filter.value === undefined) {
+        return Track.find({"track.id": id});
+    }
+    else {
+        let filterObj = {
+            "track.id": id,
+        };
+        filterObj[filter.filter] = filter.value;
+        // return TrackData.find({isSwitched: true});
+        return Track.find(filterObj);
+    }
 }
 
 async function add(trackObject) {

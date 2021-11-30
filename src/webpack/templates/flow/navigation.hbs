@@ -1,0 +1,38 @@
+<header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+    <div class="mdc-top-app-bar__row">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+            <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Open navigation menu">menu</button>
+            <span id="nav-title" class="mdc-top-app-bar__title">{{pageData.navTitle}}</span>
+        </section>
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+            <button id="mdc-top-app-bar-action1" class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Options">settings</button>
+        </section>
+    </div>
+</header>
+<aside class="mdc-drawer mdc-drawer--dismissible mdc-top-app-bar--fixed-adjust">
+    <div class="mdc-drawer__content">
+        <div class="mdc-drawer__header">
+            <h3 class="mdc-drawer__title navigation-clock">{{pageData.time}}</h3>
+            <h6 class="mdc-drawer__subtitle">{{pageData.date}}</h6>
+        </div>
+        <div class="mdc-deprecated-list">
+            <!--            <a id="app-link-page1" class="mdc-deprecated-list-item mdc-deprecated-list-item--activated " href="#" aria-current="page">-->
+            <!--                <span class="mdc-deprecated-list-item__ripple"></span>-->
+            <!--                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">dashboard</i>-->
+            <!--                <span class="mdc-deprecated-list-item__text">Übersicht</span>-->
+            <!--            </a>-->
+            <a id="app-link-page2" class="mdc-deprecated-list-item mdc-deprecated-list-item mdc-deprecated-list-item--activated" href="#" aria-current="page">
+                <span class="mdc-deprecated-list-item__ripple"></span>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">grading</i>
+                <span class="mdc-deprecated-list-item__text">Vorkontrolle</span>
+            </a>
+            <a id="app-link-page3" class="mdc-deprecated-list-item" href="#" >
+                <span class="mdc-deprecated-list-item__ripple"></span>
+                <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">announcement</i>
+                <span class="mdc-deprecated-list-item__text">Wartebereich I - Aufruf</span>
+            </a>
+        </div>
+    </div>
+</aside>
+
+

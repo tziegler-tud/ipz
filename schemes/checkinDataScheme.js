@@ -4,38 +4,77 @@ const Schema = mongoose.Schema;
 
 // create instance of Schema
 var checkinDataSchema = new Schema({
-    type: {
-        type: Number,
+    track: {
+        type: Schema.Types.ObjectId,
+        ref: "track",
         required: true,
     },
-    timestamp: {
-        type: Date,
-        default: Date.now,
+    amount: {
+        type: Number,
+        default: 1,
     },
-    second: {
-        type: Boolean,
-        default: false,
-    }
+    data: [
+        {
+            number: {
+                type: String
+            },
+            details: {
+                type: {
+                    type: Number,
+                },
+                number: {
+                    type: Number,
+                }
+            }
+        },
+    ],
+    queueNumber: {
+        type: String,
+        required: true,
+    },
+    currentStatus: {
+        status: {
+            type: Number,
+            default: 0,
+        },
+        text: {
+            type: String,
+        },
+        timestamp: {
+
+        }
+    },
+    statusHistory: [{
+        status: {
+            type: String,
+        },
+        text: {
+            type: String,
+        },
+        timestamp: {
+
+        }
+    }],
 })
 
-checkinDataSchema.virtual("name").get(function(){
-    let typeString = "";
-    switch(this.type) {
-        case 1:
-            typeString ="BionTech";
-            break;
-        case 2:
-            typeString ="Moderna";
-            break;
-        case 3:
-            typeString ="Astrazeneca";
-            break;
-        default:
-            typeString = "nicht angegeben";
-            break;
-    }
-    return typeString;
-})
+// checkinDataSchema.virtual("typeName").get(function(){
+//     let typeString = "";
+//     switch(this.type) {
+//         case 1:
+//             typeString ="BionTech";
+//             break;
+//         case 2:
+//             typeString ="Moderna";
+//             break;
+//         case 3:
+//             typeString ="Johnson";
+//             break;
+//         default:
+//             typeString = "nicht angegeben";
+//             break;
+//     }
+//     return typeString;
+// })
 
 checkinDataSchema.set('toJSON', { virtuals: true, getters: true });
 
