@@ -2,78 +2,11 @@
 @use "./app_navigation";
 @use "./app_pages";
 @use "./app_sidesheet";
+@use "./index/app_indexPage";
 
-
-@use "../../node_modules/@material/card";
 @import "./variables";
 @import "./color-variables";
 
 
-@include card.core-styles;
 
 
-.page-container {
-  background-color: $page-bg-color;
-  width: 100%;
-}
-.index-header {
-  width: 80%;
-  margin: 50px auto;
-  .index-header__text {
-    font-size: 250%;
-    color: #333;
-  }
-}
-.index-choosing-container {
-  display: grid;
-  grid-template-columns: 50% 50%;
-
-  width: 80%;
-  margin: 0 auto;
-
-  @media #{$phone} {
-    grid-template-columns: 1fr;
-  }
-
-  .index-choosing-item {
-    flex: 1 0 350px;
-    height: 150px;
-    //min-width: 350px;
-    background-color: #fff;
-    margin: 15px 15px;
-
-    &.choosing-item__Checkin {
-      background-color: $checkin-color-light;
-    }
-
-    &.choosing-item__Impfstrecke {
-      background-color: $track-color-light;
-    }
-
-    &.choosing-item__apotheke {
-      background-color: $apotheke-color-light;
-    }
-
-    &.choosing-item__management {
-      background-color: $management-color-light;
-    }
-
-    .choosing-item-inner {
-      height: 100%;
-      width: 100%;
-      padding: 30px 16px;
-      //font-size: 150%;
-
-      .choosing-item__title {
-        font-weight: 400;
-        font-size: 150%;
-        line-height: 1.25rem;
-        font-family: Roboto, sans-serif;
-      }
-      .choosing-item__subtitle {
-        font-weight: 400;
-        font-family: Roboto, sans-serif;
-      }
-    }
-  }
-}

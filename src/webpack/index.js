@@ -4,6 +4,7 @@ import {Sidesheet} from "./app_sidesheet";
 import {transformDateTimeString} from "./helpers";
 
 import "./handlebarsHelpers";
+import {IndexPage} from "./index/app_indexPage";
 const Handlebars = require("handlebars");
 var $ = require( "jquery" );
 
@@ -29,5 +30,23 @@ $(window).on('load',function() {
             open: false,
         },
     );
+
+    let indexPage = new IndexPage();
+    indexPage.show()
+//     .done(function(){
+//     sidesheet = new Sidesheet("checkin", managementPage, {});
+// });
+
+
+    nav.initialize
+        .then(function(){
+            nav.setAction("mdc-top-app-bar-action1", function(e, args){
+                sidesheet.toggle();
+            })
+            let subpage = nav.addSubpage("settings",  {user: window.user}, true, "app-link-settings", true);
+            subpage.init
+                .then(function(){})
+        });
+
 });
 

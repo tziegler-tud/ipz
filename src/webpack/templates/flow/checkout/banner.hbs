@@ -1,0 +1,29 @@
+<div class="mdc-banner checkout-banner mdc-banner--mobile-stacked {{#checklength data 4}}multi4{{else}}{{#checklength data 2}}multi2{{else}}{{/checklength}}{{/checklength}}" role="banner">
+        <div class="mdc-banner__content" role="status" aria-live="assertive">
+            <div class="mdc-banner__graphic-text-wrapper ">
+
+                <div class="mdc-banner__text">
+                    <span class="checkout-banner-text">Aktuell aufgerufen:</span>
+                    <div class="checkout-number-container">
+                        <span class="checkout-banner-number {{#checklength data 4}}multi4{{else}}{{#checklength data 2}}multi2{{else}}{{/checklength}}{{/checklength}}">
+                            {{#each data}}
+                                {{this.number}}{{#unless @last}},{{/unless}}
+                            {{/each}}
+                        </span>
+                        <div class="time-container"><span class="checkout-time-label">Vorkontrolle: </span><span class="checkout-time">{{transformTimeString this.currentStatus.timestamp}}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mdc-banner__actions">
+                <button type="button" class="mdc-button mdc-button--outlined mdc-banner__secondary-action banner-button banner-button-redraw">
+                    <div class="mdc-button__ripple"></div>
+                    <div class="mdc-button__label">Zurückstellen</div>
+                </button>
+                <button type="button" class="mdc-button mdc-button--raised mdc-banner__primary-action banner-button banner-button-next">
+                    <div class="mdc-button__ripple"></div>
+                    <div class="mdc-button__label">Nächste Nummer aufrufen</div>
+                </button>
+            </div>
+        </div>
+
+</div>

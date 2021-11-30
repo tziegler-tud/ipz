@@ -291,6 +291,20 @@ infocards
     .infocards-itemList {
 
     }
+    .infocards-content__text {
+      padding: 12px 12px 0 12px;
+    }
+
+    .infocards-primary-text {
+      font-weight: bold;
+      font-size: 120%;
+    }
+
+
+    .infocards-secondary-text {
+      font-size: 80%;
+      color: #333;
+    }
 
     .infocards-item {
 
@@ -319,6 +333,9 @@ infocards
           }
         }
       }
+    }
+    .infocards-buttons {
+      padding: 12px 12px 0 12px;
     }
   }
 }

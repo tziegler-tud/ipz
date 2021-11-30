@@ -642,6 +642,17 @@ infocards
   font-variant: small-caps;
   letter-spacing: 0.15em;
 }
+.infocards-inner .infocards-section .infocards-content__text {
+  padding: 12px 12px 0 12px;
+}
+.infocards-inner .infocards-section .infocards-primary-text {
+  font-weight: bold;
+  font-size: 120%;
+}
+.infocards-inner .infocards-section .infocards-secondary-text {
+  font-size: 80%;
+  color: #333;
+}
 .infocards-inner .infocards-section .infocards-item {
   flex: 1 1 auto;
 }
@@ -666,6 +677,9 @@ infocards
   .infocards-inner .infocards-section .infocards-item span.infocards-item-label.infocards-attribute-name, .infocards-inner .infocards-section .infocards-item label.infocards-item-label.infocards-attribute-name {
     width: 8em;
   }
+}
+.infocards-inner .infocards-section .infocards-buttons {
+  padding: 12px 12px 0 12px;
 }
 
 .color--biontech {

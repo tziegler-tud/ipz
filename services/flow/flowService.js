@@ -366,23 +366,25 @@ async function setVersionNumber(number, track) {
 }
 
 function updateVersions(track){
-    if(track.id === undefined) track = {id: track};
-    Version.findOne({label: "checkout"})
-        .then(function(version){
-            if(!version){
-                console.log("no version file found. Generating new version history...")
-                version = new Version({
-                    label: "checkout",
-                    version: 1,
-                    track: track.id,
-                    timestamp: Date.now(),
-                });
-            }
-            else {
-                version.version++;
-            }
-            version.save();
-        })
+    if (track !== undefined) {
+        if(track.id === undefined) track = {id: track};
+        Version.findOne({label: "checkout", track: track})
+            .then(function(version){
+                if(!version){
+                    console.log("no version file found. Generating new version history...")
+                    version = new Version({
+                        label: "checkout",
+                        version: 1,
+                        track: track.id,
+                        timestamp: Date.now(),
+                    });
+                }
+                else {
+                    version.version++;
+                }
+                version.save();
+            })
+    }
     Version.findOne({label: "display"})
         .then(function(displayVersion){
             if(!displayVersion){

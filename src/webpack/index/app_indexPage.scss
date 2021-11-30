@@ -1,0 +1,115 @@
+@use "../../../node_modules/@material/button";
+@use "../../../node_modules/@material/list";
+@use "../../../node_modules/@material/checkbox"; // Required only for data table with row selection.
+@use "../../../node_modules/@material/icon-button"; // Required only for data table with column sorting.
+@use "../../../node_modules/@material/data-table/data-table";
+@use "../../../node_modules/@material/banner/styles";
+@use "../../../node_modules/@material/banner";
+@use "../../../node_modules/@material/snackbar/mdc-snackbar";
+@use "../../../node_modules/@material/floating-label/mdc-floating-label";
+@use "../../../node_modules/@material/line-ripple/mdc-line-ripple";
+@use "../../../node_modules/@material/notched-outline/mdc-notched-outline";
+@use "../../../node_modules/@material/textfield";
+@use "../../../node_modules/@material/textfield/icon";
+@use "../../../node_modules/@material/fab";
+@use "../../../node_modules/@material/card";
+@use "../../../node_modules/@material/dialog";
+
+@import "../app_pages";
+@import "../dashboard/dashboard";
+
+
+@import "../variables";
+@import "../color-variables";
+
+@import "~material-icons-font/material-icons-font.css";
+
+
+@include list.deprecated-core-styles;
+@include checkbox.core-styles;
+@include icon-button.core-styles;
+@include data-table.core-styles;
+@include data-table.theme-baseline;
+@include textfield.core-styles;
+@include icon.icon-core-styles;
+@include fab.core-styles;
+@include card.core-styles;
+@include dialog.core-styles;
+
+.mdc-snackbar {
+  .mdc-snackbar__action {
+    display: none;
+  }
+  &.show-action {
+    .mdc-snackbar__action {
+      display: block;
+    }
+  }
+}
+
+
+.page-container {
+  background-color: $page-bg-color;
+  width: 100%;
+}
+.index-header {
+  width: 80%;
+  margin: 50px auto;
+  .index-header__text {
+    font-size: 250%;
+    color: #333;
+  }
+}
+.index-choosing-container {
+  display: grid;
+  grid-template-columns: 50% 50%;
+
+  width: 80%;
+  margin: 0 auto;
+
+  @media #{$phone} {
+    grid-template-columns: 1fr;
+  }
+
+  .index-choosing-item {
+    flex: 1 0 350px;
+    height: 150px;
+    //min-width: 350px;
+    background-color: #fff;
+    margin: 15px 15px;
+
+    &.choosing-item__Checkin {
+      background-color: $checkin-color-light;
+    }
+
+    &.choosing-item__Impfstrecke {
+      background-color: $track-color-light;
+    }
+
+    &.choosing-item__apotheke {
+      background-color: $apotheke-color-light;
+    }
+
+    &.choosing-item__management {
+      background-color: $management-color-light;
+    }
+
+    .choosing-item-inner {
+      height: 100%;
+      width: 100%;
+      padding: 30px 16px;
+      //font-size: 150%;
+
+      .choosing-item__title {
+        font-weight: 400;
+        font-size: 150%;
+        line-height: 1.25rem;
+        font-family: Roboto, sans-serif;
+      }
+      .choosing-item__subtitle {
+        font-weight: 400;
+        font-family: Roboto, sans-serif;
+      }
+    }
+  }
+}
