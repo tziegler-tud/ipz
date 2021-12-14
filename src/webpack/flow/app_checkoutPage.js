@@ -61,6 +61,7 @@ var CheckoutPage = function(args){
             isEmpty: true,
             updateBanner: false,
             entries: result,
+            track: self.track,
         }
 
         if(result !== undefined && result.length !== 0) {
@@ -233,7 +234,7 @@ CheckoutPage.prototype.showBanner = function(entry){
     self.bannerEntry = entry;
     self.banner.then(function(data){
         //we need current entry as context
-        let context = entry;
+        let context = {entry: entry, track: self.track};
         var template = Handlebars.compile(data);
         self.bannerWrapper.innerHTML = template(context);
         const banner = new MDCBanner(document.querySelector('.mdc-banner'));
@@ -317,3 +318,11 @@ CheckoutPage.prototype.showSnackbar = function(message, options) {
 
 
 export {CheckoutPage};
+
+var Banner = function(){
+    let self = this;
+    self.template = $.get("/webpack/templates/flow/checkout/banner.hbs");
+
+
+    return this;
+}

@@ -1,16 +1,16 @@
-<div class="mdc-banner checkout-banner mdc-banner--mobile-stacked {{#checklength data 4}}multi4{{else}}{{#checklength data 2}}multi2{{else}}{{/checklength}}{{/checklength}}" role="banner">
+<div class="mdc-banner checkout-banner mdc-banner--mobile-stacked {{#checklength entry.data 4}}multi4{{else}}{{#checklength entry.data 2}}multi2{{else}}{{/checklength}}{{/checklength}}" role="banner">
         <div class="mdc-banner__content" role="status" aria-live="assertive">
             <div class="mdc-banner__graphic-text-wrapper ">
 
                 <div class="mdc-banner__text">
                     <span class="checkout-banner-text">Aktuell aufgerufen:</span>
                     <div class="checkout-number-container">
-                        <span class="checkout-banner-number {{#checklength data 4}}multi4{{else}}{{#checklength data 2}}multi2{{else}}{{/checklength}}{{/checklength}}">
-                            {{#each data}}
+                        <span class="checkout-banner-number trackColor--{{track.name}} {{#checklength entry.data 4}}multi4{{else}}{{#checklength entry.data 2}}multi2{{else}}{{/checklength}}{{/checklength}}">
+                            {{#each entry.data}}
                                 {{this.number}}{{#unless @last}},{{/unless}}
                             {{/each}}
                         </span>
-                        <div class="time-container"><span class="checkout-time-label">Vorkontrolle: </span><span class="checkout-time">{{transformTimeString this.currentStatus.timestamp}}</span></div>
+                        <div class="time-container"><span class="checkout-time-label">Vorkontrolle: </span><span class="checkout-time">{{transformTimeString entry.currentStatus.timestamp}}</span></div>
                     </div>
                 </div>
             </div>

@@ -546,6 +546,26 @@ infocards
   color: #AAA;
 }
 
+.trackColor--A {
+  color: #a70808;
+}
+
+.trackColor--B {
+  color: #d0910a;
+}
+
+.trackColor--C {
+  color: #138c0a;
+}
+
+.trackColor--D {
+  color: #0468c9;
+}
+
+.trackColor--E {
+  color: #dc71ba;
+}
+
 .mdc-touch-target-wrapper {
   display: inline;
 }
@@ -15907,7 +15927,6 @@ a.mdc-list-item {
   flex: 1 1 auto;
   line-height: 1em;
   font-size: 400%;
-  color: #c31d34;
 }
 @media only screen and (min-width: 800px) and (max-width: 1280px) {
   .banner-wrapper .checkout-banner .checkout-number-container .checkout-banner-number {

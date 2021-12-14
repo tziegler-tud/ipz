@@ -19,7 +19,7 @@
                 <a id="app-link-checkin--{{this.id}}" class="navigation-element mdc-deprecated-list-item" href="/flow/checkin/{{this.id}}">
                     <span class="mdc-deprecated-list-item__ripple"></span>
                     <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">grading</i>
-                    <span class="mdc-deprecated-list-item__text">Checkin {{this.name}}</span>
+                    <span class="mdc-deprecated-list-item__text">Checkin <span class="trackColor--{{this.name}}">{{this.name}}</span></span>
                 </a>
             </div>
         {{/each}}
@@ -31,7 +31,7 @@
                     <a id="app-link-strecke--{{this.id}}" class="navigation-element mdc-deprecated-list-item" href="/flow/track/{{this.id}}">
                         <span class="mdc-deprecated-list-item__ripple"></span>
                         <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">coronavirus</i>
-                        <span class="mdc-deprecated-list-item__text">Impfstrecke {{this.name}}</span>
+                        <span class="mdc-deprecated-list-item__text">Impfstrecke  <span class="trackColor--{{this.name}}">{{this.name}}</span></span>
                     </a>
                 {{/each}}
             {{/if}}

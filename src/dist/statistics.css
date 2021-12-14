@@ -819,6 +819,26 @@ infocards
   color: #AAA;
 }
 
+.trackColor--A {
+  color: #a70808;
+}
+
+.trackColor--B {
+  color: #d0910a;
+}
+
+.trackColor--C {
+  color: #138c0a;
+}
+
+.trackColor--D {
+  color: #0468c9;
+}
+
+.trackColor--E {
+  color: #dc71ba;
+}
+
 .mdc-touch-target-wrapper {
   display: inline;
 }
