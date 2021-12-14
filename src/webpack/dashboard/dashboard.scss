@@ -104,11 +104,11 @@
         .dashboard-subcomponent-container {
           display: grid;
           grid-template-rows: auto auto;
-          grid-template-columns: 1fr 1fr 1fr 1fr;
+          grid-template-columns: 1fr 1fr 1fr;
           grid-row-gap: 10px;
           grid-template-areas:
-                    "main main main main"
-                    "content1 content2 content3 content4";
+                    "main main main"
+                    "content1 content2 content4";
         }
 
         .figures-main {

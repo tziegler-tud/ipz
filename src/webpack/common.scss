@@ -71,6 +71,18 @@ body {
 }
 
 /*
+general styling
+ */
+.hidden {
+  display: none;
+
+}
+
+.force-hidden {
+  display: none !important;
+}
+
+/*
 cards
  */
 

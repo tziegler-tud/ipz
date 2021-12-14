@@ -212,6 +212,14 @@
                 }
               }
 
+              &.choosing-card--single {
+                .choosing-card-counter-container {
+                  display: grid;
+                  grid-template-rows: auto;
+                  grid-template-columns: 100%;
+                }
+              }
+
               &.choosing-card--booster {
                 .choosing-card-counter-container {
                   display: grid;

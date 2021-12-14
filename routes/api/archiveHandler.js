@@ -73,9 +73,6 @@ function update (req, res, next){
     if (req.body === undefined) {
         next(err);
     }
-    if(req.body.name === undefined){
-        next(err)
-    }
     archiveService.update(req.params.id, req.body)
         .then(result => res.json(result))
         .catch(err => next(err));

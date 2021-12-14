@@ -322,6 +322,17 @@ body {
 }
 
 /*
+general styling
+ */
+.hidden {
+  display: none;
+}
+
+.force-hidden {
+  display: none !important;
+}
+
+/*
 cards
  */
 .cards-container {
@@ -9275,7 +9286,17 @@ tabs
 }
 .tabs .tab-container .tab {
   display: none;
-  height: 100%;
+  height: calc(100% - 3em);
+}
+@media only screen and (min-width: 1280px) {
+  .tabs .tab-container .tab {
+    height: calc(100% - 4em);
+  }
+}
+@media only screen and (max-width: 800px) {
+  .tabs .tab-container .tab {
+    height: calc(100% - 1em);
+  }
 }
 .tabs .tab-container .tab--active {
   display: block !important;

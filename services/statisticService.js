@@ -89,7 +89,7 @@ var ArchiveDataManager = function(daysFromNow){
 
     this.updateData = function(){
         return new Promise(function(resolve, reject){
-            getArchiveStats(self.daysFromNow)
+            getArchiveStatsCalendary(self.daysFromNow)
                 .then(function(data){
                     self.data = data;
                     self.generatedTimestamp = Date.now();
@@ -102,8 +102,8 @@ var ArchiveDataManager = function(daysFromNow){
 };
 
 let dayStatsManager = new DayStatsManager();
-let weekDataManager = new ArchiveDataManager(6);
-let monthDataManager = new ArchiveDataManager(30);
+let weekDataManager = new ArchiveDataManager(7);
+let monthDataManager = new ArchiveDataManager(31);
 
 /**
  * Gets all archive documents
@@ -692,6 +692,94 @@ async function getArchiveStats(daysFromToday, daysAhead, startDateString){
         datasets: datasets,
     };
 
+}
+
+async function getArchiveStatsCalendary(daysFromToday, daysAhead, startDateString){
+    let today, archiveData, currentDate, d;
+    if(daysAhead === undefined) daysAhead = 0;
+    if (startDateString === undefined || startDateString === "current") {
+        //get today
+        today = await trackDataService.getCounts();
+        currentDate = dateTransformer.transformDateTimeString(new Date()).date;
+        d = new Date();
+    }
+    else {
+        //find start Date in archive
+        let startDateArchive = await Archive.findOne({"date": startDateString});
+        today = count(startDateArchive.data.trackDatas);
+        currentDate = startDateArchive.date;
+        d = new Date(startDateArchive.timestamp);
+    }
+
+    let entries = [];
+    let archiveEntries = new Array(daysFromToday);
+    let dataPromises = new Array(daysFromToday);
+    let meta = new Array(daysFromToday);
+
+    for(var i=0; i<daysFromToday; i++){
+        let localDate = new Date(d);
+        localDate.setDate(d.getDate()-(i+1));
+        let index = i;
+        let dateString = dateTransformer.transformDateTimeString(localDate).date;
+        meta[index] = ({index: index, localDate: localDate, dateString: dateString});
+        dataPromises[index] = (Archive.findOne({date: dateString}));
+    }
+    //return dates and totals
+    let labels = [];
+    entries.push({
+        date: currentDate,
+        counts: today,
+        current: true,
+    })
+    labels.push(currentDate);
+
+    return new Promise(function(resolve, reject) {
+        Promise.all(dataPromises).then(function (data) {
+            data.forEach(function (archiveData, index) {
+                if (archiveData) {
+                    archiveEntries[index] = archiveData;
+                } else {
+                    //no data found in archive for that date. create empty resonse
+                    archiveEntries[index] = {
+                        timestamp: meta[index].localDate,
+                        date: meta[index].dateString,
+                        data: {
+                            trackDatas: [],
+                            checkindatas: [],
+                            tracks: []
+                        }
+                    }
+                }
+            })
+
+            archiveEntries.forEach(function (archiveElement) {
+                //calc counts
+                let counts = count(archiveElement.data.trackDatas);
+                entries.push({
+                    date: archiveElement.date,
+                    counts: counts,
+                    current: false,
+                })
+                labels.push(archiveElement.date)
+            })
+
+            //reverse to preserve chronological order
+            entries.reverse();
+            labels.reverse();
+
+            //aggregate by type and first/second
+            let datasets = aggregateByType(entries, labels);
+
+            let returnEl = {
+                labels: labels,
+                datasets: datasets,
+            };
+            resolve(returnEl);
+        })
+            .catch(function(err){
+                reject(err);
+            })
+    })
 }
 
 function count(data){

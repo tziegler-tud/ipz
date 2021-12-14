@@ -525,6 +525,17 @@ body {
 }
 
 /*
+general styling
+ */
+.hidden {
+  display: none;
+}
+
+.force-hidden {
+  display: none !important;
+}
+
+/*
 cards
  */
 .cards-container {
@@ -6047,7 +6058,17 @@ tabs
 }
 .tabs .tab-container .tab {
   display: none;
-  height: 100%;
+  height: calc(100% - 3em);
+}
+@media only screen and (min-width: 1280px) {
+  .tabs .tab-container .tab {
+    height: calc(100% - 4em);
+  }
+}
+@media only screen and (max-width: 800px) {
+  .tabs .tab-container .tab {
+    height: calc(100% - 1em);
+  }
 }
 .tabs .tab-container .tab--active {
   display: block !important;
@@ -10140,7 +10161,17 @@ tabs
 }
 .tabs .tab-container .tab {
   display: none;
-  height: 100%;
+  height: calc(100% - 3em);
+}
+@media only screen and (min-width: 1280px) {
+  .tabs .tab-container .tab {
+    height: calc(100% - 4em);
+  }
+}
+@media only screen and (max-width: 800px) {
+  .tabs .tab-container .tab {
+    height: calc(100% - 1em);
+  }
 }
 .tabs .tab-container .tab--active {
   display: block !important;
@@ -15169,9 +15200,9 @@ a.mdc-list-item {
 .dashboard .dashboard-inner .dashboard-component-container .dashboard-component-figures .dashboard-subcomponent-container {
   display: grid;
   grid-template-rows: auto auto;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-row-gap: 10px;
-  grid-template-areas: "main main main main" "content1 content2 content3 content4";
+  grid-template-areas: "main main main" "content1 content2 content4";
 }
 .dashboard .dashboard-inner .dashboard-component-container .dashboard-component-figures .figures-main {
   grid-area: main;

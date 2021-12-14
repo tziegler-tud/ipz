@@ -112,52 +112,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="choosing-item astra" data-type="3">
-                            <div class="mdc-card choosing-card">
-                                <div class=" choosing-card-counter-container">
-                                    <div class="mdc-card__primary-action choosing-card__action-section" data-type="3" data-second="false">
-                                        <div class="my-card__media mdc-card__media mdc-card__media--16-9 choosing-item-media choosing-card-counter-part first" data-type="3" data-second="false">
-                                            <div class="mdc-card__media-content content-label"><span>Erst</span></div>
-                                            <div id="astra-counter--first" class="mdc-card__media-content choosing-card-counter"><span class="choosing-card-counter-loader lds-dual-ring"></span></div>
-<!--                                            <div  class="mdc-card__media-content choosing-card-timestamp"><span class="choosing-card-timestamp__text">Zweitimpfung</span></div>-->
-                                        </div>
-                                    </div>
-                                    <div class="mdc-card__primary-action choosing-card__action-section" data-type="3" data-second="true">
-                                        <div class="my-card__media mdc-card__media mdc-card__media--16-9 choosing-item-media choosing-card-counter-part second" data-type="3" data-second="true">
-                                            <div class="mdc-card__media-content content-label"><span>Zweit</span></div>
-                                            <div id="astra-counter--second" class="mdc-card__media-content choosing-card-counter"><span class="choosing-card-counter-loader lds-dual-ring"></span></div>
-<!--                                            <div  class="mdc-card__media-content choosing-card-timestamp"><span class="choosing-card-timestamp__text">Zweitimpfung</span></div>-->
-                                        </div>
-                                    </div>
-
-                                    <!-- ... additional primary action content ... -->
-                                </div>
-                                <div class="sublabel">
-<!--                                    <span class="choosing-card-title">Erstimpfung</span>-->
-<!--                                    <span class="choosing-card-title">Zweitimpfung</span>-->
-                                </div>
-                                <div class="choosing-card__text-section">
-                                    <span class="choosing-card-title">Astrazeneca</span>
-                                </div>
-                                <div class="mdc-card__actions">
-
-                                    <div class="mdc-card__action-buttons">
-                                        <button id="astra-refresh-button" class="mdc-icon-button mdc-card__action mdc-card__action--icon refresh-button">
-                                            <i class="material-icons mdc-icon-button__icon ">refresh</i>
-                                        </button>
-                                        <button id="astra-remove-button" class="mdc-icon-button mdc-card__action mdc-card__action--icon remove-button">
-                                            <i class="material-icons mdc-icon-button__icon ">exposure_neg_1</i>
-                                        </button>
-                                    </div>
-                                    <div class="mdc-card__action-icons">
-                                        <div  class="choosing-card-timestamp"><span class="choosing-card-timestamp__text">zuletzt:&nbsp;</span><span id="astra-timer" class="choosing-card-timestamp__value"></span></div>
-<!--                                                                            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="More options">more_vert</button>-->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="choosing-item johnson" data-type="4">
-                            <div class="mdc-card choosing-card">
+                            <div class="mdc-card choosing-card choosing-card--single">
                                 <div class=" choosing-card-counter-container">
                                     <div class="mdc-card__primary-action choosing-card__action-section" data-type="4" data-second="false">
                                         <div class="my-card__media mdc-card__media mdc-card__media--16-9 choosing-item-media choosing-card-counter-part first" data-type="3" data-second="false">
@@ -166,7 +122,7 @@
                                             <!--                                            <div  class="mdc-card__media-content choosing-card-timestamp"><span class="choosing-card-timestamp__text">Zweitimpfung</span></div>-->
                                         </div>
                                     </div>
-                                    <div class="mdc-card__primary-action choosing-card__action-section" data-type="4" data-second="true">
+                                    <div class="mdc-card__primary-action choosing-card__action-section force-hidden" data-type="4" data-second="true">
                                         <div class="my-card__media mdc-card__media mdc-card__media--16-9 choosing-item-media choosing-card-counter-part second" data-type="4" data-second="true">
                                             <div class="mdc-card__media-content content-label"><span>Zweit</span></div>
                                             <div id="johnson-counter--second" class="mdc-card__media-content choosing-card-counter"><span class="choosing-card-counter-loader lds-dual-ring"></span></div>
@@ -200,13 +156,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="switch-container">
-                    <button id="switch-button" class="switch-button mdc-fab mdc-fab--extended">
-                        <div class="mdc-fab__ripple"></div>
-                        <span class="material-icons mdc-fab__icon">sync</span>
-                        <span class="mdc-fab__label">Impfstoff-Wechsel</span>
-                    </button>
-                </div>
+<!--                <div class="switch-container">-->
+<!--                    <button id="switch-button" class="switch-button mdc-fab mdc-fab--extended">-->
+<!--                        <div class="mdc-fab__ripple"></div>-->
+<!--                        <span class="material-icons mdc-fab__icon">sync</span>-->
+<!--                        <span class="mdc-fab__label">Impfstoff-Wechsel</span>-->
+<!--                    </button>-->
+<!--                </div>-->
             </div>
         </div>
 
@@ -302,10 +258,10 @@
                                 <span class="mdc-list-item__ripple"></span>
                                 <span class="mdc-deprecated-list-item__text">Moderna</span>
                             </li>
-                            <li class="mdc-deprecated-list-item" role="option" data-type="3">
-                                <span class="mdc-list-item__ripple"></span>
-                                <span class="mdc-deprecated-list-item__text">Astrazenecca</span>
-                            </li>
+<!--                            <li class="mdc-deprecated-list-item" role="option" data-type="3">-->
+<!--                                <span class="mdc-list-item__ripple"></span>-->
+<!--                                <span class="mdc-deprecated-list-item__text">Astrazenecca</span>-->
+<!--                            </li>-->
                             <li class="mdc-deprecated-list-item" role="option" data-type="4">
                                 <span class="mdc-list-item__ripple"></span>
                                 <span class="mdc-deprecated-list-item__text">Johnson & Johnson</span>

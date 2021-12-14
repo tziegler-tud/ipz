@@ -67,11 +67,11 @@ async function update(id, ArchiveObject) {
         throw new Error("Failed to update Archive: Invalid arguments received")
     }
     //find current entry
-    let Archive = await Archive.findById(id);
+    let archive = await Archive.findById(id);
     // copy ArchiveObject properties to user
-    Object.assign(Archive, ArchiveObject);
+    Object.assign(archive, ArchiveObject);
     //save to db
-    return Archive.save();
+    return archive.save();
 }
 
 async function archiveCurrentDay() {

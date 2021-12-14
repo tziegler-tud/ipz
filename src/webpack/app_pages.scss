@@ -89,7 +89,14 @@ tabs
     overflow: scroll;
     .tab {
       display: none;
-      height: 100%;
+      height: calc(100% - 3em);
+      @media #{$desktop} {
+        height: calc(100% - 4em);
+      }
+
+      @media #{$phone} {
+        height: calc(100% - 1em);
+      }
     }
 
     .tab--active {

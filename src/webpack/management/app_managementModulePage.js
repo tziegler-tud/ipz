@@ -219,15 +219,15 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                     const averageGraphData = {
                         datasets: [{
                             label: 'Gesamt',
-                            backgroundColor: 'rgb(255, 99, 132)',
-                            borderColor: 'rgb(255, 99, 132)',
+                            backgroundColor: 'rgb(0, 0, 0)',
+                            borderColor: 'rgb(0, 0, 0)',
                             data: avgDataset,
                             tension: 0.4,
                             // parsing: false,
                         }]
                     };
 
-                    let colors = ["#b19338", "#99BCE2FF", "#AF99E2FF", "#E299D0FF"]
+                    let colors = ["#a70808FF", "#d0910aFF", "#138c0aFF", "#0468c9FF", "#dc71baFF"]
                     data.day.stats.average.byTracks.forEach(function(trackAverages, index){
                         let label = trackAverages.track.name;
                         let data = trackAverages.averages;
@@ -532,11 +532,11 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                 self.figures = new Dashboard("modules", self, {containerId: "dashboard-container"});
                 self.figures.addComponent("figures-management");
 
-                self.switches = new Dashboard("modules", self, {containerId: "switched-container"});
-                self.switches.addComponent("switches", {}, buildSwitch);
+                // self.switches = new Dashboard("modules", self, {containerId: "switched-container"});
+                // self.switches.addComponent("switches", {}, buildSwitch);
 
                 self.dashboards.push(self.figures);
-                self.dashboards.push(self.switches);
+                // self.dashboards.push(self.switches);
 
 
                 //setup tab navigation interface
@@ -547,9 +547,9 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                         self.tabs[0].activate();
                     }
                 }
-                let bottomTabs = new Bottom("management", self, {}, {});
-                self.tabs[0].dashboard = self.figures;
-                self.tabs[1].dashboard = self.switches;
+                // let bottomTabs = new Bottom("management", self, {}, {});
+                // self.tabs[0].dashboard = self.figures;
+                // // self.tabs[1].dashboard = self.switches;
 
                 resolve();
             });
@@ -599,7 +599,7 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
 
                         let trackDashboard = new Dashboard("modules", self, {containerId: containerId});
                         trackDashboard.addComponent("figures-track", {track: track});
-                        trackDashboard.addComponent("switches-track", {track: track}, buildSwitch)
+                        // trackDashboard.addComponent("switches-track", {track: track}, buildSwitch)
 
                         self.dashboards.push(trackDashboard);
                         //hook to tab

@@ -223,17 +223,17 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                             counter: new Counter({start: result.counters.m.booster, min: 0, step: 1}),
                         },
                     },
-                    a: {
-                        name: "Astra",
-                        first: {
-                            el: document.getElementById("astra-counter--first"),
-                            counter: new Counter({start: result.counters.a.first, min: 0, step: 1}),
-                        },
-                        second: {
-                            el: document.getElementById("astra-counter--second"),
-                            counter: new Counter({start: result.counters.a.second, min: 0, step: 1}),
-                        },
-                    },
+                    // a: {
+                    //     name: "Astra",
+                    //     first: {
+                    //         el: document.getElementById("astra-counter--first"),
+                    //         counter: new Counter({start: result.counters.a.first, min: 0, step: 1}),
+                    //     },
+                    //     second: {
+                    //         el: document.getElementById("astra-counter--second"),
+                    //         counter: new Counter({start: result.counters.a.second, min: 0, step: 1}),
+                    //     },
+                    // },
                     j: {
                         name: "Johnson",
                         first: {
@@ -253,8 +253,8 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 self.counters.m.first.el.innerHTML = self.counters.m.first.counter.get();
                 self.counters.m.second.el.innerHTML = self.counters.m.second.counter.get();
                 self.counters.m.booster.el.innerHTML = self.counters.m.booster.counter.get();
-                self.counters.a.first.el.innerHTML = self.counters.a.first.counter.get();
-                self.counters.a.second.el.innerHTML = self.counters.a.second.counter.get();
+                // self.counters.a.first.el.innerHTML = self.counters.a.first.counter.get();
+                // self.counters.a.second.el.innerHTML = self.counters.a.second.counter.get();
                 self.counters.j.first.el.innerHTML = self.counters.j.first.counter.get();
                 self.counters.j.second.el.innerHTML = self.counters.j.second.counter.get();
 
@@ -273,11 +273,11 @@ StreckePage.prototype.buildHtml = function(url, context, options){
                 el: document.getElementById("moderna-timer"),
                 timeString: "",
             },
-            a: {
-                name: "Astra",
-                el: document.getElementById("astra-timer"),
-                timeString: "",
-            },
+            // a: {
+            //     name: "Astra",
+            //     el: document.getElementById("astra-timer"),
+            //     timeString: "",
+            // },
             j: {
                 name: "Johnson",
                 el: document.getElementById("johnson-timer"),
@@ -430,10 +430,10 @@ StreckePage.prototype.buildHtml = function(url, context, options){
             dialogRemove.listen("MDCDialog:closed", removeFunc);
 
         })
-        $(".switch-button").on("click", function() {
-            self.dialogChoice = {};
-            dialog1.open();
-        });
+        // $(".switch-button").on("click", function() {
+        //     self.dialogChoice = {};
+        //     dialog1.open();
+        // });
         dialog1.listen("MDCDialog:closed", function(event){
             let detail = event.detail;
             self.dialogChoice = {
@@ -555,8 +555,8 @@ StreckePage.prototype.refreshCounters = function(){
             self.counters.m.first.counter.set(result.counters.m.first);
             self.counters.m.second.counter.set(result.counters.m.second);
             self.counters.m.booster.counter.set(result.counters.m.booster);
-            self.counters.a.first.counter.set(result.counters.a.first);
-            self.counters.a.second.counter.set(result.counters.a.second);
+            // self.counters.a.first.counter.set(result.counters.a.first);
+            // self.counters.a.second.counter.set(result.counters.a.second);
             self.counters.j.first.counter.set(result.counters.j.first);
             self.counters.j.second.counter.set(result.counters.j.second);
 
@@ -566,8 +566,8 @@ StreckePage.prototype.refreshCounters = function(){
             self.counters.m.first.el.innerHTML = self.counters.m.first.counter.get();
             self.counters.m.second.el.innerHTML = self.counters.m.second.counter.get();
             self.counters.m.booster.el.innerHTML = self.counters.m.booster.counter.get();
-            self.counters.a.first.el.innerHTML = self.counters.a.first.counter.get();
-            self.counters.a.second.el.innerHTML = self.counters.a.second.counter.get();
+            // self.counters.a.first.el.innerHTML = self.counters.a.first.counter.get();
+            // self.counters.a.second.el.innerHTML = self.counters.a.second.counter.get();
             self.counters.j.first.el.innerHTML = self.counters.j.first.counter.get();
             self.counters.j.second.el.innerHTML = self.counters.j.second.counter.get();
         })
@@ -654,7 +654,7 @@ function getCounter (type, self, second, booster) {
             counter =  booster ? self.counters.m.booster : (second ? self.counters.m.second : self.counters.m.first);
             break;
         case 3:
-            counter =  (second) ? self.counters.a.second : self.counters.a.first;
+            // counter =  (second) ? self.counters.a.second : self.counters.a.first;
             break;
         case 4:
             counter =  (second) ? self.counters.j.second : self.counters.j.first;
@@ -677,7 +677,7 @@ function getChoosingTimer(type, self){
             timer = self.timers.m;
             break;
         case 3:
-            timer = self.timers.a;
+            // timer = self.timers.a;
             break;
         case 4:
             timer = self.timers.j;
@@ -710,12 +710,12 @@ StreckePage.prototype.updateTimer = function (type){
             else {
                 self.timers.m.timeString = transformDateTimeString(result.m.timestamp, "hh:mm").time("hh:mm");
             }
-            if(result.a === null) {
-                self.timers.a.timeString = "";
-            }
-            else {
-                self.timers.a.timeString = transformDateTimeString(result.a.timestamp, "hh:mm").time("hh:mm");
-            }
+            // if(result.a === null) {
+            //     self.timers.a.timeString = "";
+            // }
+            // else {
+            //     self.timers.a.timeString = transformDateTimeString(result.a.timestamp, "hh:mm").time("hh:mm");
+            // }
             if(result.j === null) {
                 self.timers.j.timeString = "";
             }
@@ -725,7 +725,7 @@ StreckePage.prototype.updateTimer = function (type){
 
             self.timers.b.el.innerHTML = self.timers.b.timeString;
             self.timers.m.el.innerHTML = self.timers.m.timeString;
-            self.timers.a.el.innerHTML = self.timers.a.timeString;
+            // self.timers.a.el.innerHTML = self.timers.a.timeString;
             self.timers.j.el.innerHTML = self.timers.j.timeString;
         })
 }
