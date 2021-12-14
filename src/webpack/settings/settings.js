@@ -4,6 +4,7 @@ import {Sidesheet} from "../app_sidesheet";
 import {SettingsPage} from "./app_settingsPage";
 import {transformDateTimeString} from "../helpers";
 import "../handlebarsHelpers";
+import {apiHandler} from "../apiHandlers/apiHandler";
 const Handlebars = require("handlebars");
 var $ = require( "jquery" );
 
@@ -42,12 +43,16 @@ settingsPage.show()
 // });
 
 
-nav.initialize
-    .then(function(){
-        nav.setAction("mdc-top-app-bar-action1", function(e, args){
-            sidesheet.toggle();
-        })
-        let subpage = nav.addSubpage("settings",  {user: window.user}, true, "app-link-settings", true);
-        subpage.init
-            .then(function(){})
-    });
+apiHandler.getRolesEnum()
+    .then(function(roles) {
+        nav.initialize
+            .then(function(){
+                nav.setAction("mdc-top-app-bar-action1", function(e, args){
+                    sidesheet.toggle();
+                })
+                let subpage = nav.addSubpage("settings",  {user: window.user, roles: roles}, true, "app-link-settings", true);
+                subpage.init
+                    .then(function(){})
+            });
+    })
+

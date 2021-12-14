@@ -16,6 +16,7 @@
                     <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">dashboard</i>
                     <span class="mdc-deprecated-list-item__text">System</span>
                 </a>
+                {{#if (userHasRole user roles.Admin)}}
                 <h3 class="mdc-deprecated-list-group__subheader">Datenbank</h3>
                 <a id="app-link-usermanagement" class="navigation-element mdc-deprecated-list-item" href="/settings/tasks" >
                     <span class="mdc-deprecated-list-item__ripple"></span>
@@ -27,6 +28,7 @@
                     <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">people</i>
                     <span class="mdc-deprecated-list-item__text">Impfstrecken</span>
                 </a>
+                {{/if}}
             </nav>
         </div>
     </div>
