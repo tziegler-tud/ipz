@@ -7,7 +7,7 @@ const settingsService = require('../../services/settingsService');
 
 
 
-//hooked at /api/v1/data/statistics
+//hooked at /api/v1/statistics
 
 // routes
 router.get('/', get);

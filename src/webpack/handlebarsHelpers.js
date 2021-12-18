@@ -17,6 +17,14 @@ Handlebars.registerHelper('transformDateStringExtended', function(dateString, fo
     return new Handlebars.SafeString(transformDateTimeString(dateString, format).dateExtended);
 });
 
+Handlebars.registerHelper('transformDate', function(dateString, format) {
+    return transformDateTimeString(dateString, format);
+});
+
+Handlebars.registerHelper("saveString", function(string){
+    return new Handlebars.SafeString(string);
+})
+
 Handlebars.registerHelper('checklength', function (v1, v2, options) {
     'use strict';
     if (v1.length>v2) {
@@ -89,4 +97,17 @@ Handlebars.registerHelper('eachProperty', function(context, options) {
 
 Handlebars.registerHelper('displayJson', function(context, options) {
     return JSON.stringify(context, null, '\t');
+});
+
+
+Handlebars.registerHelper('getProperty', function(oj, propertyNameOrIndex) {
+    if (typeof(propertyNameOrIndex) === "string") {
+        return oj[propertyNameOrIndex]
+    }
+    if (typeof(propertyNameOrIndex) === "number") {
+        let keys = Object.keys(oj);
+        if (keys.length >= oj) return keys[propertyNameOrIndex]
+        else return undefined;
+    }
+    else return undefined
 });

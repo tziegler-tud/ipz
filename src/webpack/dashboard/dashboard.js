@@ -14,6 +14,7 @@ const Handlebars = require("handlebars");
 import "../handlebarsHelpers";
 import {transformDateTimeString} from "../helpers";
 import {preloader} from "../preloader";
+import {apiStatisticsHandler} from "../apiHandlers/apiStatisticsHandler";
 var $ = require( "jquery" );
 
 var phone = window.matchMedia("only screen and (max-device-width: 800px)");
@@ -231,6 +232,7 @@ DashboardComponent.prototype.refresh = function(){
 
 DashboardComponent.prototype.getData = function(args){
     let dataUrl;
+    args = (args === undefined) ? {}: args;
     //get data from server
     switch(this.dataType){
         case "switches":
@@ -425,20 +427,35 @@ DashboardComponent.prototype.getData = function(args){
             dataUrl = "/api/v1/statistics/current";
             let dataUrl2 = "/api/v1/statistics/week";
             let dataUrl3 = "/api/v1/statistics/month";
+
             return new Promise(function(resolve, reject){
-                $.get(dataUrl, function (stats) {
-                    let data = {
-                        date: Date.now(),
-                        day: stats,
-                    }
-                    $.get(dataUrl2, function(week) {
-                        data.week = week;
-                        $.get(dataUrl3, function(month) {
-                            data.month = month;
-                            resolve(data);
-                        });
-                    });
-                });
+                let p1 = $.get(dataUrl);
+                let p2 = $.get(dataUrl2);
+                let p3 = $.get(dataUrl3);
+
+                Promise.all([p1,p2,p3])
+                    .then(function(apiData){
+                        let data = {
+                            date: Date.now(),
+                            day: apiData[0],
+                            week: apiData[1],
+                            month: apiData[2],
+                        }
+                        resolve(data);
+                    })
+                // $.get(dataUrl, function (stats) {
+                //     let data = {
+                //         date: Date.now(),
+                //         day: stats,
+                //     }
+                //     $.get(dataUrl2, function(week) {
+                //         data.week = week;
+                //         $.get(dataUrl3, function(month) {
+                //             data.month = month;
+                //             resolve(data);
+                //         });
+                //     });
+                // });
             })
             break;
 
@@ -494,26 +511,28 @@ DashboardComponent.prototype.getData = function(args){
         case "statistics-dash":
             return new Promise(function(resolve, reject){
                 let defaults = {
-                    daysBack1: 6,
+                    daysBack1: 7,
                     daysAhead1: 0,
-                    daysBack2: 30,
+                    daysBack2: 31,
                     daysAhead2: 0,
                     startDate: "current",
                 }
+                let localArgs = Object.assign(defaults, args);
                 let jsonDataWeek = {
-                    "daysBack": args.daysBack1,
-                    "daysAhead": args.daysAhead1,
-                    "startDate": args.startDate,
+                    "daysBack": localArgs.daysBack1,
+                    "daysAhead": localArgs.daysAhead1,
+                    "startDate": localArgs.startDate,
                 };
               let jsonDataMonth = {
-                    "daysBack": args.daysBack2,
-                    "daysAhead": args.daysAhead2,
-                    "startDate": args.startDate,
+                    "daysBack": localArgs.daysBack2,
+                    "daysAhead": localArgs.daysAhead2,
+                    "startDate": localArgs.startDate,
                 }
                 let jsonDataDay = {
-                    "date": args.startDate,
+                    "date": localArgs.startDate,
                 }
-                $.ajax({
+
+                let p1 = $.ajax({
                     url: "/api/v1/statistics/getDayStats",
                     // make put for safety reasons :-)
                     type: 'POST',
@@ -521,36 +540,42 @@ DashboardComponent.prototype.getData = function(args){
                     dataType: 'json',
                     data: JSON.stringify(jsonDataDay),
                 },{})
-                    .done(function(stats) {
+
+                let p2 = $.ajax({
+                    url: "/api/v1/statistics/getStats",
+                    // make put for safety reasons :-)
+                    type: 'POST',
+                    contentType: "application/json; charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(jsonDataWeek),
+                })
+
+
+                let p3 = $.ajax({
+                    url: "/api/v1/statistics/getStats",
+                    // make put for safety reasons :-)
+                    type: 'POST',
+                    contentType: "application/json; charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(jsonDataMonth),
+                })
+
+                let p4 = apiStatisticsHandler.getOverview();
+
+                let date = localArgs.startDate === "current" ? Date.now() : localArgs.startDate;
+                Promise.all([p1,p2,p3,p4])
+                    .then(function(apiData){
                         let data = {
-                            date: stats.date,
-                            day: stats,
+                            date: date,
+                            day: apiData[0],
+                            week: apiData[1],
+                            month: apiData[2],
+                            archive: apiData[3]
                         }
-                        $.ajax({
-                                url: "/api/v1/statistics/getStats",
-                                // make put for safety reasons :-)
-                                type: 'POST',
-                                contentType: "application/json; charset=UTF-8",
-                                dataType: 'json',
-                                data: JSON.stringify(jsonDataWeek),
-                            })
-                            .done(function(week){
-                                data.week = week;
-                                $.ajax({
-                                    url: "/api/v1/statistics/getStats",
-                                    // make put for safety reasons :-)
-                                    type: 'POST',
-                                    contentType: "application/json; charset=UTF-8",
-                                    dataType: 'json',
-                                    data: JSON.stringify(jsonDataMonth),
-                                })
-                                    .done(function(month){
-                                        data.month = month;
-                                        resolve(data);
-                                });
-                            })
-                });
+                        resolve(data);
+                    })
             })
+
             break;
 
         case "apotheke-dash":

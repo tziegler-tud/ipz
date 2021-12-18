@@ -424,7 +424,7 @@ async function getDayStatsFromArchive(dateString) {
         tracks = [];
         trackData.forEach(function(trackDataEntry){
             let i = tracks.findIndex(function(trackElement){
-                return trackDataEntry.track.id.equals(trackElement.id);
+                return trackDataEntry.track.id.toString() === trackElement.id.toString();
             });
 
             if (i === -1) {
@@ -535,6 +535,7 @@ function averagesByHours(trackData) {
     //lets look at the first entry.
     let firstEntry = trackData[0];
     let firstTimestamp = firstEntry.timestamp;
+    if(!(firstTimestamp instanceof Date)) firstTimestamp = new Date(firstTimestamp);
     //transform to date Object
     let firstDate = new Date(firstTimestamp.getTime() - timeOffsetMs);
     let firstHour = firstDate.getHours();
@@ -551,6 +552,7 @@ function averagesByHours(trackData) {
     //lets look at the last entry.
     let lastEntry = trackData[trackData.length-1];
     let lastTimestamp = lastEntry.timestamp;
+    if(!(lastTimestamp instanceof Date)) lastTimestamp = new Date(lastTimestamp);
 
     //transform to date Object
     let lastDateTime = Math.min(new Date().getTime(), lastTimestamp.getTime() + timeOffsetMs);

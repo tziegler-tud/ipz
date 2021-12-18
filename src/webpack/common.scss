@@ -400,3 +400,92 @@ infocards
 .trackColor--E {
   color: $track-color-E;
 }
+
+/**
+forms and selects
+ */
+
+input.common-input {
+  display: block;
+  border: 1px solid #BBB;
+  background-color: transparent;
+  padding: 5px 1em;
+  border-radius: 0;
+  color: #555;
+
+  margin-bottom: 1em;
+
+}
+
+select.common-select {
+  display: block;
+  border: 1px solid #BBB;
+  background-color: transparent;
+  padding: 5px 1em;
+  border-radius: 0;
+  color: #555;
+
+  margin-bottom: 1em;
+
+  &.select-disabled {
+    background-color: #CCC;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  option {
+    background-color: #fff;
+    color: #555;
+  }
+
+}
+
+.common-viewBox {
+  // text element in style of selects.
+  display: block;
+  border: 1px solid #BBB;
+  background-color: transparent;
+  padding: 5px 1em;
+  border-radius: 0;
+  color: #555;
+
+  margin-bottom: 1em;
+
+  &.viewBox-disabled {
+    background-color: #CCC;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+select:disabled{
+  background-color: #CCC;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.common-submit {
+  display: block;
+  border: 1px solid #555;
+  background-color: transparent;
+  padding: 5px 1em;
+  margin: 0;
+  border-radius: 0;
+  color: #333;
+
+  outline: 0;
+
+  &:hover {
+    cursor: pointer;
+
+  }
+
+}
+
+.formElement-optional {
+  max-height: 0;
+  overflow: hidden;
+
+  &.optional-enabled {
+    max-height: 100vh;
+  }
+}

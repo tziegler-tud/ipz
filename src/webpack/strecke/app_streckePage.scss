@@ -14,6 +14,8 @@
 @use "../../../node_modules/@material/fab";
 @use "../../../node_modules/@material/card";
 @use "../../../node_modules/@material/dialog";
+@use "../../../node_modules/@material/top-app-bar";
+@use "../../../node_modules/@material/top-app-bar/mdc-top-app-bar";
 
 @import "../app_pages";
 @import "../dashboard/dashboard";
@@ -44,6 +46,24 @@
     .mdc-snackbar__action {
       display: block;
     }
+  }
+}
+
+.mdc-top-app-bar {
+  &.trackColor--A {
+    @include top-app-bar.fill-color(#a70808);
+  }
+  &.trackColor--B {
+    @include top-app-bar.fill-color(#d0910a);
+  }
+  &.trackColor--C {
+    @include top-app-bar.fill-color(#138c0a);
+  }
+  &.trackColor--D {
+    @include top-app-bar.fill-color(#0468c9);
+  }
+  &.trackColor--E {
+    @include top-app-bar.fill-color(#dc71ba);
   }
 }
 

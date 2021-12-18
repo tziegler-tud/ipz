@@ -55,6 +55,8 @@ function buildPage(track){
             clock: ".navigation-clock",
             sidesheet: true,
             activeElement: streckeDomId,
+            topbar: true,
+            topbarClasses: ["trackColor--"+track.name]
         },
     );
 

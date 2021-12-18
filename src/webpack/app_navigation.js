@@ -41,6 +41,7 @@ var Navigation = function(context, options){
             activeElement: undefined,
             open: true,
             topbar: true,
+            topbarClasses: []
 
         }
         options = (options === undefined) ? {}: options;
@@ -72,6 +73,12 @@ var Navigation = function(context, options){
                     drawer.open = !drawer.open;
                 });
                 self.topAppBar = topAppBar;
+
+                if (Array.isArray(self.options.topbarClasses)) {
+                    self.options.topbarClasses.forEach(function(token){
+                        topAppBarElement.classList.add(token)
+                    });
+                }
             }
             else {
                 topAppBarElement.classList.add("topbar--disabled");

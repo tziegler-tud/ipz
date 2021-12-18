@@ -1,7 +1,18 @@
-var transformDateTimeString = function(dateString, format) {
+var transformDateTimeString = function(dateString, format, parseDelimiter) {
     format = (format === undefined || typeof(format !== "String")) ? "text" : format;
+    parseDelimiter = (parseDelimiter === undefined) ? "." : parseDelimiter;
     let weekDays = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag",  "Freitag", "Samstag"];
     var myDate = new Date(dateString);
+
+    //validate
+    if (!validateDate(myDate)){
+        //try parsing
+        myDate = parseDate(dateString, parseDelimiter);
+        if(!validateDate(myDate)) {
+            console.error("failed to parse date string: invalid data")
+            return {};
+        }
+    }
     var month = (myDate.getMonth()+ 1).toString().length < 2 ? "0"+(myDate.getMonth()+ 1).toString() : (myDate.getMonth()+ 1).toString();
     var day = myDate.getDate().toString().length < 2 ? "0"+myDate.getDate().toString() : myDate.getDate().toString();
 
@@ -17,6 +28,7 @@ var transformDateTimeString = function(dateString, format) {
     var dateExtended = dow + ", " + date;
 
     return {
+        raw: myDate,
         dateTime: dateTime,
         dateTimeExtended: dateTimeExtended,
         date: date,
@@ -32,6 +44,30 @@ var transformDateTimeString = function(dateString, format) {
     };
 }
 
+function parseDate(dateString, parseDelimiter) {
+    parseDelimiter = (parseDelimiter === undefined) ? "." : parseDelimiter;
+    var dateParts = dateString.split(parseDelimiter);
+    // month is 0-based, that's why we need dataParts[1] - 1
+    return new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+}
+
+function validateDate(myDate) {
+    //validate
+    if (Object.prototype.toString.call(myDate) === "[object Date]") {
+        // it is a date
+        if (isNaN(myDate.getTime())) {  // d.valueOf() could also work
+            // date is not valid
+            return false;
+        } else {
+            // date is valid
+            return true;
+        }
+    } else {
+        // not a date
+        return false;
+
+    }
+}
 /**
  *
  * @param args {Object}

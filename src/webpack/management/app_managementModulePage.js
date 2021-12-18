@@ -760,18 +760,11 @@ ManagementModulePage.prototype.buildModule = function(moduleType, options){
                     .done(function(result){
 
                         const data = {
-                            datasets: [{
-                                label: 'Checkin - WBII',
-                                backgroundColor: 'rgb(255, 99, 132)',
-                                borderColor: 'rgb(255, 99, 132)',
-                                data: result.checkinData,
-                                tension: 0.4,
-                                // parsing: false,
-                            },
+                            datasets: [
                                 {
                                     label: 'Durchgeführte Impfungen',
-                                    backgroundColor: 'rgb(10,81,220)',
-                                    borderColor: 'rgb(10,81,220)',
+                                    backgroundColor: 'rgb(220,10,59)',
+                                    borderColor: 'rgb(220,10,59)',
                                     data: result.trackData,
                                     tension: 0.4,
                                     // parsing: false,

@@ -97,13 +97,7 @@ StatisticsPage.prototype.displayData = function(date){
         .done(function(result){
 
             const data = {
-                datasets: [{
-                    label: 'CheckinData',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: result.checkinData,
-                    // parsing: false,
-                },
+                datasets: [
                     {
                         label: 'TrackData',
                         backgroundColor: 'rgb(10,81,220)',

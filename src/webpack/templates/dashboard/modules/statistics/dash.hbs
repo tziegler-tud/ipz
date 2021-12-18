@@ -2,6 +2,29 @@
     <div class="dashboard-inner dashboard-module-inner">
         <div class="dash-header">
             <span class="dash-header--date dash-header--title">{{transformDateStringExtended componentData.date}}</span>
+
+        </div>
+        <div class="dash-component-container">
+            <div class="dash-component dash-component--full dashboard-component-dash management-dash">
+                <div class="dash-component-inner">
+                    <div class="dash-component-header">
+                        <span>
+                            Anzeige
+                        </span>
+                    </div>
+                    <div class="dash-elements-container col">
+                        <div class="dash-element">
+                            <label for="select-date">Tag auswählen:</label>
+                            <select id="select-date" class="dash-header--date dash-header--title common-select">
+                                <option>-- Tag auswählen --</option>
+                                {{#each componentData.archive}}
+                                    <option value="{{#if this.current}}current{{else}}{{this.date}}{{/if}}" {{#ifEquals (getProperty (transformDate this.date) "date") (getProperty (transformDate ../componentData.date) "date") }}selected{{/ifEquals}}>{{this.date}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="dash-component-container">
             <div class="dash-component dash-component--half dashboard-component-dash management-dash">
@@ -52,14 +75,7 @@
                                     <span>Gesamt</span>
                                 </div>
                             </div>
-                            <div class="totals">
-                                <div class="totals-amount">
-                                    <span>&empty;{{componentData.day.stats.average.current}}</span>
-                                </div>
-                                <div class="totals-label">
-                                    <span>Aktuell<span class="small">(letzte 15min)</span></span>
-                                </div>
-                            </div>
+
                         </div>
                         <div class="dash-element full dash-element--graph">
                             <div class="average-graph-content">

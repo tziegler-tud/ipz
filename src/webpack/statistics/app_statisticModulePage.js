@@ -50,10 +50,11 @@ StatisticModulePage.prototype.hide = function(){
     clearInterval(this.refreshInterval);
 }
 
-StatisticModulePage.prototype.show = function(options){
+StatisticModulePage.prototype.show = function(options, forceUpdate){
     let self = this;
+    if (forceUpdate === undefined) forceUpdate = false;
     let context = {};
-    if(self.active) {
+    if(self.active && !forceUpdate) {
         self.refresh(self,options);
         return;
     }
@@ -148,9 +149,12 @@ StatisticModulePage.prototype.buildModule = function(moduleType, options){
     let self = this;
     let module;
 
+    if(options.date === undefined || typeof(options.date) !== "string") options.date = "current";
+
     let buildArgs = {
         self: self,
         containerSelector: "#page-container",
+        date: options.date,
     }
     switch(moduleType) {
         case "dashboard":
@@ -178,10 +182,20 @@ StatisticModulePage.prototype.buildModule = function(moduleType, options){
                 self.snackbar = new MDCSnackbar(document.querySelector('.mdc-snackbar'));
 
                 self.dash = new Dashboard("modules", self, {containerId: "dashboard-container"});
-                self.dash.addComponent("management-dash", {}, buildGraphs);
+                let dashInit = self.dash.addComponent("statistics-dash", {startDate:buildArgs.date}, buildGraphs);
 
                 self.dashboards.push(self.dash);
 
+                dashInit.then(function(){
+                    //date selector reloads dashboard
+                    $("#select-date").on("change", function(){
+                        let date = this.value;
+                        let index = self.dashboards.indexOf(self.dash);
+                        if(index > -1) self.dashboards.splice(index, 1);
+                        buildArgs.date = date;
+                        self.show(buildArgs, true)
+                    })
+                })
 
                 function buildGraphs(dashboard, page, data) {
 
@@ -491,6 +505,8 @@ StatisticModulePage.prototype.buildModule = function(moduleType, options){
 
                 // let bottomTabs =  new Bottom("management", self, {}, {});
                 self.tabs[0].dashboard = self.figures;
+
+
 
                 resolve();
             });
