@@ -823,7 +823,7 @@ function count(data){
         return n + (element.type === 4   && element.second === true);
     }, 0);
 
-    let total = counters.b.first + counters.b.second + counters.m.first + counters.m.second + counters.a.first + counters.a.second + counters.j.first + counters.j.second;
+    let total = counters.b.first + counters.b.second + counters.b.booster + counters.m.first + counters.m.second + counters.m.booster + counters.a.first + counters.a.second + counters.j.first + counters.j.second;
 
     return {counters: counters, total: total};
 }
