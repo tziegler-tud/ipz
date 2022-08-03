@@ -16,13 +16,12 @@ app.use(bodyParser.json());
 
 const webpush = require('web-push');
 // VAPID keys should only be generated only once. we've run the vapid.js file to do this.
-var vapidPublicKey = "BM-VsybJ1S9bkhK-GLK_LoxozsJdr0PfQCS6dmqVcpe08oSZthKcGw3Pws4D_PI4ahyxoArS6TuWYSZwW1m1nQo";
-var vapidPrivateKey = "S4B8s1x437nt6Rbo2E0t4uXo1zyacvxAoexd9i1Dbfk"
+let vapid = require("config/vapid.json");
 
 webpush.setVapidDetails(
     'mailto:test@ipzdd.de',
-    vapidPublicKey,
-    vapidPrivateKey
+    vapid.publicKey,
+    vapid.privateKey
 );
 
 /*

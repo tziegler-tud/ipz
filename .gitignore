@@ -2,5 +2,8 @@
 node_modules/
 sessions/*
 src/**/build/
+src/dist
 access.log
 config/config.json
+config/vapid.json
+bin/*.key
