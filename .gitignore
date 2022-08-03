@@ -3,3 +3,4 @@ node_modules/
 sessions/*
 src/**/build/
 access.log
+config/config.json
