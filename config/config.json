@@ -1,7 +1,0 @@
-{
-  "connectionString": "mongodb://localhost:27017/ipz",
-  "secret": "ipzSecret;-)",
-  "username": "ipz-user",
-  "pwd": "ipzdd",
-  "authSource": "admin"
-}
