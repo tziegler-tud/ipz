@@ -28,7 +28,7 @@
             {{#if (navEntryAllowed "Checkout" user.allowedTasks)}}
             <h3 class="mdc-deprecated-list-group__subheader">Checkout</h3>
                 {{#each tracks}}
-                    <a id="app-link-strecke--{{this.id}}" class="navigation-element mdc-deprecated-list-item" href="/strecke/{{this.id}}">
+                    <a id="app-link-strecke--{{this.id}}" class="navigation-element mdc-deprecated-list-item" href="/flow/track/{{this.id}}">
                         <span class="mdc-deprecated-list-item__ripple"></span>
                         <i class="material-icons mdc-deprecated-list-item__graphic" aria-hidden="true">coronavirus</i>
                         <span class="mdc-deprecated-list-item__text">Impfstrecke  <span class="trackColor--{{this.name}}">{{this.name}}</span></span>
