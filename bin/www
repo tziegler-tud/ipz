@@ -23,13 +23,13 @@ app.set('port', port);
  */
 
 console.log(process.cwd());
-const options = {
-  key: fs.readFileSync(path.resolve(__dirname, "./ipz2.key")),
-  cert: fs.readFileSync(path.resolve(__dirname, 'ipz2.crt'))
-};
+// const options = {
+//   key: fs.readFileSync(path.resolve(__dirname, "./ipz2.key")),
+//   cert: fs.readFileSync(path.resolve(__dirname, 'ipz2.crt'))
+// };
 
-var httpServer = http.createServer(options, app);
-var server = https.createServer(options, app);
+var httpServer = http.createServer({}, app);
+// var server = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -39,9 +39,9 @@ httpServer.on('error', onError);
 httpServer.on('listening', onListeningHttp);
 
 
-server.listen(port, "0.0.0.0");
-server.on('error', onError);
-server.on('listening', onListening);
+// server.listen(port, "0.0.0.0");
+// server.on('error', onError);
+// server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
