@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 const webpush = require('web-push');
 // VAPID keys should only be generated only once. we've run the vapid.js file to do this.
-let vapid = require("config/vapid.json");
+let vapid = require("../config/vapid.json");
 
 webpush.setVapidDetails(
     'mailto:test@ipzdd.de',
